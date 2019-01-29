@@ -23,7 +23,7 @@ public class GetCategory {
 	private int isActive; 
 	private int delStatus; 
 	private String sectionName; 
-	List<CategoryDescription> CategoryDescriptionList;
+	List<CategoryDescription> categoryDescriptionList;
 	
 	public int getCatId() {
 		return catId;
@@ -140,10 +140,10 @@ public class GetCategory {
 		this.sectionName = sectionName;
 	}
 	public List<CategoryDescription> getCategoryDescriptionList() {
-		return CategoryDescriptionList;
+		return categoryDescriptionList;
 	}
 	public void setCategoryDescriptionList(List<CategoryDescription> categoryDescriptionList) {
-		CategoryDescriptionList = categoryDescriptionList;
+		this.categoryDescriptionList = categoryDescriptionList;
 	}
 	@Override
 	public String toString() {
@@ -153,7 +153,7 @@ public class GetCategory {
 				+ catEditDate + ", catAddDate=" + catAddDate + ", catSortNo=" + catSortNo + ", catRemark=" + catRemark
 				+ ", sectionId=" + sectionId + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId
 				+ ", isActive=" + isActive + ", delStatus=" + delStatus + ", sectionName=" + sectionName
-				+ ", CategoryDescriptionList=" + CategoryDescriptionList + "]";
+				+ ", categoryDescriptionList=" + categoryDescriptionList + "]";
 	}
 	 
 	
