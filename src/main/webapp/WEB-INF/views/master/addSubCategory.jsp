@@ -127,7 +127,7 @@
 												placeholder="Sub-Category Description"  value="${sectionDescriptionList.catDesc}"  style="text-align: left;" name="subCategoryDesc${languagesList.languagesId}" type="text"  >
 				                                </div>
 				                              </div>
-				                               
+				                                   
 				                        </div>
                      				</c:when>
                      			</c:choose>

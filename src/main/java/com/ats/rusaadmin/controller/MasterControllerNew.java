@@ -95,6 +95,8 @@ public class MasterControllerNew {
 		return categoryList;
 	}
 	
+	
+	
 	/*@RequestMapping(value = "/insertSubCategory", method = RequestMethod.POST)
 	public String insertSubCategory(HttpServletRequest request, HttpServletResponse response) {
 
