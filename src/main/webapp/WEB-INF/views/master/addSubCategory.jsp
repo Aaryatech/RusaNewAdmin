@@ -3,303 +3,251 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+  
  
-<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<body onload="FocusOnInput()">
+<!DOCTYPE html>
+<html class=" ">
+    <head>
+      
+        <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+        <!-- CORE CSS TEMPLATE - END -->
+
+    </head>
+    <!-- END HEAD -->
+
+    <!-- BEGIN BODY -->
+    <body class=" "><!-- START TOPBAR -->
+    
+    	<c:url var="getCategoryBySectionId" value="/getCategoryBySectionId"></c:url>
+<jsp:include page="/WEB-INF/views/include/topbar.jsp"></jsp:include>
+<!-- END TOPBAR -->
+<!-- START CONTAINER -->
+<div class="page-container row-fluid container-fluid">
+
+    <!-- SIDEBAR - START -->
+
+<jsp:include page="/WEB-INF/views/include/left.jsp"></jsp:include>
+<!--  SIDEBAR - END -->
+    <!-- START CONTENT -->
+<section id="main-content" class=" ">
+     <section class="wrapper main-wrapper row" style="">
+
+    <div class="col-xs-12">
+        <div class="page-title">
+
+            <div class="pull-left">
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Sub-Category</h1><!-- PAGE HEADING TAG - END -->                            </div>
+			 
+                                
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- MAIN CONTENT AREA STARTS -->
  
-	<c:url var="getMixingListWithDate" value="/getMixingListWithDate"></c:url>
-	<c:url var="getMixingAllListWithDate" value="/getMixingAllListWithDate"></c:url>
+	<div class="col-lg-12">
+    	                                                            
+    </div>
+	
+    <div class="col-lg-12">
+        <section class="box ">
+       
+                <header class="panel_header">
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Sub-Category</c:when><c:otherwise>Add Sub-Category</c:otherwise></c:choose></h2>
+                   
+                    <div class="actions panel_actions pull-right">
+                	      <a href="${pageContext.request.contextPath}/sectionList"><button type="button" class="btn btn-info">< Back</button></a>
+                	       <a class="box_toggle fa fa-chevron-down"></a>
+                </div>
+                     
+                </header>
+                
+                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertSubCategory" 
+                   onsubmit="return confirm('Do you really want to submit the form?');" method="post">
+                   
+                <div class="content-body"> 
+                  
+                      <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Section : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   
+                                 <select name="sectionId" id="sectionId" class="form-control chosen" placeholder="Section" onchange="getCategoryList()"
+													required>
+													<option value="">Select Section</option>
+													<c:forEach items="${sectionList}" var="secList" varStatus="count">
+														<c:choose>
+															<c:when test="${secList.sectionId==editSecList.sectionId}">
+															<option value="${secList.sectionId}" selected><c:out value="${secList.sectionName}"/></option>
+															</c:when>
+															<c:otherwise>
+														<option value="${secList.sectionId}"><c:out value="${secList.sectionName}"/></option>
+															</c:otherwise>
+														</c:choose>
+														
+													</c:forEach>
+												</select>
+                                </div>
+                              </div>
+                              
+                                <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Category : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   
+                                 <select id="catId" name="catId" class="form-control chosen" placeholder="Category"
+								required>
+								<option value="${editSecList.catName}"></option>
+							</select>
+                                </div>
+                              </div>
+                                <div class="row">
+                    <c:forEach items="${languagesList}" var="languagesList" >
+                     <h5 class="title pull-left">${languagesList.name}</h5>
+                     
+                     <c:choose>
+                     	<c:when test="${isEdit==1}">
+                     	 
+                     		<c:forEach items="${editSection.sectionDescriptionList}" var="sectionDescriptionList" >
+                     		 
+                     			<c:choose>
+                     				<c:when test="${sectionDescriptionList.languageId==languagesList.languagesId}">
+                     					<div class="col-xs-12">
+                                	  
+				                               <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
+				                                <div class="col-sm-10">
+				                                   <input id="sectionName${languagesList.languagesId}" class="form-control"
+												placeholder="Sub-Category Name"  value="${sectionDescriptionList.catName}"  style="text-align: left;" name="subCategoryName${languagesList.languagesId}" type="text" required>
+				                                </div>
+				                              </div>
+				                            
+				                           
+				                              <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
+				                                <div class="col-sm-10">
+				                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
+												placeholder="Sub-Category Description"  value="${sectionDescriptionList.catDesc}"  style="text-align: left;" name="subCategoryDesc${languagesList.languagesId}" type="text"  >
+				                                </div>
+				                              </div>
+				                               
+				                        </div>
+                     				</c:when>
+                     			</c:choose>
+                     		
+                     		</c:forEach>
+                     	</c:when>
+                     	<c:otherwise>
+                     		<div class="col-xs-12">
+                                	  
+                               <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   <input id="sectionName${languagesList.languagesId}" class="form-control"
+								placeholder="Sub-Category Name" style="text-align: left;" name="subCategoryName${languagesList.languagesId}" type="text" required>
+                                </div>
+                              </div>
+                            
+                           
+                              <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
+                                <div class="col-sm-10">
+                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
+								placeholder="Sub-Category Description" style="text-align: left;" name="subCategoryDesc${languagesList.languagesId}" type="text"  >
+                                </div>
+                              </div>
+                               
+                        </div>
+                     	</c:otherwise>
+                     </c:choose>
+                        
+                        </c:forEach>
+                        
+                        <div class="col-xs-12"> 
+                        <input id="sectionId" value="${editSection.sectionId}" name="sectionId" type="hidden"  >
+                        
+                         <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10"> 
+                                  <input id="seqNo" class="form-control"
+								placeholder="Sequence No" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
+                                </div>
+                              </div>
+                              
+                                <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   
+                                  <select name="isActive" id="isActive" class="form-control">
+                                  	<c:choose>
+                                  		<c:when test="${editSection.isActive==0}">
+                                  			<option value="1" >YES</option>
+                                   			<option value="0" selected>NO</option>
+                                  		</c:when>
+                                  		<c:otherwise>
+                                  			<option value="1" >YES</option>
+                                    		<option value="0">NO</option>
+                                  		</c:otherwise>
+                                  	</c:choose>
+                                    
+                                    </select>
+                                </div>
+                              </div>
+                              
+                               
+                              <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                  <button type="submit" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-default">Reset</button> 
+                                  
+                                </div>
+                              </div>
+                            
+                        </div>
+                    </div> 
+                </div>
+                
+              
+                </form>
+        </section>
+        
+    </div> 
 
 
-	<div class="container" id="main-container">
+ <script type="text/javascript">
+		function getCategoryList() {
 
-		<!-- BEGIN Sidebar -->
-		<div id="sidebar" class="navbar-collapse collapse">
+			var sectionId = document.getElementById("sectionId").value;
+alert("Section id: "+sectionId);
+			$.getJSON('${getCategoryBySectionId}', {
 
-			<jsp:include page="/WEB-INF/views/include/left.jsp"></jsp:include>
+				sectionId : sectionId,
+				ajax : 'true'
+			}, function(data) {
+			//alert(data);
 
-			<div id="sidebar-collapse" class="visible-lg">
-				<i class="fa fa-angle-double-left"></i>
-			</div>
-			<!-- END Sidebar Collapse Button -->
-		</div>
-		<!-- END Sidebar -->
+				var html = '<option value="">Select Category</option>';
 
-		<!-- BEGIN Content -->
-		<div id="main-content">
-			<!-- BEGIN Page Title -->
-			<!-- <div class="page-title">
-				<div>
-					<h1>
-
-						<i class="fa fa-file-o"></i>Add Category
-
-					</h1>
-				</div>
-			</div> --><br>
-			<!-- END Page Title -->
-
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="box" id="todayslist">
-						<div class="box-title">
-							<h3>
-								<i class="fa fa-table"></i>Add Sub-Category
-							</h3>
-							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/addSubCategory">
-									Add Sub-Category</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-
-						</div>
-
-						<div class=" box-content">
-							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertSubCategory"
-								onsubmit="return confirm('Do you really want to submit the form?');" method="post">
-								
-								<div class="box-content">
-
-									<div class="col-md-2">Sub-Category Code*</div>
-									<div class="col-md-3">
-										<input id="subCatCode" class="form-control"
-								placeholder="Sub-Category Code" value="${editSubCategory.subCatCode}"  style="text-align: left;" name="subCatCode" type="text" required>
-								 
-								  <input id="subCatId" value="${editSubCategory.subCatId}" name="subCatId" type="hidden"  >
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Sub-Category Name*</div>
-									<div class="col-md-3">
-										<input id="subCatName" class="form-control"
-								placeholder="Sub-Category Name" value="${editSubCategory.subCatName}"  style="text-align: left;" name="subCatName" type="text" required>
-								 
-								  
-									</div>
-									 
-								</div>
-								<br>
-								
-								<div class="box-content">
-
-									<div class="col-md-2">Sub-Category Description*</div>
-									<div class="col-md-3">
-										<input id="subCatDesc" class="form-control"
-								placeholder="Sub-Category Description" value="${editSubCategory.subCatDesc}"  style="text-align: left;" name="subCatDesc" type="text" required>
-								  
-									</div>
-									<div class="col-md-1"></div>
-									
-									<div class="col-md-2" >Select Category</div>
-									<div class="col-md-3">
-										<select   class="form-control chosen"   name="catId"  id="catId"  required>
-										 	<option value="">select</option>
-											<c:forEach items="${categoryList}" var="categoryList">
-												<c:choose>
-													<c:when test="${categoryList.catId==editSubCategory.catId}">
-														<option value="${categoryList.catId}" selected>${categoryList.catName}</option>
-													</c:when>
-													<c:otherwise>
-														<option value="${categoryList.catId}">${categoryList.catName}</option>
-													</c:otherwise>
-												</c:choose>
-
-
-											</c:forEach>
-											</select>
-									</div> 
-									 
-								</div>
-								<br>
-								<div class="box-content">
-
-									<div class="col-md-2">Sequence No*</div>
-									<div class="col-md-3">
-										<input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editSubCategory.subCatSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
-								  
-									</div>
-									 
-									 
-								</div>
-								<br> <br>
-								 
-					<br>
-								<div class=" box-content">
-									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit"
-											id="submit">
-
-
-
-									</div>
-								</div>
-								
-								 <div class="box-content">
-
-					<br /> <br />
-					<div class="clearfix"></div>
-					<div class="table-responsive" style="border: 0">
-						<table class="table table-advance"   id="table1">
-							<thead>
-								<tr>
-									<th style="width: 18px">Sr No</th>
-									<th >Sub-Category Code</th>
-									<th>Sub-Category Name</th>
-									<th>Sub-Description</th>
-									<th>Category</th>
-									<th>Seq. No</th> 
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								  <c:forEach items="${subCategoryList}" var="subCategoryList" varStatus="count">
-									<tr >
-										<td>${count.index+1}</td>
-										<td>${subCategoryList.subCatCode}</td>
-										<td>${subCategoryList.subCatName}</td>
-										<td>${subCategoryList.subCatDesc}</td> 
-										<td>${subCategoryList.catName}</td>
-										<td>${subCategoryList.subCatSortNo}</td> 
-										<td><a
-											href="${pageContext.request.contextPath}/editSubCategory/${subCategoryList.subCatId}"><span
-												class="glyphicon glyphicon-edit"></span></a> <a
-											href="${pageContext.request.contextPath}/deleteSubCategory/${subCategoryList.subCatId}"
-											onClick="return confirm('Are you sure want to delete this record');"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
-									</tr>
-								</c:forEach>
-								 
-								 
-
-							</tbody>
-						</table>
-					</div>
-				</div>
-							</form>
-
-
-						</div>
-					</div>
-
-
-				</div>
-			</div>
-
-
-			<div class=" box-content">
-
-				
-
-			</div>
-
-			<!-- END Main Content -->
-			<footer>
-				<p>2019 © RUSA</p>
-			</footer>
-
-			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-				class="fa fa-chevron-up"></i></a>
-		</div>
-		<!-- END Content -->
-	</div>
-	<!-- END Container -->
-
-	<!--basic scripts-->
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-	</script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
-
-	<!--page specific plugin scripts-->
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
-
-
-	<!--page specific plugin scripts-->
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
-
-
-	<!--flaty scripts-->
-	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-	<!--page specific plugin scripts-->
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-		
-		 
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
-
-
-	<script type="text/javascript">
-		function passwordValidation() {
-
-			var pass = document.getElementById("password").value;
-			var pass1 = document.getElementById("rePassword").value;
-
-			if (pass != "" && pass1 != "") {
-				if (pass != pass1) {
-					alert("Password Not Matched ");
-					document.getElementById("submit").disabled = true;
-				} else {
-					document.getElementById("submit").disabled = false;
-
+				var len = data.length;
+				for (var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].catId + '">'
+							+ data[i].catName + ' &nbsp;&nbsp; </option>';
 				}
-
-			}
+				html += '</option>';
+				$('#catId').html(html);
+				$("#catId").trigger("chosen:updated");
+			});
 		}
-		function FocusOnInput()
-		 {
-		 document.getElementById("catDesc").focus();
-		 }
-		 
 	</script>
 
+
+<!-- MAIN CONTENT AREA ENDS -->
+    </section>
+    </section>
+    <!-- END CONTENT -->
+     
+
+
+     </div>
+    <!-- END CONTAINER -->
+<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
+
+   <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 </body>
 </html>
