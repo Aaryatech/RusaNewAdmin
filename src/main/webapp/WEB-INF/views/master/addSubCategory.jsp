@@ -16,7 +16,7 @@
     <!-- END HEAD -->
 
     <!-- BEGIN BODY -->
-    <body class=" "><!-- START TOPBAR -->
+    <body class=" " onload="getCategoryList()"><!-- START TOPBAR -->
     
     	<c:url var="getCategoryBySectionId" value="/getCategoryBySectionId"></c:url>
 <jsp:include page="/WEB-INF/views/include/topbar.jsp"></jsp:include>
@@ -55,7 +55,7 @@
                     <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Sub-Category</c:when><c:otherwise>Add Sub-Category</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/sectionList"><button type="button" class="btn btn-info">< Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/subCategoryList"><button type="button" class="btn btn-info">< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
@@ -70,12 +70,12 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Section : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                    
-                                 <select name="sectionId" id="sectionId" class="form-control chosen" placeholder="Section" onchange="getCategoryList()"
+                                 <select name="sectionId" id="sectionId" class="form-control"  onchange="getCategoryList()"
 													required>
 													<option value="">Select Section</option>
 													<c:forEach items="${sectionList}" var="secList" varStatus="count">
 														<c:choose>
-															<c:when test="${secList.sectionId==editSecList.sectionId}">
+															<c:when test="${secList.sectionId==editSubCat.sectionId}">
 															<option value="${secList.sectionId}" selected><c:out value="${secList.sectionName}"/></option>
 															</c:when>
 															<c:otherwise>
@@ -92,30 +92,31 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Category : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                    
-                                 <select id="catId" name="catId" class="form-control chosen" placeholder="Category"
+                                 <select id="categoryId" name="categoryId" class="form-control chosen" placeholder="Category"
 								required>
 								<option value="${editSecList.catName}"></option>
 							</select>
                                 </div>
                               </div>
                                 <div class="row">
+                                
                     <c:forEach items="${languagesList}" var="languagesList" >
                      <h5 class="title pull-left">${languagesList.name}</h5>
                      
                      <c:choose>
                      	<c:when test="${isEdit==1}">
                      	 
-                     		<c:forEach items="${editSection.sectionDescriptionList}" var="sectionDescriptionList" >
+                     		<c:forEach items="${editSubCat.categoryDescriptionList}" var="categoryDescriptionList" >
                      		 
                      			<c:choose>
-                     				<c:when test="${sectionDescriptionList.languageId==languagesList.languagesId}">
+                     				<c:when test="${categoryDescriptionList.languageId==languagesList.languagesId}">
                      					<div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10">
-				                                   <input id="sectionName${languagesList.languagesId}" class="form-control"
-												placeholder="Sub-Category Name"  value="${sectionDescriptionList.catName}"  style="text-align: left;" name="subCategoryName${languagesList.languagesId}" type="text" required>
+				                                   <input id="subCatName${languagesList.languagesId}" class="form-control"
+												placeholder="Sub-Category Name"  value="${categoryDescriptionList.catName}"  style="text-align: left;" name="subCatName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
@@ -123,8 +124,8 @@
 				                              <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
 				                                <div class="col-sm-10">
-				                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
-												placeholder="Sub-Category Description"  value="${sectionDescriptionList.catDesc}"  style="text-align: left;" name="subCategoryDesc${languagesList.languagesId}" type="text"  >
+				                                <input id="subCatDesc${languagesList.languagesId}" class="form-control"
+												placeholder="Sub-Category Description"  value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="subCatDesc${languagesList.languagesId}" type="text"  >
 				                                </div>
 				                              </div>
 				                                   
@@ -133,41 +134,44 @@
                      			</c:choose>
                      		
                      		</c:forEach>
+                     		<input id="parentId" value="${editSubCat.parentId}" name="parentId" type="hidden"  >
                      	</c:when>
                      	<c:otherwise>
-                     		<div class="col-xs-12">
+                     		 <div class="col-xs-12">
                                 	  
-                               <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
-                                <div class="col-sm-10">
-                                   <input id="sectionName${languagesList.languagesId}" class="form-control"
-								placeholder="Sub-Category Name" style="text-align: left;" name="subCategoryName${languagesList.languagesId}" type="text" required>
-                                </div>
-                              </div>
-                            
-                           
-                              <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
-                                <div class="col-sm-10">
-                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Sub-Category Description" style="text-align: left;" name="subCategoryDesc${languagesList.languagesId}" type="text"  >
-                                </div>
-                              </div>
-                               
-                        </div>
+				                               <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
+				                                <div class="col-sm-10">
+				                                   <input id="subCatName${languagesList.languagesId}" class="form-control"
+												placeholder="Sub-Category Name"  value="${categoryDescriptionList.catName}"  style="text-align: left;" name="subCatName${languagesList.languagesId}" type="text" required>
+				                                </div>
+				                              </div>
+				                            
+				                           
+				                              <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
+				                                <div class="col-sm-10">
+				                                <input id="subCatDesc${languagesList.languagesId}" class="form-control"
+												placeholder="Sub-Category Description"  value="${categoryDescriptionList.catDesc}"  style="text-align: left;" 
+												name="subCatDesc${languagesList.languagesId}" type="text"  >
+				                                </div>
+				                              </div>
+				                                   
+				                        </div>
+				                       <input id="parentId" value="0" name="parentId" type="hidden"  >
                      	</c:otherwise>
                      </c:choose>
                         
                         </c:forEach>
                         
                         <div class="col-xs-12"> 
-                        <input id="sectionId" value="${editSection.sectionId}" name="sectionId" type="hidden"  >
+                        <input id="catId" value="${editSubCat.catId}" name="catId" type="hidden"  >
                         
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
                                   <input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
+								placeholder="Sequence No" value="${editSubCat.catSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
                               
@@ -177,7 +181,7 @@
                                    
                                   <select name="isActive" id="isActive" class="form-control">
                                   	<c:choose>
-                                  		<c:when test="${editSection.isActive==0}">
+                                  		<c:when test="${editSubCat.isActive==0}">
                                   			<option value="1" >YES</option>
                                    			<option value="0" selected>NO</option>
                                   		</c:when>
@@ -214,25 +218,34 @@
 		function getCategoryList() {
 
 			var sectionId = document.getElementById("sectionId").value;
-alert("Section id: "+sectionId);
+			var parentId = document.getElementById("parentId").value;
+			if(sectionId!=""){ 
 			$.getJSON('${getCategoryBySectionId}', {
 
 				sectionId : sectionId,
 				ajax : 'true'
 			}, function(data) {
-			//alert(data);
+			 
 
 				var html = '<option value="">Select Category</option>';
 
 				var len = data.length;
 				for (var i = 0; i < len; i++) {
-					html += '<option value="' + data[i].catId + '">'
-							+ data[i].catName + ' &nbsp;&nbsp; </option>';
+					
+					if(parentId==data[i].catId){
+						html += '<option value="' + data[i].catId + '" selected>'
+						+ data[i].catName + ' &nbsp;&nbsp; </option>';
+					}else{
+						html += '<option value="' + data[i].catId + '">'
+						+ data[i].catName + ' &nbsp;&nbsp; </option>';
+					}
+					 
 				}
 				html += '</option>';
-				$('#catId').html(html);
-				$("#catId").trigger("chosen:updated");
+				$('#categoryId').html(html);
+				$("#categoryId").trigger("chosen:updated");
 			});
+			}
 		}
 	</script>
 

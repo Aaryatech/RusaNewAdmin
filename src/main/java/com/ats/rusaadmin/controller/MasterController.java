@@ -138,6 +138,7 @@ public class MasterController {
 					}
 					categoryDescriptionList.add(categoryDescription);
 				}
+				editcat.setCategoryDescriptionList(categoryDescriptionList);
 				//editcat.setAddedByUserId(UserDetail.getUserId());
 			}else {
 				editcat.setCatId(Integer.parseInt(catId));
@@ -148,7 +149,7 @@ public class MasterController {
 					editcat.getCategoryDescriptionList().get(i).setCatName(request.getParameter("catName"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
 					editcat.getCategoryDescriptionList().get(i).setCatDesc(request.getParameter("catDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
 					
-					if(languagesList.get(i).getLanguagesId()==1) {
+					if(editcat.getCategoryDescriptionList().get(i).getLanguageId()==1) {
 						
 						editcat.setCatName(request.getParameter("catName"+editcat.getCategoryDescriptionList().get(i).getLanguageId())); 
 						editcat.setCatDesc(request.getParameter("catDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
@@ -161,7 +162,7 @@ public class MasterController {
 				}
 				//editcat.setEditByUserId(UserDetail.getUserId());
 			}
-			editcat.setCategoryDescriptionList(categoryDescriptionList);
+			
 			editcat.setSectionId(sectionId);
 			editcat.setCatSortNo(seqNo); 
 			editcat.setIsActive(isActive);
@@ -264,17 +265,36 @@ public class MasterController {
 
 		ModelAndView model = new ModelAndView("master/addSubCategory");
 		try {
-			editSubCategory = new GetSubCategory();
+			editcat = new GetCategory();
+			
+			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+					Section[].class);
+			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
+			model.addObject("sectionList", sectionList);
+			
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
+ 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/subCategoryList", method = RequestMethod.GET)
+	public ModelAndView subCategoryList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/subCategoryList");
+		try {
+			 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+			GetCategory[] getCategory = rest.postForObject(Constant.url + "/getSubCatList", map,
 					GetCategory[].class);
-			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
-			model.addObject("categoryList", categoryList);
-			
-			GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatList", map,
-					GetSubCategory[].class);
-			List<GetSubCategory> subCategoryList = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
+			List<GetCategory> subCategoryList = new ArrayList<GetCategory>(Arrays.asList(getCategory));
 			model.addObject("subCategoryList", subCategoryList);
  
 		} catch (Exception e) {
@@ -290,43 +310,90 @@ public class MasterController {
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 
-			String subCatId = request.getParameter("subCatId");
-			String subCatCode = request.getParameter("subCatCode");
-			String subCatDesc = request.getParameter("subCatDesc");
-			String subCatName = request.getParameter("subCatName");
-			int catId = Integer.parseInt(request.getParameter("catId"));
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+			String catId = request.getParameter("catId");
+			int isActive = Integer.parseInt(request.getParameter("isActive"));
+			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
+			int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			
-			
+			List<CategoryDescription> categoryDescriptionList = new ArrayList<CategoryDescription>();
 
-			if (subCatId == "" || subCatId == null) {
-				editSubCategory.setSubCatId(0);
-				editSubCategory.setSubCatAddDate(sf.format(date));
+			if (catId == "" || catId == null) {
+				editcat.setCatId(0);
+				editcat.setCatAddDate(sf.format(date));
+				
+				for(int i = 0 ; i<languagesList.size() ; i++) {
+					
+					CategoryDescription categoryDescription = new CategoryDescription();
+					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					categoryDescription.setCatName(request.getParameter("subCatName"+languagesList.get(i).getLanguagesId()));
+					categoryDescription.setCatDesc(request.getParameter("subCatDesc"+languagesList.get(i).getLanguagesId()));
+					
+					if(languagesList.get(i).getLanguagesId()==1) {
+						
+						editcat.setCatName(request.getParameter("subCatName"+languagesList.get(i).getLanguagesId())); 
+						editcat.setCatDesc(request.getParameter("subCatDesc"+languagesList.get(i).getLanguagesId()));
+						String text = editcat.getCatName();
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+						System.out.println(text);
+						editcat.setSlugName(text);
+					}
+					categoryDescriptionList.add(categoryDescription);
+				}
+				//editcat.setAddedByUserId(UserDetail.getUserId());
+				editcat.setCategoryDescriptionList(categoryDescriptionList);
 			}else {
-				editSubCategory.setSubCatId(Integer.parseInt(subCatId));
-				editSubCategory.setSubCatEditDate(sf.format(date));
+				editcat.setCatId(Integer.parseInt(catId));
+				editcat.setCatEditDate(sf.format(date));
+				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
+				for(int i = 0 ; i<editcat.getCategoryDescriptionList().size() ; i++) {
+					 
+					editcat.getCategoryDescriptionList().get(i).setCatName(request.getParameter("subCatName"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+					editcat.getCategoryDescriptionList().get(i).setCatDesc(request.getParameter("subCatDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+					
+					if(editcat.getCategoryDescriptionList().get(i).getLanguageId()==1) {
+						
+						editcat.setCatName(request.getParameter("subCatName"+editcat.getCategoryDescriptionList().get(i).getLanguageId())); 
+						editcat.setCatDesc(request.getParameter("subCatDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+						String text = editcat.getCatName();
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+						System.out.println(text);
+						editcat.setSlugName(text);
+					}
+					 
+				}
+				//editcat.setEditByUserId(UserDetail.getUserId());
 			}
-			editSubCategory.setCatId(catId); 
-			editSubCategory.setSubCatCode(subCatCode);
-			editSubCategory.setSubCatDesc(subCatDesc);
-			editSubCategory.setSubCatName(subCatName);
-			editSubCategory.setSubCatSortNo(seqNo);
-			editSubCategory.setIsActive(1);
-			editSubCategory.setDelStatus(1);
-			System.out.println("sub category" + editSubCategory);
+			editcat.setParentId(categoryId);
+			
+			editcat.setSectionId(sectionId);
+			editcat.setCatSortNo(seqNo); 
+			editcat.setIsActive(isActive);
+			editcat.setDelStatus(1);
+			System.out.println("category" + editcat);
 
-			SubCategory res = rest.postForObject(Constant.url + "/saveUpdateSubCategory", editSubCategory, SubCategory.class);
+			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
 
 			System.out.println("res " + res);
+			
+			if(editcat.getCatId()==0) {
+				session.setAttribute("successMsg","Infomation added successfully!");
+			}else {
+				session.setAttribute("successMsg","Infomation updated successfully!");
+			}
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addSubCategory";
+		return "redirect:/subCategoryList";
 	}
 	
 	@RequestMapping(value = "/editSubCategory/{subCatId}", method = RequestMethod.GET)
@@ -337,24 +404,42 @@ public class MasterController {
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("subCatId", subCatId);
-			map.add("delStatus", 1);
-			editSubCategory = rest.postForObject(Constant.url + "/getSubCategoryBySubCatId", map, GetSubCategory.class);
-			model.addObject("editSubCategory", editSubCategory);
+			map.add("catId", subCatId);
 
-			System.out.println(editSubCategory);
+			 editcat = rest.postForObject(Constant.url + "/getCategoryByCatId", map, GetCategory.class);
+			 
+			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+					Section[].class);
+			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
+			model.addObject("sectionList", sectionList);
 			
-			map = new LinkedMultiValueMap<String, Object>();
-			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
-					GetCategory[].class);
-			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
-			model.addObject("categoryList", categoryList);
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
 			
-			GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatList", map,
-					GetSubCategory[].class);
-			List<GetSubCategory> subCategoryList = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
-			model.addObject("subCategoryList", subCategoryList);
+			for(int i=0 ; i<languagesList.size() ; i++) {
+				
+				int flag=0;
+				
+				for(int j=0 ; j<editcat.getCategoryDescriptionList().size() ; j++) {
+					
+					if(languagesList.get(i).getLanguagesId()==editcat.getCategoryDescriptionList().get(j).getLanguageId()) {
+						flag=1;
+						break;
+					}
+				}
+				
+				if(flag==0) {
+					CategoryDescription categoryDescription = new CategoryDescription();
+					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					editcat.getCategoryDescriptionList().add(categoryDescription);
+				}
+			}
+			System.out.println(editcat);
+			model.addObject("editSubCat", editcat);
+			
+			model.addObject("isEdit", 1);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -362,24 +447,49 @@ public class MasterController {
 
 		return model;
 	}
+	
+	@RequestMapping(value = "/getCategoryBySectionId", method = RequestMethod.GET)
+	public @ResponseBody List<GetCategory> getCategoryBySectionId(HttpServletRequest request, HttpServletResponse response) {
+		
+		List<GetCategory> categoryList = new ArrayList<GetCategory>();
+		try {
+			System.out.println("in method");
 
-	@RequestMapping(value = "/deleteSubCategory/{subCatId}", method = RequestMethod.GET)
-	public String deleteSubCategory(@PathVariable int subCatId, HttpServletRequest request, HttpServletResponse response) {
+			String sectionId = request.getParameter("sectionId");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("sectionId", sectionId);
+
+			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatIdBySectionId", map,
+					GetCategory[].class);
+
+			categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
+ 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return categoryList;
+	}
+ 
+	@RequestMapping(value = "/deleteSubCategory/{catId}", method = RequestMethod.GET)
+	public String deleteSubCategory(@PathVariable int catId, HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("subCatIdList", subCatId); 
+			map.add("catIdList", catId); 
 			map.add("delStatus", 0); 
-			Info res = rest.postForObject(Constant.url + "/deleteMultiSubCategory", map, Info.class);
+			Info res = rest.postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
 			System.out.println(res);
 
+			HttpSession session = request.getSession();
+			session.setAttribute("successMsg","Infomation deleted successfully!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addSubCategory";
+		return "redirect:/subCategoryList";
 	}
 	
 	@RequestMapping(value = "/addSection", method = RequestMethod.GET)
@@ -479,8 +589,8 @@ public class MasterController {
 					 }
 					if(sectionDescriptionList.get(i).getLanguageId()==1) {
 						
-						editSection.setSectionName(request.getParameter("sectionName"+languagesList.get(i).getLanguagesId())); 
-						editSection.setSectionDesc(request.getParameter("sectionDesc"+languagesList.get(i).getLanguagesId()));
+						editSection.setSectionName(request.getParameter("sectionName"+sectionDescriptionList.get(i).getLanguageId())); 
+						editSection.setSectionDesc(request.getParameter("sectionDesc"+sectionDescriptionList.get(i).getLanguageId()));
 						String text = editSection.getSectionName(); 
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
 						System.out.println(text);

@@ -23,6 +23,7 @@ public class GetCategory {
 	private int isActive; 
 	private int delStatus; 
 	private String sectionName; 
+	private String categoryName;
 	List<CategoryDescription> categoryDescriptionList;
 	
 	public int getCatId() {
@@ -145,6 +146,12 @@ public class GetCategory {
 	public void setCategoryDescriptionList(List<CategoryDescription> categoryDescriptionList) {
 		this.categoryDescriptionList = categoryDescriptionList;
 	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 	@Override
 	public String toString() {
 		return "GetCategory [catId=" + catId + ", parentId=" + parentId + ", catName=" + catName + ", slugName="
@@ -153,7 +160,7 @@ public class GetCategory {
 				+ catEditDate + ", catAddDate=" + catAddDate + ", catSortNo=" + catSortNo + ", catRemark=" + catRemark
 				+ ", sectionId=" + sectionId + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId
 				+ ", isActive=" + isActive + ", delStatus=" + delStatus + ", sectionName=" + sectionName
-				+ ", categoryDescriptionList=" + categoryDescriptionList + "]";
+				+ ", categoryName=" + categoryName + ", categoryDescriptionList=" + categoryDescriptionList + "]";
 	}
 	 
 	
