@@ -53,7 +53,7 @@
                     <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Category</c:when><c:otherwise>Add Category</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/sectionList"><button type="button" class="btn btn-info"><< Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
@@ -71,17 +71,17 @@
                      <c:choose>
                      	<c:when test="${isEdit==1}">
                      	 
-                     		<c:forEach items="${editSection.sectionDescriptionList}" var="sectionDescriptionList" >
+                     		<c:forEach items="${editCategory.CategoryDescriptionList}" var="CategoryDescriptionList" >
                      		 
                      			<c:choose>
-                     				<c:when test="${sectionDescriptionList.languageId==languagesList.languagesId}">
+                     				<c:when test="${CategoryDescriptionList.languageId==languagesList.languagesId}">
                      					<div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Category Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
-												<input id="sectionName${languagesList.languagesId}" class="form-control"
-								placeholder="Category Name" value="${editCategory.catName}"  style="text-align: left;" name="sectionName${languagesList.languagesId}" type="text" required>
+												<input id="catName${languagesList.languagesId}" class="form-control"
+								placeholder="Category Name" value="${CategoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
@@ -90,8 +90,8 @@
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Category Description:</label>
 				                                <div class="col-sm-10">
 				                                
-				                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Category Description" value="${editCategory.catDesc}"  style="text-align: left;" name="sectionDesc${languagesList.languagesId}" type="text"  >
+				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
+								placeholder="Category Description" value="${CategoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
 				                              </div>
@@ -103,13 +103,13 @@
                      		</c:forEach>
                      	</c:when>
                      	<c:otherwise>
-                     		 <div class="col-xs-12">
+                     		  <div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Category Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
-												<input id="sectionName${languagesList.languagesId}" class="form-control"
-								placeholder="Category Name" value="${editCategory.catName}"  style="text-align: left;" name="sectionName${languagesList.languagesId}" type="text" required>
+												<input id="catName${languagesList.languagesId}" class="form-control"
+								placeholder="Category Name" value="${CategoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
@@ -118,8 +118,8 @@
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Category Description:</label>
 				                                <div class="col-sm-10">
 				                                
-				                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Category Description" value="${editCategory.catDesc}"  style="text-align: left;" name="sectionDesc${languagesList.languagesId}" type="text"  >
+				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
+								placeholder="Category Description" value="${CategoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
 				                              </div>

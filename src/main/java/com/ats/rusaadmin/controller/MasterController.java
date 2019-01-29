@@ -75,6 +75,27 @@ public class MasterController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/categoryList", method = RequestMethod.GET)
+	public ModelAndView categoryList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/categoryList");
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GetCategory[] getCategory = rest.postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
+			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(getCategory));
+			model.addObject("categoryList", categoryList);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
 	@RequestMapping(value = "/insertCategory", method = RequestMethod.POST)
 	public String insertCategory(HttpServletRequest request, HttpServletResponse response) {
 
@@ -140,13 +161,12 @@ public class MasterController {
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
 			
-			 map = new LinkedMultiValueMap<String, Object>();
-			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
-					GetCategory[].class);
-			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
-			model.addObject("categoryList", categoryList);
-
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
+			model.addObject("isEdit", 1);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -166,11 +186,13 @@ public class MasterController {
 			Info res = rest.postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
 			System.out.println(res);
 
+			HttpSession session = request.getSession();
+			session.setAttribute("successMsg","Infomation deleted successfully!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addCategory";
+		return "redirect:/categoryList";
 	}
 	
 	@RequestMapping(value = "/addSubCategory", method = RequestMethod.GET)
@@ -376,6 +398,7 @@ public class MasterController {
 					}
 					sectionDescriptionList.add(sectionDescription);
 				}
+				//editSection.setAddedByUserId(UserDetail.getUserId());
 			}else {
 				editSection.setSectionId(Integer.parseInt(sectionId));
 				editSection.setSectionEditDate(sf.format(date));
@@ -399,7 +422,7 @@ public class MasterController {
 					}
 				 
 				}
-				 
+				//editSection.setEditByUserId(UserDetail.getUserId());
 			}  
 			  
 			
@@ -407,7 +430,7 @@ public class MasterController {
 			editSection.setSectionDateTime(sf.format(date));
 			editSection.setDelStatus(1);
 			editSection.setIsActive(isActive);
-			//editSection.setAddedByUserId(UserDetail.getUserId());
+			
 			editSection.setSectionDescriptionList(sectionDescriptionList);
 			System.out.println("section" + editSection);
 
@@ -458,11 +481,12 @@ public class MasterController {
 	}
 	
 	@RequestMapping(value = "/clearSessionAttribute", method = RequestMethod.GET)
-	public Info clearSessionAttribute(HttpServletRequest request,
+	public @ResponseBody Info clearSessionAttribute(HttpServletRequest request,
 			HttpServletResponse response) {
 
 		Info Info = new Info();
 		try {
+			
 			HttpSession session = request.getSession();
 			session.removeAttribute("successMsg");
 			session.removeAttribute("errorMsg");
@@ -484,12 +508,14 @@ public class MasterController {
 			map.add("sectionId", sectionId); 
 			Info res = rest.postForObject(Constant.url + "/deleteSection", map, Info.class);
 			System.out.println(res);
-
+			HttpSession session = request.getSession();
+			session.setAttribute("successMsg","Infomation deleted successfully!");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addSection";
+		return "redirect:/sectionList";
 	}
 	
 	

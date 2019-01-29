@@ -1,47 +1,53 @@
 package com.ats.rusaadmin.model;
- 
+
+import java.util.List;
 
 public class GetCategory {
-
-	 
+ 
 	private int catId; 
+	private int parentId; 
 	private String catName; 
+	private String slugName; 
 	private String catCode; 
 	private String catDesc; 
-	private String catAddDate; 
+	private String imageName; 
+	private String externalUrl; 
+	private String externalUrlTarget; 
 	private String catEditDate; 
+	private String catAddDate; 
 	private int catSortNo; 
 	private String catRemark; 
 	private int sectionId; 
-	private String sectionName; 
-	private int userId; 
+	private int addedByUserId; 
+	private int editByUserId; 
 	private int isActive; 
-	private int delStatus;  
-	Info info; 
-	private int exInt1;
-	private int exInt2;
-	private int exInt3; 
-	private String exVar1;
-	private String exVar2;
-	private String exVar3; 
-	private String exDate1;
-	private String exDate2; 
-	private float exFloat1;
-	private float exFloat2;
-	private float exFloat3; 
-	private String exVar4;
-	private String exVar5;
+	private int delStatus; 
+	private String sectionName; 
+	List<CategoryDescription> CategoryDescriptionList;
+	
 	public int getCatId() {
 		return catId;
 	}
 	public void setCatId(int catId) {
 		this.catId = catId;
 	}
+	public int getParentId() {
+		return parentId;
+	}
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
 	public String getCatName() {
 		return catName;
 	}
 	public void setCatName(String catName) {
 		this.catName = catName;
+	}
+	public String getSlugName() {
+		return slugName;
+	}
+	public void setSlugName(String slugName) {
+		this.slugName = slugName;
 	}
 	public String getCatCode() {
 		return catCode;
@@ -55,17 +61,35 @@ public class GetCategory {
 	public void setCatDesc(String catDesc) {
 		this.catDesc = catDesc;
 	}
-	public String getCatAddDate() {
-		return catAddDate;
+	public String getImageName() {
+		return imageName;
 	}
-	public void setCatAddDate(String catAddDate) {
-		this.catAddDate = catAddDate;
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	public String getExternalUrl() {
+		return externalUrl;
+	}
+	public void setExternalUrl(String externalUrl) {
+		this.externalUrl = externalUrl;
+	}
+	public String getExternalUrlTarget() {
+		return externalUrlTarget;
+	}
+	public void setExternalUrlTarget(String externalUrlTarget) {
+		this.externalUrlTarget = externalUrlTarget;
 	}
 	public String getCatEditDate() {
 		return catEditDate;
 	}
 	public void setCatEditDate(String catEditDate) {
 		this.catEditDate = catEditDate;
+	}
+	public String getCatAddDate() {
+		return catAddDate;
+	}
+	public void setCatAddDate(String catAddDate) {
+		this.catAddDate = catAddDate;
 	}
 	public int getCatSortNo() {
 		return catSortNo;
@@ -85,17 +109,17 @@ public class GetCategory {
 	public void setSectionId(int sectionId) {
 		this.sectionId = sectionId;
 	}
-	public String getSectionName() {
-		return sectionName;
+	public int getAddedByUserId() {
+		return addedByUserId;
 	}
-	public void setSectionName(String sectionName) {
-		this.sectionName = sectionName;
+	public void setAddedByUserId(int addedByUserId) {
+		this.addedByUserId = addedByUserId;
 	}
-	public int getUserId() {
-		return userId;
+	public int getEditByUserId() {
+		return editByUserId;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setEditByUserId(int editByUserId) {
+		this.editByUserId = editByUserId;
 	}
 	public int getIsActive() {
 		return isActive;
@@ -109,102 +133,28 @@ public class GetCategory {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
-	public Info getInfo() {
-		return info;
+	public String getSectionName() {
+		return sectionName;
 	}
-	public void setInfo(Info info) {
-		this.info = info;
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
 	}
-	public int getExInt1() {
-		return exInt1;
+	public List<CategoryDescription> getCategoryDescriptionList() {
+		return CategoryDescriptionList;
 	}
-	public void setExInt1(int exInt1) {
-		this.exInt1 = exInt1;
-	}
-	public int getExInt2() {
-		return exInt2;
-	}
-	public void setExInt2(int exInt2) {
-		this.exInt2 = exInt2;
-	}
-	public int getExInt3() {
-		return exInt3;
-	}
-	public void setExInt3(int exInt3) {
-		this.exInt3 = exInt3;
-	}
-	public String getExVar1() {
-		return exVar1;
-	}
-	public void setExVar1(String exVar1) {
-		this.exVar1 = exVar1;
-	}
-	public String getExVar2() {
-		return exVar2;
-	}
-	public void setExVar2(String exVar2) {
-		this.exVar2 = exVar2;
-	}
-	public String getExVar3() {
-		return exVar3;
-	}
-	public void setExVar3(String exVar3) {
-		this.exVar3 = exVar3;
-	}
-	public String getExDate1() {
-		return exDate1;
-	}
-	public void setExDate1(String exDate1) {
-		this.exDate1 = exDate1;
-	}
-	public String getExDate2() {
-		return exDate2;
-	}
-	public void setExDate2(String exDate2) {
-		this.exDate2 = exDate2;
-	}
-	public float getExFloat1() {
-		return exFloat1;
-	}
-	public void setExFloat1(float exFloat1) {
-		this.exFloat1 = exFloat1;
-	}
-	public float getExFloat2() {
-		return exFloat2;
-	}
-	public void setExFloat2(float exFloat2) {
-		this.exFloat2 = exFloat2;
-	}
-	public float getExFloat3() {
-		return exFloat3;
-	}
-	public void setExFloat3(float exFloat3) {
-		this.exFloat3 = exFloat3;
-	}
-	public String getExVar4() {
-		return exVar4;
-	}
-	public void setExVar4(String exVar4) {
-		this.exVar4 = exVar4;
-	}
-	public String getExVar5() {
-		return exVar5;
-	}
-	public void setExVar5(String exVar5) {
-		this.exVar5 = exVar5;
+	public void setCategoryDescriptionList(List<CategoryDescription> categoryDescriptionList) {
+		CategoryDescriptionList = categoryDescriptionList;
 	}
 	@Override
 	public String toString() {
-		return "GetCategory [catId=" + catId + ", catName=" + catName + ", catCode=" + catCode + ", catDesc=" + catDesc
-				+ ", catAddDate=" + catAddDate + ", catEditDate=" + catEditDate + ", catSortNo=" + catSortNo
-				+ ", catRemark=" + catRemark + ", sectionId=" + sectionId + ", sectionName=" + sectionName + ", userId="
-				+ userId + ", isActive=" + isActive + ", delStatus=" + delStatus + ", info=" + info + ", exInt1="
-				+ exInt1 + ", exInt2=" + exInt2 + ", exInt3=" + exInt3 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2
-				+ ", exVar3=" + exVar3 + ", exDate1=" + exDate1 + ", exDate2=" + exDate2 + ", exFloat1=" + exFloat1
-				+ ", exFloat2=" + exFloat2 + ", exFloat3=" + exFloat3 + ", exVar4=" + exVar4 + ", exVar5=" + exVar5
-				+ "]";
+		return "GetCategory [catId=" + catId + ", parentId=" + parentId + ", catName=" + catName + ", slugName="
+				+ slugName + ", catCode=" + catCode + ", catDesc=" + catDesc + ", imageName=" + imageName
+				+ ", externalUrl=" + externalUrl + ", externalUrlTarget=" + externalUrlTarget + ", catEditDate="
+				+ catEditDate + ", catAddDate=" + catAddDate + ", catSortNo=" + catSortNo + ", catRemark=" + catRemark
+				+ ", sectionId=" + sectionId + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId
+				+ ", isActive=" + isActive + ", delStatus=" + delStatus + ", sectionName=" + sectionName
+				+ ", CategoryDescriptionList=" + CategoryDescriptionList + "]";
 	}
-	
-	
+	 
 	
 }
