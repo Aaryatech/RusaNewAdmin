@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,11 @@ import com.ats.rusaadmin.model.GetCategory;
 import com.ats.rusaadmin.model.GetGalleryHeaderByCatId;
 import com.ats.rusaadmin.model.GetSubCategory;
 import com.ats.rusaadmin.model.Info;
+import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.Section;
+import com.ats.rusaadmin.model.SectionDescription;
 import com.ats.rusaadmin.model.SubCategory;
+import com.ats.rusaadmin.model.User;
 
 @Controller
 @Scope("session")
@@ -45,24 +49,24 @@ public class MasterController {
 	Section editSection = new Section();
 	GetSubCategory editSubCategory = new GetSubCategory();
 	Galleryheader editGalleryheader = new Galleryheader();
+	List<Languages> languagesList = new ArrayList<Languages>();
+	
 	
 	@RequestMapping(value = "/addCategory", method = RequestMethod.GET)
 	public ModelAndView addCategory(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("master/addCategory");
 		try {
-			editcat = new GetCategory();
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
-					GetCategory[].class);
-			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
-			model.addObject("categoryList", categoryList);
-			
+			editcat = new GetCategory();  
 			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
+			
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -297,13 +301,34 @@ public class MasterController {
 
 		ModelAndView model = new ModelAndView("master/addSection");
 		try {
+			editSection = new Section();
+			 
+			 Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
+  
 			
-			 editSection = new Section();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/sectionList", method = RequestMethod.GET)
+	public ModelAndView sectionList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/sectionList");
+		try {
+			
+			 
 			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
- 
+  
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -316,43 +341,92 @@ public class MasterController {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
-
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd"); 
 			
-			String sectionId = request.getParameter("sectionId");
-			String sectionNo = request.getParameter("sectionNo");
-			String sectionName = request.getParameter("sectionName");
-			String sectionDesc = request.getParameter("sectionDesc");
-			String seqNo =  request.getParameter("seqNo") ; 
-			Section section = new Section();
+			String sectionId = request.getParameter("sectionId");  
+			int seqNo =  Integer.parseInt(request.getParameter("seqNo")); 
+			int isActive =  Integer.parseInt(request.getParameter("isActive")); 
+			
+			List<SectionDescription> sectionDescriptionList = new ArrayList<SectionDescription>();
+			
+			//Section section = new Section();
 
 			if (sectionId == "" || sectionId == null) {
 				editSection.setSectionId(0);
 				editSection.setSectionAddDate(sf.format(date));
+				for(int i = 0 ; i<languagesList.size() ; i++) {
+					
+					SectionDescription sectionDescription = new SectionDescription();
+					sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					sectionDescription.setSectionName(request.getParameter("sectionName"+languagesList.get(i).getLanguagesId()));
+					sectionDescription.setSectionDesc(request.getParameter("sectionDesc"+languagesList.get(i).getLanguagesId()));
+					
+					if(languagesList.get(i).getLanguagesId()==1) {
+						
+						editSection.setSectionName(request.getParameter("sectionName"+languagesList.get(i).getLanguagesId())); 
+						editSection.setSectionDesc(request.getParameter("sectionDesc"+languagesList.get(i).getLanguagesId()));
+						String text = editSection.getSectionName(); 
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+						System.out.println(text);
+						editSection.setSectionSlugname(text);
+					}
+					sectionDescriptionList.add(sectionDescription);
+				}
 			}else {
 				editSection.setSectionId(Integer.parseInt(sectionId));
 				editSection.setSectionEditDate(sf.format(date));
-			} 
-			editSection.setSectionName(sectionName);
-			editSection.setSectionNo(sectionNo);
-			editSection.setSectionDesc(sectionDesc);
+				sectionDescriptionList=editSection.getSectionDescriptionList();
+				
+				for(int i = 0 ; i<sectionDescriptionList.size() ; i++) {
+					
+					 
+					sectionDescriptionList.get(i).setLanguageId(languagesList.get(i).getLanguagesId());
+					sectionDescriptionList.get(i).setSectionName(request.getParameter("sectionName"+sectionDescriptionList.get(i).getLanguageId()));
+					sectionDescriptionList.get(i).setSectionDesc(request.getParameter("sectionDesc"+sectionDescriptionList.get(i).getLanguageId()));
+					
+					if(sectionDescriptionList.get(i).getLanguageId()==1) {
+						
+						editSection.setSectionName(request.getParameter("sectionName"+languagesList.get(i).getLanguagesId())); 
+						editSection.setSectionDesc(request.getParameter("sectionDesc"+languagesList.get(i).getLanguagesId()));
+						String text = editSection.getSectionName(); 
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+						System.out.println(text);
+						editSection.setSectionSlugname(text);
+					}
+				 
+				}
+				 
+			}  
+			  
+			
 			editSection.setSectionSortNo(seqNo); 
 			editSection.setSectionDateTime(sf.format(date));
 			editSection.setDelStatus(1);
-			editSection.setIsActive(1);
-			
-			System.out.println("section" + section);
+			editSection.setIsActive(isActive);
+			//editSection.setAddedByUserId(UserDetail.getUserId());
+			editSection.setSectionDescriptionList(sectionDescriptionList);
+			System.out.println("section" + editSection);
 
-			Info res = rest.postForObject(Constant.url + "/saveSection", section, Info.class);
+			Section res = rest.postForObject(Constant.url + "/saveSection", editSection, Section.class);
 
 			System.out.println("res " + res);
-
+			
+			session = request.getSession();
+			if(editSection.getSectionId()==0) {
+				session.setAttribute("successMsg","Infomation added successfully!");
+			}else {
+				session.setAttribute("successMsg","Infomation updated successfully!");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addSection";
+		return "redirect:/sectionList";
 	}
 	
 	@RequestMapping(value = "/editSection/{sectionId}", method = RequestMethod.GET)
@@ -370,16 +444,34 @@ public class MasterController {
 
 			System.out.println(editSection);
 			
-			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
-					Section[].class);
-			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
-			model.addObject("sectionList", sectionList);
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
+			model.addObject("isEdit", 1);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
+	}
+	
+	@RequestMapping(value = "/clearSessionAttribute", method = RequestMethod.GET)
+	public Info clearSessionAttribute(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		Info Info = new Info();
+		try {
+			HttpSession session = request.getSession();
+			session.removeAttribute("successMsg");
+			session.removeAttribute("errorMsg");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return Info;
 	}
 
 	@RequestMapping(value = "/deleteSection/{sectionId}", method = RequestMethod.GET)

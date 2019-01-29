@@ -2,7 +2,9 @@ package com.ats.rusaadmin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,8 +27,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.GetCategory;
+import com.ats.rusaadmin.model.LoginLogs;
+import com.ats.rusaadmin.model.LoginResponse;
 import com.ats.rusaadmin.model.Section;
+import com.ats.rusaadmin.model.User;
 
 /**
  * Handles requests for the application home page.
@@ -40,7 +46,7 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(HttpServletRequest request, HttpServletResponse res,Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
@@ -49,7 +55,16 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate );
-		
+		try {
+		 
+        InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
+        String hostName = addr.getHostName(); 
+         String userAgent = request.getHeader("User-Agent"); 
+         System.out.println("userAgent :" + userAgent);
+         System.out.println("hostName" + hostName);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		return "login";
 	}
 	
@@ -60,28 +75,54 @@ public class HomeController {
 		String password = request.getParameter("password");
 
 		ModelAndView mav = new ModelAndView("login");
-
+		RestTemplate rest = new RestTemplate();
 		res.setContentType("text/html");
-		PrintWriter pw = res.getWriter();
 		HttpSession session = request.getSession();
-
 		try {
 			System.out.println("Login Process " + name);
 
 			if (name.equalsIgnoreCase("") || password.equalsIgnoreCase("") || name == null || password == null) {
 
 				mav = new ModelAndView("login");
+				mav.addObject("msg", "Invalid login");
 			} else {
  
-				if (name.equals("Tester") && password.equals("1234")) {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("userName", name);
+				map.add("password", password);
+				LoginResponse loginResponse = rest.postForObject(Constant.url + "/loginResponse", map,
+						LoginResponse.class);
+				
+				 
+				if (loginResponse.isError()==false) {
 					 
+					
 					mav = new ModelAndView("welcome");
+					 
+						session.setAttribute("UserDetail", loginResponse.getUser());
+						InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
+				        String hostName = addr.getHostName(); 
+				        String userAgent = request.getHeader("User-Agent"); 
+				         
+				        Date date = new Date();
+				        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				        LoginLogs saveLoginLogs = new LoginLogs();
+				        saveLoginLogs.setIpAddress(hostName);
+				        saveLoginLogs.setUserAgent(userAgent);
+				        saveLoginLogs.setCreatedDate(sf.format(date));
+				        saveLoginLogs.setUserId(loginResponse.getUser().getUserId());
+				        
+				        LoginLogs resp = rest.postForObject(Constant.url + "/saveLoginLogs", saveLoginLogs, LoginLogs.class);
+						
+				        System.out.println(resp);
+
+				 
 					
 				} else {
 
 					mav = new ModelAndView("login");
 					System.out.println("Invalid login credentials");
-
+					mav.addObject("msg", "Invalid login");
 				}
 
 				
@@ -89,13 +130,29 @@ public class HomeController {
 		} catch (Exception e) {
 			System.out.println("HomeController Login API Excep:  " + e.getMessage());
 			e.printStackTrace();
-
+			mav.addObject("msg", "Invalid login");
 		}
 
 		return mav;
 
 	}
 	
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		System.out.println("User Logout");
+
+		session.invalidate();
+		return "redirect:/";
+	}
+	 
+	@RequestMapping(value = "/sessionTimeOut", method = RequestMethod.GET)
+	public String sessionTimeOut(HttpSession session) {
+		System.out.println("User Logout");
+
+		session.invalidate();
+		return "redirect:/";
+	}
 	@RequestMapping(value = "/sampleForm", method = RequestMethod.GET)
 	public ModelAndView addCategory(HttpServletRequest request, HttpServletResponse response) {
 
@@ -114,6 +171,20 @@ public class HomeController {
 	public ModelAndView sampleTableList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("sample/sampleTableList");
+		try {
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/langConvert", method = RequestMethod.GET)
+	public ModelAndView langConvert(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("sample/langConvert");
 		try {
 			 
 			

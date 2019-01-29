@@ -9,7 +9,7 @@
 <script src="${pageContext.request.contextPath}/resources/assets/plugins/pace/pace.min.js" type="text/javascript"></script>  
 <script src="${pageContext.request.contextPath}/resources/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js" type="text/javascript"></script> 
 <script src="${pageContext.request.contextPath}/resources/assets/plugins/viewport/viewportchecker.js" type="text/javascript"></script>  
-<script>window.jQuery||document.write('<script src="assets/js/jquery-1.11.2.min.js"><\/script>');</script>
+<script>window.jQuery||document.write('<script src="${pageContext.request.contextPath}/resources/assets/js/jquery-1.11.2.min.js"><\/script>');</script>
 <!-- CORE JS FRAMEWORK - END --> 
 
 
@@ -20,7 +20,9 @@
 
 
 
-<script src="assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script> <script src="assets/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script> <script src="assets/js/form-validation.js" type="text/javascript"></script> 
+<script src="${pageContext.request.contextPath}/resources/assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+ <script src="${pageContext.request.contextPath}/resources/assets/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>
+  <script src="${pageContext.request.contextPath}/resources/assets/js/form-validation.js" type="text/javascript"></script> 
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
 
 

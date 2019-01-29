@@ -63,6 +63,16 @@
             <h1><a href="#" title="Login Page" tabindex="-1">Complete Admin</a></h1>
 
             <form name="loginform" id="loginform" action="${pageContext.request.contextPath}/loginProcess" method="post">
+            
+            <c:choose>
+            	<c:when test="${msg!=null}">
+	            	<div class="alert alert-error alert-dismissible fade in">
+		                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+		                <strong>${msg}</strong> 
+	            	</div>
+            	</c:when>
+            </c:choose>
+            
                 <p>
                     <label for="user_login">Username<br />
                         <input type="text" name="username" id="username" class="input" value="demo" size="20" /></label>
@@ -71,14 +81,15 @@
                     <label for="user_pass">Password<br />
                         <input type="password" name="password" id="password" class="input" value="demo" size="20" /></label>
                 </p>
-                <p class="forgetmenot">
+               <!--  <p class="forgetmenot">
                     <label class="icheck-label form-label" for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" class="icheck-minimal-aero" checked> Remember me</label>
                 </p>
-
+ -->
 
 
                 <p class="submit">
                     <input type="submit" name="wp-submit" id="wp-submit" class="btn btn-accent btn-block" value="Sign In" />
+                    
                 </p>
             </form>
 
