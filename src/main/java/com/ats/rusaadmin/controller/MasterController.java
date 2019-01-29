@@ -470,11 +470,13 @@ public class MasterController {
 				
 				for(int i = 0 ; i<sectionDescriptionList.size() ; i++) {
 					
+					 try {
 					 
-					sectionDescriptionList.get(i).setLanguageId(languagesList.get(i).getLanguagesId());
 					sectionDescriptionList.get(i).setSectionName(request.getParameter("sectionName"+sectionDescriptionList.get(i).getLanguageId()));
 					sectionDescriptionList.get(i).setSectionDesc(request.getParameter("sectionDesc"+sectionDescriptionList.get(i).getLanguageId()));
-					
+					 }catch(Exception e) {
+						 
+					 }
 					if(sectionDescriptionList.get(i).getLanguageId()==1) {
 						
 						editSection.setSectionName(request.getParameter("sectionName"+languagesList.get(i).getLanguagesId())); 
@@ -527,7 +529,7 @@ public class MasterController {
 			map.add("sectionId", sectionId);
 
 			 editSection = rest.postForObject(Constant.url + "/getSectionBySectionId", map, Section.class);
-			model.addObject("editSection", editSection);
+			
 
 			System.out.println(editSection);
 			
@@ -536,6 +538,28 @@ public class MasterController {
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
 			model.addObject("isEdit", 1);
+			
+			
+			for(int i=0 ; i<languagesList.size() ; i++) {
+				
+				int flag=0;
+				
+				for(int j=0 ; j<editSection.getSectionDescriptionList().size() ; j++) {
+					
+					if(languagesList.get(i).getLanguagesId()==editSection.getSectionDescriptionList().get(j).getLanguageId()) {
+						flag=1;
+						break;
+					}
+				}
+				
+				if(flag==0) {
+					SectionDescription sectionDescription = new SectionDescription();
+					sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					editSection.getSectionDescriptionList().add(sectionDescription);
+				}
+			}
+			
+			model.addObject("editSection", editSection);
 
 		} catch (Exception e) {
 			e.printStackTrace();
