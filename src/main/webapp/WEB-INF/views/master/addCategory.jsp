@@ -67,21 +67,23 @@
                     
                     <c:forEach items="${languagesList}" var="languagesList" >
                      <h5 class="title pull-left">${languagesList.name}</h5>
-                     
+                     <c:set var="find" value="0"></c:set>
                      <c:choose>
                      	<c:when test="${isEdit==1}">
                      	 
-                     		<c:forEach items="${editCategory.CategoryDescriptionList}" var="CategoryDescriptionList" >
+                     		<c:forEach items="${editCategory.categoryDescriptionList}" var="categoryDescriptionList" >
+                     		 
                      		 
                      			<c:choose>
-                     				<c:when test="${CategoryDescriptionList.languageId==languagesList.languagesId}">
+                     				<c:when test="${categoryDescriptionList.languageId==languagesList.languagesId}">
+                     					<c:set var="find" value="1"></c:set>
                      					<div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Category Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
 												<input id="catName${languagesList.languagesId}" class="form-control"
-								placeholder="Category Name" value="${CategoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
+								placeholder="Category Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
@@ -91,7 +93,7 @@
 				                                <div class="col-sm-10">
 				                                
 				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Category Description" value="${CategoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
+								placeholder="Category Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
 				                              </div>
@@ -99,8 +101,8 @@
 				                        </div>
                      				</c:when>
                      			</c:choose>
-                     		
-                     		</c:forEach>
+                     			 
+                     		</c:forEach> 
                      	</c:when>
                      	<c:otherwise>
                      		  <div class="col-xs-12">
@@ -109,7 +111,7 @@
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Category Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
 												<input id="catName${languagesList.languagesId}" class="form-control"
-								placeholder="Category Name" value="${CategoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
+								placeholder="Category Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
@@ -119,7 +121,7 @@
 				                                <div class="col-sm-10">
 				                                
 				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Category Description" value="${CategoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
+								placeholder="Category Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
 				                              </div>
@@ -131,7 +133,7 @@
                         </c:forEach>
                         
                         <div class="col-xs-12"> 
-                        <input id="catId" value="${editSection.sectionId}" name="catId" type="hidden"  >
+                        <input id="catId" value="${editCategory.catId}" name="catId" type="hidden"  >
                         
                         <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Select Section : <span class="text-danger">*</span> </label>
@@ -140,7 +142,15 @@
                                  <select class="form-control"   name="sectionId"  id="sectionId"  required>
                                     <option value="" >Select</option>
                                     <c:forEach items="${sectionList}" var="sectionList" >
-                                    <option value="${sectionList.sectionId}">${sectionList.sectionName}</option>
+                                    <c:choose>
+                                    	<c:when test="${sectionList.sectionId==editCategory.sectionId}">
+                                    	<option value="${sectionList.sectionId}" selected>${sectionList.sectionName}</option>
+                                    	</c:when>
+                                    	<c:otherwise>
+                                    	<option value="${sectionList.sectionId}">${sectionList.sectionName}</option>
+                                    	</c:otherwise>
+                                    </c:choose>
+                                    
                                     </c:forEach>
                                     </select>
                                 </div>
@@ -150,7 +160,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
                                   <input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
+								placeholder="Sequence No" value="${editCategory.catSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
                             
@@ -160,7 +170,7 @@
                                    
                                   <select name="isActive" id="isActive" class="form-control">
                                     <c:choose>
-                                  		<c:when test="${editSection.isActive==0}">
+                                  		<c:when test="${editCategory.isActive==0}">
                                   			<option value="1" >YES</option>
                                    			<option value="0" selected>NO</option>
                                   		</c:when>

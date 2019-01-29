@@ -26,8 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.Category;
+import com.ats.rusaadmin.model.CategoryDescription;
 import com.ats.rusaadmin.model.GalleryDetail;
 import com.ats.rusaadmin.model.Galleryheader;
 import com.ats.rusaadmin.model.GetCategory;
@@ -101,44 +103,86 @@ public class MasterController {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
-
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
 			String catId = request.getParameter("catId");
-			String catCode = request.getParameter("catCode");
-			String catDesc = request.getParameter("catDesc");
-			String catName = request.getParameter("catName");
+			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			
-			 
+			List<CategoryDescription> categoryDescriptionList = new ArrayList<CategoryDescription>();
 
 			if (catId == "" || catId == null) {
 				editcat.setCatId(0);
 				editcat.setCatAddDate(sf.format(date));
+				
+				for(int i = 0 ; i<languagesList.size() ; i++) {
+					
+					CategoryDescription categoryDescription = new CategoryDescription();
+					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					categoryDescription.setCatName(request.getParameter("catName"+languagesList.get(i).getLanguagesId()));
+					categoryDescription.setCatDesc(request.getParameter("catDesc"+languagesList.get(i).getLanguagesId()));
+					
+					if(languagesList.get(i).getLanguagesId()==1) {
+						
+						editcat.setCatName(request.getParameter("catName"+languagesList.get(i).getLanguagesId())); 
+						editcat.setCatDesc(request.getParameter("catDesc"+languagesList.get(i).getLanguagesId()));
+						String text = editcat.getCatName();
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+						System.out.println(text);
+						editcat.setSlugName(text);
+					}
+					categoryDescriptionList.add(categoryDescription);
+				}
+				//editcat.setAddedByUserId(UserDetail.getUserId());
 			}else {
 				editcat.setCatId(Integer.parseInt(catId));
 				editcat.setCatEditDate(sf.format(date));
+				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
+				for(int i = 0 ; i<editcat.getCategoryDescriptionList().size() ; i++) {
+					 
+					editcat.getCategoryDescriptionList().get(i).setCatName(request.getParameter("catName"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+					editcat.getCategoryDescriptionList().get(i).setCatDesc(request.getParameter("catDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+					
+					if(languagesList.get(i).getLanguagesId()==1) {
+						
+						editcat.setCatName(request.getParameter("catName"+editcat.getCategoryDescriptionList().get(i).getLanguageId())); 
+						editcat.setCatDesc(request.getParameter("catDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+						String text = editcat.getCatName();
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+						System.out.println(text);
+						editcat.setSlugName(text);
+					}
+					 
+				}
+				//editcat.setEditByUserId(UserDetail.getUserId());
 			}
-			editcat.setCatDesc(catDesc);
-			editcat.setCatCode(catCode);
-			editcat.setCatName(catName);
+			editcat.setCategoryDescriptionList(categoryDescriptionList);
 			editcat.setSectionId(sectionId);
 			editcat.setCatSortNo(seqNo); 
-			editcat.setIsActive(1);
+			editcat.setIsActive(isActive);
 			editcat.setDelStatus(1);
 			System.out.println("category" + editcat);
 
 			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
 
 			System.out.println("res " + res);
+			
+			if(editcat.getCatId()==0) {
+				session.setAttribute("successMsg","Infomation added successfully!");
+			}else {
+				session.setAttribute("successMsg","Infomation updated successfully!");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addCategory";
+		return "redirect:/categoryList";
 	}
 	
 	@RequestMapping(value = "/editCategory/{catId}", method = RequestMethod.GET)
@@ -152,10 +196,7 @@ public class MasterController {
 			map.add("catId", catId);
 
 			 editcat = rest.postForObject(Constant.url + "/getCategoryByCatId", map, GetCategory.class);
-			model.addObject("editCategory", editcat);
-
-			System.out.println(editcat);
-			
+			 
 			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
@@ -165,8 +206,31 @@ public class MasterController {
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
+			
+			for(int i=0 ; i<languagesList.size() ; i++) {
+				
+				int flag=0;
+				
+				for(int j=0 ; j<editcat.getCategoryDescriptionList().size() ; j++) {
+					
+					if(languagesList.get(i).getLanguagesId()==editcat.getCategoryDescriptionList().get(j).getLanguageId()) {
+						flag=1;
+						break;
+					}
+				}
+				
+				if(flag==0) {
+					CategoryDescription categoryDescription = new CategoryDescription();
+					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					editcat.getCategoryDescriptionList().add(categoryDescription);
+				}
+			}
+			
+			model.addObject("editCategory", editcat);
+			
 			model.addObject("isEdit", 1);
 			
+			System.out.println(editcat);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
