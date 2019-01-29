@@ -47,7 +47,7 @@
 <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">Section List</h2>
+                <h2 class="title pull-left">Category List</h2>
                 <div class="actions panel_actions pull-right">
                  <a href="${pageContext.request.contextPath}/addCategory"><button type="button" class="btn btn-success">Add Category</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
