@@ -979,6 +979,20 @@ public class MasterController {
 		return "redirect:/photoGalleryDetail/"+editGalleryheader.getGalleryHeaderId();
 	}
 	
-	 
+	@RequestMapping(value = "/addSliderPic", method = RequestMethod.GET)
+	public ModelAndView addSliderPic(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addSliderPic");
+		try {
+		 
+			 
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
 
 }
