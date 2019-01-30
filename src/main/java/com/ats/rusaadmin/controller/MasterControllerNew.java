@@ -271,9 +271,12 @@ public class MasterControllerNew {
 						bannerList.setText1(text1);
 						bannerList.setText2(text2);
 						
-						
+						try {
 						upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
 								docFile);
+						}catch (Exception e) {
+							// TODO: handle exception
+						}
 						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", bannerList, BannerImages.class);
 						 
 

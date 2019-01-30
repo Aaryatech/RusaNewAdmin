@@ -39,6 +39,7 @@ import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.Section;
 import com.ats.rusaadmin.model.SectionDescription;
+import com.ats.rusaadmin.model.SectionTree;
 import com.ats.rusaadmin.model.SubCategory;
 import com.ats.rusaadmin.model.User;
 
@@ -986,6 +987,25 @@ public class MasterController {
 		try {
 		 
 			 
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/sectionTreeList", method = RequestMethod.GET)
+	public ModelAndView getSectionTreeStructure(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/sectionTreeList");
+		try {
+		 
+			  
+			SectionTree[] sectionTree = rest.getForObject(Constant.url + "/getSectionTreeStructure",  SectionTree[].class);
+			List<SectionTree> list = new ArrayList<SectionTree>(Arrays.asList(sectionTree));
+			model.addObject("list", list);
 			 
 			
 		} catch (Exception e) {
