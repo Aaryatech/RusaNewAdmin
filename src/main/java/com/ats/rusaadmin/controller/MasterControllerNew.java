@@ -1,8 +1,10 @@
 package com.ats.rusaadmin.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,18 +16,26 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.common.DateConvertor;
+import com.ats.rusaadmin.common.VpsImageUpload;
+import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.CategoryDescription;
+import com.ats.rusaadmin.model.GalleryDetail;
 import com.ats.rusaadmin.model.Galleryheader;
 import com.ats.rusaadmin.model.GetCategory;
 import com.ats.rusaadmin.model.GetSubCategory;
+import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.Section;
 import com.ats.rusaadmin.model.SectionDescription;
@@ -35,6 +45,7 @@ import com.ats.rusaadmin.model.User;
 public class MasterControllerNew {
 	
 	RestTemplate rest = new RestTemplate();
+	User edituser=new User();
 //	GetCategory editcat = new GetCategory();
 	Section editSection = new Section();
 	Category editSubCat=new Category();
@@ -42,29 +53,14 @@ public class MasterControllerNew {
 	Galleryheader editGalleryheader = new Galleryheader();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	List<GetCategory> categoryList;
-
+	User user=new User();
 	//List<Languages> languagesList = new ArrayList<Languages>();
 	//GetCategory
-	@RequestMapping(value = "/addSubCategoryNew", method = RequestMethod.GET)
+	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public ModelAndView addSection(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("master/addSubCategory");
+		ModelAndView model = new ModelAndView("master/addUser");
 		try {
-			editSection = new Section();
-			 
-			 Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
-					 Languages[].class);
-			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
-			 model.addObject("languagesList", languagesList);
-			 List<Section> section = rest.getForObject(Constant.url + "/getAllSectionList", 
-					 List.class);
-			 model.addObject("sectionList", section);
-			 
-			/* List<GetCategory> category = rest.postForObject(Constant.url + "/getAllCatList", map,
-					 List.class);
-			 model.addObject("categoryList", category);
-			
-			System.out.println("Section List: "+category.toString());*/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,125 +68,222 @@ public class MasterControllerNew {
 
 		return model;
 	}
-	@RequestMapping(value = "/getCategoryBySectionId", method = RequestMethod.GET)
-	public @ResponseBody List<GetCategory> getCategoryBySectionId(HttpServletRequest request, HttpServletResponse response) {
+	
+	@RequestMapping(value = "/userList", method = RequestMethod.GET)
+	public ModelAndView userList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/userList");
 		try {
-			System.out.println("in method");
-
-			String sectionId = request.getParameter("sectionId");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("sectionId", sectionId);
-
-			GetCategory[] categoryL = rest.postForObject(Constant.url + "/getAllCatIdBySectionId", map,
-					GetCategory[].class);
-
-			categoryList = new ArrayList<GetCategory>(Arrays.asList(categoryL));
-
-			System.out.println("Get Category List" + categoryList.toString());
-
+			map.add("delStatus", 1);
+			List<User> getUser = rest.getForObject(Constant.url + "/getAllUserList",
+					List.class);
+			//List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
+			model.addObject("userList", getUser);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return categoryList;
+		return model;
 	}
 	
-	
-	
-	/*@RequestMapping(value = "/insertSubCategory", method = RequestMethod.POST)
-	public String insertSubCategory(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/insertUser", method = RequestMethod.POST)
+	public String insertUser(HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
-			HttpSession session = request.getSession();
-			User UserDetail =(User) session.getAttribute("UserDetail");
+			HttpSession session1 = request.getSession();
+			User UserDetail =(User) session1.getAttribute("UserDetail");
 			
+			String userId = request.getParameter("userId");
+			String userName = request.getParameter("userName");
+			String roles = request.getParameter("roles");
+			String firstName = request.getParameter("firstname");
+			String middleName = request.getParameter("middlename");
+			String lastName = request.getParameter("lastname");
+			String email = request.getParameter("userEmail");
+			String pass = request.getParameter("userPass");
+		//	String userId = request.getParameter("middlename");
+			int isActive = Integer.parseInt(request.getParameter("isActive"));
+		
+			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+
 			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd"); 
-			
-			String sectionId = request.getParameter("sectionId"); 
-			int catId =Integer.parseInt(request.getParameter("catId"));
-			int seqNo =  Integer.parseInt(request.getParameter("seqNo")); 
-			int isActive =  Integer.parseInt(request.getParameter("isActive")); 
-			
-			List<Category> subCatDescList = new ArrayList<Category>();
-			
-			//Section section = new Section();
+			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+			System.out.println(sf.format(date));
 
-			if (sectionId == "" || sectionId == null) {
-				editSubCat.setSectionId(0);
-				editSubCat.setCatAddDate(sf.format(date));
-				editSubCat.setParentId(catId);
-				for(int i = 0 ; i<languagesList.size() ; i++) {
-					
-					CategoryDescription sectionDescription = new CategoryDescription();
-					sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					sectionDescription.setCatName(request.getParameter("subCatName"+languagesList.get(i).getLanguagesId()));
-					sectionDescription.setCatDesc(request.getParameter("subCatDesc"+languagesList.get(i).getLanguagesId()));
-					
-					if(languagesList.get(i).getLanguagesId()==1) {
-						
-						editSubCat.setSectionName(request.getParameter("subCatName"+languagesList.get(i).getLanguagesId())); 
-						editSubCat.setSectionDesc(request.getParameter("subCatDesc"+languagesList.get(i).getLanguagesId()));
-						String text = editSection.getSectionName(); 
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
-						System.out.println(text);
-						editSection.setSectionSlugname(text);
-					}
-					sectionDescriptionList.add(sectionDescription);
-				}
-				//editSection.setAddedByUserId(UserDetail.getUserId());
+			if (userId == "" || userId == null) {
+				user.setUserId(0);
+				user.setCreatedDate(sf.format(date));
+				user.setUserName(userName);
+				user.setFirstname(firstName);
+				user.setMiddlename(middleName);
+				user.setRoles(roles);
+				user.setDelStatus(1);
+				user.setSortNo(seqNo);
+				//user.setCreatedDate(sf.format(date));
+				user.setIsActive(isActive);
+				user.setUserEmail(email);
+				user.setUserPass(pass);
+				user.setLastname(lastName);
+				user.setAddedByUserId(UserDetail.getUserId());
+				//UserDetail.getUserId()
+				//user.setEditByUserId(0);
+				//editcat.setAddedByUserId(UserDetail.getUserId());
 			}else {
-				editSection.setSectionId(Integer.parseInt(sectionId));
-				editSection.setSectionEditDate(sf.format(date));
-				sectionDescriptionList=editSection.getSectionDescriptionList();
+				user.setUserId(Integer.parseInt(userId));
+				user.setCreatedDate(sf.format(date));
+				user.setUserName(userName);
+				user.setFirstname(firstName);
+				user.setMiddlename(middleName);
+				user.setRoles(roles);
+				user.setDelStatus(1);
+				user.setSortNo(seqNo);
+				//user.setCreatedDate(sf.format(date));
+				user.setIsActive(isActive);
+				user.setUserEmail(email);
+				user.setUserPass(pass);
+				user.setLastname(lastName);
+			//	user.setAddedByUserId(0);
+				user.setEditByUserId(UserDetail.getUserId());
 				
-				for(int i = 0 ; i<sectionDescriptionList.size() ; i++) {
-					
-					 
-					sectionDescriptionList.get(i).setLanguageId(languagesList.get(i).getLanguagesId());
-					sectionDescriptionList.get(i).setSectionName(request.getParameter("sectionName"+sectionDescriptionList.get(i).getLanguageId()));
-					sectionDescriptionList.get(i).setSectionDesc(request.getParameter("sectionDesc"+sectionDescriptionList.get(i).getLanguageId()));
-					
-					if(sectionDescriptionList.get(i).getLanguageId()==1) {
-						
-						editSection.setSectionName(request.getParameter("sectionName"+languagesList.get(i).getLanguagesId())); 
-						editSection.setSectionDesc(request.getParameter("sectionDesc"+languagesList.get(i).getLanguagesId()));
-						String text = editSection.getSectionName(); 
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
-						System.out.println(text);
-						editSection.setSectionSlugname(text);
-					}
-				 
 				}
-				//editSection.setEditByUserId(UserDetail.getUserId());
-			}  
-			  
+				//editcat.setEditByUserId(UserDetail.getUserId());
 			
-			editSection.setSectionSortNo(seqNo); 
-			editSection.setSectionDateTime(sf.format(date));
-			editSection.setDelStatus(1);
-			editSection.setIsActive(isActive);
 			
-			editSection.setSectionDescriptionList(sectionDescriptionList);
-			System.out.println("section" + editSection);
+			User res = rest.postForObject(Constant.url + "/saveUser", user, User.class);
 
-			Section res = rest.postForObject(Constant.url + "/saveSection", editSection, Section.class);
-
-			System.out.println("res " + res);
+			//System.out.println("res " + res);
 			
-			session = request.getSession();
-			if(editSection.getSectionId()==0) {
-				session.setAttribute("successMsg","Infomation added successfully!");
+			if(user.getUserId()==0) {
+				HttpSession session = request.getSession();
+				session.setAttribute("successMsg","User Infomation added successfully!");
 			}else {
-				session.setAttribute("successMsg","Infomation updated successfully!");
+				HttpSession session = request.getSession();
+				session.setAttribute("successMsg","User Infomation updated successfully!");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/sectionList";
-	}*/
-			  
+		return "redirect:/addUser";
+	}
+	@RequestMapping(value = "/editUser/{userId}", method = RequestMethod.GET)
+	public ModelAndView editUser(@PathVariable int userId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addUser");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("userId", userId);
+
+			 edituser = rest.postForObject(Constant.url + "/getUserByUserId", map, User.class);
+			 
+			 User[] user = rest.getForObject(Constant.url + "/getAllUserList", 
+					 User[].class);
+			List<User> userList = new ArrayList<User>(Arrays.asList(user));
+			model.addObject("userList", userList);
+			
+		
+			model.addObject("editUser", edituser);
+			
+			model.addObject("isEdit", 1);
+			
+			System.out.println(edituser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.GET)
+	public String deleteCategory(@PathVariable int userId, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("userId", userId); 
+			//map.add("delStatus", 0); 
+			Info res = rest.postForObject(Constant.url + "/deleteUser", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if(userId==1)
+			{
+				session.setAttribute("successMsg","Sorry, Can't deleted!");
+			}
+			else
+			{
+			session.setAttribute("successMsg","Infomation deleted successfully!");
+			}
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/userList";
+	}
+	@RequestMapping(value = "/insertBannerImage", method = RequestMethod.POST)
+	public String insertBannerImage(@RequestParam("docfile") List<MultipartFile> docfile,HttpServletRequest request,
+			HttpServletResponse response) {
+
+		 try {
+			 
+		//	 String mainImage = request.getParameter("main_image");
+				String sliderName = request.getParameter("sliderName");
+				String text1 = request.getParameter("text1");
+				String text2 = request.getParameter("text2");
+				String urlLink = request.getParameter("urlLink");
+				String linkName = request.getParameter("linkName");
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				List<BannerImages> bannerL = new ArrayList<BannerImages>();  
+				
+				VpsImageUpload upload = new VpsImageUpload();
+				String docFile = null;
+				
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				int year = cal.get(Calendar.YEAR);
+				int month = cal.get(Calendar.MONTH) + 1;
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				
+				
+						BannerImages bannerList = new BannerImages();
+						docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+						bannerList.setSliderImage(docFile);
+						//bannerList.setEditDate("");
+						bannerList.setLinkName(linkName);
+						bannerList.setSliderName(sliderName);
+						bannerList.setUrlLink(urlLink);
+				
+						bannerList.setAddDate(sf.format(date));
+						bannerList.setIsActive(isActive);
+						bannerList.setDelStatus(1);
+						bannerList.setCateId(0);
+						bannerList.setText1(text1);
+						bannerList.setText2(text2);
+						
+						
+						upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
+								docFile);
+						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", bannerList, BannerImages.class);
+						 
+
+					//	System.out.println("upload method called for image Upload " + files.get(i).toString());
+						//bannerL.add(bannerList);
+						
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 return "redirect:/addSliderPic";
+	}
 }

@@ -10,6 +10,7 @@ public class User {
 	private String userEmail; 
 	private String firstname; 
 	private String middlename; 
+	private String lastname; 
 	private int sortNo; 
 	private int delStatus; 
 	private int isActive; 
@@ -18,6 +19,22 @@ public class User {
 	private String createdDate; 
 	private String modifiedDate; 
 	private int loginFailureCount;  
+	private int addedByUserId;
+	private int editByUserId;
+	
+	
+	public int getAddedByUserId() {
+		return addedByUserId;
+	}
+	public void setAddedByUserId(int addedByUserId) {
+		this.addedByUserId = addedByUserId;
+	}
+	public int getEditByUserId() {
+		return editByUserId;
+	}
+	public void setEditByUserId(int editByUserId) {
+		this.editByUserId = editByUserId;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -53,6 +70,13 @@ public class User {
 	}
 	public void setMiddlename(String middlename) {
 		this.middlename = middlename;
+	}
+	
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	public int getSortNo() {
 		return sortNo;
@@ -105,10 +129,11 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", userPass=" + userPass + ", userEmail="
-				+ userEmail + ", firstname=" + firstname + ", middlename=" + middlename + ", sortNo=" + sortNo
-				+ ", delStatus=" + delStatus + ", isActive=" + isActive + ", roles=" + roles + ", lastloginDate="
-				+ lastloginDate + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate
-				+ ", loginFailureCount=" + loginFailureCount + "]";
+				+ userEmail + ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname
+				+ ", sortNo=" + sortNo + ", delStatus=" + delStatus + ", isActive=" + isActive + ", roles=" + roles
+				+ ", lastloginDate=" + lastloginDate + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate
+				+ ", loginFailureCount=" + loginFailureCount + ", addedByUserId=" + addedByUserId + ", editByUserId="
+				+ editByUserId + "]";
 	}
 	 
 

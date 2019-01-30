@@ -75,7 +75,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Pic</c:when><c:otherwise>Add Category</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Pic</c:when><c:otherwise>Add Slider Images</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -84,8 +84,8 @@
                      
                 </header>
                 
-                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertCategory" 
-                   onsubmit="return confirm('Do you really want to submit the form?');" method="post">
+                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertBannerImage" 
+                   onsubmit="return confirm('Do you really want to submit the form?');" method="post" enctype="multipart/form-data">
                    
                 <div class="content-body"> 
                     <div class="row">
@@ -109,7 +109,13 @@
                          
                         
                         <div class="col-xs-12"> 
-                       
+                          <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name :  </label>
+				                                <div class="col-sm-10"> 
+												<input id="sliderName" class="form-control"
+								placeholder="Slider Name" value="${categoryDescriptionList.sliderName}"  style="text-align: left;" name="sliderName" type="text"  >
+				                                </div>
+				                              </div>
                        <div class="form-group">
                                     <label class="col-md-2 control-label">New Slider Image:</label>
                                      <div class="col-md-10">
@@ -129,7 +135,7 @@
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="main_image"> <!-- rename it -->
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile"> <!-- rename it -->
                                                    
                                                 </div>
                                             </span>
@@ -163,7 +169,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL/Link :  </label>
                                 <div class="col-sm-10"> 
                                   <input id="urlLink" class="form-control"
-								placeholder="URL/Link " value="${editCategory.catSortNo}"  style="text-align: left;" name="urlLink" type="number"  >
+								placeholder="URL/Link " value="${editCategory.catSortNo}"  style="text-align: left;" name="urlLink" type="text"  >
                                 </div>
                               </div>
                               
@@ -171,7 +177,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Link Name :  </label>
                                 <div class="col-sm-10"> 
                                   <input id="linkName" class="form-control"
-								placeholder="Link Name " value="${editCategory.catSortNo}"  style="text-align: left;" name="linkName" type="number"  >
+								placeholder="Link Name " value="${editCategory.catSortNo}"  style="text-align: left;" name="linkName" type="text"  >
                                 </div>
                               </div>
                             
