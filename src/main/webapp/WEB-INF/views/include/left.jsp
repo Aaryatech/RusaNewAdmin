@@ -30,28 +30,20 @@
             <li class="">
                 <a href="javascript:;">
                 <i class="fa fa-columns"></i>
-                <span class="title">Layouts</span>
+                <span class="title">Section</span>
                 <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu" >
-                    <li>
-                        <a class="" href="layout-default.html" >Default Layout</a>
+               		 <li>
+                        <a class="" href="${pageContext.request.contextPath}/sectionList" >Section List </a>
                     </li>
                     <li>
-                        <a class="" href="layout-collapsed.html" >Collapsed Menu</a>
+                        <a class="" href="${pageContext.request.contextPath}/categoryList" >Menu List </a>
                     </li>
                     <li>
-                        <a class="" href="layout-chat.html" >Chat Open</a>
+                        <a class="" href="${pageContext.request.contextPath}/subCategoryList" >Sub Menu List</a>
                     </li>
-                    <li>
-                        <a class="" href="layout-boxed.html" >Boxed Layout</a>
-                    </li>
-                    <li>
-                        <a class="" href="layout-boxed-collapsed.html" >Boxed Collapsed Menu</a>
-                    </li>
-                    <li>
-                        <a class="" href="layout-boxed-chat.html" >Boxed Chat Open</a>
-                    </li>
+                     
                 </ul>
             </li>
              

@@ -24,6 +24,7 @@ public class GetCategory {
 	private int delStatus; 
 	private String sectionName; 
 	private String categoryName;
+	private int exInt2;
 	List<CategoryDescription> categoryDescriptionList;
 	
 	public int getCatId() {
@@ -152,6 +153,12 @@ public class GetCategory {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
+	public int getExInt2() {
+		return exInt2;
+	}
+	public void setExInt2(int exInt2) {
+		this.exInt2 = exInt2;
+	}
 	@Override
 	public String toString() {
 		return "GetCategory [catId=" + catId + ", parentId=" + parentId + ", catName=" + catName + ", slugName="
@@ -160,7 +167,8 @@ public class GetCategory {
 				+ catEditDate + ", catAddDate=" + catAddDate + ", catSortNo=" + catSortNo + ", catRemark=" + catRemark
 				+ ", sectionId=" + sectionId + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId
 				+ ", isActive=" + isActive + ", delStatus=" + delStatus + ", sectionName=" + sectionName
-				+ ", categoryName=" + categoryName + ", categoryDescriptionList=" + categoryDescriptionList + "]";
+				+ ", categoryName=" + categoryName + ", exInt2=" + exInt2 + ", categoryDescriptionList="
+				+ categoryDescriptionList + "]";
 	}
 	 
 	
