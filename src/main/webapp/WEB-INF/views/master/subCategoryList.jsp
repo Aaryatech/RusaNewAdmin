@@ -58,7 +58,7 @@
                  
             </header> 
             <div class="content-body">    <div class="row">
-            <c:if test="${sessionScope.successMsg!=null}">
+            <c:if test="${sessionScope.successMsg!=null}"> 
             <div class="col-lg-12">
     		          <div class="alert alert-success alert-dismissible fade in">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -77,7 +77,7 @@
                         <th>Sub Category Desc</th>
                         <th>Section Name</th>
                         <th>Category Name</th>
-                        <th width="10%">Sub Category Sort No</th> 
+                        <th width="10%"> Sort No</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
@@ -89,7 +89,7 @@
                         <th>Sub Category Desc</th>
                         <th>Section Name</th>
                         <th>Category Name</th>
-                        <th width="10%">Sub Category Sort No</th> 
+                        <th width="10%"> Sort No</th> 
                         <th>Action</th> 
                     </tr>
                 </tfoot>
