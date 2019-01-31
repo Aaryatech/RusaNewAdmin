@@ -252,6 +252,9 @@ public class MasterControllerNew {
 
 		 try {
 			 
+			 HttpSession session = request.getSession();
+				User UserDetail =(User) session.getAttribute("UserDetail");
+			 
 			 	String id = request.getParameter("id");
 		        String imageName = request.getParameter("imageName");
 				String sliderName = request.getParameter("sliderName");
@@ -284,6 +287,7 @@ public class MasterControllerNew {
 									e.printStackTrace();
 								}
 							editbanner.setAddDate(sf.format(date));
+							//editbanner.setAddedByUserId(UserDetail.getUserId());
 				  }else {
 					  
 					  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
@@ -300,6 +304,7 @@ public class MasterControllerNew {
 								}
 						}
 					  editbanner.setEditDate(sf.format(date));
+					  //editbanner.setEditByUserId(UserDetail.getUserId());
 				  }
 				
 					  
@@ -315,7 +320,11 @@ public class MasterControllerNew {
 						
 						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", editbanner, BannerImages.class);
 						 
- 
+						if(editbanner.getId()==0) {
+							session.setAttribute("successMsg","Infomation added successfully!");
+						}else {
+							session.setAttribute("successMsg","Infomation updated successfully!");
+						}
 						
 		 }catch (Exception e) {
 			e.printStackTrace();
