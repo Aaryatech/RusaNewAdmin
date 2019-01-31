@@ -921,7 +921,7 @@ public class MasterController {
 			int month = cal.get(Calendar.MONTH) + 1;
 			int day = cal.get(Calendar.DAY_OF_MONTH);
 			
-			try {
+			/*try {
 				
 				for(int i = 0 ; i< files.size() ; i++) {
 					
@@ -947,7 +947,7 @@ public class MasterController {
 
 				System.out.println("Exce in File Upload In GATE ENTRY  Insert " + e.getMessage());
 				e.printStackTrace();
-			}
+			}*/
 			 
 
 			GalleryDetail[] res = rest.postForObject(Constant.url + "/saveGalleryDetail", detailList, GalleryDetail[].class);
@@ -979,25 +979,6 @@ public class MasterController {
 
 		return "redirect:/photoGalleryDetail/"+editGalleryheader.getGalleryHeaderId();
 	}
-	
 	 
-	@RequestMapping(value = "/sectionTreeList", method = RequestMethod.GET)
-	public ModelAndView getSectionTreeStructure(HttpServletRequest request, HttpServletResponse response) {
-
-		ModelAndView model = new ModelAndView("master/sectionTreeList");
-		try {
-		 
-			  
-			SectionTree[] sectionTree = rest.getForObject(Constant.url + "/getSectionTreeStructure",  SectionTree[].class);
-			List<SectionTree> list = new ArrayList<SectionTree>(Arrays.asList(sectionTree));
-			model.addObject("list", list);
-			 
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return model;
-	}
 
 }

@@ -41,12 +41,12 @@
         </style>
 
     <!-- BEGIN BODY -->
-    <body class=" "><!-- START TOPBAR -->
+    <body class=" " onload="clearSessionAttribute()"><!-- START TOPBAR -->
 <jsp:include page="/WEB-INF/views/include/topbar.jsp"></jsp:include>
 <!-- END TOPBAR -->
 <!-- START CONTAINER -->
 <div class="page-container row-fluid container-fluid">
-
+<c:url var="clearSessionAttribute" value="/clearSessionAttribute" />
     <!-- SIDEBAR - START -->
 
 <jsp:include page="/WEB-INF/views/include/left.jsp"></jsp:include>
@@ -84,30 +84,44 @@
                      
                 </header>
                 
-                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertBannerImage" 
+                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/updateOrInsertLogo" 
                    onsubmit="return confirm('Do you really want to submit the form?');" method="post" enctype="multipart/form-data">
                    
                 <div class="content-body"> 
                     <div class="row">
                     
                     
+                    <c:if test="${sessionScope.errorMsg!=null and sessionScope.errorMsg==false}">
+            <div class="col-lg-12">
+    		          <div class="alert alert-success alert-dismissible fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <strong>Success : </strong> ${sessionScope.successMsg}</div>
+        	                                       </div> 
+            </c:if>
+            
+            <c:if test="${sessionScope.errorMsg!=null and sessionScope.errorMsg==true}">
+            <div class="col-lg-12">
+    		          <div class="alert alert-danger alert-dismissible fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <strong>Success : </strong> ${sessionScope.successMsg}</div>
+        	                                       </div> 
+            </c:if>
+                    
                      <h5 class="title pull-left">${languagesList.name}</h5>
                        
                         <div class="col-xs-12"> 
                         
-                        <c:if test="${isEdit==1}">
-                        		<div class="form-group">
-                                <label class="control-label col-sm-2" for="banner_image"> Current Slider Image:</label>
-                                <div class="col-sm-10">
-                                     <img src="${url}${editbanner.sliderImage}" style="width:250px; height:auto">
-                                     
-                                     <input id="imageName"  value="${editbanner.sliderImage}"  name="imageName" type="hidden"  >
-                                </div>
-                              </div>
-                        </c:if>
-                          <input id="id"  value="${editbanner.id}"  name="id" type="hidden"  >
+                         <div class="form-group">  
+                                 <label class="col-md-2 control-label">Current Logo</label>
+                                          <div class="col-md-10">
+                                                  <img src="${url}${logo.logoMain}" style="width:150px; height:auto">
+                                                  
+                                          </div>
+ 								</div>
+ 								
+                           
                        		<div class="form-group">
-                                    <label class="col-md-2 control-label">New Slider Image:</label>
+                                    <label class="col-md-2 control-label">Main Logo:</label>
                                      <div class="col-md-10">
                                         <div class="row col-md-5">
                                      <img src="" id="temppreviewimageki1" class="temppreviewimageki1" style="width:200px; height:auto;display:none">								 </div>
@@ -125,82 +139,96 @@
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile"> <!-- rename it -->
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="mainLogo"> <!-- rename it -->
                                                    
                                                 </div>
                                             </span>
                                         </div>
-                                         <span class="help-block">* Only jpg,gif,png * Best image size is 1920px × 700px</span>
+                                         <span class="help-block">* Only jpg,gif,png</span>
                                           
                                     </div>
                                       </div>
                                  </div>
                                  
-                                 <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name : <span class="text-danger">*</span> </label>
-				                                <div class="col-sm-10"> 
-												<input id="sliderName" class="form-control"
-								placeholder="Slider Name" value="${editbanner.sliderName}"  style="text-align: left;" name="sliderName" type="text" required >
-				                                </div>
-				                              </div>
+                                 <div class="form-group">  
+                                 <label class="col-md-2 control-label">Current Logo2</label>
+                                          <div class="col-md-10">
+                                                  <img src="${url}${logo.logo2}" style="width:150px; height:auto">
+                                                         
+                                          </div>
+ 								</div>
                                  
-                        <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Text 1 :  </label>
-				                                <div class="col-sm-10"> 
-												<input id="text1" class="form-control"
-								placeholder="Text 1" value="${editbanner.text1}"  style="text-align: left;" name="text1" type="text"  >
-				                                </div>
-				                              </div>
-				                            
-				                           
-				          <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Text 2:</label>
-				                                <div class="col-sm-10">
-				                                
-				                                <input id="text2" class="form-control"
-								placeholder="Text 2" value="${editbanner.text2}"  style="text-align: left;" name="text2" type="text"  >
-				                                 
-				                                </div>
-				                              </div> 
-                              
-                         <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">URL/Link :  </label>
-                                <div class="col-sm-10"> 
-                                  <input id="urlLink" class="form-control"
-								placeholder="URL/Link " value="${editbanner.urlLink}"  style="text-align: left;" name="urlLink" type="text"  >
-                                </div>
-                              </div>
-                              
-                              <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Link Name :  </label>
-                                <div class="col-sm-10"> 
-                                  <input id="linkName" class="form-control"
-								placeholder="Link Name " value="${editbanner.linkName}"  style="text-align: left;" name="linkName" type="text"  >
-                                </div>
-                              </div>
-                            
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
-                                <div class="col-sm-10">
-                                   
-                                  <select name="isActive" id="isActive" class="form-control">
-                                    <c:choose>
-                                  		<c:when test="${editbanner.isActive==0}">
-                                  			<option value="1" >YES</option>
-                                   			<option value="0" selected>NO</option>
-                                  		</c:when>
-                                  		<c:otherwise>
-                                  			<option value="1" >YES</option>
-                                    		<option value="0">NO</option>
-                                  		</c:otherwise>
-                                  	</c:choose>
-                                    </select>
-                                </div>
-                              </div>
-                               
+                                  <div class="form-group">
+                                    <label class="col-md-2 control-label"> Logo2:</label>
+                                     <div class="col-md-10">
+                                        <div class="row col-md-5">
+                                     <img src="" id="temppreviewimageki2" class="temppreviewimageki2" style="width:200px; height:auto;display:none">								 </div>
+                                        <div class="row col-md-10">
+                                
+                                        <div class="input-group image-preview2" data-original-title="" title="">
+                                    
+                                     <input type="text" class="form-control image-preview-filename2" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                            <span class="input-group-btn">
+                                                <!-- image-preview-clear button -->
+                                                <button type="button" class="btn btn-default image-preview-clear2" style="display:none;">
+                                                    <span class="glyphicon glyphicon-remove"></span> Clear
+                                                </button>
+                                            <!-- image-preview-input -->
+                                                <div class="btn btn-default image-preview-input">
+                                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                                    <span class="image-preview-input-title image-preview-input-title2">Browse</span>
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage2" id="2" name="Logo2"> <!-- rename it -->
+                                                   
+                                                </div>
+                                            </span>
+                                        </div>
+                                         <span class="help-block">* Only jpg,gif,png</span>
+                                          
+                                    </div>
+                                      </div>
+                                 </div>
+                                 
+                                 <div class="form-group">  
+                                 <label class="col-md-2 control-label">Current Logo3</label>
+                                          <div class="col-md-10">
+                                                  <img src="${url}${logo.logo2}" style="width:150px; height:auto">
+                                                         
+                                          </div>
+ 								</div>
+ 								
+                                 <div class="form-group">
+                                    <label class="col-md-2 control-label">Logo3:</label>
+                                     <div class="col-md-10">
+                                        <div class="row col-md-5">
+                                     <img src="" id="temppreviewimageki3" class="temppreviewimageki3" style="width:200px; height:auto;display:none">								 </div>
+                                        <div class="row col-md-10">
+                                
+                                        <div class="input-group image-preview3" data-original-title="" title="">
+                                    
+                                     <input type="text" class="form-control image-preview-filename3" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                            <span class="input-group-btn">
+                                                <!-- image-preview-clear button -->
+                                                <button type="button" class="btn btn-default image-preview-clear3" style="display:none;">
+                                                    <span class="glyphicon glyphicon-remove"></span> Clear
+                                                </button>
+                                            <!-- image-preview-input -->
+                                                <div class="btn btn-default image-preview-input">
+                                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                                    <span class="image-preview-input-title image-preview-input-title3">Browse</span>
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage3" id="3" name="Logo3"> <!-- rename it -->
+                                                   
+                                                </div>
+                                            </span>
+                                        </div>
+                                         <span class="help-block">* Only jpg,gif,png</span>
+                                          
+                                    </div>
+                                      </div>
+                                 </div>
+				                               
                               <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                  <button type="submit" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-default">Reset</button> 
+                                  <button type="submit" class="btn btn-primary">Submit</button> 
                                   
                                 </div>
                               </div>
@@ -317,5 +345,22 @@
            // TableManageButtons.init();
 
         </script>
+        
+        <script>
+function clearSessionAttribute() {
+	 
+	 
+ 
+	$.getJSON('${clearSessionAttribute}', {
+  
+		ajax : 'true',
+
+	}, function(data) { 
+		 
+	
+	});
+
+}
+ </script>
 </body>
 </html>

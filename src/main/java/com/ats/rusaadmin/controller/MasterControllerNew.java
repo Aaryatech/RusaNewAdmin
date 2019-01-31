@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -38,6 +39,7 @@ import com.ats.rusaadmin.model.GetGalleryHeaderByCatId;
 import com.ats.rusaadmin.model.GetSubCategory;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
+import com.ats.rusaadmin.model.Logo;
 import com.ats.rusaadmin.model.Section;
 import com.ats.rusaadmin.model.SectionDescription;
 import com.ats.rusaadmin.model.User;
@@ -280,8 +282,7 @@ public class MasterControllerNew {
 							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
 							editbanner.setSliderImage(docFile);
 							try {
-								upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
-										docFile);
+								Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0);
 								}catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();
@@ -296,8 +297,7 @@ public class MasterControllerNew {
 							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
 							editbanner.setSliderImage(docFile);
 							try {
-								upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
-										docFile);
+								Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0 );
 								}catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();
@@ -369,7 +369,7 @@ public class MasterControllerNew {
 			}
 			
 			model.addObject("bannerImagesList", bannerImagesList);
-			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("url", Constant.bannerImageURL);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -389,7 +389,7 @@ public class MasterControllerNew {
 			editbanner = rest.postForObject(Constant.url + "/getSliderImagesById", map, BannerImages.class);
 			model.addObject("editbanner", editbanner);
 			model.addObject("isEdit", 1);
-			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("url", Constant.bannerImageURL);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -398,5 +398,133 @@ public class MasterControllerNew {
 		return model;
 	}
 	
+	Logo logo = new Logo();
+	
+	@RequestMapping(value = "/addLogo", method = RequestMethod.GET)
+	public ModelAndView addLogo(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addLogo");
+		try {
+		 
+			editbanner=new BannerImages();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", 1); 
+			logo = rest.postForObject(Constant.url + "/getLogoListById", map, Logo.class);
+			model.addObject("logo", logo);
+			model.addObject("url", Constant.lgogImageURL);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/updateOrInsertLogo", method = RequestMethod.POST)
+	public String updateOrInsertLogo(@RequestParam("mainLogo") List<MultipartFile> mainLogo,
+			@RequestParam("Logo2") List<MultipartFile> Logo2, @RequestParam("Logo3") List<MultipartFile> Logo3,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		 try {
+			 
+			 HttpSession session = request.getSession();
+				User UserDetail =(User) session.getAttribute("UserDetail");
+			  
+				VpsImageUpload upload = new VpsImageUpload();
+				
+				
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				 
+				System.out.println(" mainLogo.get(0).getOriginalFilename() " + mainLogo.get(0).getOriginalFilename());
+				System.out.println(" Logo2.get(0).getOriginalFilename()) " + Logo2.get(0).getOriginalFilename());
+				System.out.println("Logo3.get(0).getOriginalFilename()  " + Logo3.get(0).getOriginalFilename());
+				
+				Info info = new Info();
+						
+				 if(logo.getId()==0) {
+					  
+					 logo.setAddDate(sf.format(date));
+				 }else
+				 {
+					 logo.setEditDate(sf.format(date));
+				 }
+							 
+				 if(mainLogo.get(0).getOriginalFilename()==null || mainLogo.get(0).getOriginalFilename()=="") {
+					 
+				 }else {
+					 String imageName = null;
+					 String extension = FilenameUtils.getExtension(mainLogo.get(0).getOriginalFilename());
+					 imageName =  Constant.logoName+"."+extension;
+					 
+					 try {
+							info = upload.saveUploadedImge(mainLogo.get(0), Constant.lgogImageURL,imageName,Constant.values,0,0,0,0,0 );
+							
+							}catch (Exception e) {
+								// TODO: handle exception 
+							}
+					 logo.setLogoMain(imageName);
+				 }
+				 
+				 if(info.isError()==false) {
+					 
+				 
+						 if(Logo2.get(0).getOriginalFilename()==null || Logo2.get(0).getOriginalFilename()=="") {
+							
+						 }else {
+							 String imageName = null;
+							 String extension = FilenameUtils.getExtension(Logo2.get(0).getOriginalFilename());
+							 imageName =  Constant.logoName+"2."+extension;
+							 
+							 try {
+								 info = upload.saveUploadedImge(Logo2.get(0), Constant.lgogImageURL,imageName,Constant.values,0,0,0,0,0 );
+									}catch (Exception e) {
+										// TODO: handle exception 
+									}
+							 logo.setLogo2(imageName);
+						 }
+						
+						 if(info.isError()==false) {
+							 
+						 
+								 if(Logo3.get(0).getOriginalFilename()==null || Logo3.get(0).getOriginalFilename()=="") {
+									
+								 }else {
+									 String imageName = null;
+									 String extension = FilenameUtils.getExtension(Logo3.get(0).getOriginalFilename());
+									 imageName =  Constant.logoName+"3."+extension;
+									 
+									 try {
+										 
+										 info = upload.saveUploadedImge(Logo3.get(0), Constant.lgogImageURL,imageName,Constant.values,0,0,0,0,0 );
+										 
+											}catch (Exception e) {
+												// TODO: handle exception 
+											}
+									 logo.setLogo3(imageName);
+								 }
+								 
+									   
+										 
+										System.out.println("logo" + logo);
+								
+								Logo res = rest.postForObject(Constant.url + "/saveLogo", logo, Logo.class);
+						 }
+				 }  
+				 
+				 
+					session.setAttribute("successMsg",info.getMsg());
+					session.setAttribute("errorMsg",info.isError());
+						
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 return "redirect:/addLogo";
+	}
 	
 }

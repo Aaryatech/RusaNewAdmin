@@ -84,9 +84,9 @@
 									<tr>
 										<td>${count.index+1}</td>
 										<td>${list.sectionName}</td> 
-										<td> <a
-											href="${pageContext.request.contextPath}/deleteSection/${list.pageId}"
-											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record">Add Content</a></td>
+										<td>   
+										<a
+											href="#myModal" data-toggle="modal" onclick="getPageId(${list.pageId})" ><button type="button" class="btn btn-info"> Add Content</button></a></td>
 									</tr> 
 									
 									 <c:forEach items="${list.catList}" var="catList">
@@ -94,16 +94,14 @@
 											<td> </td>
 											<td><span style="padding-right: 20px;"></span>-${catList.catName}</td> 
 											<td> <a
-												href="${pageContext.request.contextPath}/deleteSection/${catList.pageId}"
-												onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record">Add Content</a></td>
+											href="#myModal" data-toggle="modal" onclick="getPageId(${catList.pageId})" ><button type="button" class="btn btn-info"> Add Content</button></a> </td>
 										</tr>
 										  <c:forEach items="${catList.subCatList}" var="subCatList" >
 												<tr>
 													<td> </td>
 													<td><span style="padding-right: 40px;"></span>--${subCatList.subCatName}</td> 
-													<td> <a
-														href="${pageContext.request.contextPath}/deleteSection/${subCatList.pageId}"
-														onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"> Add Content</a></td>
+													<td>  <a
+											href="#myModal" data-toggle="modal" onclick="getPageId(${subCatList.pageId})" ><button type="button" class="btn btn-info"> Add Content</button></a></td>
 												</tr>
 											</c:forEach>   
 									</c:forEach>  
@@ -138,7 +136,45 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+   
+   <div aria-hidden="true"  role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                <h4 class="modal-title">Select Module</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" action="${pageContext.request.contextPath}/showModuleForm" method="get">
+								<input type="hidden" class="form-control" id="pageId" name="pageId">
+                                    <div class="form-group">
+                                        <label for="modalname1" class="form-label">Select Module</label>
+                                        
+		                                     <select name="moduleId" id="moduleId" class="form-control" required>
+		                                     <option value="" >Select Module</option>
+				                                   <c:forEach items="${mdulesList}" var="mdulesList" >
+				                                  			<option value="${mdulesList.id}" >${mdulesList.name}</option>
+				                                   		 
+				                                  	</c:forEach>
+		                                    </select>
+                                    </div>
+                                      
+                                   
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+   
    <script>
+   
+   function getPageId(pageId) {
+		 
+	   document.getElementById("pageId").value = pageId;
+
+	}
+   
 function clearSessionAttribute() {
 	 
 	 

@@ -12,7 +12,7 @@ public class Logo {
 
 	private String addDate;
 
-	private int editDate;
+	private String editDate;
 
 	private int addedByUserId;
 
@@ -47,10 +47,10 @@ public class Logo {
 	public void setAddDate(String addDate) {
 		this.addDate = addDate;
 	}
-	public int getEditDate() {
+	public String getEditDate() {
 		return editDate;
 	}
-	public void setEditDate(int editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 	public int getAddedByUserId() {
