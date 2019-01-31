@@ -75,10 +75,10 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Pic</c:when><c:otherwise>Add Slider Images</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Slider Image</c:when><c:otherwise>Add Slider Image</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/sliderPicList"><button type="button" class="btn btn-info"><< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
@@ -92,31 +92,21 @@
                     
                     
                      <h5 class="title pull-left">${languagesList.name}</h5>
-                     <c:set var="find" value="0"></c:set>
-                     <c:choose>
-                     	<c:when test="${isEdit==1}"> 
-                     					<div class="col-xs-12">
-                                	  
-				                                <div class="form-group">
+                       
+                        <div class="col-xs-12"> 
+                        
+                        <c:if test="${isEdit==1}">
+                        		<div class="form-group">
                                 <label class="control-label col-sm-2" for="banner_image"> Current Slider Image:</label>
                                 <div class="col-sm-10">
-                                    <img src="http://www.webtreeindia.com/projectdemo/bppatilcollege/webadmin//../../uploads/slider/slider_47SB.jpg" style="width:250px; height:auto">
+                                     <img src="file://${url}${editbanner.sliderImage}" style="width:250px; height:auto">
+                                     
+                                     <input id="imageName"  value="${editbanner.sliderImage}"  name="imageName" type="hidden"  >
                                 </div>
                               </div>
-				                        </div> 
-                     	</c:when> 
-                     </c:choose>
-                         
-                        
-                        <div class="col-xs-12"> 
-                          <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name : <span class="text-danger">*</span> </label>
-				                                <div class="col-sm-10"> 
-												<input id="sliderName" class="form-control"
-								placeholder="Slider Name" value="${categoryDescriptionList.sliderName}"  style="text-align: left;" name="sliderName" type="text" required >
-				                                </div>
-				                              </div>
-                       <div class="form-group">
+                        </c:if>
+                          <input id="id"  value="${editbanner.id}"  name="id" type="hidden"  >
+                       		<div class="form-group">
                                     <label class="col-md-2 control-label">New Slider Image:</label>
                                      <div class="col-md-10">
                                         <div class="row col-md-5">
@@ -146,11 +136,19 @@
                                       </div>
                                  </div>
                                  
+                                 <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name : <span class="text-danger">*</span> </label>
+				                                <div class="col-sm-10"> 
+												<input id="sliderName" class="form-control"
+								placeholder="Slider Name" value="${editbanner.sliderName}"  style="text-align: left;" name="sliderName" type="text" required >
+				                                </div>
+				                              </div>
+                                 
                         <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Text 1 :  </label>
 				                                <div class="col-sm-10"> 
 												<input id="text1" class="form-control"
-								placeholder="Text 1" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="text1" type="text"  >
+								placeholder="Text 1" value="${editbanner.text1}"  style="text-align: left;" name="text1" type="text"  >
 				                                </div>
 				                              </div>
 				                            
@@ -160,7 +158,7 @@
 				                                <div class="col-sm-10">
 				                                
 				                                <input id="text2" class="form-control"
-								placeholder="Text 2" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="text2" type="text"  >
+								placeholder="Text 2" value="${editbanner.text2}"  style="text-align: left;" name="text2" type="text"  >
 				                                 
 				                                </div>
 				                              </div> 
@@ -169,7 +167,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL/Link :  </label>
                                 <div class="col-sm-10"> 
                                   <input id="urlLink" class="form-control"
-								placeholder="URL/Link " value="${editCategory.catSortNo}"  style="text-align: left;" name="urlLink" type="text"  >
+								placeholder="URL/Link " value="${editbanner.urlLink}"  style="text-align: left;" name="urlLink" type="text"  >
                                 </div>
                               </div>
                               
@@ -177,7 +175,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Link Name :  </label>
                                 <div class="col-sm-10"> 
                                   <input id="linkName" class="form-control"
-								placeholder="Link Name " value="${editCategory.catSortNo}"  style="text-align: left;" name="linkName" type="text"  >
+								placeholder="Link Name " value="${editbanner.linkName}"  style="text-align: left;" name="linkName" type="text"  >
                                 </div>
                               </div>
                             
@@ -187,7 +185,7 @@
                                    
                                   <select name="isActive" id="isActive" class="form-control">
                                     <c:choose>
-                                  		<c:when test="${editCategory.isActive==0}">
+                                  		<c:when test="${editbanner.isActive==0}">
                                   			<option value="1" >YES</option>
                                    			<option value="0" selected>NO</option>
                                   		</c:when>

@@ -229,20 +229,38 @@ public class MasterControllerNew {
 
 		return "redirect:/userList";
 	}
+	
+	@RequestMapping(value = "/addSliderPic", method = RequestMethod.GET)
+	public ModelAndView addSliderPic(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addSliderPic");
+		try {
+		 
+			editbanner=new BannerImages();
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	} 
+	
 	@RequestMapping(value = "/insertBannerImage", method = RequestMethod.POST)
 	public String insertBannerImage(@RequestParam("docfile") List<MultipartFile> docfile,HttpServletRequest request,
 			HttpServletResponse response) {
 
 		 try {
 			 
-		        String mainImage = request.getParameter("docfile");
+			 	String id = request.getParameter("id");
+		        String imageName = request.getParameter("imageName");
 				String sliderName = request.getParameter("sliderName");
 				String text1 = request.getParameter("text1");
 				String text2 = request.getParameter("text2");
 				String urlLink = request.getParameter("urlLink");
 				String linkName = request.getParameter("linkName");
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
-				List<BannerImages> bannerL = new ArrayList<BannerImages>();  
+				 
 				
 				VpsImageUpload upload = new VpsImageUpload();
 				String docFile = null;
@@ -253,45 +271,103 @@ public class MasterControllerNew {
 				
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(date);
-				int year = cal.get(Calendar.YEAR);
-				int month = cal.get(Calendar.MONTH) + 1;
-				int day = cal.get(Calendar.DAY_OF_MONTH);
-				
-				
-						BannerImages bannerList = new BannerImages();
-						docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-						bannerList.setSliderImage(docFile);
-						//bannerList.setEditDate("");
-						bannerList.setLinkName(linkName);
-						bannerList.setSliderName(sliderName);
-						bannerList.setUrlLink(urlLink);
-				
-						bannerList.setAddDate(sf.format(date));
-						bannerList.setIsActive(isActive);
-						bannerList.setDelStatus(1);
-						bannerList.setCateId(0);
-						bannerList.setText1(text1);
-						bannerList.setText2(text2);
-						//System
-						try {
-						upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
-								docfile.get(0).getOriginalFilename());
-						}catch (Exception e) {
-							// TODO: handle exception
-							e.printStackTrace();
+				  if(id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
+					  
+					  
+							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+							editbanner.setSliderImage(docFile);
+							try {
+								upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
+										docFile);
+								}catch (Exception e) {
+									// TODO: handle exception
+									e.printStackTrace();
+								}
+							editbanner.setAddDate(sf.format(date));
+				  }else {
+					  
+					  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
+							editbanner.setSliderImage(imageName);
+						}else {
+							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+							editbanner.setSliderImage(docFile);
+							try {
+								upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
+										docFile);
+								}catch (Exception e) {
+									// TODO: handle exception
+									e.printStackTrace();
+								}
 						}
-						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", bannerList, BannerImages.class);
+					  editbanner.setEditDate(sf.format(date));
+				  }
+				
+					  
+						editbanner.setLinkName(linkName);
+						editbanner.setSliderName(sliderName);
+						editbanner.setUrlLink(urlLink); 
+						editbanner.setIsActive(isActive);
+						editbanner.setDelStatus(1); 
+						editbanner.setText1(text1);
+						editbanner.setText2(text2);
 						 
-
-					//	System.out.println("upload method called for image Upload " + files.get(i).toString());
-						//bannerL.add(bannerList);
+						System.out.println("editbanner" + editbanner);
+						
+						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", editbanner, BannerImages.class);
+						 
+ 
 						
 		 }catch (Exception e) {
 			e.printStackTrace();
 		}
 		 
-	 return "redirect:/addSliderPic";
+	 return "redirect:/sliderPicList";
 	}
+	
+	@RequestMapping(value = "/deleteSliderPic/{id}", method = RequestMethod.GET)
+	public String deleteSliderPic(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);  
+			Info res = rest.postForObject(Constant.url + "/deleteBanner", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			session.setAttribute("successMsg","Infomation deleted successfully!");
+			
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/sliderPicList";
+	}
+	
+	@RequestMapping(value = "/sliderPicList", method = RequestMethod.GET)
+	public ModelAndView sliderPicList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/sliderPicList");
+		try {
+		 
+			
+			BannerImages[] bannerImages = rest.getForObject(Constant.url + "/getAllBannerList",  BannerImages[].class);
+			List<BannerImages> bannerImagesList = new ArrayList<BannerImages>(Arrays.asList(bannerImages));
+		
+			for(int i=0 ; i<bannerImagesList.size() ; i++) {
+				bannerImagesList.get(i).setAddDate(DateConvertor.convertToDMY(bannerImagesList.get(i).getAddDate()));
+			}
+			
+			model.addObject("bannerImagesList", bannerImagesList);
+			model.addObject("url", Constant.gallryImageURL);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	} 
 	@RequestMapping(value = "/editSliderImages/{id}", method = RequestMethod.GET)
 	public ModelAndView editPhotoGallary(@PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -300,32 +376,11 @@ public class MasterControllerNew {
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-
+			map.add("id", id); 
 			editbanner = rest.postForObject(Constant.url + "/getSliderImagesById", map, BannerImages.class);
 			model.addObject("editbanner", editbanner);
-
-			System.out.println(editbanner);
-			
-			 map = new LinkedMultiValueMap<String, Object>();
-			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
-					GetCategory[].class);
-			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
-			model.addObject("categoryList", categoryList);
-			
-			map = new LinkedMultiValueMap<String, Object>();
-			 map.add("catId", editGalleryheader.getCatId());
-			 map.add("delStatus", 1);
-			 GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatByCatId", map,
-					 GetSubCategory[].class);
-			 List<GetSubCategory> list = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
-			model.addObject("subCategoryList", list);
-			
-			GetGalleryHeaderByCatId[] galleryheader = rest.getForObject(Constant.url + "/getGalleryHeaderList", 
-					GetGalleryHeaderByCatId[].class);
-			List<GetGalleryHeaderByCatId> galleryheaderList = new ArrayList<GetGalleryHeaderByCatId>(Arrays.asList(galleryheader));
-			model.addObject("galleryheaderList", galleryheaderList);
+			model.addObject("isEdit", 1);
+			model.addObject("url", Constant.gallryImageURL);
 
 		} catch (Exception e) {
 			e.printStackTrace();
