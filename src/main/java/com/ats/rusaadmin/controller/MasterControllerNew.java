@@ -34,6 +34,7 @@ import com.ats.rusaadmin.model.CategoryDescription;
 import com.ats.rusaadmin.model.GalleryDetail;
 import com.ats.rusaadmin.model.Galleryheader;
 import com.ats.rusaadmin.model.GetCategory;
+import com.ats.rusaadmin.model.GetGalleryHeaderByCatId;
 import com.ats.rusaadmin.model.GetSubCategory;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
@@ -51,6 +52,7 @@ public class MasterControllerNew {
 	Category editSubCat=new Category();
 	GetSubCategory editSubCategory = new GetSubCategory();
 	Galleryheader editGalleryheader = new Galleryheader();
+	BannerImages editbanner=new BannerImages();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	List<GetCategory> categoryList;
 	User user=new User();
@@ -233,7 +235,7 @@ public class MasterControllerNew {
 
 		 try {
 			 
-		//	 String mainImage = request.getParameter("main_image");
+		        String mainImage = request.getParameter("docfile");
 				String sliderName = request.getParameter("sliderName");
 				String text1 = request.getParameter("text1");
 				String text2 = request.getParameter("text2");
@@ -270,12 +272,13 @@ public class MasterControllerNew {
 						bannerList.setCateId(0);
 						bannerList.setText1(text1);
 						bannerList.setText2(text2);
-						
+						//System
 						try {
 						upload.saveUploadedFiles(docfile.get(0), Constant.gallryImage,
-								docFile);
+								docfile.get(0).getOriginalFilename());
 						}catch (Exception e) {
 							// TODO: handle exception
+							e.printStackTrace();
 						}
 						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", bannerList, BannerImages.class);
 						 
@@ -289,4 +292,47 @@ public class MasterControllerNew {
 		 
 	 return "redirect:/addSliderPic";
 	}
+	@RequestMapping(value = "/editSliderImages/{id}", method = RequestMethod.GET)
+	public ModelAndView editPhotoGallary(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addSliderPic");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);
+
+			editbanner = rest.postForObject(Constant.url + "/getSliderImagesById", map, BannerImages.class);
+			model.addObject("editbanner", editbanner);
+
+			System.out.println(editbanner);
+			
+			 map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
+			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
+			model.addObject("categoryList", categoryList);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			 map.add("catId", editGalleryheader.getCatId());
+			 map.add("delStatus", 1);
+			 GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatByCatId", map,
+					 GetSubCategory[].class);
+			 List<GetSubCategory> list = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
+			model.addObject("subCategoryList", list);
+			
+			GetGalleryHeaderByCatId[] galleryheader = rest.getForObject(Constant.url + "/getGalleryHeaderList", 
+					GetGalleryHeaderByCatId[].class);
+			List<GetGalleryHeaderByCatId> galleryheaderList = new ArrayList<GetGalleryHeaderByCatId>(Arrays.asList(galleryheader));
+			model.addObject("galleryheaderList", galleryheaderList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	
 }

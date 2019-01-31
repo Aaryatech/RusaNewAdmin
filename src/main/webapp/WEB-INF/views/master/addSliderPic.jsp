@@ -110,10 +110,10 @@
                         
                         <div class="col-xs-12"> 
                           <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name :  </label>
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
 												<input id="sliderName" class="form-control"
-								placeholder="Slider Name" value="${categoryDescriptionList.sliderName}"  style="text-align: left;" name="sliderName" type="text"  >
+								placeholder="Slider Name" value="${categoryDescriptionList.sliderName}"  style="text-align: left;" name="sliderName" type="text" required >
 				                                </div>
 				                              </div>
                        <div class="form-group">
