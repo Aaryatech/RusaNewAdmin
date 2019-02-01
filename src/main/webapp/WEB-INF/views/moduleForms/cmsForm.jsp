@@ -217,7 +217,7 @@
  										 <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
                                           <div class="col-sm-7">
-                                             <input type="file" name="page_pdf" id="page_pdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip"  />
+                                             <input type="file" name="pagePdf" id="pagePdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip"  />
                                               
                                           </div>
                                         </div>
