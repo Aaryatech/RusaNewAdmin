@@ -103,7 +103,7 @@
             <div class="col-lg-12">
     		          <div class="alert alert-danger alert-dismissible fade in">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <strong>Success : </strong> ${sessionScope.successMsg}</div>
+                <strong>Error : </strong> ${sessionScope.successMsg}</div>
         	                                       </div> 
             </c:if>
                     

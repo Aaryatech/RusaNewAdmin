@@ -60,6 +60,26 @@ public class VpsImageUpload {
 			return info;
 
 		}
+	
+	public void saveUploadedFiles(MultipartFile file, String filePath, String imageName) throws IOException {
+
+		 
+
+			Path path = Paths.get(filePath + imageName);
+
+			byte[] bytes = file.getBytes();
+
+			 
+				System.out.println("Inside Image Type =1");
+
+				path = Paths.get(galleryImage + imageName);
+
+				System.out.println("Path= " + path.toString());
+ 
+
+			Files.write(path, bytes);
+
+		}
 	/*public void saveUploadedFiles(MultipartFile file, int imageType, String imageName) throws IOException {
 
 		for (MultipartFile file : files) {

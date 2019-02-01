@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,11 +24,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
+import com.ats.rusaadmin.common.VpsImageUpload;
+import com.ats.rusaadmin.model.CMSPageDescription;
+import com.ats.rusaadmin.model.CMSPages;
 import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.CategoryDescription;
+import com.ats.rusaadmin.model.FreqAskQue;
+import com.ats.rusaadmin.model.FreqAskQueDescription;
+import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.ModulesNames;
 import com.ats.rusaadmin.model.Page;
+import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.SectionTree;
 import com.ats.rusaadmin.model.User; 
 
@@ -78,6 +86,10 @@ public class AddContentController {
 			  if(moduleId==1) {
 				  
 				  url="redirect:/cmsForm";
+				  
+			  }else if(moduleId==2){
+				  
+				  url="redirect:/faqForm";
 			  }
 			  
 			
@@ -112,7 +124,7 @@ public class AddContentController {
 		return model;
 	}
 	
-	/*@RequestMapping(value = "/insertCmsForm", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertCmsForm", method = RequestMethod.POST)
 	public String insertCmsForm(@RequestParam("images") List<MultipartFile> images,@RequestParam("pagePdf") List<MultipartFile> pagePdf
 			,HttpServletRequest request, HttpServletResponse response) {
 
@@ -127,77 +139,186 @@ public class AddContentController {
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			CMSPages cMSPages = new CMSPages();
 			
-			List<CategoryDescription> categoryDescriptionList = new ArrayList<CategoryDescription>();
+			List<CMSPageDescription> cMSPageDescriptionList = new ArrayList<CMSPageDescription>();
 
-			if (catId == "" || catId == null) {
-				editcat.setCatId(0);
-				editcat.setCatAddDate(sf.format(date));
-				
+			VpsImageUpload upload = new VpsImageUpload();
+			
 				for(int i = 0 ; i<languagesList.size() ; i++) {
 					
-					CategoryDescription categoryDescription = new CategoryDescription();
-					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					categoryDescription.setCatName(request.getParameter("catName"+languagesList.get(i).getLanguagesId()));
-					categoryDescription.setCatDesc(request.getParameter("catDesc"+languagesList.get(i).getLanguagesId()));
-					
-					if(languagesList.get(i).getLanguagesId()==1) {
-						
-						editcat.setCatName(request.getParameter("catName"+languagesList.get(i).getLanguagesId())); 
-						editcat.setCatDesc(request.getParameter("catDesc"+languagesList.get(i).getLanguagesId()));
-						String text = editcat.getCatName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
-						System.out.println(text);
-						editcat.setSlugName(text);
-					}
-					categoryDescriptionList.add(categoryDescription);
+					CMSPageDescription cMSPageDescription = new CMSPageDescription();
+					cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					cMSPageDescription.setHeading(request.getParameter("heading1"+languagesList.get(i).getLanguagesId()));
+					cMSPageDescription.setSmallheading(request.getParameter("smallheading"+languagesList.get(i).getLanguagesId()));
+					cMSPageDescription.setPageDesc(request.getParameter("page_description1"+languagesList.get(i).getLanguagesId()));
+					cMSPageDescription.setDateTransaction(sf.format(date));
+					cMSPageDescriptionList.add(cMSPageDescription);
 				}
-				editcat.setCategoryDescriptionList(categoryDescriptionList);
-				//editcat.setAddedByUserId(UserDetail.getUserId());
-			}else {
-				editcat.setCatId(Integer.parseInt(catId));
-				editcat.setCatEditDate(sf.format(date));
-				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
-				for(int i = 0 ; i<editcat.getCategoryDescriptionList().size() ; i++) {
+				 
+				//cMSPages.setAddedByUserId(UserDetail.getUserId());
+				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
+				  
+				}else {
+				 
+					String imageName = new String(); 
+					imageName =  dateTimeInGMT.format(date)+"_"+images.get(0).getOriginalFilename();
 					 
-					editcat.getCategoryDescriptionList().get(i).setCatName(request.getParameter("catName"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
-					editcat.getCategoryDescriptionList().get(i).setCatDesc(request.getParameter("catDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
-					
-					if(editcat.getCategoryDescriptionList().get(i).getLanguageId()==1) {
-						
-						editcat.setCatName(request.getParameter("catName"+editcat.getCategoryDescriptionList().get(i).getLanguageId())); 
-						editcat.setCatDesc(request.getParameter("catDesc"+editcat.getCategoryDescriptionList().get(i).getLanguageId()));
-						String text = editcat.getCatName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
-						System.out.println(text);
-						editcat.setSlugName(text);
-					}
+					try {
+						 upload.saveUploadedImge(images.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
+						 cMSPages.setFeaturedImage(imageName);
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
 					 
 				}
-				//editcat.setEditByUserId(UserDetail.getUserId());
-			}
+				
+				if(pagePdf.get(0).getOriginalFilename()==null || pagePdf.get(0).getOriginalFilename()=="") {
+					  
+				}else {
+				 
+					String pdfName = new String(); 
+					pdfName =  dateTimeInGMT.format(date)+"_"+pagePdf.get(0).getOriginalFilename();
+					 
+					try {
+						 upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf,pdfName);
+						 cMSPages.setDownloadPdf(pdfName);
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					 
+				}
+			cMSPages.setPageId(pageId);
+			cMSPages.setPageOrder(seqNo); 
+			cMSPages.setIsActive(isActive);
+			cMSPages.setDelStatus(1);
+			cMSPages.setAddDate(sf.format(date));
+			cMSPages.setFeaturedImageAlignment(aligment);
+			cMSPages.setDetailList(cMSPageDescriptionList);
 			
-			editcat.setSectionId(sectionId);
-			editcat.setCatSortNo(seqNo); 
-			editcat.setIsActive(isActive);
-			editcat.setDelStatus(1);
-			System.out.println("category" + editcat);
+			System.out.println("category" + cMSPages); 
+			CMSPages res = rest.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
 
-			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
-
-			System.out.println("res " + res);
-			
-			if(editcat.getCatId()==0) {
+			if(res!=null && res.getDetailList()!=null) {
+				
+				PagesModule pagesModule = new PagesModule();
+				
+				pagesModule.setPageId(res.getPageId());
+				pagesModule.setPrimaryKeyId(res.getCmsPageId());
+				pagesModule.setModuleId(1);
+				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+				System.out.println("res " + res);  
+				
 				session.setAttribute("successMsg","Infomation added successfully!");
+				session.setAttribute("errorMsg","false");
 			}else {
-				session.setAttribute("successMsg","Infomation updated successfully!");
+				
+				session.setAttribute("successMsg","Error While Uploading Content !");
+				session.setAttribute("errorMsg","true");
 			}
+			 
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/categoryList";
-	}*/
+		return "redirect:/sectionTreeList";
+	}
+	
+	@RequestMapping(value = "/faqForm", method = RequestMethod.GET)
+	public ModelAndView faqForm(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/faqForm");
+		try {
+		 
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
+			 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("pageId", pageId);
+			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+					 Page.class);
+			model.addObject("page", page);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/insertFaqForm", method = RequestMethod.POST)
+	public String insertFaqForm( HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+		 
+			int isActive = Integer.parseInt(request.getParameter("status")); 
+			int seqNo = Integer.parseInt(request.getParameter("sortNo"));
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			 
+			FreqAskQue freqAskQue = new FreqAskQue();
+			
+			List<FreqAskQueDescription> freqAskQueDescriptionList = new ArrayList<FreqAskQueDescription>();
+
+			 
+			
+				for(int i = 0 ; i<languagesList.size() ; i++) {
+					
+					FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
+					freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					freqAskQueDescription.setFaqQue(request.getParameter("question"+languagesList.get(i).getLanguagesId()));
+					freqAskQueDescription.setFaqAns(request.getParameter("ans"+languagesList.get(i).getLanguagesId())); 
+					freqAskQueDescriptionList.add(freqAskQueDescription);
+				}
+				 
+				//freqAskQue.setAddedByUserId(UserDetail.getUserId());
+				 
+				freqAskQue.setPageId(pageId);
+				freqAskQue.setFaqSortNo(seqNo); 
+				freqAskQue.setIsActive(isActive);
+				freqAskQue.setDelStatus(1);
+				freqAskQue.setAddDate(sf.format(date));
+				 
+				freqAskQue.setDescriptionList(freqAskQueDescriptionList);
+			
+			System.out.println("freqAskQue " + freqAskQue ); 
+			FreqAskQue res = rest.postForObject(Constant.url + "/saveUpdateFreqAskQue", freqAskQue, FreqAskQue.class);
+
+			if(res!=null && res.getDescriptionList()!=null) {
+				
+				PagesModule pagesModule = new PagesModule();
+				
+				pagesModule.setPageId(res.getPageId());
+				pagesModule.setPrimaryKeyId(res.getPageId());
+				pagesModule.setModuleId(2);
+				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+				System.out.println("res " + res);  
+				
+				session.setAttribute("successMsg","Infomation added successfully!");
+				session.setAttribute("errorMsg","false");
+			}else {
+				
+				session.setAttribute("successMsg","Error While Uploading Content !");
+				session.setAttribute("errorMsg","true");
+			}
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/sectionTreeList";
+	}
 	
 }

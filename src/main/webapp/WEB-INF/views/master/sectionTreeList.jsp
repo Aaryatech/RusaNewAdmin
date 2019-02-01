@@ -58,11 +58,19 @@
                  
             </header> 
             <div class="content-body">    <div class="row">
-            <c:if test="${sessionScope.successMsg!=null}">
+            <c:if test="${sessionScope.errorMsg!=null and sessionScope.errorMsg==false}">
             <div class="col-lg-12">
     		          <div class="alert alert-success alert-dismissible fade in">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                 <strong>Success : </strong> ${sessionScope.successMsg}</div>
+        	                                       </div> 
+            </c:if>
+            
+            <c:if test="${sessionScope.errorMsg!=null and sessionScope.errorMsg==true}">
+            <div class="col-lg-12">
+    		          <div class="alert alert-danger alert-dismissible fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <strong>Error : </strong> ${sessionScope.successMsg}</div>
         	                                       </div> 
             </c:if>
             

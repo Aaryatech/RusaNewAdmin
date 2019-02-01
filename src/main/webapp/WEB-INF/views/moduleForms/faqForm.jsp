@@ -61,7 +61,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add CMS Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add FAQ</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,7 +79,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add CMS Form</h2>
+                    <h2 class="title pull-left">Add FAQ</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -92,7 +92,7 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertCmsForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertFaqForm" method="post" name="form_sample_2" id="form_sample_2" 
                          onsubmit="return confirm('Do you really want to submit the form?');">               
                     
                     <ul class="nav nav-tabs">
@@ -131,23 +131,16 @@
                        <div class="col-xs-12"> 
                     		  
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Heading :</label>
+                                <label class="control-label col-sm-2" for="heading1">Question : <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" >
+                                  <input type="text" class="form-control" id="question${languagesList.languagesId}" name="question${languagesList.languagesId}" placeholder="Question" value="" required>
                                 </div>
                             </div>
-                            
-                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="smallheading">Small heading :</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="smallheading${languagesList.languagesId}" name="smallheading${languagesList.languagesId}" placeholder="Small heading" value="" >
-                                </div>
-                              </div>
-                              
+                             
                               <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_description1">Content :</label>
+                                <label class="control-label col-sm-2" for="page_description1">Answer : <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   required="required"></textarea>
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${languagesList.languagesId}" id="ans${languagesList.languagesId}"   required="required"></textarea>
                                 </div>
                               </div> 
                               
@@ -158,81 +151,20 @@
                      
                         <div class="col-xs-12"> 
                         <hr>
-                            
-                              
-           					 <input type="hidden" name="mode" id="mode" value="edit_content">
-                               			 
+                             	 
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="" required>
+                                  <input type="text" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order" value="" required>
                                 </div>
                               </div>
-                                 
-                                  
-                           <div class="form-group row">
-                             <label class="control-label col-sm-2" for="category_id">Featured Image :</label>
-                              <div class="col-sm-7">
-                               								<div class="fileinput-new thumbkishore2div thumbnail" style="width: 250px;   display:none; overflow:hidden">
-                                                                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" id="thumbkishore2" alt=""  style="width:250px; height:auto" >
-                                                          </div>
-                                                            
-                                                           <div class="input-group image-preview2">
-                                            
-											<input type="text" class="form-control image-preview-filename2" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
-											<span class="input-group-btn">
-												<!-- image-preview-clear button -->
-												<button type="button" class="btn btn-default image-preview-clear2" style="display:none;">
-													<span class="glyphicon glyphicon-remove2"></span> Clear
-												</button>
-												<!-- image-preview-input -->
-                                                
-												<div class="btn btn-default image-preview-input">
-													<span class="glyphicon glyphicon-folder-open"></span>
-													<span class="image-preview-input-title2">Browse</span>
-                                                    
-													<input type="file" accept="image/png, image/jpeg, image/gif" id="images"   name="images"/> <!-- rename it -->
-												</div>
-											</span>
-										</div>
-                                  
-                                 Note: Image size should be  width: 960px   and height: 600px. 
-                              </div>
-                           </div>
-                           
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="status">Featured Image Aligned  :</label>
-                                <div class="col-sm-10">
-                                <select id="header_top_alignment" name="header_top_alignment" class="form-control"  >
-                                	<option value="none"  >None</option>
-                                                                    <option value="center"  >Center</option>
-                    				<option value="left"  >Left</option>
-                                    <option value="right" >Right</option>
                                     
-                     
-                 
-                                  </select>
-                                </div>
-                              </div>
- 
- 										 <div class="form-group row">
-                                         <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
-                                          <div class="col-sm-7">
-                                             <input type="file" name="pagePdf" id="pagePdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip"  />
-                                              
-                                          </div>
-                                        </div>
-                               
-                                 
-                                 
-                                                
-                                 
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                 <select id="status" name="status" class="form-control" required >
                                                                     <option value="1" >Active</option>
-                    <option value="0" >Inactive</option>
+                    							<option value="0" >Inactive</option>
                      
                  
                                   </select>
