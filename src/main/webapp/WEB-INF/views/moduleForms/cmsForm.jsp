@@ -72,6 +72,8 @@
 	<div class="col-lg-12">
     	                                                            
     </div>
+    
+    
 	
     <div class="col-lg-12">
         <section class="box ">
@@ -90,7 +92,9 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                                        
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertCmsForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
+                         onsubmit="return confirm('Do you really want to submit the form?');">               
+                    
                     <ul class="nav nav-tabs">
                         <li class="active">
                             <a href="#home" data-toggle="tab">
@@ -110,7 +114,7 @@
 
                             <div>
 
-                               <form class="form-horizontal" action="http://www.webtreeindia.com/projectdemo/bppatilcollege/webadmin/index.php/pages/adddata" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" onSubmit="return CheckForm(this)">
+                               
                       
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
@@ -241,7 +245,7 @@
                             
                             
                         </div>
-                        </form>
+                        
                         <div class="clearfix"></div>
 
                             </div>
@@ -255,7 +259,7 @@
                          
                          
                     </div>
-
+ 				</form>
                 </div>
                     
                     </div> 
