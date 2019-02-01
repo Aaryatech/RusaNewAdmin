@@ -44,23 +44,47 @@ public class NewController {
 	MetaData editMetaData = new MetaData();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	ImageLink editImageLink=new ImageLink();
+	List<MetaData> editMeta = new ArrayList<MetaData>();
+	
 	@RequestMapping(value = "/addMetaNew", method = RequestMethod.GET)
 	public ModelAndView addMetaData(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("master/addMetaData");
 		try {
 			editMetaData = new MetaData();
-			   
+			     
 			 Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", 1); 
 			
-			editMetaData = rest.postForObject(Constant.url + "/getMetaListById", map, MetaData.class);
-			model.addObject("editMetaData", editMetaData);
-  
+			MetaData[] editMet = rest.getForObject(Constant.url + "/getAllMetaDataList", MetaData[].class);
+			 editMeta = new ArrayList<MetaData>(Arrays.asList(editMet));
+			
+			model.addObject("editMetaData", editMeta);
+			
+			for(int i = 0 ; i< languagesList.size() ; i++) {
+				
+				int flag=0;
+				
+				for(int j = 0 ; j< editMeta.size() ; j++) {
+					
+					if(languagesList.get(i).getLanguagesId()==editMeta.get(j).getLanguageId()) {
+						flag=1;
+						break;
+						
+					}
+				}
+				
+				if(flag==0) {
+					MetaData MetaData = new MetaData();
+					MetaData.setLanguageId(languagesList.get(i).getLanguagesId());
+					editMeta.add(MetaData);
+					
+				}
+			}
+			 System.out.println(editMeta);
+			model.addObject("editMeta", editMeta);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,37 +125,24 @@ public class NewController {
 			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd"); 
-			System.out.println("ID: "+editMetaData.getId());
-		
-			 if(editMetaData.getId()==0) {
-				 //MetaData metaDesc = new MetaData();
-				 editMetaData.setAddDate(sf.format(date));
-							  
-			 }else 
-			 {
-				 editMetaData.setEditDate(sf.format(date));
-				 MetaData metaDesc = new MetaData();
-				 List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
-			 }
+			List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
+			 
+			for(int i = 0 ; i<editMeta.size() ; i++) {
+				  
+				 
+				editMeta.get(i).setSiteTitle(request.getParameter("siteName"+languagesList.get(i).getLanguagesId()));
+				editMeta.get(i).setMetaDescription(request.getParameter("metaDescription"+languagesList.get(i).getLanguagesId()));
+				editMeta.get(i).setMetaAuthor(request.getParameter("metaAuthor"+languagesList.get(i).getLanguagesId())); 
 				
+			 
+			}
+			//editSection.setAddedByUserId(UserDetail.getUserId());
+		 System.out.println("siteTitle" + editMeta);
 
-				for(int i = 0 ; i<languagesList.size() ; i++) {
-					 List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
-					     
-					editMetaData.setLanguageId(languagesList.get(i).getLanguagesId());
-					editMetaData.setSiteTitle(request.getParameter("siteName"+languagesList.get(i).getLanguagesId()));
-					editMetaData.setMetaDescription(request.getParameter("metaDescription"+languagesList.get(i).getLanguagesId()));
-					editMetaData.setMetaAuthor(request.getParameter("metaAuthor"+languagesList.get(i).getLanguagesId())); 
-					
-				System.out.println("asdxcfgvbhjn"+request.getParameter("siteName"+languagesList.get(i).getLanguagesId()));
-					metaDescriptionList.add(editMetaData);
-					 System.out.println("siteTitle" + metaDescriptionList);
+		 List<MetaData> res = rest.postForObject(Constant.url + "/saveMetaData", editMeta, List.class);
 
-						List<MetaData> res = rest.postForObject(Constant.url + "/saveMetaData", metaDescriptionList, List.class);
-
-						System.out.println("res " + res);
-				}
-			session = request.getSession();
+		 System.out.println("res " + res);
+ 		    session = request.getSession();
 			if(editMetaData.getId()==0) {
 				session.setAttribute("successMsg","Infomation added successfully!");
 			}else {
@@ -225,6 +236,7 @@ public class NewController {
 			 	String id = request.getParameter("id");
 			 	String urlLink = request.getParameter("urlLink");
 				int sortOrder = Integer.parseInt(request.getParameter("sortNo"));
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
 				 
 				
 				VpsImageUpload upload = new VpsImageUpload();
@@ -248,6 +260,7 @@ public class NewController {
 									e.printStackTrace();
 								}
 							editImageLink.setAddDate(sf.format(date));
+							editImageLink.setIsActive(isActive);
 							//editbanner.setAddedByUserId(UserDetail.getUserId());
 				  }else {
 					  
@@ -264,6 +277,7 @@ public class NewController {
 								}
 						}
 					  editImageLink.setEditDate(sf.format(date));
+					  editImageLink.setIsActive(isActive);
 					  //editbanner.setEditByUserId(UserDetail.getUserId());
 				  }
 				
@@ -271,7 +285,7 @@ public class NewController {
 				  editImageLink.setUrlLink(urlLink);
 				
 				  editImageLink.setDelStatus(1); 
-				  editImageLink.setIsActive(1);
+				 // editImageLink.setIsActive(1);
 				  editImageLink.setSortOrder(sortOrder); 
 				
 						 
@@ -316,7 +330,7 @@ public class NewController {
 	@RequestMapping(value = "/imageLinkList", method = RequestMethod.GET)
 	public ModelAndView sliderPicList(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("master/imageLinkList");
+		ModelAndView model = new ModelAndView("master/imagesLinkList");
 		try {
 		 
 			

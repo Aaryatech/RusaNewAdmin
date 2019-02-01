@@ -34,7 +34,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Image Link List</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Other Link List</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -47,9 +47,9 @@
 <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">Image Link List</h2>
+                <h2 class="title pull-left">Other Link List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/addImageLink"><button type="button" class="btn btn-success">Add Image Link List</button></a>
+                 <a href="${pageContext.request.contextPath}/addImageLink"><button type="button" class="btn btn-success">Add Other Link </button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -74,7 +74,7 @@
                     <tr>
                    		<th width="5%">Sr No</th>
                         <th>Image</th>
-                        <th>URL Link</th>  
+                        <th>Sort Order No.</th>  
                         <th>Add Date</th> 
                         <th>Action</th> 
                     </tr>
@@ -84,10 +84,10 @@
                     <tr>
                     	<th width="5%">Sr No</th>
                          <th>Image</th>
-                         <th>URL Link</th> 
+                         <th>Sort Order No.</th>  
                          <th>Add Date</th> 
                          <th>Action</th> 
-                    </tr>
+                    </tr> 
                 </tfoot>
 
                 <tbody>
@@ -96,7 +96,7 @@
 										<td>${count.index+1}</td>
 										<td>file://${url}${imagesLinkList.sliderImage}<img src="${url}${imagesLinkList.sliderImage}" style="width:150px; height:auto"></td>
 										
-										<td>${imagesLinkList.urlLink}</td>
+										<td>${imagesLinkList.sortOrder}</td>
 										<td>${imagesLinkList.addDate}</td>   
 										<td><a
 											href="${pageContext.request.contextPath}/editImagesLink/${imagesLinkList.id}"><span

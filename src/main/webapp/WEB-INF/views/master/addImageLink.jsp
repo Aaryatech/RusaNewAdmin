@@ -59,7 +59,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Image Link</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Other Link</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -75,7 +75,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Image Link</c:when><c:otherwise>Add Image Link</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Other Link</c:when><c:otherwise>Add Other Link</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/imageLinkList"><button type="button" class="btn btn-info"> Back</button></a>
@@ -139,7 +139,25 @@
 								placeholder="Sequence No" value="${editImageLink.sortOrder}"  style="text-align: left;" name="sortNo" type="number" required>
                                 </div>
                               </div>
-                            
+                                  
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   
+                                  <select name="isActive" id="isActive" class="form-control">
+                                    <c:choose>
+                                  		<c:when test="${editImageLink.isActive==0}">
+                                  			<option value="1" >YES</option>
+                                   			<option value="0" selected>NO</option>
+                                  		</c:when>
+                                  		<c:otherwise>
+                                  			<option value="1" >YES</option>
+                                    		<option value="0">NO</option>
+                                  		</c:otherwise>
+                                  	</c:choose>
+                                    </select>
+                                </div>
+                              </div>
                            
                                
                               <div class="form-group">

@@ -50,10 +50,7 @@
                 <header class="panel_header">
                     <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Meta Data</c:when><c:otherwise>Add Meta Data</c:otherwise></c:choose></h2>
                    
-                    <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/metaList"><button type="button" class="btn btn-info"> Back</button></a>
-                	       <a class="box_toggle fa fa-chevron-down"></a>
-                </div>
+                  
                      
                 </header>
                 
@@ -66,10 +63,11 @@
                     <c:forEach items="${languagesList}" var="languagesList" >
                      <h5 class="title pull-left">${languagesList.name}</h5>
                      
-                     <c:choose>
-                     	<c:when test="${isEdit==1}">
+                     <%-- <c:choose>
+                     	<c:when test="${isEdit==1}"> --%>
                      	 
-                     		<c:forEach items="${editMetaData.metaList}" var="metaList" >
+                     		<c:forEach items="${editMetaData}" var="metaList" >
+                     		 
                      		 
                      			<c:choose>
                      				<c:when test="${metaList.languageId==languagesList.languagesId}">
@@ -106,7 +104,7 @@
                      			</c:choose>
                      		
                      		</c:forEach>
-                     	</c:when>
+                     	<%-- </c:when>
                      	<c:otherwise>
                      		<div class="col-xs-12">
                                 	  
@@ -137,12 +135,12 @@
                               
                         </div>
                      	</c:otherwise>
-                     </c:choose>
+                     </c:choose> --%>
                         
                         </c:forEach>
                         
                         <div class="col-xs-12"> 
-                        <input id="id" value="${editMetaData.id}" name="id" type="hidden"  >
+                      <%--   <input id="id" value="${editMetaData.id}" name="id" type="hidden"  > --%>
                         
                       
                                
@@ -150,7 +148,7 @@
                                 <div class="col-sm-offset-2 col-sm-10">
                                   <button type="submit" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-default">Reset</button> 
                                   
-                                </div>
+                                </div><!--  -->
                               </div>
                             
                         </div>
