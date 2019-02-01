@@ -90,6 +90,9 @@ public class AddContentController {
 			  }else if(moduleId==2){
 				  
 				  url="redirect:/faqForm";
+			  } else if(moduleId==6){
+				  
+				  url="redirect:/textimonialForm";
 			  }
 			  
 			
