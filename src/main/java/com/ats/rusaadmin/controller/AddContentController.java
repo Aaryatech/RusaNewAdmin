@@ -300,7 +300,7 @@ public class AddContentController {
 				PagesModule pagesModule = new PagesModule();
 				
 				pagesModule.setPageId(res.getPageId());
-				pagesModule.setPrimaryKeyId(res.getPageId());
+				pagesModule.setPrimaryKeyId(res.getFaqId());
 				pagesModule.setModuleId(2);
 				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 				System.out.println("res " + res);  
