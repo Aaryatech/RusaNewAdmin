@@ -65,7 +65,7 @@ public class MasterControllerNew {
 
 		ModelAndView model = new ModelAndView("master/addUser");
 		try {
-			
+			        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

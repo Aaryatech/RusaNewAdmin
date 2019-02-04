@@ -61,7 +61,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Text Imonial</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Test Imonial</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,7 +79,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add Text Imonial</h2>
+                    <h2 class="title pull-left">Add Test Imonial</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"> Back</button></a>
@@ -92,7 +92,7 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertImonialForm" method="post" name="form_sample_2" id="form_sample_2" 
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertImonialForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" " 
                          onsubmit="return confirm('Do you really want to submit the form?');">               
                     
                     <ul class="nav nav-tabs">
@@ -113,28 +113,19 @@
                         <div class="tab-pane fade in active" id="home">
 
                             <div>
-
-                               
-                      
-                      <div class="col-xs-12"> 
-                    		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
-                                </div>
-                              </div>
-                        </div>
+                             <input type="hidden" name="pageId" value="${page.pageId}">  
+                    
                           
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Form Name :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="Form Name" value="${editTextImonial.formName}"  readonly>
+                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="Form Name" value="${editTextImonial.formName}">
                                 </div>
                               </div>
                         </div>
                         
-                           
+                    <%--        
                      <div class="col-xs-12"> 
                         <input id="id" value="${editTextImonial.id}" name="id" type="hidden"  >
                         
@@ -166,33 +157,72 @@
                                           
                                     </div>
                                       </div>
-                                 </div>
+                                 </div>   --%>
+                             <div class="col-xs-12"> 
+                               <div class="form-group row">
+                             <label class="control-label col-sm-2" for="category_id"> Image :</label>
+                              <div class="col-sm-7">
+                               								<div class="fileinput-new thumbkishore2div thumbnail" style="width: 250px;   display:none; overflow:hidden">
+                                                                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" id="thumbkishore2" alt=""  style="width:250px; height:auto" >
+                                                          </div>
+                                                            
+                                                           <div class="input-group image-preview2">
+                                            
+											<input type="text" class="form-control image-preview-filename2" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+											<span class="input-group-btn">
+												<!-- image-preview-clear button -->
+												<button type="button" class="btn btn-default image-preview-clear2" style="display:none;">
+													<span class="glyphicon glyphicon-remove2"></span> Clear
+												</button>
+												<!-- image-preview-input -->
+                                                
+												<div class="btn btn-default image-preview-input">
+													<span class="glyphicon glyphicon-folder-open"></span>
+													<span class="image-preview-input-title2">Browse</span>
+                                                    
+													<input type="file" accept="image/png, image/jpeg, image/gif" id="images"   name="images"/> <!-- rename it -->
+												</div>
+											</span>
+										</div>
+                                  
+                                 Note: Image size should be  width: 960px   and height: 600px. 
+                              </div>
+                           </div></div>
+                           
                              
                     <div class="col-xs-12"> 
                     		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Designation :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_name">Designation :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" value="${editTextImonial.designation}"  readonly>
+                                  <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" value="${editTextImonial.designation}">
                                 </div>
                               </div>
                         </div>
                          <div class="col-xs-12"> 
                     		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Location :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_name">Location :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="location" name="location" placeholder="Location" value="${editTextImonial.location}"  readonly>
+                                  <input type="text" class="form-control" id="location" name="location" placeholder="Location" value="${editTextImonial.location}">
                                 </div>
                               </div>
                         </div>
-                     
+                       
+                      <div class="col-xs-12"> 
+                    		 <div class="form-group">
+                                <label class="control-label col-sm-2" for="page_name">Message :<span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="msg" name="msg" placeholder="Page/Menu Title" value="${editTextImonial.message}" required>
+                                </div>
+                              </div>
+                        </div>
                      
                         <div class="col-xs-12"> 
                         <hr>
                              	 
                                 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_order">Sort No. :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_order">Sort No. :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order"  value="${editTextImonial.sortNo}" required>
+                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order"  value="${editTextImonial.sortNo}" >
                                 </div>
                               </div>
                                     

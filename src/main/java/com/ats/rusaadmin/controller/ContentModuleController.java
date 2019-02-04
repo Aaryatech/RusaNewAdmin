@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.VpsImageUpload;
-import com.ats.rusaadmin.model.CMSPageDescription;
-import com.ats.rusaadmin.model.CMSPages;
+import com.ats.rusaadmin.model.GetPagesModule;
+import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.Page;
 import com.ats.rusaadmin.model.PagesModule;
@@ -38,11 +39,11 @@ public class ContentModuleController {
 	RestTemplate rest = new RestTemplate();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	int pageId;
-	Page page = new Page();
+	Page page = new Page();      
 
 
-	@RequestMapping(value = "/textimonialForm", method = RequestMethod.GET)
-	public ModelAndView textimonialForm(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/textimonialForm/{pageId}", method = RequestMethod.GET)
+	public ModelAndView textimonialForm(@PathVariable int pageId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/textImonialForm");
 		try {
@@ -68,13 +69,12 @@ public class ContentModuleController {
 			HttpSession session = request.getSession();
 			User UserDetail =(User) session.getAttribute("UserDetail");
 		
-			
 			String formName = request.getParameter("form_name");
 			String designation = request.getParameter("designation");
-			
+			String msg = request.getParameter("msg");
+			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			String location = request.getParameter("location");
 			int isActive = Integer.parseInt(request.getParameter("status")); 
-			//int seqNo = Integer.parseInt(request.getParameter("page_order"));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
 
 			Date date = new Date();
@@ -85,10 +85,7 @@ public class ContentModuleController {
 			List<TestImonial> TestImonialList = new ArrayList<TestImonial>();
 
 			VpsImageUpload upload = new VpsImageUpload();
-			
-				
-				 
-				//cMSPages.setAddedByUserId(UserDetail.getUserId());
+		
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
 				  
 				}else {
@@ -103,9 +100,7 @@ public class ContentModuleController {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
-					 
-				}
-				
+					}
 				
 				textImonial.setPageId(pageId);
 				textImonial.setDesignation(designation); 
@@ -115,17 +110,18 @@ public class ContentModuleController {
 				textImonial.setAddDate(sf.format(date));
 				textImonial.setLocation(location);
 				textImonial.setSortNo(sortNo);
-			
+				textImonial.setMessage(msg); 
+				
 			System.out.println("textImonial" + textImonial); 
-			TestImonial res = rest.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", textImonial, TestImonial.class);
-/*
-			if(res!=null && res.getDetailList()!=null) {
+			TestImonial res = rest.postForObject(Constant.url + "/saveTextImonial", textImonial, TestImonial.class);
+
+				if(res!=null) {
 				
 				PagesModule pagesModule = new PagesModule();
 				
-				pagesModule.setPageId(res.getPageId());
-				pagesModule.setPrimaryKeyId(res.getCmsPageId());
-				pagesModule.setModuleId(1);
+				pagesModule.setPageId(pageId);
+				pagesModule.setPrimaryKeyId(res.getId());
+				pagesModule.setModuleId(6);
 				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 				System.out.println("res " + res);  
 				
@@ -136,12 +132,58 @@ public class ContentModuleController {
 				session.setAttribute("successMsg","Error While Uploading Content !");
 				session.setAttribute("errorMsg","true");
 			}
-			 */
-
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/textimonialForm";
+		return "redirect:/testImonialList";
+	}
+	@RequestMapping(value = "/testImonialList", method = RequestMethod.GET)
+	public ModelAndView testImonialList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/testImonialList");
+		try {
+		 
+			 
+			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getTestImonialList",
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
+			
+			model.addObject("getPagesModuleList", getPagesModuleList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/deleteTestImonial/{id}", method = RequestMethod.GET)
+	public String deleteTestImonial(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+		 
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("id", id);
+			 Info info = rest.postForObject(Constant.url + "/deleteTestImonial",map,
+					 Info.class);
+			  
+			 HttpSession session = request.getSession();
+			 
+			 if(info.isError()==false) {
+				 session.setAttribute("successMsg","Infomation Delete successfully!"); 
+			 }else {
+				 session.setAttribute("successMsg","Error while Deleting !");
+			 }
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/testImonialList";
 	}
 }
