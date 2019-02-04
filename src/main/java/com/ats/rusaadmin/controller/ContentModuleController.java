@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.VpsImageUpload;
+import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.GetPagesModule;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
@@ -39,7 +40,8 @@ public class ContentModuleController {
 	RestTemplate rest = new RestTemplate();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	int pageId;
-	Page page = new Page();      
+	Page page = new Page();  
+	TestImonial editTestImonial=new TestImonial();
 
 
 	@RequestMapping(value = "/textimonialForm/{pageId}", method = RequestMethod.GET)
@@ -53,6 +55,7 @@ public class ContentModuleController {
 			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
 					 Page.class);
 			model.addObject("page", page);
+			model.addObject("isEdit", 0);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,7 +79,7 @@ public class ContentModuleController {
 			String location = request.getParameter("location");
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
-
+			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -95,27 +98,27 @@ public class ContentModuleController {
 					 
 					try {
 						 upload.saveUploadedImge(images.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
-						 textImonial.setImageName(imageName);
+						 editTestImonial.setImageName(imageName);
 						}catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
 					}
 				
-				textImonial.setPageId(pageId);
-				textImonial.setDesignation(designation); 
-				textImonial.setFromName(formName);
-				textImonial.setIsActive(isActive);
-				textImonial.setDelStatus(1);
-				textImonial.setAddDate(sf.format(date));
-				textImonial.setLocation(location);
-				textImonial.setSortNo(sortNo);
-				textImonial.setMessage(msg); 
+				editTestImonial.setPageId(pageId);
+				editTestImonial.setDesignation(designation); 
+				editTestImonial.setFromName(formName);
+				editTestImonial.setIsActive(isActive);
+				editTestImonial.setDelStatus(1);
+				editTestImonial.setAddDate(sf.format(date));
+				editTestImonial.setLocation(location);
+				editTestImonial.setSortNo(sortNo);
+				editTestImonial.setMessage(msg); 
 				
-			System.out.println("textImonial" + textImonial); 
-			TestImonial res = rest.postForObject(Constant.url + "/saveTextImonial", textImonial, TestImonial.class);
+			System.out.println("textImonial" + editTestImonial); 
+			TestImonial res = rest.postForObject(Constant.url + "/saveTextImonial", editTestImonial, TestImonial.class);
 
-				if(res!=null) {
+				if(res!=null && isEdit==0) {
 				
 				PagesModule pagesModule = new PagesModule();
 				
@@ -140,13 +143,33 @@ public class ContentModuleController {
 
 		return "redirect:/testImonialList";
 	}
+	@RequestMapping(value = "/editTestImonial/{id}", method = RequestMethod.GET)
+	public ModelAndView editTestImonial(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/textImonialForm");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id); 
+			editTestImonial = rest.postForObject(Constant.url + "/getTestImonialById", map, TestImonial.class);
+			model.addObject("editTestImonial", editTestImonial);
+			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("isEdit", 1);
+		//	model.addObject("url", Constant.bannerImageURL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
 	@RequestMapping(value = "/testImonialList", method = RequestMethod.GET)
 	public ModelAndView testImonialList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/testImonialList");
 		try {
 		 
-			 
 			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getTestImonialList",
 					GetPagesModule[].class);
 			
@@ -165,8 +188,7 @@ public class ContentModuleController {
 	public String deleteTestImonial(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) {
 
 		 
-		try {
-		 
+		try {		 
 			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			 map.add("id", id);
 			 Info info = rest.postForObject(Constant.url + "/deleteTestImonial",map,

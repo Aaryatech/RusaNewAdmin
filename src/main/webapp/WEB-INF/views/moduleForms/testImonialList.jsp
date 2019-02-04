@@ -74,7 +74,7 @@
                     <tr>
                    		<th width="5%">Sr No</th>
                         <th>Page Name</th> 
-                        <th>Desc</th> 
+                        <th>Form Name</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
@@ -95,7 +95,7 @@
 										<td>${getPagesModuleList.pageName} (${getPagesModuleList.secctionName})</td> 
 										<td>${getPagesModuleList.content}</td>  
 										<td><a
-											href="${pageContext.request.contextPath}/editTestImonialContent/${getPagesModuleList.primaryKeyId}"><span
+											href="${pageContext.request.contextPath}/editTestImonial/${getPagesModuleList.primaryKeyId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a> | <a
 											href="${pageContext.request.contextPath}/deleteTestImonial/${getPagesModuleList.primaryKeyId}"

@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -82,7 +83,7 @@
                     <h2 class="title pull-left">Add Test Imonial</h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"> Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/testImonialList"><button type="button" class="btn btn-info"><< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
@@ -108,57 +109,44 @@
                         </li>
                         
                     </ul>
-
+       <c:choose>
+                                	<c:when test="${isEdit==0}">
+                                	
+                                	
+                                
+                                
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="home">
 
                             <div>
                              <input type="hidden" name="pageId" value="${page.pageId}">  
+                             </c:when>
+                             	<c:otherwise>
+                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">  
+                                	</c:otherwise></c:choose>
+                      <input type="hidden" name="isEdit" value="${isEdit}">  
                     
                           
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Form Name :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="Form Name" value="${editTextImonial.formName}">
+                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="Form Name" value="${editTestImonial.fromName}">
                                 </div>
                               </div>
                         </div>
-                        
-                    <%--        
-                     <div class="col-xs-12"> 
-                        <input id="id" value="${editTextImonial.id}" name="id" type="hidden"  >
-                        
-                             <div class="form-group">
-                                    <label class="col-md-2 control-label"> Image: <span class="text-danger">*</span></label>
-                                     <div class="col-md-10">
-                                        <div class="row col-md-5">
-                                     <img src="" id="temppreviewimageki1" class="temppreviewimageki1" style="width:200px; height:auto;display:none">								 </div>
-                                        <div class="row col-md-10">
-                                
-                                        <div class="input-group image-preview1" data-original-title="" title="">
-                                    
-                                     <input type="text" class="form-control image-preview-filename1" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
-                                            <span class="input-group-btn">
-                                                <!-- image-preview-clear button -->
-                                                <button type="button" class="btn btn-default image-preview-clear1" style="display:none;">
-                                                    <span class="glyphicon glyphicon-remove"></span> Clear
-                                                </button>
-                                            <!-- image-preview-input -->
-                                                <div class="btn btn-default image-preview-input">
-                                                    <span class="glyphicon glyphicon-folder-open"></span>
-                                                    <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="images" name="images" required> <!-- rename it -->
-                                                   
-                                                </div>
-                                            </span>
-                                        </div>
-                                         <span class="help-block">* Only jpg,gif,png * Best image size is 1920px × 700px</span>
-                                          
-                                    </div>
-                                      </div>
-                                 </div>   --%>
-                             <div class="col-xs-12"> 
+                        <div class="col-xs-12">
+                         <c:if test="${editTestImonial.imageName!=null}">
+                               	<div class="form-group">  
+                                 <label class="col-md-2 control-label">Current Image</label>
+                                          <div class="col-md-10">
+                                                  <img src="${url}${editTestImonial.imageName}" style="width:200px; height:auto">
+                                                  
+                                          </div>
+ 								</div>
+                               </c:if>
+                 
+                              
                                <div class="form-group row">
                              <label class="control-label col-sm-2" for="category_id"> Image :</label>
                               <div class="col-sm-7">
@@ -194,7 +182,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Designation :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" value="${editTextImonial.designation}">
+                                  <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" value="${editTestImonial.designation}">
                                 </div>
                               </div>
                         </div>
@@ -202,7 +190,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Location :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="location" name="location" placeholder="Location" value="${editTextImonial.location}">
+                                  <input type="text" class="form-control" id="location" name="location" placeholder="Location" value="${editTestImonial.location}">
                                 </div>
                               </div>
                         </div>
@@ -211,7 +199,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Message :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="msg" name="msg" placeholder="Page/Menu Title" value="${editTextImonial.message}" required>
+                                  <input type="text" class="form-control" id="msg" name="msg" placeholder="Page/Menu Title" value="${editTestImonial.message}" required>
                                 </div>
                               </div>
                         </div>
@@ -222,16 +210,26 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort No. :</label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order"  value="${editTextImonial.sortNo}" >
+                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order"  value="${editTestImonial.sortNo}" >
                                 </div>
                               </div>
                                     
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                <select id="status" name="status" class="form-control" required >
-                                                                    <option value="1" >Active</option>
+                               <select id="status" name="status" class="form-control" required >
+                                
+                                <c:choose>
+                                	<c:when test="${editTestImonial.isActive==0}">
+                                		<option value="1" >Active</option>
+                    							<option value="0" selected>Inactive</option>
+                                	</c:when>
+                                	<c:otherwise>
+                                		<option value="1" selected>Active</option>
                     							<option value="0" >Inactive</option>
+                                	</c:otherwise>
+                                </c:choose>
+                                                
                      
                  
                                   </select>
