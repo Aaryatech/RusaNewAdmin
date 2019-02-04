@@ -31,6 +31,7 @@ import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.CategoryDescription;
 import com.ats.rusaadmin.model.FreqAskQue;
 import com.ats.rusaadmin.model.FreqAskQueDescription;
+import com.ats.rusaadmin.model.GetPagesModule;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.ModulesNames;
@@ -231,6 +232,27 @@ public class AddContentController {
 		return "redirect:/sectionTreeList";
 	}
 	
+	@RequestMapping(value = "/cmsList", method = RequestMethod.GET)
+	public ModelAndView cmsList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/cmsList");
+		try {
+		 
+			 
+			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getCmsPagesModuleList",
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
+			
+			model.addObject("getPagesModuleList", getPagesModuleList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
 	@RequestMapping(value = "/faqForm", method = RequestMethod.GET)
 	public ModelAndView faqForm(HttpServletRequest request, HttpServletResponse response) {
 
@@ -322,6 +344,27 @@ public class AddContentController {
 		}
 
 		return "redirect:/sectionTreeList";
+	}
+	
+	@RequestMapping(value = "/faqList", method = RequestMethod.GET)
+	public ModelAndView faqList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/faqList");
+		try {
+		 
+			 
+			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getFaqPagesModuleList",
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
+			
+			model.addObject("getPagesModuleList", getPagesModuleList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
 	}
 	
 }
