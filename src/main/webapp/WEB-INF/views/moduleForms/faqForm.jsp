@@ -201,6 +201,70 @@
         </section>
         
     </div> 
+    
+    
+    <div class="col-lg-12">
+    <section class="box "> 
+             <header class="panel_header">
+                <h2 class="title pull-left">FAQ List</h2>
+                <div class="actions panel_actions pull-right">
+                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add FAQ</button></a>
+                	<a class="box_toggle fa fa-chevron-down"></a>
+                   <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                    <a class="box_close fa fa-times"></a> -->
+                     
+                </div>
+                 
+            </header> 
+            <div class="content-body">    <div class="row"> 
+            
+        <div class="col-xs-12">
+
+
+            <table id="example-1" class="table table-striped dt-responsive display">
+                <thead>
+                    <tr>
+                   		<th width="5%">Sr No</th>
+                        <th>Page Name</th> 
+                        <th>Desc</th> 
+                        <th width="10%">Action</th> 
+                    </tr>
+                </thead>
+
+                <tfoot>
+                    <tr>
+                    	<th width="5%">Sr No</th>
+                        <th>Page Name</th> 
+                        <th>Desc</th> 
+                        <th width="10%">Action</th> 
+                    </tr>
+                </tfoot>
+
+                <tbody>
+                        <c:forEach items="${getPagesModuleList}" var="getPagesModuleList" varStatus="count">
+									<tr  >
+										<td>${count.index+1}</td>
+										<td>${getPagesModuleList.pageName} (${getPagesModuleList.secctionName})</td> 
+										<td>${getPagesModuleList.content}</td>  
+										<td><a
+											href="${pageContext.request.contextPath}/editFaqContent/${getPagesModuleList.primaryKeyId}"><span
+												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
+												rel="tooltip" ></span></a> | <a
+											href="${pageContext.request.contextPath}/deleteFaqContent/${getPagesModuleList.primaryKeyId}"
+											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
+												class="glyphicon glyphicon-remove"></span></a></td>
+									</tr>
+								</c:forEach>  
+                </tbody>
+            </table>
+
+
+
+
+        </div>
+    </div>
+    </div>
+        </section></div>
 
   
 <!-- MAIN CONTENT AREA ENDS -->

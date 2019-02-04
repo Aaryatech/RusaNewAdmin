@@ -124,6 +124,12 @@ public class AddContentController {
 					 Page.class);
 			model.addObject("page", page);
 			
+			GetPagesModule[] getPagesModule = rest.postForObject(Constant.url + "/getCmsPagesModuleListByPageId",map,
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule)); 
+			model.addObject("getPagesModuleList", getPagesModuleList);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -433,6 +439,13 @@ public class AddContentController {
 			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
 					 Page.class);
 			model.addObject("page", page);
+			
+			GetPagesModule[] getPagesModule = rest.postForObject(Constant.url + "/getFaqPagesModuleListByPageId",map,
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
+			
+			model.addObject("getPagesModuleList", getPagesModuleList);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

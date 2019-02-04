@@ -61,7 +61,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add CMS Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Edit CMS Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,7 +79,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add CMS Form</h2>
+                    <h2 class="title pull-left">Edit CMS Form</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/cmsList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -137,7 +137,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="heading1">Heading :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" >
+                                  <input type="text" class="form-control" id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" required>
                                 </div>
                             </div>
                             
