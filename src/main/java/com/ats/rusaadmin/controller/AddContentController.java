@@ -50,6 +50,7 @@ public class AddContentController {
 	List<Languages> languagesList = new ArrayList<Languages>();
 	int pageId;
 	Page page = new Page();
+	FreqAskQue editFreqAskQue =  new FreqAskQue();
 	
 	@RequestMapping(value = "/sectionTreeList", method = RequestMethod.GET)
 	public ModelAndView getSectionTreeStructure(HttpServletRequest request, HttpServletResponse response) {
@@ -415,6 +416,105 @@ public class AddContentController {
 			 }
 			 
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/faqList";
+	}
+	
+	@RequestMapping(value = "/editFaqContent/{faqId}", method = RequestMethod.GET)
+	public ModelAndView editFaqContent(@PathVariable("faqId") int faqId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/editFaqContent");
+		try {
+		 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("faqId", faqId);
+			 
+			editFreqAskQue = rest.postForObject(Constant.url + "/getFaqById",map,
+					FreqAskQue.class);
+			 
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			 
+			 map = new LinkedMultiValueMap<String, Object>();
+				map.add("pageId", editFreqAskQue.getPageId());
+				Page page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+						 Page.class);
+			
+			
+			for(int i = 0 ; i< languagesList.size() ; i++) {
+				
+				int flag=0;
+				
+				for(int j = 0 ; j< editFreqAskQue.getDescriptionList().size() ; j++) {
+					
+					if(languagesList.get(i).getLanguagesId()==editFreqAskQue.getDescriptionList().get(j).getLanguageId()) {
+						flag=1;
+						break;
+					}
+				}
+				
+				if(flag==0) {
+					FreqAskQueDescription freqAskQueDescription  = new FreqAskQueDescription();
+					freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					editFreqAskQue.getDescriptionList().add(freqAskQueDescription);
+				}
+			}
+			
+			model.addObject("languagesList", languagesList);
+			model.addObject("freqAskQue", editFreqAskQue);
+			model.addObject("page", page);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/submitEditFaqForm", method = RequestMethod.POST)
+	public String submitEditFaqForm( HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+		 
+			int isActive = Integer.parseInt(request.getParameter("status")); 
+			int seqNo = Integer.parseInt(request.getParameter("sortNo"));
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			  
+				for(int i = 0 ; i<editFreqAskQue.getDescriptionList().size() ; i++) {
+					
+					 
+					editFreqAskQue.getDescriptionList().get(i).setFaqQue(request.getParameter("question"+editFreqAskQue.getDescriptionList().get(i).getLanguageId()));
+					editFreqAskQue.getDescriptionList().get(i).setFaqAns(request.getParameter("ans"+editFreqAskQue.getDescriptionList().get(i).getLanguageId())); 
+				 
+				}
+				 
+				//editFreqAskQue.setEditByUserId(UserDetail.getUserId());
+				  
+				editFreqAskQue.setFaqSortNo(seqNo); 
+				editFreqAskQue.setIsActive(isActive);
+				editFreqAskQue.setDelStatus(1);
+				editFreqAskQue.setEditDate(sf.format(date));
+				  
+			
+			System.out.println("editFreqAskQue " + editFreqAskQue ); 
+			FreqAskQue res = rest.postForObject(Constant.url + "/saveUpdateFreqAskQue", editFreqAskQue, FreqAskQue.class);
+
+			if(res!=null) {
+				 
+				session.setAttribute("successMsg","Infomation updated successfully!");
+				 
+			} 
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
