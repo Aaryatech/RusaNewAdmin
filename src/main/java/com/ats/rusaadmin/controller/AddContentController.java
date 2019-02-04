@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,7 +94,7 @@ public class AddContentController {
 				  url="redirect:/faqForm";
 			  } else if(moduleId==6){
 				  
-				  url="redirect:/textimonialForm";
+				  url="redirect:/textimonialForm/"+pageId;
 			  }
 			  
 			
@@ -253,6 +254,32 @@ public class AddContentController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/deleteCmsContent/{cmsPageId}", method = RequestMethod.GET)
+	public String deleteCmsContent(@PathVariable("cmsPageId") int cmsPageId, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+		 
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("cmsPageId", cmsPageId);
+			 Info info = rest.postForObject(Constant.url + "/deleteCmsContent",map,
+					 Info.class);
+			  
+			 HttpSession session = request.getSession();
+			 
+			 if(info.isError()==false) {
+				 session.setAttribute("successMsg","Infomation Delete successfully!"); 
+			 }else {
+				 session.setAttribute("successMsg","Error while Deleting !");
+			 }
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/cmsList";
+	}
+	
 	@RequestMapping(value = "/faqForm", method = RequestMethod.GET)
 	public ModelAndView faqForm(HttpServletRequest request, HttpServletResponse response) {
 
@@ -365,6 +392,34 @@ public class AddContentController {
 		}
 
 		return model;
+	}
+	
+	
+	@RequestMapping(value = "/deleteFaqContent/{faqId}", method = RequestMethod.GET)
+	public String deleteFaqContent(@PathVariable("faqId") int faqId, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+		 
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("faqIdList", faqId);
+			 map.add("delStatus", 0);
+			 Info info = rest.postForObject(Constant.url + "/deleteFaq",map,
+					 Info.class);
+			 HttpSession session = request.getSession();
+			 
+			 if(info.isError()==false) {
+				 session.setAttribute("successMsg","Infomation Delete successfully!"); 
+			 }else {
+				 session.setAttribute("successMsg","Error while Deleting !");
+			 }
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/faqList";
 	}
 	
 }

@@ -82,7 +82,7 @@
                     <h2 class="title pull-left">Add CMS Form</h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/cmsList"><button type="button" class="btn btn-info"><< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
