@@ -51,6 +51,7 @@ public class AddContentController {
 	int pageId;
 	Page page = new Page();
 	FreqAskQue editFreqAskQue =  new FreqAskQue();
+	CMSPages editCMSPages = new CMSPages();
 	
 	@RequestMapping(value = "/sectionTreeList", method = RequestMethod.GET)
 	public ModelAndView getSectionTreeStructure(HttpServletRequest request, HttpServletResponse response) {
@@ -274,6 +275,141 @@ public class AddContentController {
 				 session.setAttribute("successMsg","Error while Deleting !");
 			 }
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/cmsList";
+	}
+	
+	@RequestMapping(value = "/editCmsContent/{cmsPageId}", method = RequestMethod.GET)
+	public ModelAndView editCmsContent(@PathVariable("cmsPageId") int cmsPageId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/editCmsContent");
+		try {
+		 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("cmsPageId", cmsPageId);
+			 
+			 editCMSPages = rest.postForObject(Constant.url + "/getCmsPagebyId",map,
+					CMSPages.class);
+			 
+			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+					 Languages[].class);
+			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			 
+			 map = new LinkedMultiValueMap<String, Object>();
+				map.add("pageId", editCMSPages.getPageId());
+				Page page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+						 Page.class);
+			
+			
+			for(int i = 0 ; i< languagesList.size() ; i++) {
+				
+				int flag=0;
+				
+				for(int j = 0 ; j< editCMSPages.getDetailList().size() ; j++) {
+					
+					if(languagesList.get(i).getLanguagesId()==editCMSPages.getDetailList().get(j).getLanguageId()) {
+						flag=1;
+						break;
+					}
+				}
+				
+				if(flag==0) {
+					CMSPageDescription cMSPageDescription  = new CMSPageDescription();
+					cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					editCMSPages.getDetailList().add(cMSPageDescription);
+				}
+			}
+			
+			model.addObject("languagesList", languagesList);
+			model.addObject("editCMSPages", editCMSPages);
+			model.addObject("page", page);
+			model.addObject("url", Constant.gallryImageURL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/submtEditCmsForm", method = RequestMethod.POST)
+	public String submtEditCmsForm(@RequestParam("images") List<MultipartFile> images,@RequestParam("pagePdf") List<MultipartFile> pagePdf
+			,HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+			String aligment = request.getParameter("header_top_alignment");
+			int isActive = Integer.parseInt(request.getParameter("status")); 
+			int seqNo = Integer.parseInt(request.getParameter("page_order"));
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			 
+			 
+			VpsImageUpload upload = new VpsImageUpload();
+			
+				for(int i = 0 ; i<editCMSPages.getDetailList().size() ; i++) {
+					
+					 
+					editCMSPages.getDetailList().get(i).setHeading(request.getParameter("heading1"+editCMSPages.getDetailList().get(i).getLanguageId()));
+					editCMSPages.getDetailList().get(i).setSmallheading(request.getParameter("smallheading"+editCMSPages.getDetailList().get(i).getLanguageId()));
+					editCMSPages.getDetailList().get(i).setPageDesc(request.getParameter("page_description1"+editCMSPages.getDetailList().get(i).getLanguageId()));
+					 
+				}
+				 
+				//editCMSPages.setEditByUserId(UserDetail.getUserId());
+				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
+				  
+				}else {
+				 
+					String imageName = new String(); 
+					imageName =  dateTimeInGMT.format(date)+"_"+images.get(0).getOriginalFilename();
+					 
+					try {
+						 upload.saveUploadedImge(images.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
+						 editCMSPages.setFeaturedImage(imageName);
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					 
+				}
+				
+				if(pagePdf.get(0).getOriginalFilename()==null || pagePdf.get(0).getOriginalFilename()=="") {
+					  
+				}else {
+				 
+					String pdfName = new String(); 
+					pdfName =  dateTimeInGMT.format(date)+"_"+pagePdf.get(0).getOriginalFilename();
+					 
+					try {
+						 upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf,pdfName);
+						 editCMSPages.setDownloadPdf(pdfName);
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					 
+				}
+			 
+				editCMSPages.setPageOrder(seqNo); 
+				editCMSPages.setIsActive(isActive); 
+				editCMSPages.setEditDate(sf.format(date));
+				editCMSPages.setFeaturedImageAlignment(aligment); 
+			
+			System.out.println("editCMSPages" + editCMSPages); 
+			CMSPages res = rest.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", editCMSPages, CMSPages.class);
+ 
+				session.setAttribute("successMsg","Infomation Updated successfully!");
+				 
+			 
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -521,5 +657,7 @@ public class AddContentController {
 
 		return "redirect:/faqList";
 	}
+	
+	
 	
 }
