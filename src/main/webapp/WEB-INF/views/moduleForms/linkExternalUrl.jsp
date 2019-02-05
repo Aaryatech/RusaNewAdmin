@@ -61,7 +61,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add FAQ</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Link External URL</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,10 +79,10 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add FAQ</h2>
+                    <h2 class="title pull-left">Link External URL</h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/faqList"><button type="button" class="btn btn-info"><< Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-info"><< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
@@ -92,7 +92,7 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertFaqForm" method="post" name="form_sample_2" id="form_sample_2" 
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/submitExtenalUrl" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
                          onsubmit="return confirm('Do you really want to submit the form?');">               
                     
                     <ul class="nav nav-tabs">
@@ -101,12 +101,7 @@
                                 <i class="fa fa-home"></i> Home
                             </a>
                         </li>
-                        <li>
-                            <a href="#metatage" data-toggle="tab">
-                                <i class="fa fa-user"></i> Meta Tags 
-                            </a>
-                        </li>
-                        
+                          
                     </ul>
 
                     <div class="tab-content">
@@ -124,47 +119,34 @@
                                 </div>
                               </div>
                         </div>
-                        
-                      <c:forEach items="${languagesList}" var="languagesList" >
-                    	 <h5 class="title pull-left">${languagesList.name}</h5>
-                      
-                       <div class="col-xs-12"> 
-                    		  
-                         <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Question : <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="question${languagesList.languagesId}" name="question${languagesList.languagesId}" placeholder="Question" value="" required>
-                                </div>
-                            </div>
-                             
-                              <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_description1">Answer : <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${languagesList.languagesId}" id="ans${languagesList.languagesId}"   required="required"></textarea>
-                                </div>
-                              </div> 
-                              
-                             </div>
-                     </c:forEach>
-                     
-                     
-                     
+                         
                         <div class="col-xs-12"> 
                         <hr>
                              	 
                                 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_order">External URL :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order" value="" required>
+                                  <input type="text" class="form-control" id="externalUrl" name="externalUrl" placeholder="External URL" value="${page.externalUrl}" required>
                                 </div>
                               </div>
-                                    
+                                  
+                            	  
+                                 
                                <div class="form-group">
-                                <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="status">In New Window  :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                <select id="status" name="status" class="form-control" required >
-                                                                    <option value="1" >Active</option>
-                    							<option value="0" >Inactive</option>
+                                <select id="newWindow" name="newWindow" class="form-control" required >
+                                <c:choose>
+                                	<c:when test="${page.externalUrlTarget==0}">
+                                			<option value="1" >Yes</option>
+                   					 				<option value="0" selected>No</option>
+                                	</c:when>
+                                	<c:otherwise>
+                                		<option value="1" selected>Yes</option>
+                   					 				<option value="0"  >No</option> 
+                                	</c:otherwise>
+                                </c:choose>
+                                                                    
                      
                  
                                   </select>
@@ -184,11 +166,7 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane fade" id="metatage">
-
-                            <p>That said, in some situations it may be desirable to turn this functionality off. Therefore, we also provide the ability to disable the data attribute API by unbinding all events on the document namespaced with data-api. </p>
-
-                        </div>
+                         
                          
                          
                     </div>
@@ -201,72 +179,7 @@
         </section>
         
     </div> 
-    
-    
-    <div class="col-lg-12">
-    <section class="box "> 
-             <header class="panel_header">
-                <h2 class="title pull-left">FAQ List</h2>
-                <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add FAQ</button></a>
-                	<a class="box_toggle fa fa-chevron-down"></a>
-                   <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
-                    <a class="box_close fa fa-times"></a> -->
-                     
-                </div>
-                 
-            </header> 
-            <div class="content-body">    <div class="row"> 
-            
-        <div class="col-xs-12">
-
-
-            <table id="example-1" class="table table-striped dt-responsive display">
-                <thead>
-                    <tr>
-                   		<th width="5%">Sr No</th>
-                        <th>Page Name</th> 
-                        <th>Desc</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Page Name</th> 
-                        <th>Desc</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </tfoot>
-
-                <tbody>
-                        <c:forEach items="${getPagesModuleList}" var="getPagesModuleList" varStatus="count">
-									<tr  >
-										<td>${count.index+1}</td>
-										<td>${getPagesModuleList.pageName} (${getPagesModuleList.secctionName})</td> 
-										<td>${getPagesModuleList.content}</td>  
-										<td><a
-											href="${pageContext.request.contextPath}/editFaqContent/${getPagesModuleList.primaryKeyId}"><span
-												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
-												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteFaqContent/${getPagesModuleList.primaryKeyId}"
-											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
-									</tr>
-								</c:forEach>  
-                </tbody>
-            </table>
-
-
-
-
-        </div>
-    </div>
-    </div>
-        </section></div>
-
-  
+     
 <!-- MAIN CONTENT AREA ENDS -->
     </section>
     </section>

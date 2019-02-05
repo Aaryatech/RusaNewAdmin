@@ -9,6 +9,7 @@ public class Page {
 	private String pageName; 
 	private String pageSlug; 
 	private String externalUrl; 
+	private String externalUrlTarget;
 	private String typeSecCate; 
 	private int secCateId; 
 	private String pageMetaTitle; 
@@ -80,12 +81,19 @@ public class Page {
 	public void setPageMetaKeyword(String pageMetaKeyword) {
 		this.pageMetaKeyword = pageMetaKeyword;
 	}
+	public String getExternalUrlTarget() {
+		return externalUrlTarget;
+	}
+	public void setExternalUrlTarget(String externalUrlTarget) {
+		this.externalUrlTarget = externalUrlTarget;
+	}
 	@Override
 	public String toString() {
 		return "Page [pageId=" + pageId + ", templateId=" + templateId + ", moduleId=" + moduleId + ", pageName="
-				+ pageName + ", pageSlug=" + pageSlug + ", externalUrl=" + externalUrl + ", typeSecCate=" + typeSecCate
-				+ ", secCateId=" + secCateId + ", pageMetaTitle=" + pageMetaTitle + ", pageMetaDescription="
-				+ pageMetaDescription + ", pageMetaKeyword=" + pageMetaKeyword + "]";
+				+ pageName + ", pageSlug=" + pageSlug + ", externalUrl=" + externalUrl + ", externalUrlTarget="
+				+ externalUrlTarget + ", typeSecCate=" + typeSecCate + ", secCateId=" + secCateId + ", pageMetaTitle="
+				+ pageMetaTitle + ", pageMetaDescription=" + pageMetaDescription + ", pageMetaKeyword="
+				+ pageMetaKeyword + "]";
 	}
 	
 	
