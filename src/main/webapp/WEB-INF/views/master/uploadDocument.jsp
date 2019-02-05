@@ -59,7 +59,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Upload Document</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Other Link</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -75,33 +75,35 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Upload Document</c:when><c:otherwise>Upload Document</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Other Link</c:when><c:otherwise>Add Other Link</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/imageLinkList"><button type="button" class="btn btn-info"><< Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/imageLinkList"><button type="button" class="btn btn-info"> Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
                 </header>
                 
-                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertImageLink" 
+                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertUploadDoc" 
                    onsubmit="return confirm('Do you really want to submit the form?');" method="post" enctype="multipart/form-data">
                    
                 <div class="content-body"> 
                     <div class="row">
                     
-                  
-                        
-                        <div class="col-xs-12"> 
+                   
+                          <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Document Name  : </label>
+                                <div class="col-sm-10"> 
+                                  <input id="docName" class="form-control"
+								placeholder="Document Name" value="${editImageLink.urlLink}"  style="text-align: left;" name="docName" type="text" required>
+                                </div>
+                              </div>
+                       
                         <input id="id" value="${editImageLink.id}" name="id" type="hidden"  >
-                        
+                         <div class="col-xs-12"> 
                              <div class="form-group">
-                                    <label class="col-md-2 control-label"> Image: <span class="text-danger">*</span></label>
-                                     <div class="col-md-10">
-                                        <div class="row col-md-5">
-                                     <img src="" id="temppreviewimageki1" class="temppreviewimageki1" style="width:200px; height:auto;display:none">								 </div>
-                                        <div class="row col-md-10">
-                                
+                                    <label class="col-md-2 control-label"> Upload Document: <span class="text-danger">*</span></label>
+                                       <div class="row col-md-10">
                                         <div class="input-group image-preview1" data-original-title="" title="">
                                     
                                      <input type="text" class="form-control image-preview-filename1" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
@@ -114,23 +116,16 @@
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" required> <!-- rename it -->
+                                                    <input type="file" accept="doc/txt, doc/docx, doc/pdf" class="browseimage1" id="1" name="docfile" required> <!-- rename it -->
                                                    
                                                 </div>
                                             </span>
                                         </div>
-                                         <span class="help-block">* Only jpg,gif,png * Best image size is 1920px × 700px</span>
-                                          
-                                    </div>
-                                      </div>
+                                         <span class="help-block">* Only  .TXT,.DOCX,.PSD,.DOCX,* Best image size Bytes, KB, MB, GB, TB</span>
+                                          </div>
+                                   </div>
                                  </div>
-                     <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">URL Link : </label>
-                                <div class="col-sm-10"> 
-                                  <input id="urlLink" class="form-control"
-								placeholder="URL Link" value="${editImageLink.urlLink}"  style="text-align: left;" name="urlLink" type="text" required>
-                                </div>
-                              </div>
+                 	
                               
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort Order :  </label>
@@ -169,8 +164,7 @@
                             
                         </div>
                     </div> 
-                </div>
-                
+               
               
                 </form>
         </section>

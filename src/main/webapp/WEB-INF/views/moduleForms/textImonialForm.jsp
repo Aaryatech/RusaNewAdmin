@@ -89,7 +89,14 @@
                      
                 </header>
                 
-                    
+                      <c:choose>
+                	<c:when test="${isEdit==0}">
+                             <input type="hidden" name="pageId" value="${page.pageId}">  
+                             
+                             </c:when>
+                             	<c:otherwise>
+                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">  
+                                	</c:otherwise></c:choose>                
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
@@ -102,15 +109,9 @@
                                 <i class="fa fa-home"></i> Home
                             </a>
                         </li>
-                        <li>
-                            <a href="#metatage" data-toggle="tab">
-                                <i class="fa fa-user"></i> Meta Tags 
-                            </a>
-                        </li>
-                        
+                    
                     </ul>
-       <c:choose>
-                                	<c:when test="${isEdit==0}">
+    				
                                 	
                                 	
                                 
@@ -118,12 +119,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="home">
 
-                            <div>
-                             <input type="hidden" name="pageId" value="${page.pageId}">  
-                             </c:when>
-                             	<c:otherwise>
-                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">  
-                                	</c:otherwise></c:choose>
+                            
                       <input type="hidden" name="isEdit" value="${isEdit}">  
                     
                           
@@ -145,8 +141,9 @@
                                           </div>
  								</div>
                                </c:if>
-                 
-                              
+              
+                              </div>
+                                <div class="col-xs-12">
                                <div class="form-group row">
                              <label class="control-label col-sm-2" for="category_id"> Image :</label>
                               <div class="col-sm-7">
@@ -256,7 +253,7 @@
                         </div>
                          
                          
-                    </div>
+                    
  				</form>
                 </div>
                     
