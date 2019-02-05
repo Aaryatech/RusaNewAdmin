@@ -48,6 +48,13 @@
             </li>
              
              <li  > 
+                    <a href="${pageContext.request.contextPath}/sectionTreeList">
+                    <i class="fa fa-columns"></i>
+                    <span class="title">Section Tree</span>
+                        </a>
+                    </li> 
+                    
+             <li  > 
                     <a href="#">
                     <i class="fa fa-lock"></i>
                     <span class="title">Logout</span>

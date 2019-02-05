@@ -165,7 +165,7 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="" required>
+                                  <input type="number" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="" required>
                                 </div>
                               </div>
                                  

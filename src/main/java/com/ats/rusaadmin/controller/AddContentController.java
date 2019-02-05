@@ -97,6 +97,9 @@ public class AddContentController {
 			  } else if(moduleId==6){
 				  
 				  url="redirect:/textimonialForm/"+pageId;
+			  }else if(moduleId==10){
+				  
+				  url="redirect:/linkExternalUrl/";
 			  }
 			  
 			
@@ -671,6 +674,58 @@ public class AddContentController {
 		return "redirect:/faqList";
 	}
 	
+	@RequestMapping(value = "/linkExternalUrl", method = RequestMethod.GET)
+	public ModelAndView linkExternalUrl(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/linkExternalUrl");
+		try {
+		 
+			 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("pageId", pageId);
+			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+					 Page.class);
+			model.addObject("page", page);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
 	
+	@RequestMapping(value = "/submitExtenalUrl", method = RequestMethod.POST)
+	public String submitExtenalUrl( HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+		 
+			String externalUrl =  request.getParameter("externalUrl") ; 
+			String newWindow =  request.getParameter("newWindow") ;
+ 
+			page.setExternalUrl(externalUrl);
+			page.setExternalUrlTarget(newWindow);
+			
+			System.out.println("page " + page ); 
+			Page res = rest.postForObject(Constant.url + "/savePage", page, Page.class);
+
+			if(res!=null) {
+				 
+				session.setAttribute("successMsg","Infomation updated successfully!");
+				session.setAttribute("errorMsg",false);
+			} else {
+				session.setAttribute("successMsg","Error While Updating");
+				session.setAttribute("errorMsg",true);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/sectionTreeList";
+	}
 	
 }
