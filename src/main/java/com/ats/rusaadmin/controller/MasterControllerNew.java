@@ -533,7 +533,7 @@ public class MasterControllerNew {
 	}
 	
 	@RequestMapping(value = "/uploadDocForm/{pageId}", method = RequestMethod.GET)
-	public ModelAndView uploadDocForm(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView uploadDocForm(@PathVariable int pageId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("master/uploadDocument");
 		try {
