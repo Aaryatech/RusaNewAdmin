@@ -100,6 +100,9 @@ public class AddContentController {
 			  }else if(moduleId==10){
 				  
 				  url="redirect:/linkExternalUrl/";
+			  }else if(moduleId==7){
+				  
+				  url="redirect:/uploadDocForm/"+pageId;
 			  }
 			  
 			

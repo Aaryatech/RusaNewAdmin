@@ -2,7 +2,7 @@ package com.ats.rusaadmin.model;
 
 public class DocumentUpload {
 
-	private int id;
+	private int docId;
 
 	private String cateType;
 	
@@ -12,9 +12,9 @@ public class DocumentUpload {
 	
 	private String fileName;
 	
-	private int fileType;
+	private String fileType;
 	
-	private String fileSize;
+	private long fileSize;
 	
 	private int sortNo;
 
@@ -38,12 +38,14 @@ public class DocumentUpload {
 	
 	private String exVar2;
 
-	public int getId() {
-		return id;
+	
+
+	public int getDocId() {
+		return docId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setDocId(int docId) {
+		this.docId = docId;
 	}
 
 	public String getCateType() {
@@ -78,19 +80,21 @@ public class DocumentUpload {
 		this.fileName = fileName;
 	}
 
-	public int getFileType() {
+	
+
+	public String getFileType() {
 		return fileType;
 	}
 
-	public void setFileType(int fileType) {
+	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
 
-	public String getFileSize() {
+	public long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(String fileSize) {
+	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
 	}
 
@@ -184,11 +188,11 @@ public class DocumentUpload {
 
 	@Override
 	public String toString() {
-		return "DocumentUpload [id=" + id + ", cateType=" + cateType + ", pageId=" + pageId + ", sectionId=" + sectionId
-				+ ", fileName=" + fileName + ", fileType=" + fileType + ", fileSize=" + fileSize + ", sortNo=" + sortNo
-				+ ", isActive=" + isActive + ", delStatus=" + delStatus + ", addDate=" + addDate + ", editDate="
-				+ editDate + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId + ", exInt1="
-				+ exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
+		return "DocumentUpload [docId=" + docId + ", cateType=" + cateType + ", pageId=" + pageId + ", sectionId="
+				+ sectionId + ", fileName=" + fileName + ", fileType=" + fileType + ", fileSize=" + fileSize
+				+ ", sortNo=" + sortNo + ", isActive=" + isActive + ", delStatus=" + delStatus + ", addDate=" + addDate
+				+ ", editDate=" + editDate + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId
+				+ ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
 	}
 
 	

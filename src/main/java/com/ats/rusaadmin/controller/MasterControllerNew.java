@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -32,6 +33,7 @@ import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.CategoryDescription;
+import com.ats.rusaadmin.model.DocumentUpload;
 import com.ats.rusaadmin.model.GalleryDetail;
 import com.ats.rusaadmin.model.Galleryheader;
 import com.ats.rusaadmin.model.GetCategory;
@@ -40,6 +42,8 @@ import com.ats.rusaadmin.model.GetSubCategory;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.Logo;
+import com.ats.rusaadmin.model.Page;
+import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.Section;
 import com.ats.rusaadmin.model.SectionDescription;
 import com.ats.rusaadmin.model.User;
@@ -49,7 +53,6 @@ public class MasterControllerNew {
 	
 	RestTemplate rest = new RestTemplate();
 	User edituser=new User();
-//	GetCategory editcat = new GetCategory();
 	Section editSection = new Section();
 	Category editSubCat=new Category();
 	GetSubCategory editSubCategory = new GetSubCategory();
@@ -57,9 +60,11 @@ public class MasterControllerNew {
 	BannerImages editbanner=new BannerImages();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	List<GetCategory> categoryList;
+	int pageId;
+	Page page = new Page();  
 	User user=new User();
-	//List<Languages> languagesList = new ArrayList<Languages>();
-	//GetCategory
+	DocumentUpload editupload=new DocumentUpload();
+
 	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public ModelAndView addSection(HttpServletRequest request, HttpServletResponse response) {
 
@@ -265,7 +270,7 @@ public class MasterControllerNew {
 				String urlLink = request.getParameter("urlLink");
 				String linkName = request.getParameter("linkName");
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
-				 
+				int pageId = Integer.parseInt(request.getParameter("pageId")); 
 				
 				VpsImageUpload upload = new VpsImageUpload();
 				String docFile = null;
@@ -527,4 +532,213 @@ public class MasterControllerNew {
 	 return "redirect:/addLogo";
 	}
 	
+	@RequestMapping(value = "/uploadDocForm/{pageId}", method = RequestMethod.GET)
+	public ModelAndView uploadDocForm(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/uploadDocument");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("pageId", pageId);
+			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+					 Page.class);
+			model.addObject("page", page);
+			model.addObject("isEdit", 0);
+			//model.addObject("isEdit", 0);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/insertUploadDoc", method = RequestMethod.POST)
+	public String insertDocument(@RequestParam("docfile") List<MultipartFile> docfile,HttpServletRequest request,
+			HttpServletResponse response) {
+
+		 try {
+			 
+			    HttpSession session = request.getSession();
+				User UserDetail =(User) session.getAttribute("UserDetail");
+			 
+			 	String docId = request.getParameter("docId");
+		        String docName = request.getParameter("docName");
+				int sortNo = Integer.parseInt(request.getParameter("sortNo"));
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+				int pageId = Integer.parseInt(request.getParameter("pageId")); 
+				System.out.println("Id: "+isEdit);
+				VpsImageUpload upload = new VpsImageUpload();
+				String docFile = null;
+				
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				
+				 String extension = null;
+				 long fileSize =0;
+				
+				final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+				String fileType= null;
+				//System.out.println("docfile extension:"+fileType);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+			    if(docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
+			    	System.out.println("id null");
+					
+							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+							editupload.setFileName(docFile);
+							try {
+								 
+								  extension = FilenameUtils.getExtension(docfile.get(0).getOriginalFilename());
+								  fileSize = docfile.get(0).getSize();
+								  fileType=  fileTypeMap.getContentType(docfile.get(0).getOriginalFilename());
+								   editupload.setFileSize(fileSize);
+								    editupload.setFileType(fileType);
+								Info info = upload.saveUploadedImge(docfile.get(0), Constant.uploadDocURL,docFile,Constant.DocImgValues,0,0,0,0,0);
+								 	
+							}catch (Exception e) {
+									// TODO: handle exception
+									e.printStackTrace();
+								}
+							editupload.setAddDate(sf.format(date));
+							
+							//editbanner.setAddedByUserId(UserDetail.getUserId());
+				  }else {
+					
+					  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
+						  editupload.setEditDate(sf.format(date));
+						
+						   
+						}else {
+						
+							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+							editupload.setFileName(docFile);
+							try {
+								 
+								  extension = FilenameUtils.getExtension(docfile.get(0).getOriginalFilename());
+								  fileSize =docfile.get(0).getSize();
+								  fileType=  fileTypeMap.getContentType(docfile.get(0).getOriginalFilename());
+								   editupload.setFileSize(fileSize);
+								    editupload.setFileType(fileType);
+								Info info = upload.saveUploadedImge(docfile.get(0), Constant.uploadDocURL,docFile,Constant.DocImgValues,0,0,0,0,0);
+								}catch (Exception e) {
+									// TODO: handle exception
+									e.printStackTrace();  
+								}
+						}
+					  editupload.setEditDate(sf.format(date));
+					  //editbanner.setEditByUserId(UserDetail.getUserId());
+				  }
+			 //   editupload.setDocId(0);
+			
+			    
+			   editupload.setExVar1(docName); 
+			  
+			   editupload.setPageId(pageId);
+			    editupload.setCateType("7");
+			    editupload.setSortNo(sortNo);
+			    editupload.setIsActive(isActive);
+			    editupload.setDelStatus(1); 
+			
+				
+				DocumentUpload res = rest.postForObject(Constant.url + "/saveDocumentFiles", editupload, DocumentUpload.class);
+				if(res!=null && isEdit==0) {
+					
+					PagesModule pagesModule = new PagesModule();
+					
+					pagesModule.setPageId(pageId);
+					pagesModule.setPrimaryKeyId(res.getDocId());
+					pagesModule.setModuleId(6);
+					PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+					System.out.println("res " + res);  
+					
+					session.setAttribute("successMsg","Infomation added successfully!");
+					session.setAttribute("errorMsg","false");
+				}else {
+					
+					session.setAttribute("successMsg","Error While Uploading Content !");
+					session.setAttribute("errorMsg","true");
+				}
+				
+						
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 return "redirect:/documentUploadList";
+	}
+	@RequestMapping(value = "/documentUploadList", method = RequestMethod.GET)
+	public ModelAndView documentUploadList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/DocUploadList");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			DocumentUpload[] getDoc = rest.getForObject(Constant.url + "/getDocumentList",	DocumentUpload[].class);
+			List<DocumentUpload> getDocList = new ArrayList<DocumentUpload>(Arrays.asList(getDoc));
+			
+			for(int i=0 ; i<getDocList.size() ; i++) {
+				getDocList.get(i).setAddDate(DateConvertor.convertToDMY(getDocList.get(i).getAddDate()));
+			}
+			
+			//List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
+			model.addObject("docList", getDocList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model; 
+	}
+	@RequestMapping(value = "/editDocument/{docId}", method = RequestMethod.GET)
+	public ModelAndView editDocument(@PathVariable int docId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/uploadDocument");
+		try {
+  
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", docId); 
+			editupload = rest.postForObject(Constant.url + "/getDocumentById", map, DocumentUpload.class);
+			// System.out.println("sdf");
+			model.addObject("editupload", editupload);
+			model.addObject("isEdit", 1);
+			model.addObject("url", Constant.uploadDocURL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	@RequestMapping(value = "/deleteDocument/{docId}", method = RequestMethod.GET)
+	public String deleteDocument(@PathVariable int docId, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("docId", docId); 
+			//map.add("delStatus", 0); 
+			Info res = rest.postForObject(Constant.url + "/deleteDocument", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if(res==null)
+			{
+				session.setAttribute("successMsg","Sorry, Can't deleted!");
+			}
+			else
+			{
+				session.setAttribute("successMsg","Infomation deleted successfully!");
+			}
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/documentUploadList";
+	}
+
 }
