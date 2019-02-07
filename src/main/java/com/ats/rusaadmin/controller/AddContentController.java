@@ -103,7 +103,10 @@ public class AddContentController {
 			  }else if(moduleId==7){
 				  
 				  url="redirect:/uploadDocForm/"+pageId;
-			  }
+			  }else if(moduleId==9){
+			  
+				  url="redirect:/NewsBlogForm/"+pageId;
+		  }
 			  
 			
 		} catch (Exception e) {

@@ -650,7 +650,7 @@ public class MasterControllerNew {
 					
 					pagesModule.setPageId(pageId);
 					pagesModule.setPrimaryKeyId(res.getDocId());
-					pagesModule.setModuleId(6);
+					pagesModule.setModuleId(7);
 					PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 					System.out.println("res " + res);  
 					
