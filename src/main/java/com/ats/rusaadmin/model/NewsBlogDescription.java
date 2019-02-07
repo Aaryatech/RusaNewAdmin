@@ -18,7 +18,6 @@ public class NewsBlogDescription {
 	private int languageId;
 
 
-	private int pageId;
 	
 	private String pageMetaTitle;
 	
@@ -41,13 +40,6 @@ public class NewsBlogDescription {
 	
 	
 
-	public int getPageId() {
-		return pageId;
-	}
-
-	public void setPageId(int pageId) {
-		this.pageId = pageId;
-	}
 
 	public int getNewsblogsDescId() {
 		return newsblogsDescId;
@@ -164,20 +156,13 @@ public class NewsBlogDescription {
 	@Override
 	public String toString() {
 		return "NewsBlogDescription [newsblogsDescId=" + newsblogsDescId + ", newsblogsId=" + newsblogsId + ", heading="
-				+ heading + ", descriptions=" + descriptions + ", languageId=" + languageId + ", pageId=" + pageId
-				+ ", pageMetaTitle=" + pageMetaTitle + ", pageMetaDescription=" + pageMetaDescription
-				+ ", pageMetaKeyword=" + pageMetaKeyword + ", exDate1=" + exDate1 + ", exFloat1=" + exFloat1
-				+ ", exText1=" + exText1 + ", dateTransaction=" + dateTransaction + ", exInt1=" + exInt1 + ", exVar1="
-				+ exVar1 + ", getPageId()=" + getPageId() + ", getNewsblogsDescId()=" + getNewsblogsDescId()
-				+ ", getNewsblogsId()=" + getNewsblogsId() + ", getHeading()=" + getHeading() + ", getDescriptions()="
-				+ getDescriptions() + ", getLanguageId()=" + getLanguageId() + ", getPageMetaTitle()="
-				+ getPageMetaTitle() + ", getPageMetaDescription()=" + getPageMetaDescription()
-				+ ", getPageMetaKeyword()=" + getPageMetaKeyword() + ", getExDate1()=" + getExDate1()
-				+ ", getExFloat1()=" + getExFloat1() + ", getExText1()=" + getExText1() + ", getDateTransaction()="
-				+ getDateTransaction() + ", getExInt1()=" + getExInt1() + ", getExVar1()=" + getExVar1()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
-				+ "]";
+				+ heading + ", descriptions=" + descriptions + ", languageId=" + languageId + ", pageMetaTitle="
+				+ pageMetaTitle + ", pageMetaDescription=" + pageMetaDescription + ", pageMetaKeyword="
+				+ pageMetaKeyword + ", exDate1=" + exDate1 + ", exFloat1=" + exFloat1 + ", exText1=" + exText1
+				+ ", dateTransaction=" + dateTransaction + ", exInt1=" + exInt1 + ", exVar1=" + exVar1 + "]";
 	}
+
+	
 
 	
 	

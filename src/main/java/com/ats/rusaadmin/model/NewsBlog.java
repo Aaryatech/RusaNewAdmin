@@ -20,7 +20,7 @@ public class NewsBlog {
 	
 	private String eventContactPerson;
 	
-	private String eventContactNumer;
+	private String eventContactNumber;
 	
 	private int pageOrder;
 	
@@ -119,12 +119,12 @@ public class NewsBlog {
 		this.eventContactPerson = eventContactPerson;
 	}
 
-	public String getEventContactNumer() {
-		return eventContactNumer;
+	public String getEventContactNumber() {
+		return eventContactNumber;
 	}
 
-	public void setEventContactNumer(String eventContactNumer) {
-		this.eventContactNumer = eventContactNumer;
+	public void setEventContactNumber(String eventContactNumer) {
+		this.eventContactNumber = eventContactNumer;
 	}
 
 	public int getPageOrder() {
@@ -252,7 +252,7 @@ public class NewsBlog {
 		return "NewsBlog [newsblogsId=" + newsblogsId + ", pageId=" + pageId + ", newsSourceUrlName="
 				+ newsSourceUrlName + ", eventLocation=" + eventLocation + ", eventDateFrom=" + eventDateFrom
 				+ ", eventDateTo=" + eventDateTo + ", eventContactPerson=" + eventContactPerson + ", eventContactNumer="
-				+ eventContactNumer + ", pageOrder=" + pageOrder + ", featuredImage=" + featuredImage
+				+ eventContactNumber + ", pageOrder=" + pageOrder + ", featuredImage=" + featuredImage
 				+ ", featuredImageAlignment=" + featuredImageAlignment + ", downloadPdf=" + downloadPdf + ", isActive="
 				+ isActive + ", delStatus=" + delStatus + ", addDate=" + addDate + ", editDate=" + editDate
 				+ ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId + ", exInt1=" + exInt1
@@ -261,7 +261,7 @@ public class NewsBlog {
 				+ getNewsblogsId() + ", getPageId()=" + getPageId() + ", getNewsSourceUrlName()="
 				+ getNewsSourceUrlName() + ", getEventLocation()=" + getEventLocation() + ", getEventDateFrom()="
 				+ getEventDateFrom() + ", getEventDateTo()=" + getEventDateTo() + ", getEventContactPerson()="
-				+ getEventContactPerson() + ", getEventContactNumer()=" + getEventContactNumer() + ", getPageOrder()="
+				+ getEventContactPerson() + ", getEventContactNumer()=" + getEventContactNumber() + ", getPageOrder()="
 				+ getPageOrder() + ", getFeaturedImage()=" + getFeaturedImage() + ", getFeaturedImageAlignment()="
 				+ getFeaturedImageAlignment() + ", getDownloadPdf()=" + getDownloadPdf() + ", getIsActive()="
 				+ getIsActive() + ", getDelStatus()=" + getDelStatus() + ", getAddDate()=" + getAddDate()

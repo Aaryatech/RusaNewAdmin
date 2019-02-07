@@ -159,7 +159,7 @@ public class ContentModuleController {
 			editTestImonial = rest.postForObject(Constant.url + "/getTestImonialById", map, TestImonial.class);
 			model.addObject("editTestImonial", editTestImonial);
 			model.addObject("url", Constant.gallryImageURL);
-			model.addObject("isEdit", 1);
+			model.addObject("isEdit",1);
 		//	model.addObject("url", Constant.bannerImageURL);
 
 		} catch (Exception e) {
@@ -314,6 +314,7 @@ public class ContentModuleController {
 				}
 				newsBlog.setPageId(pageId);
 				newsBlog.setNewsSourceUrlName(urlName);
+				newsBlog.setExInt1(9);
 				newsBlog.setPageOrder(seqNo); 
 				newsBlog.setIsActive(isActive);
 				newsBlog.setDelStatus(1);
@@ -434,16 +435,23 @@ public class ContentModuleController {
 			HttpSession session = request.getSession();
 			User UserDetail =(User) session.getAttribute("UserDetail");
 			
+			String location = request.getParameter("event_loc");
+			String eventDate = request.getParameter("from_date");
 			String aligment = request.getParameter("header_top_alignment");
+			String personName = request.getParameter("per_name");
+			String eventNo = request.getParameter("event_no");
+			
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-			String urlName = request.getParameter("url_name");
+			//String urlName = request.getParameter("url_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			
 			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			SimpleDateFormat sf = new SimpleDateFormat(eventDate);
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat(eventDate+"_HH:mm:ss");
+			System.out.println("date"+sf.format(date));
+		
 			//CMSPages cMSPages = new CMSPages();
 			NewsBlog newsBlog=new NewsBlog();
 			List<NewsBlogDescription> newsBlogDescriptionList = new ArrayList<NewsBlogDescription>();
@@ -468,7 +476,7 @@ public class ContentModuleController {
 				 
 					String imageName = new String(); 
 					imageName =  dateTimeInGMT.format(date)+"_"+images.get(0).getOriginalFilename();
-					 
+					System.out.println("date"+imageName);
 					try {
 						 upload.saveUploadedImge(images.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
 						 newsBlog.setFeaturedImage(imageName);
@@ -496,9 +504,13 @@ public class ContentModuleController {
 					 
 				}
 				newsBlog.setPageId(pageId);
-				newsBlog.setNewsSourceUrlName(urlName);
+				newsBlog.setEventContactNumber(eventNo);
+				newsBlog.setEventContactPerson(personName);
+				newsBlog.setEventDateFrom(sf.format(date)); 
+				newsBlog.setEventLocation(location); 
 				newsBlog.setPageOrder(seqNo); 
 				newsBlog.setIsActive(isActive);
+				newsBlog.setExInt1(11);
 				newsBlog.setDelStatus(1);
 				newsBlog.setAddDate(sf.format(date));
 				newsBlog.setFeaturedImageAlignment(aligment);
@@ -513,7 +525,7 @@ public class ContentModuleController {
 				
 				pagesModule.setPageId(res.getPageId());
 				pagesModule.setPrimaryKeyId(res.getNewsblogsId());
-				pagesModule.setModuleId(9);
+				pagesModule.setModuleId(11);
 				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 				System.out.println("res " + res);  
 				
