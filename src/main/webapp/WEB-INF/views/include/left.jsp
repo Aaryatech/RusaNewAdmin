@@ -43,17 +43,37 @@
                     <li>
                         <a class="" href="${pageContext.request.contextPath}/subCategoryList" >Sub Menu List</a>
                     </li>
+                     <li>
+                        <a href="${pageContext.request.contextPath}/sectionTreeList">Section Tree</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/sliderPicList">Slider Photo List</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/addLogo">Add Logo</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/uploadDocForm">Upload Document</a>
+                    </li>
                      
                 </ul>
             </li>
-             
-             <li  > 
-                    <a href="${pageContext.request.contextPath}/sectionTreeList">
-                    <i class="fa fa-columns"></i>
-                    <span class="title">Section Tree</span>
-                        </a>
-                    </li> 
+            
+             <li class="">
+                <a href="javascript:;">
+                <i class="fa fa-columns"></i>
+                <span class="title">User</span>
+                <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu" >
+               		 <li>
+                        <a class="" href="${pageContext.request.contextPath}/addUser" >Add User </a>
+                    </li>
                     
+                     
+                </ul>
+            </li>
+                  
              <li  > 
                     <a href="#">
                     <i class="fa fa-lock"></i>

@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.activation.MimetypesFileTypeMap;
+ 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -579,7 +578,7 @@ public class MasterControllerNew {
 				 String extension = null;
 				 long fileSize =0;
 				
-				final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+				//final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
 				String fileType= null;
 				//System.out.println("docfile extension:"+fileType);
 				Calendar cal = Calendar.getInstance();
@@ -593,7 +592,7 @@ public class MasterControllerNew {
 								 
 								  extension = FilenameUtils.getExtension(docfile.get(0).getOriginalFilename());
 								  fileSize = docfile.get(0).getSize();
-								  fileType=  fileTypeMap.getContentType(docfile.get(0).getOriginalFilename());
+								  fileType= docfile.get(0).getContentType();
 								   editupload.setFileSize(fileSize);
 								    editupload.setFileType(fileType);
 								Info info = upload.saveUploadedImge(docfile.get(0), Constant.uploadDocURL,docFile,Constant.DocImgValues,0,0,0,0,0);
@@ -619,7 +618,7 @@ public class MasterControllerNew {
 								 
 								  extension = FilenameUtils.getExtension(docfile.get(0).getOriginalFilename());
 								  fileSize =docfile.get(0).getSize();
-								  fileType=  fileTypeMap.getContentType(docfile.get(0).getOriginalFilename());
+								  fileType= docfile.get(0).getContentType();
 								   editupload.setFileSize(fileSize);
 								    editupload.setFileType(fileType);
 								Info info = upload.saveUploadedImge(docfile.get(0), Constant.uploadDocURL,docFile,Constant.DocImgValues,0,0,0,0,0);
