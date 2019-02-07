@@ -145,27 +145,25 @@
                         
                          <div class="col-xs-12"> 
                     		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Event From Date :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_name">Event Date :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="date" class="form-control" id="from_date" name="from_date" placeholder="From Date"  >
+                                  <input type="date" class="form-control" id="from_date" name="from_date" placeholder="Event Date"  >
                                 </div>
                               </div>
                         </div>
-                        
                          <div class="col-xs-12"> 
                     		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Event To Date :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_name">Person Name :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="date" class="form-control" id="to_date" name="to_date" placeholder="To Date"  >
+                                  <input type="text" class="form-control" id="per_name" name="per_name" placeholder="Person Name"   required>
                                 </div>
                               </div>
                         </div>
-                        
-                            <div class="col-xs-12"> 
+                          <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Contact No. :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="contact" name="contact" placeholder="Event Contact"  maxlength={10} required>
+                                  <input type="text" class="form-control" id="event_no" name="event_no" placeholder="Event Contact No"   required>
                                 </div>
                               </div>
                         </div>
@@ -177,6 +175,30 @@
                     		  
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="heading1">Heading :</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
+                                </div>
+                            </div>
+                            
+                       
+                              
+                              <div class="form-group">
+                                <label class="control-label col-sm-2" for="page_description1">Content :</label>
+                                <div class="col-sm-10">
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   required="required"></textarea>
+                                </div>
+                              </div> 
+                              
+                             </div>
+                     </c:forEach>
+                     
+                      <c:forEach items="${languagesList}" var="languagesList" >
+                    	 <h5 class="title pull-left">${languagesList.name}</h5>
+                      
+                       <div class="col-xs-12"> 
+                    		  
+                         <div class="form-group">
+                                <label class="control-label col-sm-2" for="heading1">Meta :</label>
                                 <div class="col-sm-10">
                                   <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
                                 </div>

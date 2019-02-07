@@ -88,15 +88,7 @@
                 </div>
                      
                 </header>
-                
-                      <c:choose>
-                	<c:when test="${isEdit==0}">
-                             <input type="hidden" name="pageId" value="${page.pageId}">  
-                             
-                             </c:when>
-                             	<c:otherwise>
-                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">  
-                                	</c:otherwise></c:choose>                
+                              
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
@@ -115,13 +107,21 @@
                                 	
                                 	
                                 
-                                
+                      <c:choose>
+                	<c:when test="${isEdit==0}">
+                             <input type="hidden" name="pageId" value="${page.pageId}">  
+                             
+                             </c:when>
+                             	<c:otherwise>
+                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">  
+                                	</c:otherwise></c:choose>  
+                                       
+                      <input type="hidden" name="isEdit" value="${isEdit}">  
+                    
+                     
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="home">
 
-                            
-                      <input type="hidden" name="isEdit" value="${isEdit}">  
-                    
                           
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
@@ -193,10 +193,10 @@
                         </div>
                        
                       <div class="col-xs-12"> 
-                    		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Message :<span class="text-danger">*</span></label>
+                    	<div class="form-group">
+                                <label class="control-label col-sm-2" for="page_description1">Message :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="msg" name="msg" placeholder="Page/Menu Title" value="${editTestImonial.message}" required>
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="msg" id="msg"   required="required">${editTestImonial.message} </textarea>
                                 </div>
                               </div>
                         </div>
