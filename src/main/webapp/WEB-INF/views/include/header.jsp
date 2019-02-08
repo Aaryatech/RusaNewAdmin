@@ -44,7 +44,7 @@
         <link href="${pageContext.request.contextPath}/resources/assets/plugins/jquery-ui/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="${pageContext.request.contextPath}/resources/assets/plugins/datepicker/css/datepicker.css" rel="stylesheet" type="text/css" media="screen"/>
 
-	 <link href="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap-tag/css/bootstrap-tagsinput.css" rel="stylesheet" />
+	 <link href="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap-tag/bootstrap-tagsinput.css" rel="stylesheet" />
         <!-- HEADER SCRIPTS INCLUDED ON THIS PAGE - END --> 
 <link href="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap3-wysihtml5/css/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" media="screen"/>
 
@@ -55,6 +55,7 @@
 <link href="${pageContext.request.contextPath}/resources/assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="${pageContext.request.contextPath}/resources/assets/plugins/datatables/extensions/Responsive/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css" media="screen"/>
 
+   <link href="${pageContext.request.contextPath}/resources/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" type="text/css" media="screen"/>
 
         
         <!-- CORE CSS TEMPLATE - START -->

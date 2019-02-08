@@ -106,10 +106,13 @@ public class AddContentController {
 			  }else if(moduleId==9){
 			  
 				  url="redirect:/NewsBlogForm/"+pageId;
-		  }else if(moduleId==11){
+			  }else if(moduleId==11){
 			  
-			  url="redirect:/EventForm/"+pageId;
-	  }
+			  url="redirect:/gallaryForm/"+pageId;
+			  }else if(moduleId==3 || moduleId==4 || moduleId==5){
+				  
+				  url="redirect:/gallaryForm/"+pageId+"/"+moduleId;
+				 }
 			  
 			
 		} catch (Exception e) {

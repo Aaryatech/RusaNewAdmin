@@ -15,7 +15,7 @@
 
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - START --> 
 
-<script src="${pageContext.request.contextPath}/resources/assets/plugins/jvectormap/jquery-jvectormap-2.0.1.min.js" type="text/javascript"></script>
+ 
   <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
 
 
@@ -38,7 +38,7 @@
 
 
 
-  <script src="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap-tag/js/bootstrap-tagsinput.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap-tag/bootstrap-tagsinput.js"></script>
 
 
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
@@ -51,6 +51,7 @@
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
 
 
+<script src="${pageContext.request.contextPath}/resources/assets/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
 
 <!-- CORE TEMPLATE JS - START --> 
 <script src="${pageContext.request.contextPath}/resources/assets/js/scripts.js" type="text/javascript"></script> 
