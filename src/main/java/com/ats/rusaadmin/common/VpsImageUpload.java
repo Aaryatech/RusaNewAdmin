@@ -1,10 +1,18 @@
 package com.ats.rusaadmin.common;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -28,7 +36,7 @@ public class VpsImageUpload {
 					 String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 					 
 					 if ( ArrayUtils.contains( allowExt, extension ) ) {
-						if(isResize==0) {
+						
 							Path path = Paths.get(uploadPath + imageName);
 				
 							byte[] bytes = file.getBytes();
@@ -42,7 +50,24 @@ public class VpsImageUpload {
 							 
 				
 							Files.write(path, bytes);
-						}
+							
+							if(isResize==1) {
+							 
+								Image img = null;
+								BufferedImage tempPNG = null;
+								 
+								File newFilePNG = null;
+								 
+						        System.out.println("File " + imageName);
+						        img = ImageIO.read(new File("/home/lenovo/Documents/gallery/"+imageName));
+						        tempPNG = resizeImage(img, 200, 200);
+						        
+						        newFilePNG = new File("/home/lenovo/Documents/gallery/thumbnail"+imageName);
+						       
+						        ImageIO.write(tempPNG, extension, newFilePNG);
+						       
+								System.out.println("DONE");
+							} 
 						
 						info.setError(false);
 						info.setMsg("Upload Successfully ");
@@ -80,6 +105,19 @@ public class VpsImageUpload {
 			Files.write(path, bytes);
 
 		}
+	
+	public static BufferedImage resizeImage(final Image image, int width, int height) {
+        final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        final Graphics2D graphics2D = bufferedImage.createGraphics();
+        graphics2D.setComposite(AlphaComposite.Src);
+        //below three lines are for RenderingHints for better image quality at cost of higher processing time
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics2D.drawImage(image, 0, 0, width, height, null);
+        graphics2D.dispose();
+        return bufferedImage;
+    }
 	/*public void saveUploadedFiles(MultipartFile file, int imageType, String imageName) throws IOException {
 
 		for (MultipartFile file : files) {

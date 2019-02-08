@@ -375,7 +375,7 @@ public class GallaryController{
 			System.out.println(pageId);
 			
 			 try {
-				 upload.saveUploadedImge(file.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
+				 upload.saveUploadedImge(file.get(0), Constant.gallryImageURL,imageName,Constant.values,1,0,0,0,0);
 				 
 				 GallaryDetail gallaryDetail = new GallaryDetail();
 				 gallaryDetail.setAddDate(sf.format(date));
