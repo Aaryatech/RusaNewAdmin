@@ -353,7 +353,7 @@
 										 
 										<td>${getPagesModuleList.content}</td>  
 										<td><a
-											href="${pageContext.request.contextPath}/editContent/${getPagesModuleList.primaryKeyId}"><span
+											href="${pageContext.request.contextPath}/editNewsBlogContent/${getPagesModuleList.primaryKeyId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a> | <a
 											href="${pageContext.request.contextPath}/deleteCmsContent/${getPagesModuleList.primaryKeyId}"

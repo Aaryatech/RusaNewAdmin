@@ -321,9 +321,9 @@
     <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">CMS Pages List</h2>
+                <h2 class="title pull-left">Event List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add CMS Content</button></a>
+                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add Event Content</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -370,10 +370,10 @@
 										 
 										<td>${getPagesModuleList.content}</td>  
 										<td><a
-											href="${pageContext.request.contextPath}/editCmsContent/${getPagesModuleList.primaryKeyId}"><span
+											href="${pageContext.request.contextPath}/editEventContent/${getPagesModuleList.primaryKeyId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteCmsContent/${getPagesModuleList.primaryKeyId}"
+											href="${pageContext.request.contextPath}/deleteEventContent/${getPagesModuleList.primaryKeyId}"
 											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
 												class="glyphicon glyphicon-remove"></span></a></td>
 									</tr>

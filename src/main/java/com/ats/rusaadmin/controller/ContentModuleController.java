@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.CMSPageDescription;
@@ -382,7 +383,7 @@ public class ContentModuleController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 			 
-			editNewsBlog = rest.postForObject(Constant.url + "/getEventListByNewsblogsId",map,
+			editNewsBlog = rest.postForObject(Constant.url + "/getNewsPagebyId",map,
 					NewsBlog.class);
 			 System.out.println("Page ID: "+editNewsBlog.getPageId());
 			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
@@ -556,7 +557,7 @@ public class ContentModuleController {
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
 			
-			GetPagesModule[] getPagesModule = rest.postForObject(Constant.url + "/getNewsBlogListByPageId",map,
+			GetPagesModule[] getPagesModule = rest.postForObject(Constant.url + "/getEventListByNewsblogsId",map,
 					GetPagesModule[].class);
 			
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule)); 
@@ -752,6 +753,9 @@ public class ContentModuleController {
 					editNewsBlog.getDetailList().add(newsBlogDescription);
 				}
 			}
+			//editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
+			
+			
 			
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
