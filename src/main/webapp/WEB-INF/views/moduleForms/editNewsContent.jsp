@@ -61,7 +61,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add News Blog Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Edit News Blog Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,7 +79,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add News Blog Form</h2>
+                    <h2 class="title pull-left">Edit News Blog Form</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/NewsBlogList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -92,7 +92,7 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertNewsBlogForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/submtEditNewsBlogForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
                          onsubmit="return confirm('Do you really want to submit the form?');">               
                     
                     <ul class="nav nav-tabs">
@@ -113,6 +113,11 @@
                         <div class="tab-pane fade in active" id="home">
 
                             <div>
+
+                             <%--    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="home">
+
+                            <div>
 						 <input type="hidden" name="isEdit" value="${isEdit}">  
                     
                     <c:choose>
@@ -121,9 +126,10 @@
                              
                              </c:when>
                              	<c:otherwise>
-                                	    <input type="hidden" name="pageId" value="">  
+                                	    <input type="hidden" name="pageId" value="${editNewsBlog.pageId}">  
                                 	</c:otherwise></c:choose> 
                       
+                       --%>
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
@@ -132,18 +138,20 @@
                                 </div>
                               </div>
                         </div>
-                        
-                        
-                      <div class="col-xs-12"> 
+                        <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">News Source URL :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL"  >
+                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL" value="${editNewsBlog.newsSourceUrlName}"  >
                                 </div>
                               </div>
                         </div>
                         
                       <c:forEach items="${languagesList}" var="languagesList" >
+                      	<c:forEach items="${editNewsBlog.detailList}" var="detailList" >
+                      	
+                      	<c:if test="${detailList.languageId==languagesList.languagesId}"> 
+                      	
                     	 <h5 class="title pull-left">${languagesList.name}</h5>
                       
                        <div class="col-xs-12"> 
@@ -151,38 +159,43 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="heading1">Heading :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
+                                  <input type="text" class="form-control" id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" required>
                                 </div>
                             </div>
-                            
-                             
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_description1">Content :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   required="required"></textarea>
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   required="required">
+                                    ${detailList.descriptions}
+                                    </textarea>
                                 </div>
                               </div> 
-                              <div class="form-group">
+                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_title1">Meta Title :</label>
                                 <div class="col-sm-10">
-                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="" required>
+                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="${detailList.pageMetaTitle}"  required>
                                 
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_description1">Meta Description :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   required="required"></textarea>
+                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   required="required"> 
+                                     ${detailList.pageMetaDescription}</textarea>
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_keyword1">KeyWord :</label>
                                 <div class="col-sm-10">
-                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="" required>
+                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="${detailList.pageMetaKeyword}"  required>
                                 
                                 </div>
                               </div> 
                              </div>
+                             
+                             </c:if>
+                             </c:forEach>
+                             
                      </c:forEach>
                      
                      
@@ -196,9 +209,19 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="" required>
+                                  <input type="text" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="${editNewsBlog.pageOrder}" required>
                                 </div>
                               </div>
+                                 
+                               <c:if test="${editNewsBlog.featuredImage!=null}">
+                               	<div class="form-group">  
+                                 <label class="col-md-2 control-label">Current Image</label>
+                                          <div class="col-md-10">
+                                                  <img src="${url}${editNewsBlog.featuredImage}" style="width:150px; height:auto">
+                                                  
+                                          </div>
+ 								</div>
+                               </c:if>
                                  
                                   
                            <div class="form-group row">
@@ -230,15 +253,38 @@
                                  Note: Image size should be  width: 960px   and height: 600px. 
                               </div>
                            </div>
-                           
+                            
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Featured Image Aligned  :</label>
                                 <div class="col-sm-10">
                                 <select id="header_top_alignment" name="header_top_alignment" class="form-control"  >
-                                	<option value="none"  >None</option>
-                                                                    <option value="center"  >Center</option>
+                                
+                                <c:choose>
+                                <c:when test="${editNewsBlog.featuredImageAlignment eq 'none'}">
+                                	<option value="none"  selected>None</option>
+                                    <option value="center"  >Center</option>
                     				<option value="left"  >Left</option>
                                     <option value="right" >Right</option>
+                                </c:when>
+                                 <c:when test="${editNewsBlog.featuredImageAlignment eq 'center'}">
+                                	<option value="none"  >None</option>
+                                    <option value="center" selected>Center</option>
+                    				<option value="left"  >Left</option>
+                                    <option value="right" >Right</option>
+                                </c:when>
+                                 <c:when test="${editNewsBlog.featuredImageAlignment eq 'left'}">
+                                	<option value="none"  >None</option>
+                                    <option value="center"  >Center</option>
+                    				<option value="left"  selected>Left</option>
+                                    <option value="right" >Right</option>
+                                </c:when>
+                                 <c:when test="${editNewsBlog.featuredImageAlignment eq 'right'}">
+                                	<option value="none"   >None</option>
+                                    <option value="center"  >Center</option>
+                    				<option value="left"  >Left</option>
+                                    <option value="right" selected>Right</option>
+                                </c:when>
+                                	</c:choose>
                                     
                      
                  
@@ -262,8 +308,18 @@
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                 <select id="status" name="status" class="form-control" required >
-                                                                    <option value="1" >Active</option>
-                 			    <option value="0" >Inactive</option>
+                                <c:choose>
+                                	<c:when test="${editNewsBlog.isActive==0}">
+                                				<option value="1" >Active</option>
+                   								 <option value="0" selected>Inactive</option>
+                                	</c:when>
+                                	<c:otherwise>
+                                				<option value="1" selected>Active</option>
+                   								 <option value="0" >Inactive</option>
+                                	</c:otherwise>
+                                </c:choose>
+                                    
+                                                                    
                      
                  
                                   </select>
@@ -300,77 +356,6 @@
         </section>
         
     </div> 
-    
-    <div class="col-lg-12">
-    <section class="box "> 
-             <header class="panel_header">
-                <h2 class="title pull-left">News Blogs List</h2>
-                <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add News Blogs Content</button></a>
-                	<a class="box_toggle fa fa-chevron-down"></a>
-                   <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
-                    <a class="box_close fa fa-times"></a> -->
-                     
-                </div>
-                 
-            </header> 
-            <div class="content-body">    <div class="row">
-            <c:if test="${sessionScope.successMsg!=null}">
-            <div class="col-lg-12">
-    		          <div class="alert alert-success alert-dismissible fade in">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <strong>Success : </strong> ${sessionScope.successMsg}</div>
-        	      </div> 
-            </c:if>
-            
-        <div class="col-xs-12">
-
-
-            <table id="example-1" class="table table-striped dt-responsive display">
-                <thead>
-                    <tr>
-                   		<th width="5%">Sr No</th>
-                        <th>Page Name</th> 
-                        <th>Desc</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Page Name</th> 
-                        <th>Desc</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </tfoot>
-
-                <tbody>
-                        <c:forEach items="${getPagesModuleList}" var="getPagesModuleList" varStatus="count">
-									<tr  >
-										<td>${count.index+1}</td>
-										<td>${getPagesModuleList.pageName} (${getPagesModuleList.secctionName})</td>
-										 
-										<td>${getPagesModuleList.content}</td>  
-										<td><a
-											href="${pageContext.request.contextPath}/editContent/${getPagesModuleList.primaryKeyId}"><span
-												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
-												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteCmsContent/${getPagesModuleList.primaryKeyId}"
-											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
-									</tr>
-								</c:forEach>  
-                </tbody>
-            </table>
-
-
-
-
-        </div>
-    </div>
-    </div>
-        </section></div>
 
   
 <!-- MAIN CONTENT AREA ENDS -->

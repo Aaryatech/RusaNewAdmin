@@ -11,6 +11,7 @@ public class NewsBlogDescription {
 
 	private String heading;
 	
+	private int pageId;
 	
 	private String descriptions;
 	
@@ -47,6 +48,14 @@ public class NewsBlogDescription {
 
 	public void setNewsblogsDescId(int newsblogsDescId) {
 		this.newsblogsDescId = newsblogsDescId;
+	}
+
+	public int getPageId() {
+		return pageId;
+	}
+
+	public void setPageId(int pageId) {
+		this.pageId = pageId;
 	}
 
 	public int getNewsblogsId() {
@@ -156,14 +165,21 @@ public class NewsBlogDescription {
 	@Override
 	public String toString() {
 		return "NewsBlogDescription [newsblogsDescId=" + newsblogsDescId + ", newsblogsId=" + newsblogsId + ", heading="
-				+ heading + ", descriptions=" + descriptions + ", languageId=" + languageId + ", pageMetaTitle="
-				+ pageMetaTitle + ", pageMetaDescription=" + pageMetaDescription + ", pageMetaKeyword="
-				+ pageMetaKeyword + ", exDate1=" + exDate1 + ", exFloat1=" + exFloat1 + ", exText1=" + exText1
-				+ ", dateTransaction=" + dateTransaction + ", exInt1=" + exInt1 + ", exVar1=" + exVar1 + "]";
+				+ heading + ", pageId=" + pageId + ", descriptions=" + descriptions + ", languageId=" + languageId
+				+ ", pageMetaTitle=" + pageMetaTitle + ", pageMetaDescription=" + pageMetaDescription
+				+ ", pageMetaKeyword=" + pageMetaKeyword + ", exDate1=" + exDate1 + ", exFloat1=" + exFloat1
+				+ ", exText1=" + exText1 + ", dateTransaction=" + dateTransaction + ", exInt1=" + exInt1 + ", exVar1="
+				+ exVar1 + ", getNewsblogsDescId()=" + getNewsblogsDescId() + ", getPageId()=" + getPageId()
+				+ ", getNewsblogsId()=" + getNewsblogsId() + ", getHeading()=" + getHeading() + ", getDescriptions()="
+				+ getDescriptions() + ", getLanguageId()=" + getLanguageId() + ", getPageMetaTitle()="
+				+ getPageMetaTitle() + ", getPageMetaDescription()=" + getPageMetaDescription()
+				+ ", getPageMetaKeyword()=" + getPageMetaKeyword() + ", getExDate1()=" + getExDate1()
+				+ ", getExFloat1()=" + getExFloat1() + ", getExText1()=" + getExText1() + ", getDateTransaction()="
+				+ getDateTransaction() + ", getExInt1()=" + getExInt1() + ", getExVar1()=" + getExVar1()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
 	}
 
-	
-
-	
+		
 	
 }
