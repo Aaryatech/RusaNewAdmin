@@ -76,7 +76,7 @@
  <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">CMS Pages List</h2>
+                <h2 class="title pull-left">Images List</h2>
                 <div class="actions panel_actions pull-right">
                  
                 	<a class="box_toggle fa fa-chevron-down"></a>
@@ -104,8 +104,8 @@
                 <tfoot>
                     <tr>
                     	<th width="5%">Sr No</th>
-                        <th>Page Name</th> 
-                        <th>Desc</th> 
+                        <th>Title</th> 
+                        <th>Image</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </tfoot>

@@ -10,7 +10,7 @@ public class Constant {
 	public static final String gallryImageURL = "/home/lenovo/Documents/gallery/";
 	public static final String cmsPdf = "/home/lenovo/Documents/pdf/";
 	public static String[] values = {"jpg","jpeg","gif","png"};
-	public static String[] DocValues = {"txt","docx","pdf","exe"};
-	public static String[] DocImgValues = {"txt","docx","pdf","exe","jpg","jpeg","gif","png"};
+	public static String[] DocValues = {"txt","doc","pdf","xls"};
+	public static String[] DocImgValues = {"txt","doc","pdf","xls","jpg","jpeg","gif","png"};
 	public static final String logoName = "Russa-Logo";
 }

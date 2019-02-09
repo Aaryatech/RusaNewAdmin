@@ -11,7 +11,6 @@
       
         <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
         <!-- CORE CSS TEMPLATE - END -->
-
     </head>
     <!-- END HEAD -->
 

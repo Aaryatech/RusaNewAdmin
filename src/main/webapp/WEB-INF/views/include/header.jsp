@@ -87,3 +87,6 @@
                 margin-left:2px;
             }
         </style>
+        <script type="text/javascript">
+	var st_url = "http://localhost:8080/rusaadmin/";
+	</script>

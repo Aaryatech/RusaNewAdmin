@@ -1,5 +1,6 @@
 package com.ats.rusaadmin.controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +32,7 @@ import com.ats.rusaadmin.model.CMSPageDescription;
 import com.ats.rusaadmin.model.CMSPages;
 import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.CategoryDescription;
+import com.ats.rusaadmin.model.ContentImages;
 import com.ats.rusaadmin.model.FreqAskQue;
 import com.ats.rusaadmin.model.FreqAskQueDescription;
 import com.ats.rusaadmin.model.GetPagesModule;
@@ -39,7 +42,8 @@ import com.ats.rusaadmin.model.ModulesNames;
 import com.ats.rusaadmin.model.Page;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.SectionTree;
-import com.ats.rusaadmin.model.User; 
+import com.ats.rusaadmin.model.User;
+import com.fasterxml.jackson.databind.ObjectMapper; 
 
 @Controller
 @Scope("session")
@@ -740,4 +744,34 @@ public class AddContentController {
 		return "redirect:/sectionTreeList";
 	}
 	
+	@RequestMapping(value = "/sitebrowse", method = RequestMethod.GET)
+	public @ResponseBody String sitebrowse( HttpServletRequest request, HttpServletResponse response) {
+  
+		// ModelAndView model = new ModelAndView("moduleForms/showFoldersFiles");
+		String jsonString = new String();
+		try {
+			 
+			List<ContentImages> list = new ArrayList<ContentImages>();
+			
+			File folder = new File(Constant.gallryImageURL);
+		    File[] listOfFiles = folder.listFiles();
+			 
+			for (int i = 0; i < listOfFiles.length; i++) {
+			      if (listOfFiles[i].isFile()) {
+			        System.out.println("File " + listOfFiles[i].getName());
+			        ContentImages contentImages = new ContentImages();
+			        contentImages.setImage(Constant.gallryImageURL+listOfFiles[i].getName());
+			        list.add(contentImages);
+			      }
+			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+			 jsonString = mapper.writeValueAsString(list);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		 return  jsonString;
+	}
 }

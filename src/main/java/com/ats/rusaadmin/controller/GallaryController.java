@@ -24,19 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
-import com.ats.rusaadmin.common.VpsImageUpload;
-import com.ats.rusaadmin.model.Category;
-import com.ats.rusaadmin.model.CategoryDescription;
+import com.ats.rusaadmin.common.VpsImageUpload; 
 import com.ats.rusaadmin.model.GallaryCategory;
 import com.ats.rusaadmin.model.GallaryCategoryDescriptioin;
-import com.ats.rusaadmin.model.GallaryDetail;
-import com.ats.rusaadmin.model.GetCategory;
-import com.ats.rusaadmin.model.GetPagesModule;
+import com.ats.rusaadmin.model.GallaryDetail; 
 import com.ats.rusaadmin.model.Info;
-import com.ats.rusaadmin.model.Languages;
-import com.ats.rusaadmin.model.Page;
-import com.ats.rusaadmin.model.PagesModule;
-import com.ats.rusaadmin.model.Section;
+import com.ats.rusaadmin.model.Languages; 
+import com.ats.rusaadmin.model.PagesModule; 
 import com.ats.rusaadmin.model.User; 
 
 @Controller
@@ -414,8 +408,53 @@ public class GallaryController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+ 
+	}
+	
+	
+	
+	@RequestMapping(value = "/uploadOtherMedia", method = RequestMethod.GET)
+	public ModelAndView uploadOtherMedia( HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("gallary/uploadOtherMedia");
+		try {
+		  
+			 
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/uploadOtherMediaProccess", method = RequestMethod.POST)
+	public void uploadOtherMediaProccess(@RequestParam("file") List<MultipartFile> file, HttpServletRequest request, HttpServletResponse response) {
 
 		 
+		try {
+			
+			 
+		   Date date = new Date();
+		   SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		   String imageName = new String(); 
+			imageName =  dateTimeInGMT.format(date)+"_"+file.get(0).getOriginalFilename();
+			VpsImageUpload upload = new VpsImageUpload();
+			 
+			 
+			 try {
+				 upload.saveUploadedImge(file.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
+				 upload.saveUploadedImge(file.get(0), Constant.uploadDocURL,imageName,Constant.DocValues,0,0,0,0,0);
+				 
+				}catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				} 
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+ 
 	}
 
 }
