@@ -1,6 +1,7 @@
 package com.ats.rusaadmin.controller;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -761,10 +762,14 @@ public class AddContentController {
 			        System.out.println("File " + listOfFiles[i].getName());
 			        ContentImages contentImages = new ContentImages();
 			        contentImages.setImage(Constant.getGallryImageURL+listOfFiles[i].getName());
+			        contentImages.setThumb(Constant.getGallryImageURL+listOfFiles[i].getName());
+			        contentImages.setSize(String.valueOf(listOfFiles[i].length()));
+			        contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
+			        contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
 			        list.add(contentImages);
 			      }
 			}
-			
+			System.out.println(list);
 			ObjectMapper mapper = new ObjectMapper();
 			 jsonString = mapper.writeValueAsString(list);
 

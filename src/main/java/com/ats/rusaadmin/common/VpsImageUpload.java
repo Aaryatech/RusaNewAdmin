@@ -97,7 +97,7 @@ public class VpsImageUpload {
 			 
 				System.out.println("Inside Image Type =1");
 
-				path = Paths.get(galleryImage + imageName);
+				path = Paths.get(filePath + imageName);
 
 				System.out.println("Path= " + path.toString());
  

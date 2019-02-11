@@ -269,7 +269,7 @@ public class MasterControllerNew {
 				String urlLink = request.getParameter("urlLink");
 				String linkName = request.getParameter("linkName");
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
-				int pageId = Integer.parseInt(request.getParameter("pageId")); 
+				//int pageId = Integer.parseInt(request.getParameter("pageId")); 
 				
 				VpsImageUpload upload = new VpsImageUpload();
 				String docFile = null;
