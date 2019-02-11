@@ -108,14 +108,14 @@
                             <option>Select Category</option>
 							       <c:forEach items="${categoryList}" var="catList" >
 									   <c:choose>
-										<c:when test="${catList.catId==editupload.cateType}">
-											<option value="${catList.catId}" selected>${catList.catName}</option>
+										<c:when test="${catList.galleryCatId==editupload.cateType}">
+											<option value="${catList.galleryCatId}" selected>${catList.cateName}</option>
 										</c:when>
 									  </c:choose>
 								   </c:forEach>
 								   
 								   <c:forEach items="${categoryList}" var="catList" varStatus="count">
-								        	<option value="${catList.catId}">${catList.catName}</option>
+								        	<option value="${catList.galleryCatId}">${catList.cateName}</option>
 								   </c:forEach>
 							</select>
 					
