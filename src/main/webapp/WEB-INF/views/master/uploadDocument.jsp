@@ -98,12 +98,33 @@
                              	<c:otherwise>
                                 	    <input type="hidden" name="pageId" value="${editupload.pageId}">  
                                 	</c:otherwise></c:choose> 
-                        <input id="id" value="${editupload.docId}" name="docId" type="hidden"  >
+                        <input id="docId" value="${editupload.docId}" name="docId" type="hidden"  >
                             <input type="hidden" name="isEdit" value="${isEdit}">  
-                    
-                    <div class="col-xs-12">
+                       <div class="col-xs-12">
+                   <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Category : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                            <select id="cateId" name="cateId" class="form-control chosen"	required>
+                            <option>Select Category</option>
+							       <c:forEach items="${categoryList}" var="catList" >
+									   <c:choose>
+										<c:when test="${catList.catId==editupload.cateType}">
+											<option value="${catList.catId}" selected>${catList.catName}</option>
+										</c:when>
+									  </c:choose>
+								   </c:forEach>
+								   
+								   <c:forEach items="${categoryList}" var="catList" varStatus="count">
+								        	<option value="${catList.catId}">${catList.catName}</option>
+								   </c:forEach>
+							</select>
+					
+                                
+                                </div>
+                              </div>
+                 
                           <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Document Name  : </label>
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Document Name  :<span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
                                   <input id="docName" class="form-control"
 								placeholder="Document Name" value="${editupload.exVar1}"  style="text-align: left;" name="docName" type="text" required>
@@ -111,23 +132,23 @@
                               </div>
                                
                              
-                             <div class="form-group">
+                           <!--   <div class="form-group">
                                       <label class="col-md-2 control-label"> Upload Document: <span class="text-danger">*</span></label>
                                       <div class="col-sm-10"> 
                                            <div class="row col-md-10">
                                         <div class="input-group image-preview1" data-original-title="" title="">
                                     
-                                     <input type="text" class="form-control image-preview-filename1" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                     <input type="text" class="form-control image-preview-filename1" disabled="disabled"> don't give a name === doesn't send on POST/GET
                                             <span class="input-group-btn">
-                                                <!-- image-preview-clear button -->
+                                                image-preview-clear button
                                                 <button type="button" class="btn btn-default image-preview-clear1" style="display:none;">
                                                     <span class="glyphicon glyphicon-remove"></span> Clear
                                                 </button>
-                                            <!-- image-preview-input -->
+                                            image-preview-input
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="doc/txt, doc/docx, doc/pdf, image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" > <!-- rename it -->
+                                                    <input type="file" accept="doc/txt, doc/docx, doc/pdf, image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" > rename it
                                                    
                                                 </div>
                                             </span>
@@ -135,7 +156,15 @@
                                          <span class="help-block">* Only  .TXT,.DOCX,.PSD,.PDF,Image * Best image size Bytes, KB, MB, GB, TB and image size in width: 960px and height: 600px</span>
                                           </div>
                                           </div>
-                                   </div>
+                                   </div> -->
+                                   <div class="form-group row">
+                                         <label class="control-label col-sm-2" for="page_pdf">PDF File :<span class="text-danger">*</span></label>
+                                          <div class="col-sm-10">
+                                             <input type="file" name="pagePdf" id="pagePdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip,image/png, image/jpeg, image/gif"  required/>
+                                              
+                                          </div>
+                                        </div>
+                               
                                 
                  	
                               
@@ -151,7 +180,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                    
-                                  <select name="isActive" id="isActive" class="form-control">
+                                  <select name="isActive" id="isActive" class="form-control" required>
                                     <c:choose>
                                   		<c:when test="${editupload.isActive==0}">
                                   			<option value="1" >YES</option>

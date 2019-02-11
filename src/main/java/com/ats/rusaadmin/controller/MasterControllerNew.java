@@ -539,8 +539,12 @@ public class MasterControllerNew {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
-					 Page.class);
+			page = rest.postForObject(Constant.url + "/getPageByPageId",map, Page.class);
+			map.add("delStatus",1);
+			Category[] category = rest.postForObject(Constant.url + "/getAllCategory", map,  Category[].class);
+			List<Category> categoryList = new ArrayList<Category>(Arrays.asList(category));
+			System.out.println(""+categoryList.toString());
+			model.addObject("categoryList",categoryList);
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
 			//model.addObject("isEdit", 0);
@@ -553,7 +557,7 @@ public class MasterControllerNew {
 	}
 	
 	@RequestMapping(value = "/insertUploadDoc", method = RequestMethod.POST)
-	public String insertDocument(@RequestParam("docfile") List<MultipartFile> docfile,HttpServletRequest request,
+	public String insertDocument(@RequestParam("pagePdf") List<MultipartFile> pagePdf,HttpServletRequest request,
 			HttpServletResponse response) {
 
 		 try {
@@ -562,6 +566,8 @@ public class MasterControllerNew {
 				User UserDetail =(User) session.getAttribute("UserDetail");
 			 
 			 	String docId = request.getParameter("docId");
+			 	String catId = request.getParameter("cateId");
+			 	System.out.println("category: "+catId);
 		        String docName = request.getParameter("docName");
 				int sortNo = Integer.parseInt(request.getParameter("sortNo"));
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
@@ -569,7 +575,7 @@ public class MasterControllerNew {
 				int pageId = Integer.parseInt(request.getParameter("pageId")); 
 				System.out.println("Id: "+isEdit);
 				VpsImageUpload upload = new VpsImageUpload();
-				String docFile = null;
+				String pdfName = null;
 				
 				Date date = new Date(); // your date
 				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -586,16 +592,16 @@ public class MasterControllerNew {
 			    if(docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
 			    	System.out.println("id null");
 					
-							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-							editupload.setFileName(docFile);
+			    	pdfName =  dateTimeInGMT.format(date)+"_"+pagePdf.get(0).getOriginalFilename();
+							editupload.setFileName(pdfName);
 							try {
 								 
-								  extension = FilenameUtils.getExtension(docfile.get(0).getOriginalFilename());
-								  fileSize = docfile.get(0).getSize();
-								  fileType= docfile.get(0).getContentType();
+								  extension = FilenameUtils.getExtension(pagePdf.get(0).getOriginalFilename());
+								  fileSize = pagePdf.get(0).getSize();
+								  fileType= pagePdf.get(0).getContentType();
 								   editupload.setFileSize(fileSize);
 								    editupload.setFileType(fileType);
-								Info info = upload.saveUploadedImge(docfile.get(0), Constant.uploadDocURL,docFile,Constant.DocImgValues,0,0,0,0,0);
+								upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf,pdfName);
 								 	
 							}catch (Exception e) {
 									// TODO: handle exception
@@ -606,22 +612,22 @@ public class MasterControllerNew {
 							//editbanner.setAddedByUserId(UserDetail.getUserId());
 				  }else {
 					
-					  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
+					  if(pagePdf.get(0).getOriginalFilename()==null || pagePdf.get(0).getOriginalFilename()=="") {
 						  editupload.setEditDate(sf.format(date));
 						
 						   
 						}else {
 						
-							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-							editupload.setFileName(docFile);
+							pdfName =  dateTimeInGMT.format(date)+"_"+pagePdf.get(0).getOriginalFilename();
+							editupload.setFileName(pdfName);
 							try {
 								 
-								  extension = FilenameUtils.getExtension(docfile.get(0).getOriginalFilename());
-								  fileSize =docfile.get(0).getSize();
-								  fileType= docfile.get(0).getContentType();
-								   editupload.setFileSize(fileSize);
-								    editupload.setFileType(fileType);
-								Info info = upload.saveUploadedImge(docfile.get(0), Constant.uploadDocURL,docFile,Constant.DocImgValues,0,0,0,0,0);
+								  extension = FilenameUtils.getExtension(pagePdf.get(0).getOriginalFilename());
+								  fileSize =pagePdf.get(0).getSize();
+								  fileType= pagePdf.get(0).getContentType();
+								  editupload.setFileSize(fileSize);
+								  editupload.setFileType(fileType);
+								  upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf,pdfName);
 								}catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();  
@@ -631,12 +637,9 @@ public class MasterControllerNew {
 					  //editbanner.setEditByUserId(UserDetail.getUserId());
 				  }
 			 //   editupload.setDocId(0);
-			
-			    
-			   editupload.setExVar1(docName); 
-			  
-			   editupload.setPageId(pageId);
-			    editupload.setCateType("7");
+			    editupload.setExVar1(docName); 
+			    editupload.setPageId(pageId);
+			    editupload.setCateType(catId);
 			    editupload.setSortNo(sortNo);
 			    editupload.setIsActive(isActive);
 			    editupload.setDelStatus(1); 
@@ -656,10 +659,10 @@ public class MasterControllerNew {
 					session.setAttribute("successMsg","Infomation added successfully!");
 					session.setAttribute("errorMsg","false");
 				}else {
-					
-					session.setAttribute("successMsg","Error While Uploading Content !");
-					session.setAttribute("errorMsg","true");
+					session.setAttribute("successMsg","Infomation added successfully!");
+					session.setAttribute("errorMsg","false");
 				}
+			
 				
 						
 		 }catch (Exception e) {
@@ -702,6 +705,10 @@ public class MasterControllerNew {
 			map.add("id", docId); 
 			editupload = rest.postForObject(Constant.url + "/getDocumentById", map, DocumentUpload.class);
 			// System.out.println("sdf");
+			map.add("delStatus",1);
+			Category[] category = rest.postForObject(Constant.url + "/getAllCategory", map,  Category[].class);
+			List<Category> categoryList = new ArrayList<Category>(Arrays.asList(category));
+			model.addObject("categoryList",categoryList);
 			model.addObject("editupload", editupload);
 			model.addObject("isEdit", 1);
 			model.addObject("url", Constant.uploadDocURL);
