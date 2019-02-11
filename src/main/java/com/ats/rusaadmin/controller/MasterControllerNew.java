@@ -373,7 +373,7 @@ public class MasterControllerNew {
 			}
 			
 			model.addObject("bannerImagesList", bannerImagesList);
-			model.addObject("url", Constant.bannerImageURL);
+			model.addObject("url", Constant.getBannerImageURL);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -393,7 +393,7 @@ public class MasterControllerNew {
 			editbanner = rest.postForObject(Constant.url + "/getSliderImagesById", map, BannerImages.class);
 			model.addObject("editbanner", editbanner);
 			model.addObject("isEdit", 1);
-			model.addObject("url", Constant.bannerImageURL);
+			model.addObject("url", Constant.getBannerImageURL);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -415,7 +415,7 @@ public class MasterControllerNew {
 			map.add("id", 1); 
 			logo = rest.postForObject(Constant.url + "/getLogoListById", map, Logo.class);
 			model.addObject("logo", logo);
-			model.addObject("url", Constant.lgogImageURL);
+			model.addObject("url", Constant.getLgogImageURL);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -711,7 +711,7 @@ public class MasterControllerNew {
 			model.addObject("categoryList",categoryList);
 			model.addObject("editupload", editupload);
 			model.addObject("isEdit", 1);
-			model.addObject("url", Constant.uploadDocURL);
+			model.addObject("url", Constant.getUploadDocURL);
 
 		} catch (Exception e) {
 			e.printStackTrace();

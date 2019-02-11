@@ -59,10 +59,10 @@ public class VpsImageUpload {
 								File newFilePNG = null;
 								 
 						        System.out.println("File " + imageName);
-						        img = ImageIO.read(new File("/home/lenovo/Documents/gallery/"+imageName));
+						        img = ImageIO.read(new File(uploadPath+imageName));
 						        tempPNG = resizeImage(img, 200, 200);
 						        
-						        newFilePNG = new File("/home/lenovo/Documents/gallery/thumbnail"+imageName);
+						        newFilePNG = new File(uploadPath+"thumbnail"+imageName);
 						       
 						        ImageIO.write(tempPNG, extension, newFilePNG);
 						       

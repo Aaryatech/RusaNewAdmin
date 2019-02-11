@@ -342,7 +342,7 @@ public class NewController {
 			}
 			
 			model.addObject("imagesLinkList", imagesLinkList);
-			model.addObject("url", Constant.bannerImageURL);
+			model.addObject("url", Constant.getBannerImageURL);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -363,7 +363,7 @@ public class NewController {
 			editImageLink = rest.postForObject(Constant.url + "/getImageLinksById", map, ImageLink.class);
 			model.addObject("editImageLink", editImageLink);
 			model.addObject("isEdit", 1);
-			model.addObject("url", Constant.bannerImageURL);
+			model.addObject("url", Constant.getBannerImageURL);
 
 		} catch (Exception e) {
 			e.printStackTrace();

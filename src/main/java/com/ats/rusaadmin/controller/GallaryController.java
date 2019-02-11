@@ -299,7 +299,7 @@ public class GallaryController{
 				 GallaryDetail[] gallaryDetail = rest.postForObject(Constant.url + "/galleryDetailList", map, GallaryDetail[].class);
 				 List<GallaryDetail> gallaryDetailList = new ArrayList<GallaryDetail>(Arrays.asList(gallaryDetail));
 				 model.addObject("gallaryDetailList", gallaryDetailList);
-				 model.addObject("imageUrl", Constant.gallryImageURL);
+				 model.addObject("imageUrl", Constant.getGallryImageURL);
 		 
 			
 				

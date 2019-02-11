@@ -351,7 +351,7 @@ public class AddContentController {
 			model.addObject("languagesList", languagesList);
 			model.addObject("editCMSPages", editCMSPages);
 			model.addObject("page", page);
-			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("url", Constant.getGallryImageURL);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -760,7 +760,7 @@ public class AddContentController {
 			      if (listOfFiles[i].isFile()) {
 			        System.out.println("File " + listOfFiles[i].getName());
 			        ContentImages contentImages = new ContentImages();
-			        contentImages.setImage(Constant.gallryImageURL+listOfFiles[i].getName());
+			        contentImages.setImage(Constant.getGallryImageURL+listOfFiles[i].getName());
 			        list.add(contentImages);
 			      }
 			}
