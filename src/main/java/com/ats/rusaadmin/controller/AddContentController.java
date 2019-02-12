@@ -754,15 +754,15 @@ public class AddContentController {
 			 
 			List<ContentImages> list = new ArrayList<ContentImages>();
 			
-			File folder = new File(Constant.gallryImageURL);
+			File folder = new File(Constant.otherDocURL);
 		    File[] listOfFiles = folder.listFiles();
 			 
 			for (int i = 0; i < listOfFiles.length; i++) {
 			      if (listOfFiles[i].isFile()) {
 			        System.out.println("File " + listOfFiles[i].getName());
 			        ContentImages contentImages = new ContentImages();
-			        contentImages.setImage(Constant.getGallryImageURL+listOfFiles[i].getName());
-			        contentImages.setThumb(Constant.getGallryImageURL+listOfFiles[i].getName());
+			        contentImages.setImage(Constant.getOtherDocURL+listOfFiles[i].getName());
+			        contentImages.setThumb(Constant.getOtherDocURL+listOfFiles[i].getName());
 			        contentImages.setSize(String.valueOf(listOfFiles[i].length()));
 			        contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
 			        contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));

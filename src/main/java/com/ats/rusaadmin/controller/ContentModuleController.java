@@ -418,7 +418,7 @@ public class ContentModuleController {
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);
-			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("url", Constant.getGallryImageURL);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -760,7 +760,7 @@ public class ContentModuleController {
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);
-			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("url", Constant.getGallryImageURL);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

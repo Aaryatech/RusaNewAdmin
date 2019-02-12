@@ -27,6 +27,54 @@
                 <span class="title">Dashboard</span>
                 </a>
             </li>
+            
+            <li class="">
+                <a href="javascript:;">
+                <i class="fa fa-columns"></i>
+                <span class="title">Admin</span>
+                <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu" >
+               		 <li>
+                        <a class="" href="${pageContext.request.contextPath}/addUser" >Add Admin  </a>
+                        <a class="" href="${pageContext.request.contextPath}/userList" >Admin List </a>
+                    </li>
+                    
+                     
+                </ul>
+            </li>
+            
+            <li class="">
+                <a href="javascript:;">
+                <i class="fa fa-columns"></i>
+                <span class="title">Front End Control</span>
+                <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu" >
+               		 
+                    
+                    <li>
+                        <a href="${pageContext.request.contextPath}/addLogo">Add Logo</a>
+                    </li>
+                     <li>
+                        <a href="${pageContext.request.contextPath}/addMetaNew">Add Meta Data</a>
+                    </li>
+                     <li>
+                        <a href="${pageContext.request.contextPath}/addMetaNew">Add Social Links</a>
+                    </li>
+                      <li>
+                        <a href="${pageContext.request.contextPath}/sliderPicList">Header Slider</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/uploadOtherMedia">Upload Media/Files</a>
+                    </li>
+                     <li>
+                        <a href="${pageContext.request.contextPath}/maintenanceMode">Maintenance Mode</a>
+                    </li>
+                     
+                </ul>
+            </li>
+            
             <li class="">
                 <a href="javascript:;">
                 <i class="fa fa-columns"></i>
@@ -44,11 +92,9 @@
                         <a class="" href="${pageContext.request.contextPath}/subCategoryList" >Sub Menu List</a>
                     </li>
                      <li>
-                        <a href="${pageContext.request.contextPath}/sectionTreeList">Section Tree</a>
+                        <a href="${pageContext.request.contextPath}/sectionTreeList">Add Content</a>
                     </li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/sliderPicList">Slider Photo List</a>
-                    </li>
+                    
                     <li>
                         <a href="${pageContext.request.contextPath}/addLogo">Add Logo</a>
                     </li>
@@ -59,21 +105,8 @@
                 </ul>
             </li>
             
-             <li class="">
-                <a href="javascript:;">
-                <i class="fa fa-columns"></i>
-                <span class="title">User</span>
-                <span class="arrow "></span>
-                </a>
-                <ul class="sub-menu" >
-               		 <li>
-                        <a class="" href="${pageContext.request.contextPath}/addUser" >Add User </a>
-                    </li>
-                    
-                     
-                </ul>
-            </li>
-                  
+             
+                
              <li  > 
                     <a href="#">
                     <i class="fa fa-lock"></i>

@@ -443,7 +443,7 @@ public class GallaryController{
 			 
 			 
 			 try {
-				 upload.saveUploadedImge(file.get(0), Constant.gallryImageURL,imageName,Constant.values,0,0,0,0,0);
+				 upload.saveUploadedImge(file.get(0), Constant.otherDocURL,imageName,Constant.values,0,0,0,0,0);
 				 upload.saveUploadedImge(file.get(0), Constant.uploadDocURL,imageName,Constant.DocValues,0,0,0,0,0);
 				 
 				}catch (Exception e) {
