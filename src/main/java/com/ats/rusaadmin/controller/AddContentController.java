@@ -190,7 +190,7 @@ public class AddContentController {
 					cMSPageDescriptionList.add(cMSPageDescription);
 				}
 				 
-				//cMSPages.setAddedByUserId(UserDetail.getUserId());
+				cMSPages.setAddedByUserId(UserDetail.getUserId());
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
 				  
 				}else {
@@ -389,7 +389,7 @@ public class AddContentController {
 					 
 				}
 				 
-				//editCMSPages.setEditByUserId(UserDetail.getUserId());
+				editCMSPages.setEditByUserId(UserDetail.getUserId());
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
 				  
 				}else {
@@ -504,7 +504,7 @@ public class AddContentController {
 					freqAskQueDescriptionList.add(freqAskQueDescription);
 				}
 				 
-				//freqAskQue.setAddedByUserId(UserDetail.getUserId());
+				freqAskQue.setAddedByUserId(UserDetail.getUserId());
 				 
 				freqAskQue.setPageId(pageId);
 				freqAskQue.setFaqSortNo(seqNo); 
@@ -667,7 +667,7 @@ public class AddContentController {
 				 
 				}
 				 
-				//editFreqAskQue.setEditByUserId(UserDetail.getUserId());
+				editFreqAskQue.setEditByUserId(UserDetail.getUserId());
 				  
 				editFreqAskQue.setFaqSortNo(seqNo); 
 				editFreqAskQue.setIsActive(isActive);

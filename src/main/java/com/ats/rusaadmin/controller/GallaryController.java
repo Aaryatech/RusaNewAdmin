@@ -98,7 +98,7 @@ public class GallaryController{
 					gallaryCategoryDescriptioinList.add(gallaryCategoryDescriptioin);
 				}
 				editGallaryCategory.setGallaryCategoryDescriptioinList(gallaryCategoryDescriptioinList);
-				//editGallaryCategory.setAddedByUserId(UserDetail.getUserId());
+				editGallaryCategory.setAddedByUserId(UserDetail.getUserId());
 				
 			}else {
 				editGallaryCategory.setGalleryCatId(Integer.parseInt(catId));
@@ -119,7 +119,7 @@ public class GallaryController{
 					}
 					 
 				}
-				//editGallaryCategory.setEditByUserId(UserDetail.getUserId());
+				editGallaryCategory.setEditByUserId(UserDetail.getUserId());
 			}
 			
 			 
@@ -380,7 +380,7 @@ public class GallaryController{
 				 gallaryDetail.setGalleryCatId(catId);
 				 gallaryDetail.setFileSize(String.valueOf(file.get(0).getSize()));
 				 gallaryDetail.setFileType(file.get(0).getContentType());
-				 //gallaryDetail.setAddedByUserId(UserDetail.getAddedByUserId());
+				 gallaryDetail.setAddedByUserId(UserDetail.getAddedByUserId());
 				 gallaryDetail.setIsActive(1);
 				 gallaryDetail.setDelStatus(1);
 				 

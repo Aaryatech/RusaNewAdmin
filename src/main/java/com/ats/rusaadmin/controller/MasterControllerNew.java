@@ -67,7 +67,7 @@ public class MasterControllerNew {
 
 	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public ModelAndView addSection(HttpServletRequest request, HttpServletResponse response) {
-
+ 
 		ModelAndView model = new ModelAndView("master/addUser");
 		try {
 			        
