@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -146,7 +147,13 @@ public class HomeController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	 
+	@ExceptionHandler(LoginFailException.class)
+	public String redirectToLogin() {
+		System.out.println("HomeController Login Fail Excep:");
+
+		return "login";
+	}
+	
 	@RequestMapping(value = "/sessionTimeOut", method = RequestMethod.GET)
 	public String sessionTimeOut(HttpSession session) {
 		System.out.println("User Logout");
@@ -154,6 +161,7 @@ public class HomeController {
 		session.invalidate();
 		return "redirect:/";
 	}
+	
 	@RequestMapping(value = "/sampleForm", method = RequestMethod.GET)
 	public ModelAndView addCategory(HttpServletRequest request, HttpServletResponse response) {
 

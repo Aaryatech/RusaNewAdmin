@@ -456,5 +456,7 @@ public class GallaryController{
 		}
  
 	}
+	
+	
 
 }
