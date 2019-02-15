@@ -1,5 +1,6 @@
 package com.ats.rusaadmin.controller;
 
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
+import com.ats.rusaadmin.model.ContactUs;
 import com.ats.rusaadmin.model.GetCategory;
 import com.ats.rusaadmin.model.ImageLink;
 import com.ats.rusaadmin.model.Info;
@@ -45,7 +47,7 @@ public class NewController {
 	List<Languages> languagesList = new ArrayList<Languages>();
 	ImageLink editImageLink=new ImageLink();
 	List<MetaData> editMeta = new ArrayList<MetaData>();
-	
+	ContactUs contactUs=new ContactUs();
 	@RequestMapping(value = "/addMetaNew", method = RequestMethod.GET)
 	public ModelAndView addMetaData(HttpServletRequest request, HttpServletResponse response) {
 
@@ -133,6 +135,7 @@ public class NewController {
 				editMeta.get(i).setSiteTitle(request.getParameter("siteName"+languagesList.get(i).getLanguagesId()));
 				editMeta.get(i).setMetaDescription(request.getParameter("metaDescription"+languagesList.get(i).getLanguagesId()));
 				editMeta.get(i).setMetaAuthor(request.getParameter("metaAuthor"+languagesList.get(i).getLanguagesId())); 
+				editMeta.get(i).setMetaKeywords(request.getParameter("metaKeywords"+languagesList.get(i).getLanguagesId())); 
 				
 			 
 			}
@@ -371,5 +374,106 @@ public class NewController {
 
 		return model;
 	}
+	@RequestMapping(value = "/editContactUs", method = RequestMethod.POST)
+	public String editContactUs(HttpServletRequest request,HttpServletResponse response) {
+
+		 try {
+			 
+				String remark = request.getParameter("remark");
+
+				String id = request.getParameter("id");
+				System.out.println("remark: "+remark);
+		if(id!=null)
+		{
+			
+				contactUs.setId(Integer.parseInt(id));
+				contactUs.setStatusByAdmin(0);
+				contactUs.setRemark(remark);
+							
+          			}
+		ContactUs res = rest.postForObject(Constant.url + "/saveContactUs", contactUs, ContactUs.class);
+
+						
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 return "redirect:/ContactList";
+	}
+	  
 	
+	@RequestMapping(value = "/ContactList", method = RequestMethod.GET)
+	public ModelAndView ContactList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/contactList");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			List<ContactUs> contactList = rest.getForObject(Constant.url + "/getAllContactList",
+					List.class);
+			//List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
+			model.addObject("contactList", contactList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/editContact/{id}", method = RequestMethod.GET)
+	public ModelAndView editContact(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/editContact");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);
+
+			contactUs = rest.postForObject(Constant.url + "/getContactById", map, ContactUs.class);
+		 /*   ContactUs[] contact = rest.getForObject(Constant.url + "/getContactById", 
+					ContactUs[].class);
+			List<ContactUs> editcontact = new ArrayList<ContactUs>(Arrays.asList(contact));*/
+			
+			
+			model.addObject("editcontact", contactUs);
+			model.addObject("isEdit", 1);
+			
+			System.out.println(contactUs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	
+	@RequestMapping(value = "/deleteContact/{id}", method = RequestMethod.GET)
+	public String deleteCategory(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id); 
+			//map.add("delStatus", 0); 
+			Info res = rest.postForObject(Constant.url + "/deleteContact", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if(id==0)
+			{
+				session.setAttribute("successMsg","Sorry, Can't deleted!");
+			}
+			else
+			{
+			session.setAttribute("successMsg","Infomation deleted successfully!");
+			}
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/ContactList";
+	}
 }

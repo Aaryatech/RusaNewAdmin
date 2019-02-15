@@ -89,16 +89,22 @@
 												placeholder="Meta Description"  value="${metaList.metaDescription}"  style="text-align: left;" name="metaDescription${languagesList.languagesId}" type="text"  required>
 				                                </div>
 				                              </div>
-				                              
-				                              
-				                              <div class="form-group">
+				                                                          
+				                               <div class="form-group">
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Meta Keywords :<span class="text-danger">*</span> </label>
+				                                <div class="col-sm-10">
+				                                <input id="metaKeywords${languagesList.languagesId}" class="form-control"
+												placeholder="Meta Keyword"  value="${metaList.metaKeywords}"  style="text-align: left;" name="metaKeywords${languagesList.languagesId}" type="text"  required>
+				                                </div>
+				                              </div>
+				                               
+				                                <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Meta Author :<span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10">
 				                                <input id="metaAuthor${languagesList.languagesId}" class="form-control"
 												placeholder="Meta Author"  value="${metaList.metaAuthor}"  style="text-align: left;" name="metaAuthor${languagesList.languagesId}" type="text"  required>
 				                                </div>
 				                              </div>
-				                               
 				                        </div>
                      				</c:when>
                      			</c:choose>

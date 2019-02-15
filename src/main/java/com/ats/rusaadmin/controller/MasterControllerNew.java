@@ -190,7 +190,7 @@ public class MasterControllerNew {
 			map.add("userId", userId);
 
 			 edituser = rest.postForObject(Constant.url + "/getUserByUserId", map, User.class);
-			 
+			   
 			 User[] user = rest.getForObject(Constant.url + "/getAllUserList", 
 					 User[].class);
 			List<User> userList = new ArrayList<User>(Arrays.asList(user));

@@ -74,6 +74,7 @@
 			            	</c:otherwise>
 		            	</c:choose>	
                         
+                
                     </li>
                     
                      
@@ -151,22 +152,12 @@
 			            		<a class="active" href="${pageContext.request.contextPath}/addImageLink" onclick="selectSubMod(2,205)">Image Link</a>
 			            	</c:when>
 			            	<c:otherwise> 
-			            	<a href="${pageContext.request.contextPath}/addImageLink" onclick="selectSubMod(2,205)">Image Link</a>
+			            	<a href="${pageContext.request.contextPath}/addImageLink" onclick="selectSubMod(2,205)">Other GOV Links</a>
 			            	</c:otherwise>
 		            	</c:choose>
                         
                     </li>
-                    <li>
-                    	<c:choose>
-			            	<c:when test="${sessionScope.sessionSubModuleId==206}"> 
-			            		 <a class="active" href="${pageContext.request.contextPath}/uploadOtherMedia" onclick="selectSubMod(2,206)">Upload Media/Files</a>
-			            	</c:when>
-			            	<c:otherwise> 
-			            	 <a href="${pageContext.request.contextPath}/uploadOtherMedia" onclick="selectSubMod(2,206)">Upload Media/Files</a>
-			            	</c:otherwise>
-		            	</c:choose>
-                       
-                    </li>
+                   
                      <li>
                      	 <c:choose>
 			            	<c:when test="${sessionScope.sessionSubModuleId==207}"> 
@@ -249,41 +240,88 @@
                         
                     </li>
                     
-                    <li>	
-                    	<c:choose>
-			            	<c:when test="${sessionScope.sessionSubModuleId==305}">  
-			            		<a class="active" href="${pageContext.request.contextPath}/addLogo" onclick="selectSubMod(3,305)">Add Logo</a>
-			            	</c:when>
-			            	<c:otherwise> 
-			            		<a class=" " href="${pageContext.request.contextPath}/addLogo" onclick="selectSubMod(3,305)">Add Logo</a>
-			            	</c:otherwise>
-		            	</c:choose>
-                        
-                    </li>
-                    <li>
-                    	<c:choose>
-			            	<c:when test="${sessionScope.sessionSubModuleId==306}">  
-			            		<a class="active" href="${pageContext.request.contextPath}/uploadDocForm" onclick="selectSubMod(3,306)">Upload Document</a>
-			            	</c:when>
-			            	<c:otherwise> 
-			            		<a class=" " href="${pageContext.request.contextPath}/uploadDocForm" onclick="selectSubMod(3,306)">Upload Document</a>
-			            	</c:otherwise>
-		            	</c:choose>
-                        
-                    </li>
+                   
+                   
                      
                 </ul>
-            </li>
+                 <a href="javascript:;">
+                <i class="fa fa-columns"></i>
+                <span class="title">Content List</span>
+               		<c:choose>
+		            	<c:when test="${sessionScope.sessionModuleId==4}">
+		            		 <span class="arrow open"></span>
+		            	</c:when>
+		            	<c:otherwise> 
+		            	  <span class="arrow "></span>
+		            	</c:otherwise>
+	            	</c:choose>
+                </a>
+             <ul class="sub-menu" >
+             <li  > 
+                    <a href="${pageContext.request.contextPath}/cmsList">
+               
+                    <span class="title">CMS List</span>
+                        </a>
+                    </li> 
+                    <a href="${pageContext.request.contextPath}/faqList">
+                    
+                    <span class="title">FAQ List</span>
+                        </a>
+                    </li>   
+                       <li  > 
+                    <a href="${pageContext.request.contextPath}/testImonialList">
+                  
+                    <span class="title">TestImonial List</span>
+                        </a>
+                    </li>   
+                         
             
-             
+            <li  > 
+                    <a href="${pageContext.request.contextPath}/galleryCategoryList">
+                  
+                    <span class="title">Gallery Category List</span>
+                        </a>
+                    </li>   
                 
+             <li  > 
+              <li  > 
+                    <a href="${pageContext.request.contextPath}/documentUploadList">
+                  
+                    <span class="title">Document List</span>
+                        </a>
+                    </li>   
+                        <li  > 
+                    <a href="${pageContext.request.contextPath}/NewsBlogList">
+                  
+                    <span class="title">News Blog List</span>
+                        </a>
+                    </li>   
+                
+               </ul>
+              <li>
+                    	
+			            	
+			            	 <a href="${pageContext.request.contextPath}/uploadOtherMedia" >
+			            	   <i class="fa fa-columns"></i>
+			             <span class="title">Upload Media/Files</span>
+		            	</a>
+                    </li>
+          
+             
+              
+                   <li> 
+                    <a href="${pageContext.request.contextPath}/ContactList">
+                    <i class="fa fa-columns"></i>
+                    <span class="title">Contact List</span>
+                        </a>
+                    </li> 
              <li  > 
                     <a href="#">
                     <i class="fa fa-lock"></i>
                     <span class="title">Logout</span>
                         </a>
                     </li> 
-        </ul>
+       </ul>
         <div class="menustats">    
         </div>
     </div>
