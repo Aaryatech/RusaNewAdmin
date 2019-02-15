@@ -34,7 +34,7 @@
                         </li>
                         
                         <li class="last">
-                            <a href="ui-login.html">
+                            <a href="${pageContext.request.contextPath}/logout">
                                 <i class="fa fa-lock"></i>
                                 Logout
                             </a>
