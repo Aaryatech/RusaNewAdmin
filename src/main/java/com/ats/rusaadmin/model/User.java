@@ -1,5 +1,4 @@
 package com.ats.rusaadmin.model;
- 
 
 public class User {
 	
@@ -21,6 +20,7 @@ public class User {
 	private int loginFailureCount;  
 	private int addedByUserId;
 	private int editByUserId;
+	private String fileName;
 	
 	
 	public int getAddedByUserId() {
@@ -126,6 +126,13 @@ public class User {
 	public void setLoginFailureCount(int loginFailureCount) {
 		this.loginFailureCount = loginFailureCount;
 	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", userPass=" + userPass + ", userEmail="
@@ -133,8 +140,9 @@ public class User {
 				+ ", sortNo=" + sortNo + ", delStatus=" + delStatus + ", isActive=" + isActive + ", roles=" + roles
 				+ ", lastloginDate=" + lastloginDate + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate
 				+ ", loginFailureCount=" + loginFailureCount + ", addedByUserId=" + addedByUserId + ", editByUserId="
-				+ editByUserId + "]";
+				+ editByUserId + ", fileName=" + fileName + "]";
 	}
+
 	 
 
 	

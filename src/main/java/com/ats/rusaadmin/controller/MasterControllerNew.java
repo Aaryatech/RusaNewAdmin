@@ -98,7 +98,7 @@ public class MasterControllerNew {
 	}
 	
 	@RequestMapping(value = "/insertUser", method = RequestMethod.POST)
-	public String insertUser(HttpServletRequest request, HttpServletResponse response) {
+	public String insertUser(@RequestParam("docfile") List<MultipartFile> docfile,HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
@@ -117,31 +117,54 @@ public class MasterControllerNew {
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 		
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
-
+            String docFile=null;
+        	VpsImageUpload upload = new VpsImageUpload();
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			
 			System.out.println(sf.format(date));
-
-			if (userId == "" || userId == null) {
-				user.setUserId(0);
-				user.setCreatedDate(sf.format(date));
-				user.setUserName(userName);
-				user.setFirstname(firstName);
-				user.setMiddlename(middleName);
-				user.setRoles(roles);
-				user.setDelStatus(1);
-				user.setSortNo(seqNo);
-				//user.setCreatedDate(sf.format(date));
-				user.setIsActive(isActive);
-				user.setUserEmail(email);
-				user.setUserPass(pass);
-				user.setLastname(lastName);
-				user.setAddedByUserId(UserDetail.getUserId());
-				//UserDetail.getUserId()
-				//user.setEditByUserId(0);
-				//editcat.setAddedByUserId(UserDetail.getUserId());
-			}else {
-				user.setUserId(Integer.parseInt(userId));
+			  if(userId.equalsIgnoreCase(null) || userId.equalsIgnoreCase("")) {
+				  
+				  
+					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+					user.setFileName(docFile);
+					try {
+						Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0);
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					user.setUserId(0);
+					user.setCreatedDate(sf.format(date));
+					user.setUserName(userName);
+					user.setFirstname(firstName);
+					user.setMiddlename(middleName);
+					user.setRoles(roles);
+					user.setDelStatus(1);
+					user.setSortNo(seqNo);
+					//user.setCreatedDate(sf.format(date));
+					user.setIsActive(isActive);
+					user.setUserEmail(email);
+					user.setUserPass(pass);
+					user.setLastname(lastName);
+					user.setAddedByUserId(UserDetail.getUserId());
+					//editbanner.setAddedByUserId(UserDetail.getUserId());
+		  }else {
+			  
+			  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
+				 
+				}else {
+					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+					user.setFileName(docFile);
+					try {
+						Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0 );
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+				}
+			    user.setUserId(Integer.parseInt(userId));
 				user.setCreatedDate(sf.format(date));
 				user.setUserName(userName);
 				user.setFirstname(firstName);
@@ -156,10 +179,11 @@ public class MasterControllerNew {
 				user.setLastname(lastName);
 			//	user.setAddedByUserId(0);
 				user.setEditByUserId(UserDetail.getUserId());
-				
-				}
-				//editcat.setEditByUserId(UserDetail.getUserId());
-			
+			  //editbanner.setEditByUserId(UserDetail.getUserId());
+		  }
+		
+		
+		
 			
 			User res = rest.postForObject(Constant.url + "/saveUser", user, User.class);
 
