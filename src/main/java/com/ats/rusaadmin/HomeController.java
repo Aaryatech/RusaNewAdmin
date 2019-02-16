@@ -102,6 +102,7 @@ public class HomeController {
 					mav = new ModelAndView("welcome");
 					 
 						session.setAttribute("UserDetail", loginResponse.getUser());
+						session.setAttribute("imageProfileUrl", Constant.getUserProfileURL);
 						InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
 				        String hostName = addr.getHostName(); 
 				        String userAgent = request.getHeader("User-Agent"); 
