@@ -66,7 +66,7 @@
         	          </c:if>  --%>                             </div> 
            
                    <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertUser" 
-                   onsubmit="return confirm('Do you really want to submit the form?');" method="post">
+                   onsubmit="return confirm('Do you really want to submit the form?');" method="post" enctype="multipart/form-data">
                    
                 <div class="content-body"> 
                     <div class="row">
@@ -169,6 +169,57 @@
 								placeholder="Sequence No" value="${editUser.sortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
+                               
+                           <%--     <c:if test="${isEdit==1}">
+                        		<div class="form-group">
+                                <label class="control-label col-sm-2" for="banner_image"> Image:</label>
+                                <div class="col-sm-10">
+                                     <img src="${url}${editbanner.sliderImage}" style="width:250px; height:auto">
+                                     
+                                     <input id="imageName"  value="${editUser.fileImage}"  name="imageName" type="hidden"  >
+                                </div>
+                              </div>
+                        </c:if --%>
+                
+                         	<c:choose>
+                                  		<c:when test="${editUser.fileName!='null'}">
+                                  			 <div class="form-group">
+                                                <label class="col-md-2 control-label">Current Profile Photo</label>
+                                                <div class="col-md-10">
+                                                    <img src="${url}${editUser.fileName}" style="width:150px; height:auto">
+                                                </div>
+                                            </div>
+                                  		</c:when>
+                                  	
+                                  	</c:choose>
+                       	               
+                              
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Profile Photo:</label>
+                                                <div class="col-md-10">
+                                                    <div class="row col-md-5">
+                                                        <img src="" id="temppreviewimageki1" class="temppreviewimageki1" style="width:200px; height:auto;display:none">								 
+                                                    </div>
+                                                    <div class="row col-md-10">
+                                                        <div class="input-group image-preview1" data-original-title="" title="">
+                                                            <input type="text" class="form-control image-preview-filename1" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                                            <span class="input-group-btn">
+                                                                <!-- image-preview-clear button -->
+                                                                <button type="button" class="btn btn-default image-preview-clear image-preview-clear1"  id="1" style="display:none;">
+                                                                <span class="glyphicon glyphicon-remove"></span> Clear
+                                                                </button>
+                                                                <!-- image-preview-input -->
+                                                                <div class="btn btn-default image-preview-input">
+                                                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                                                    <span class="image-preview-input-title image-preview-input-title1">Browse</span>
+                                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage browseimage1" id="1" name="docfile"> <!-- rename it -->
+                                                                </div>
+                                                            </span>
+                                                        </div>
+                                                        <span class="help-block">* Only jpg,gif,png</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                               
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
@@ -208,8 +259,7 @@
         
     </div> 
 
-
- 
+  
 <script type="text/javascript">
 function RestrictSpace() {
     if (event.keyCode == 32) {
@@ -220,16 +270,97 @@ function RestrictSpace() {
 </script>
 
 <!-- MAIN CONTENT AREA ENDS -->
-    </section>
-    </section>
-    <!-- END CONTENT -->
-     
-
-
-     </div>
+  
     <!-- END CONTAINER -->
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+      <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $(document).on('click', '#close-preview1', function(){ 
+                    $('.image-preview1').popover('hide');
+                    // Hover befor close the preview
+                    $('.image-preview1').hover(
+                    function () {
+                        $('.image-preview1').popover('show');
+                        }, 
+                    function () {
+                        $('.image-preview1').popover('hide');
+                        }
+                    );    
+                });
+            });
+            $(function() {
+            
+                
+                				//image 1
+                
+                
+                					// Create the preview image
+                					$(".browseimage").change(function (){
+                						var img = $('<img/>', {
+                							id: 'dynamic',
+                							width:250,
+                							height:200,
+                						});
+                					var imgid =	$(this).attr('id');
+                					//alert(imgid);
+                						var file = this.files[0];
+                						var reader = new FileReader();
+                						// Set preview image into the popover data-content
+                						reader.onload = function (e) {
+                
+                
+                
+                							$(".image-preview-filename"+imgid).html(file.name);
+                							img.attr('src', e.target.result);
+                
+                							$(".temppreviewimageki"+imgid).attr("src",$(img)[0].src);
+                							$(".temppreviewimageki"+imgid).show();
+                						
+                                            $('.image-preview-clear'+imgid).show();
+                							//alert(e.target.result);
+                							///alert($(img)[0].outerHTML);
+                							//$(".image-preview1").attr("data-content",$(img)[0].outerHTML).popover("show");
+                						}
+                						reader.readAsDataURL(file);
+                					});
+                
+                
+                                    // Clear event
+                            $('.image-preview-clear').click(function(){
+                                var imgid =	$(this).attr('id');
+                              
+                                $('.image-preview-filename'+imgid).html("No file selected");
+                                $('.image-preview-clear'+imgid).val("");
+                                $('.image-preview-clear'+imgid).hide();
+                                $(".image-preview-input-title"+imgid).text("Browse"); 
+                                $(".temppreviewimageki"+imgid).attr("src",'');
+                                $(".temppreviewimageki"+imgid).hide();
+                            }); 
+                					//end
+             
+            });
+            
+            // TableManageButtons.init();
+            
+        </script>
+        <script>
+            function clearSessionAttribute() {
+            	 
+            	 
+             
+            	$.getJSON('${clearSessionAttribute}', {
+              
+            		ajax : 'true',
+            
+            	}, function(data) { 
+            		 
+            	
+            	});
+            
+            }
+             
+        </script>
 </body>
 </html>
