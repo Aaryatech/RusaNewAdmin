@@ -94,7 +94,7 @@
                         <c:forEach items="${imagesLinkList}" var="imagesLinkList" varStatus="count">
 									<tr  >
 										<td>${count.index+1}</td>
-										<td>file://${url}${imagesLinkList.sliderImage}<img src="${url}${imagesLinkList.sliderImage}" style="width:150px; height:auto"></td>
+										<td> <img src="${url}${imagesLinkList.sliderImage}" style="width:120px; height:100px"></td>
 										
 										<td>${imagesLinkList.sortOrder}</td>
 										<td>${imagesLinkList.addDate}</td>   

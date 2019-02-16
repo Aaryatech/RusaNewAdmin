@@ -2,7 +2,6 @@ package com.ats.rusaadmin.model;
 
 import java.util.List;
  
-
 public class SectionTree {
 	 
 	private int sectionId; 
@@ -11,6 +10,9 @@ public class SectionTree {
 	private String sectionDesc; 
 	private int pageId; 
 	private int secSortNo; 
+	private int catCount;
+	private String externalUrl; 
+	private String externalUrlTarget;
 	List<CategoryList> catList;
 	public int getSectionId() {
 		return sectionId;
@@ -48,6 +50,24 @@ public class SectionTree {
 	public void setSecSortNo(int secSortNo) {
 		this.secSortNo = secSortNo;
 	}
+	public int getCatCount() {
+		return catCount;
+	}
+	public void setCatCount(int catCount) {
+		this.catCount = catCount;
+	}
+	public String getExternalUrl() {
+		return externalUrl;
+	}
+	public void setExternalUrl(String externalUrl) {
+		this.externalUrl = externalUrl;
+	}
+	public String getExternalUrlTarget() {
+		return externalUrlTarget;
+	}
+	public void setExternalUrlTarget(String externalUrlTarget) {
+		this.externalUrlTarget = externalUrlTarget;
+	}
 	public List<CategoryList> getCatList() {
 		return catList;
 	}
@@ -58,7 +78,9 @@ public class SectionTree {
 	public String toString() {
 		return "SectionTree [sectionId=" + sectionId + ", sectionName=" + sectionName + ", sectionSlugname="
 				+ sectionSlugname + ", sectionDesc=" + sectionDesc + ", pageId=" + pageId + ", secSortNo=" + secSortNo
+				+ ", catCount=" + catCount + ", externalUrl=" + externalUrl + ", externalUrlTarget=" + externalUrlTarget
 				+ ", catList=" + catList + "]";
 	}
-
+	
+ 
 }

@@ -14,6 +14,8 @@ public class Constant {
 	public static String[] values = {"jpg","jpeg","gif","png"};
 	public static String[] DocValues = {"txt","doc","pdf","xls"};
 	public static String[] DocImgValues = {"txt","doc","pdf","xls","jpg","jpeg","gif","png"};
+	public static int mod=0;
+	public static int subMod=0;
 	public static final String logoName = "Russa-Logo";
 	public static final String getLgogImageURL = "http://192.168.10.226:8080/media/logo/";
 	public static final String getBannerImageURL = "http://192.168.10.226:8080/media/banenr/";

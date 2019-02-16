@@ -276,7 +276,7 @@ public class GallaryController{
 				 GallaryDetail[] gallaryDetail = rest.postForObject(Constant.url + "/galleryDetailListByCatId", map, GallaryDetail[].class);
 				 List<GallaryDetail> gallaryDetailList = new ArrayList<GallaryDetail>(Arrays.asList(gallaryDetail));
 				 model.addObject("gallaryDetailList", gallaryDetailList);
-				 model.addObject("imageUrl", Constant.gallryImageURL);
+				 model.addObject("imageUrl", Constant.getGallryImageURL);
 			}
 			
 				
@@ -369,7 +369,7 @@ public class GallaryController{
 			System.out.println(pageId);
 			
 			 try {
-				 upload.saveUploadedImge(file.get(0), Constant.gallryImageURL,imageName,Constant.values,1,0,0,0,0);
+				 upload.saveUploadedImge(file.get(0), Constant.gallryImageURL,imageName,Constant.values,1,184,134,0,0);
 				 
 				 GallaryDetail gallaryDetail = new GallaryDetail();
 				 gallaryDetail.setAddDate(sf.format(date));

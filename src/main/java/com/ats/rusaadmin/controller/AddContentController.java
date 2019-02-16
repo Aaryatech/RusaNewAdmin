@@ -43,7 +43,8 @@ import com.ats.rusaadmin.model.ModulesNames;
 import com.ats.rusaadmin.model.Page;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.SectionTree;
-import com.ats.rusaadmin.model.User;
+import com.ats.rusaadmin.model.TopMenuList;
+import com.ats.rusaadmin.model.User; 
 import com.fasterxml.jackson.databind.ObjectMapper; 
 
 @Controller
@@ -64,10 +65,13 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("master/sectionTreeList");
 		try {
 		 
-			  
-			SectionTree[] sectionTree = rest.getForObject(Constant.url + "/getSectionTreeStructure",  SectionTree[].class);
-			List<SectionTree> list = new ArrayList<SectionTree>(Arrays.asList(sectionTree));
-			model.addObject("list", list);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("langId", 1); 
+			TopMenuList sectionTree = rest.postForObject(Constant.url + "/getTopMenuList",map,  TopMenuList.class);
+			
+			/*SectionTree[] sectionTree = rest.getForObject(Constant.url + "/getSectionTreeStructure",  SectionTree[].class);
+			List<SectionTree> list = new ArrayList<SectionTree>(Arrays.asList(sectionTree));*/
+			model.addObject("list", sectionTree);
 			
 			ModulesNames[] mdulesNames = rest.getForObject(Constant.url + "/getAllModuleNameList",  ModulesNames[].class);
 			List<ModulesNames> mdulesList = new ArrayList<ModulesNames>(Arrays.asList(mdulesNames));

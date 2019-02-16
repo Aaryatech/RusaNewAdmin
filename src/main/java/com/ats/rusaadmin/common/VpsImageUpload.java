@@ -60,7 +60,7 @@ public class VpsImageUpload {
 								 
 						        System.out.println("File " + imageName);
 						        img = ImageIO.read(new File(uploadPath+imageName));
-						        tempPNG = resizeImage(img, 200, 200);
+						        tempPNG = resizeImage(img, width, hieght);
 						        
 						        newFilePNG = new File(uploadPath+"thumbnail"+imageName);
 						       
