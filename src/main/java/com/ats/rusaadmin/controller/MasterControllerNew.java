@@ -130,7 +130,7 @@ public class MasterControllerNew {
 					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
 					user.setFileName(docFile);
 					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0);
+						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0);
 						}catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
@@ -158,7 +158,7 @@ public class MasterControllerNew {
 					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
 					user.setFileName(docFile);
 					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0 );
+						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0 );
 						}catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
@@ -224,7 +224,7 @@ public class MasterControllerNew {
 			model.addObject("editUser", edituser);
 			
 			model.addObject("isEdit", 1);
-			
+			model.addObject("imageUrl", Constant.getUserProfileURL);
 			System.out.println(edituser);
 		} catch (Exception e) {
 			e.printStackTrace();
