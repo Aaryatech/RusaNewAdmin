@@ -101,14 +101,7 @@
                     </tr>
                 </thead>
 
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Title</th> 
-                        <th>Image</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </tfoot>
+                 
 
                 <tbody>
                         <c:forEach items="${gallaryDetailList}" var="gallaryDetailList" varStatus="count">

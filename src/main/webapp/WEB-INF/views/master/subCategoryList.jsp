@@ -34,7 +34,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Sub-Category List</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Sub-Menu List</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -47,9 +47,9 @@
 <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">Sub-Category List</h2>
+                <h2 class="title pull-left">Sub-Menu List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/addSubCategory"><button type="button" class="btn btn-success">Add Sub-Category</button></a>
+                 <a href="${pageContext.request.contextPath}/addSubCategory"><button type="button" class="btn btn-success">Add Sub-Menu</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -73,27 +73,15 @@
                 <thead>
                     <tr>
                    		<th width="5%">Sr No</th>
-                        <th>Sub Category Name</th>
-                        <th>Sub Category Desc</th>
+                        <th>Sub Menu Name</th>
+                        <th>Sub Menu Desc</th>
                         <th>Section Name</th>
-                        <th>Category Name</th>
+                        <th>Menu Name</th>
                         <th width="10%"> Sort No</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Sub Category Name</th>
-                        <th>Sub Category Desc</th>
-                        <th>Section Name</th>
-                        <th>Category Name</th>
-                        <th width="10%"> Sort No</th> 
-                        <th>Action</th> 
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${subCategoryList}" var="categoryList" varStatus="count">
 									<tr  >

@@ -49,7 +49,7 @@
              <header class="panel_header">
                 <h2 class="title pull-left">Other Link List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/addImageLink"><button type="button" class="btn btn-success">Add Other Link </button></a>
+                 <a href="${pageContext.request.contextPath}/addImageLink"><button type="button" class="btn btn-success">Add Other GOV Links</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -79,16 +79,7 @@
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                         <th>Image</th>
-                         <th>Sort Order No.</th>  
-                         <th>Add Date</th> 
-                         <th>Action</th> 
-                    </tr> 
-                </tfoot>
+ 
 
                 <tbody>
                         <c:forEach items="${imagesLinkList}" var="imagesLinkList" varStatus="count">

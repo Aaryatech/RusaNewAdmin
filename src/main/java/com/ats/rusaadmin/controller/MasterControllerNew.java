@@ -121,6 +121,7 @@ public class MasterControllerNew {
         	VpsImageUpload upload = new VpsImageUpload();
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			
 			System.out.println(sf.format(date));
@@ -158,28 +159,28 @@ public class MasterControllerNew {
 					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
 					user.setFileName(docFile);
 					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0 );
+						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0);
 						}catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
 				}
 			    user.setUserId(Integer.parseInt(userId));
-				user.setCreatedDate(sf.format(date));
+				//user.setCreatedDate(sf.format(date));
 				user.setUserName(userName);
 				user.setFirstname(firstName);
 				user.setMiddlename(middleName);
 				user.setRoles(roles);
 				user.setDelStatus(1);
 				user.setSortNo(seqNo);
-				//user.setCreatedDate(sf.format(date));
+				 
 				user.setIsActive(isActive);
 				user.setUserEmail(email);
 				user.setUserPass(pass);
 				user.setLastname(lastName);
-			//	user.setAddedByUserId(0);
+				user.setModifiedDate(yy.format(date));
 				user.setEditByUserId(UserDetail.getUserId());
-			  //editbanner.setEditByUserId(UserDetail.getUserId());
+			   
 		  }
 		
 		
@@ -201,36 +202,57 @@ public class MasterControllerNew {
 			e.printStackTrace();
 		}
 
-		return "redirect:/addUser";
+		return "redirect:/userList";
 	}
 	@RequestMapping(value = "/editUser/{userId}", method = RequestMethod.GET)
-	public ModelAndView editUser(@PathVariable int userId, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String editUser(@PathVariable int userId, HttpServletRequest request,
+			HttpServletResponse response,ModelAndView model) {
 
-		ModelAndView model = new ModelAndView("master/addUser");
+		//;
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("userId", userId);
 
-			 edituser = rest.postForObject(Constant.url + "/getUserByUserId", map, User.class);
+			user = rest.postForObject(Constant.url + "/getUserByUserId", map, User.class);
 			   
-			 User[] user = rest.getForObject(Constant.url + "/getAllUserList", 
+			 User[] user1 = rest.getForObject(Constant.url + "/getAllUserList", 
 					 User[].class);
-			List<User> userList = new ArrayList<User>(Arrays.asList(user));
+			List<User> userList = new ArrayList<User>(Arrays.asList(user1));
 			model.addObject("userList", userList);
+			HttpSession session = request.getSession();
+			session.setAttribute("editUser", user);
+			session.setAttribute("isEdit", 1);
+			session.setAttribute("imageUrl", Constant.getUserProfileURL); 
 			
-		
-			model.addObject("editUser", edituser);
-			
-			model.addObject("isEdit", 1);
-			model.addObject("imageUrl", Constant.getUserProfileURL);
-			System.out.println(edituser);
+			if(user.getRoles().equals("DA")) {
+				return "redirect:/userList";
+			}
+			 
+			System.out.println(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return model;
+		return "master/addUser";
+	}
+	 
+	@RequestMapping(value = "/clearUserSessionAttribute", method = RequestMethod.GET)
+	public @ResponseBody Info clearUserSessionAttribute(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		Info Info = new Info();
+		try {
+			
+			HttpSession session = request.getSession();
+			session.removeAttribute("editUser");
+			session.removeAttribute("isEdit");
+			session.removeAttribute("imageUrl");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return Info;
 	}
 
 	@RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.GET)
@@ -485,6 +507,10 @@ public class MasterControllerNew {
 							 
 				 if(mainLogo.get(0).getOriginalFilename()==null || mainLogo.get(0).getOriginalFilename()=="") {
 					 
+					  info = new Info();
+					  info.setError(false);
+					  info.setMsg("Updated Successfully ");
+					 
 				 }else {
 					 String imageName = null;
 					 String extension = FilenameUtils.getExtension(mainLogo.get(0).getOriginalFilename());
@@ -503,6 +529,10 @@ public class MasterControllerNew {
 					 
 				 
 						 if(Logo2.get(0).getOriginalFilename()==null || Logo2.get(0).getOriginalFilename()=="") {
+							 
+							 info = new Info();
+							  info.setError(false);
+							  info.setMsg("Updated Successfully ");
 							
 						 }else {
 							 String imageName = null;
@@ -521,6 +551,10 @@ public class MasterControllerNew {
 							 
 						 
 								 if(Logo3.get(0).getOriginalFilename()==null || Logo3.get(0).getOriginalFilename()=="") {
+									 
+									 info = new Info();
+									  info.setError(false);
+									  info.setMsg("Updated Successfully ");
 									
 								 }else {
 									 String imageName = null;

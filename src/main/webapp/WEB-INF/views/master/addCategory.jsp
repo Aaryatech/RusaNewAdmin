@@ -34,7 +34,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Category</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Menu</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -50,7 +50,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Category</c:when><c:otherwise>Add Category</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Menu</c:when><c:otherwise>Add Menu</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -80,20 +80,20 @@
                      					<div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Category Name : <span class="text-danger">*</span> </label>
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
 												<input id="catName${languagesList.languagesId}" class="form-control"
-								placeholder="Category Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
+								placeholder="Menu Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
 				                           
 				                              <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Category Description:</label>
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Menu Description:</label>
 				                                <div class="col-sm-10">
 				                                
 				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Category Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
+								placeholder="Menu Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
 				                              </div>
@@ -108,20 +108,20 @@
                      		  <div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Category Name : <span class="text-danger">*</span> </label>
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
 												<input id="catName${languagesList.languagesId}" class="form-control"
-								placeholder="Category Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
+								placeholder="Menu Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
 				                           
 				                              <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Category Description:</label>
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Menu Description:</label>
 				                                <div class="col-sm-10">
 				                                
 				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
-								placeholder="Category Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
+								placeholder="Menu Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
 				                              </div>

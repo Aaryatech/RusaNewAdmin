@@ -81,17 +81,7 @@
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                    	<th>Contact Name</th>
-                   		<th>Email</th> 
-                        <th>Mobile No</th>
-                        <th>Message</th> 
-                        <th>Action</th>  
-                    </tr>
-                </tfoot>
+ 
 
                 <tbody>
                         <c:forEach items="${contactList}" var="contactList" varStatus="count">

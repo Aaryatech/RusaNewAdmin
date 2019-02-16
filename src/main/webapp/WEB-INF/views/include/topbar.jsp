@@ -39,12 +39,8 @@
 
 				</a>
 					<ul class="dropdown-menu profile animated fadeIn">
-
-						<li><a href="#profile"> <i class="fa fa-user"></i>
-								Profile
-						</a></li>
-
-						<li class="last"><a
+ 
+						<li  ><a
 							href="${pageContext.request.contextPath}/logout"> <i
 								class="fa fa-lock"></i> Logout
 						</a></li>

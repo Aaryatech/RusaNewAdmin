@@ -101,11 +101,11 @@
                                 <i class="fa fa-home"></i> Home
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#metatage" data-toggle="tab">
                                 <i class="fa fa-user"></i> Meta Tags 
                             </a>
-                        </li>
+                        </li> -->
                         
                     </ul>
 
@@ -305,11 +305,11 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane fade" id="metatage">
+                       <!--  <div class="tab-pane fade" id="metatage">
 
                             <p>That said, in some situations it may be desirable to turn this functionality off. Therefore, we also provide the ability to disable the data attribute API by unbinding all events on the document namespaced with data-api. </p>
 
-                        </div>
+                        </div> -->
                          
                          
                     </div>

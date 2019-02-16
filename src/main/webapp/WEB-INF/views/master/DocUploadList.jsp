@@ -81,19 +81,7 @@
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>File Name</th> 
-                        <th>File Type</th> 
-                        <th>File Size</th> 
-                        <th>Sort No.</th> 
-                        <th>Add Date</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${docList}" var="getDocList" varStatus="count">
 									<tr  >

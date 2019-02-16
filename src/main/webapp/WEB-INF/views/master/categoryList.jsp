@@ -34,7 +34,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Category List</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Menu List</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -47,9 +47,9 @@
 <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">Category List</h2>
+                <h2 class="title pull-left">Menu List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/addCategory"><button type="button" class="btn btn-success">Add Category</button></a>
+                 <a href="${pageContext.request.contextPath}/addCategory"><button type="button" class="btn btn-success">Add Menu</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -73,25 +73,14 @@
                 <thead>
                     <tr>
                    		<th width="5%">Sr No</th>
-                        <th>Category Name</th>
-                        <th>Category Desc</th>
+                        <th>Menu Name</th>
+                        <th>Menu Desc</th>
                         <th>Section Name</th>
                         <th>Category Sort No</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Category Name</th>
-                        <th>Category Desc</th>
-                        <th>Section Name</th>
-                        <th>Category Sort No</th> 
-                        <th>Action</th> 
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${categoryList}" var="categoryList" varStatus="count">
 									<tr  >

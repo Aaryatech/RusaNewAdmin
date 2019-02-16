@@ -11,6 +11,7 @@
        <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
         <!-- CORE CSS TEMPLATE - END -->
 <c:url var="clearSessionAttribute" value="/clearSessionAttribute" />
+<c:url var="clearUserSessionAttribute" value="/clearUserSessionAttribute" />
     </head>
     <!-- END HEAD -->
 
@@ -34,7 +35,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">User List</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Admin  </h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -47,9 +48,9 @@
 <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">User List</h2>
+                <h2 class="title pull-left">Admin List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add User</button></a>
+                 <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add Admin</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -83,20 +84,7 @@
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>User Name</th>
-                        <th>User First Name</th>
-                        <th>User Last Name</th> 
-                         <th>Email</th> 
-                          <th>Roles</th> 
-                      
-                        <th>Action</th> 
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${userList}" var="userList" varStatus="count">
 									<tr  >
@@ -163,6 +151,20 @@ function clearSessionAttribute() {
 	 
 
 	$.getJSON('${clearSessionAttribute}', {
+  
+		ajax : 'true',
+
+	}, function(data) { 
+		 
+		clearUserSessionAttribute();
+	});
+
+}
+function clearUserSessionAttribute() {
+	 
+	 
+
+	$.getJSON('${clearUserSessionAttribute}', {
   
 		ajax : 'true',
 

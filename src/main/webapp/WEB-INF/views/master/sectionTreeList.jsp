@@ -53,11 +53,11 @@
 						<header class="panel_header">
 							<h2 class="title pull-left">Section List</h2>
 							<div class="actions panel_actions pull-right">
-								<a href="${pageContext.request.contextPath}/addSection"><button
-										type="button" class="btn btn-success">Add Section</button></a> <a
-									class="box_toggle fa fa-chevron-down"></a>
-								<!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
-                    <a class="box_close fa fa-times"></a> -->
+								<c:if test="${sessionScope.UserDetail.roles eq 'DA'}">
+									<a href="${pageContext.request.contextPath}/addSection"><button
+											type="button" class="btn btn-success">Add Section</button></a>
+								</c:if>
+								<a class="box_toggle fa fa-chevron-down"></a>
 
 							</div>
 
@@ -116,7 +116,8 @@
 												</tr>
 
 												<c:forEach items="${list.categoryList}" var="categoryList">
-													<c:if test="${categoryList.sectionId==sectionlist.sectionId}">
+													<c:if
+														test="${categoryList.sectionId==sectionlist.sectionId}">
 
 														<tr>
 															<td></td>
@@ -128,14 +129,14 @@
 														</tr>
 														<c:forEach items="${list.subCatList}" var="subCatList">
 															<c:if test="${subCatList.parentId==categoryList.catId}">
-															<tr>
-																<td></td>
-																<td><span style="padding-right: 40px;"></span>--${subCatList.subCatName}</td>
-																<td><a href="#myModal" data-toggle="modal"
-																	onclick="getPageId(${subCatList.pageId})"><button
-																			type="button" class="btn btn-info">Add
-																			Content</button></a></td>
-															</tr>
+																<tr>
+																	<td></td>
+																	<td><span style="padding-right: 40px;"></span>--${subCatList.subCatName}</td>
+																	<td><a href="#myModal" data-toggle="modal"
+																		onclick="getPageId(${subCatList.pageId})"><button
+																				type="button" class="btn btn-info">Add
+																				Content</button></a></td>
+																</tr>
 															</c:if>
 														</c:forEach>
 
@@ -145,7 +146,7 @@
 											</c:forEach>
 										</tbody>
 									</table>
- 
+
 								</div>
 							</div>
 						</div>

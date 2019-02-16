@@ -7,7 +7,7 @@
 		<!-- MAIN MENU - START -->
 		<div class="page-sidebar-wrapper" id="main-menu-wrapper">
 			<!-- USER INFO - START -->
-			<div class="profile-info row">
+			<!-- <div class="profile-info row">
 				<div class="profile-image col-xs-4">
 					<a href="ui-profile.html"> <img alt=""
 						src="../data/profile/profile.jpg"
@@ -17,18 +17,27 @@
 				<div class="profile-details col-xs-8">
 					<h3>
 						<a href="ui-profile.html">Shane Taylor</a>
-						<!-- Available statuses: online, idle, busy, away and offline -->
+						Available statuses: online, idle, busy, away and offline
 						<span class="profile-status online"></span>
 					</h3>
 					<p class="profile-title">Web Developer</p>
 				</div>
-			</div>
+			</div> -->
 			<!-- USER INFO - END -->
 			<ul class='wraplist'>
-				<li class='menusection'>Main</li>
-				<li class="open"><a href="index.html"> <i
-						class="fa fa-dashboard"></i> <span class="title">Dashboard</span>
+				<li class='menusection'>&nbsp;</li>
+				<c:choose>
+					<c:when test="${sessionScope.sessionModuleId==0}">
+						<li class="open">
+					</c:when>
+					<c:otherwise>
+						<li class="">
+					</c:otherwise>
+				</c:choose><a href="${pageContext.request.contextPath}/dashboard" onclick="selectSubMod(0,0)"> <i
+						class="fa fa-dashboard" ></i> <span class="title">Dashboard</span>
 				</a></li>
+				
+				
 				<c:choose>
 					<c:when test="${sessionScope.sessionModuleId==1}">
 						<li class="open">
@@ -129,7 +138,9 @@
 									onclick="selectSubMod(2,203)">Add Social Links</a>
 							</c:otherwise>
 						</c:choose></li>
-					<li><c:choose>
+						
+					<c:if test="${sessionScope.UserDetail.roles eq 'DA'}">
+						<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==204}">
 								<a class="active"
 									href="${pageContext.request.contextPath}/sliderPicList"
@@ -139,15 +150,17 @@
 								<a href="${pageContext.request.contextPath}/sliderPicList"
 									onclick="selectSubMod(2,204)">Header Slider</a>
 							</c:otherwise>
-						</c:choose></li>
+						</c:choose></li> 
+					</c:if>
+					
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==205}">
 								<a class="active"
-									href="${pageContext.request.contextPath}/addImageLink"
-									onclick="selectSubMod(2,205)">Image Link</a>
+									href="${pageContext.request.contextPath}/imageLinkList"
+									onclick="selectSubMod(2,205)">Other GOV Links</a>
 							</c:when>
 							<c:otherwise>
-								<a href="${pageContext.request.contextPath}/addImageLink"
+								<a href="${pageContext.request.contextPath}/imageLinkList"
 									onclick="selectSubMod(2,205)">Other GOV Links</a>
 							</c:otherwise>
 						</c:choose></li>
@@ -186,6 +199,7 @@
 					</c:choose>
 				</a>
 				<ul class="sub-menu">
+				<c:if test="${sessionScope.UserDetail.roles eq 'DA'}">
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==301}">
 
@@ -223,6 +237,7 @@
 									onclick="selectSubMod(3,303)">Sub Menu List</a>
 							</c:otherwise>
 						</c:choose></li>
+						</c:if>
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==304}">
 								<a class="active"

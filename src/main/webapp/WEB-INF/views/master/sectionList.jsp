@@ -79,17 +79,7 @@
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Section Name</th>
-                        <th>Section Desc</th>
-                        <th>Section Sort No</th> 
-                        <th>Action</th> 
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${sectionList}" var="sectionList" varStatus="count">
 									<tr  >

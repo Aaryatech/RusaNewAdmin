@@ -93,10 +93,10 @@
                 </p>
             </form>
 
-            <p id="nav">
+           <!--  <p id="nav">
                 <a class="pull-left" href="#" title="Password Lost and Found">Forgot password?</a>
                 <a class="pull-right" href="ui-register.html" title="Sign Up">Sign Up</a>
-            </p>
+            </p> -->
 
 
         </div>

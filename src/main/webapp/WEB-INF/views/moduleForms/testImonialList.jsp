@@ -78,15 +78,7 @@
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Page Name</th> 
-                        <th>Form Name</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </tfoot>
+ 
 
                 <tbody>
                         <c:forEach items="${getPagesModuleList}" var="getPagesModuleList" varStatus="count">

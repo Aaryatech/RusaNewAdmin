@@ -36,7 +36,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Sub-Category</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Sub-Menu</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -52,7 +52,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Sub-Category</c:when><c:otherwise>Add Sub-Category</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Sub-Menu</c:when><c:otherwise>Add Sub-Menu</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/subCategoryList"><button type="button" class="btn btn-info">< Back</button></a>
@@ -89,7 +89,7 @@
                               </div>
                               
                                 <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Category : <span class="text-danger">*</span> </label>
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                    
                                  <select id="categoryId" name="categoryId" class="form-control chosen" placeholder="Category"
@@ -113,19 +113,19 @@
                      					<div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Menu Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10">
 				                                   <input id="subCatName${languagesList.languagesId}" class="form-control"
-												placeholder="Sub-Category Name"  value="${categoryDescriptionList.catName}"  style="text-align: left;" name="subCatName${languagesList.languagesId}" type="text" required>
+												placeholder="Sub-Menu Name"  value="${categoryDescriptionList.catName}"  style="text-align: left;" name="subCatName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
 				                           
 				                              <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Menu Description:</label>
 				                                <div class="col-sm-10">
 				                                <input id="subCatDesc${languagesList.languagesId}" class="form-control"
-												placeholder="Sub-Category Description"  value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="subCatDesc${languagesList.languagesId}" type="text"  >
+												placeholder="Sub-Menu Description"  value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="subCatDesc${languagesList.languagesId}" type="text"  >
 				                                </div>
 				                              </div>
 				                                   
@@ -140,19 +140,19 @@
                      		 <div class="col-xs-12">
                                 	  
 				                               <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Category Name : <span class="text-danger">*</span> </label>
+				                                <label class="control-label col-sm-2" for="config_mail_protocol">Sub-Menu Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10">
 				                                   <input id="subCatName${languagesList.languagesId}" class="form-control"
-												placeholder="Sub-Category Name"  value="${categoryDescriptionList.catName}"  style="text-align: left;" name="subCatName${languagesList.languagesId}" type="text" required>
+												placeholder="Sub-Menu Name"  value="${categoryDescriptionList.catName}"  style="text-align: left;" name="subCatName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
 				                            
 				                           
 				                              <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Category Description:</label>
+				                                <label class="control-label col-sm-2" for="config_smtp_host">Sub-Menu Description:</label>
 				                                <div class="col-sm-10">
 				                                <input id="subCatDesc${languagesList.languagesId}" class="form-control"
-												placeholder="Sub-Category Description"  value="${categoryDescriptionList.catDesc}"  style="text-align: left;" 
+												placeholder="Sub-Menu Description"  value="${categoryDescriptionList.catDesc}"  style="text-align: left;" 
 												name="subCatDesc${languagesList.languagesId}" type="text"  >
 				                                </div>
 				                              </div>
@@ -227,7 +227,7 @@
 			}, function(data) {
 			 
 
-				var html = '<option value="">Select Category</option>';
+				var html = '<option value="">Select Menu</option>';
 
 				var len = data.length;
 				for (var i = 0; i < len; i++) {

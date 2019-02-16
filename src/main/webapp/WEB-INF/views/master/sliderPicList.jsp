@@ -79,17 +79,7 @@
                         <th>Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Image</th>
-                        <th>Slider Name</th>
-                        <th>Add Date</th> 
-                        <th>Action</th>  
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${bannerImagesList}" var="bannerImagesList" varStatus="count">
 									<tr  >

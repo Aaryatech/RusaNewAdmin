@@ -78,16 +78,7 @@
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
-
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Category Name</th> 
-                        <th>Category Sort No</th> 
-                        <th width="10%">Action</th> 
-                    </tr>
-                </tfoot>
-
+ 
                 <tbody>
                         <c:forEach items="${gallaryCategoryList}" var="categoryList" varStatus="count">
 									<tr  >

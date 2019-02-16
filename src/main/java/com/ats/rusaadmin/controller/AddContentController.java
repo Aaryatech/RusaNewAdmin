@@ -96,6 +96,7 @@ public class AddContentController {
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			 pageId = Integer.parseInt(request.getParameter("pageId"));
 			
+			 System.out.println(pageId);
 			  if(moduleId==1) {
 				  
 				  url="redirect:/cmsForm";

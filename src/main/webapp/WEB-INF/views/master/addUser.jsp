@@ -34,7 +34,7 @@
 
 						<div class="pull-left">
 							<!-- PAGE HEADING TAG - START -->
-							<h1 class="title">Add User</h1>
+							<h1 class="title">Admin </h1>
 							<!-- PAGE HEADING TAG - END -->
 						</div>
 
@@ -50,10 +50,11 @@
 					<section class="box ">
 
 						<header class="panel_header">
-							<h2 class="title pull-left">
+							<h2 class="title pull-left">  
 								<c:choose>
-									<c:when test="${isEdit==1}">Edit User</c:when>
-									<c:otherwise>Add User</c:otherwise>
+								
+									<c:when test="${editUser.userId==null}">Add Admin</c:when>
+									<c:otherwise>Edit Admin</c:otherwise>
 								</c:choose>
 							</h2>
 
@@ -81,7 +82,7 @@
 							<div class="content-body">
 								<div class="row">
 									<div class="col-xs-12">
-										<div class="form-group">
+										<%-- <div class="form-group">
 											<label class="control-label col-sm-2"
 												for="config_mail_protocol">Roles : <span
 												class="text-danger">*</span>
@@ -104,47 +105,13 @@
 												</select>
 											</div>
 										</div>
+										 --%>
+										<input id="roles" value="SA" name="roles" type="hidden">
+										<input id="roles" value="SA" name="roles" type="hidden">
 
 
 										<input id="userId" value="${editUser.userId}" name="userId"
 											type="hidden">
-
-										<c:choose>
-											<c:when test="${isEdit=='1'}">
-
-												<div class="form-group">
-													<label class="control-label col-sm-2"
-														for="config_mail_protocol">User Name : <span
-														class="text-danger">*</span>
-													</label>
-													<div class="col-sm-10">
-														<input id="userName" class="form-control"
-															placeholder="User Name" value="${editUser.userName}"
-															style="text-align: left;" name="userName" type="text"
-															onKeyDown="if(event.keyCode === 32) return false;" readonly required>
-													</div>
-												</div>
-
-												<br />
-											</c:when>
-
-											<c:otherwise>
-												<div class="form-group">
-													<label class="control-label col-sm-2"
-														for="config_mail_protocol">User Name : <span
-														class="text-danger">*</span>
-													</label>
-													<div class="col-sm-10">
-														<input id="userName" class="form-control"
-															placeholder="User Name" value="${editUser.userName}"
-															style="text-align: left;" name="userName" type="text"
-															onKeyDown="if(event.keyCode === 32) return false;" required>
-													</div>
-												</div>
-												<br />
-											</c:otherwise>
-										</c:choose>
-
 
 										<div class="form-group">
 											<label class="control-label col-sm-2"
@@ -197,19 +164,6 @@
 
 										<div class="form-group">
 											<label class="control-label col-sm-2"
-												for="config_mail_protocol">Password : <span
-												class="text-danger">*</span>
-											</label>
-											<div class="col-sm-10">
-												<input id="userPass" class="form-control"
-													placeholder="Password" value="${editUser.userPass}"
-													style="text-align: left;" name="userPass" type="text"
-													required>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<label class="control-label col-sm-2"
 												for="config_mail_protocol">Sort No : <span
 												class="text-danger">*</span>
 											</label>
@@ -221,7 +175,7 @@
 											</div>
 										</div>
 
-										 
+
 
 										<c:choose>
 											<c:when test="${isEdit==1}">
@@ -234,7 +188,7 @@
 													</div>
 												</div>
 											</c:when>
-											 
+
 
 										</c:choose>
 
@@ -270,7 +224,8 @@
 															</div>
 														</span>
 													</div>
-													<span class="help-block">* Only jpg,gif,png</span>
+													<span class="help-block">* Only jpg,gif,png * Best
+														image size is 100px × 100px </span>
 												</div>
 											</div>
 										</div>
@@ -295,6 +250,62 @@
 													</c:choose>
 
 												</select>
+											</div>
+										</div>
+										<hr>
+										<div class="row">
+											<div class="col-xs-12">
+												<h3 class="title pull-left">LOGIN DETAIL</h3>
+											</div>
+										</div>
+										<c:choose>
+											<c:when test="${isEdit=='1'}">
+
+												<div class="form-group">
+													<label class="control-label col-sm-2"
+														for="config_mail_protocol">User Name : <span
+														class="text-danger">*</span>
+													</label>
+													<div class="col-sm-10">
+														<input id="userName" class="form-control"
+															placeholder="User Name" value="${editUser.userName}"
+															style="text-align: left;" name="userName" type="text"
+															onKeyDown="if(event.keyCode === 32) return false;"
+															readonly required>
+													</div>
+												</div>
+
+
+											</c:when>
+
+											<c:otherwise>
+												<div class="form-group">
+													<label class="control-label col-sm-2"
+														for="config_mail_protocol">User Name : <span
+														class="text-danger">*</span>
+													</label>
+													<div class="col-sm-10">
+														<input id="userName" class="form-control"
+															placeholder="User Name" value="${editUser.userName}"
+															style="text-align: left;" name="userName" type="text"
+															onKeyDown="if(event.keyCode === 32) return false;"
+															required>
+													</div>
+												</div>
+
+											</c:otherwise>
+										</c:choose>
+
+										<div class="form-group">
+											<label class="control-label col-sm-2"
+												for="config_mail_protocol">Password : <span
+												class="text-danger">*</span>
+											</label>
+											<div class="col-sm-10">
+												<input id="userPass" class="form-control"
+													placeholder="Password" value="${editUser.userPass}"
+													style="text-align: left;" name="userPass" type="text"
+													required>
 											</div>
 										</div>
 

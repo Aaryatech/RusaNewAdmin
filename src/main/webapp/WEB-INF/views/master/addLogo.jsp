@@ -69,10 +69,7 @@
                                         <c:otherwise>Add Logo</c:otherwise>
                                     </c:choose>
                                 </h2>
-                                <div class="actions panel_actions pull-right">
-                                    <a href="${pageContext.request.contextPath}/sliderPicList"><button type="button" class="btn btn-info"><< Back</button></a>
-                                    <a class="box_toggle fa fa-chevron-down"></a>
-                                </div>
+                                
                             </header>
                             <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/updateOrInsertLogo" 
                                 onsubmit="return confirm('Do you really want to submit the form?');" method="post" enctype="multipart/form-data">
