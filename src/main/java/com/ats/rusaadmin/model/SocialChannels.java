@@ -4,19 +4,21 @@ package com.ats.rusaadmin.model;
 public class SocialChannels {
 
 	private int id;
-	
-	private int title;
+	private String title;
 	
 	private String urllinks;
 	
+	
 	private String imageName;
 	
-	private String sortNo;
 
+	private int sortNo;
+
+	
 	private int isActive;
 	
 	private int delStatus;
-	
+
 	private String addDate;
 	
 	private String editDate;
@@ -41,12 +43,21 @@ public class SocialChannels {
 		this.id = id;
 	}
 
-	public int getTitle() {
+	
+	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(int title) {
+	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public int getSortNo() {
+		return sortNo;
+	}
+
+	public void setSortNo(int sortNo) {
+		this.sortNo = sortNo;
 	}
 
 	public String getUrllinks() {
@@ -65,14 +76,7 @@ public class SocialChannels {
 		this.imageName = imageName;
 	}
 
-	public String getSortNo() {
-		return sortNo;
-	}
-
-	public void setSortNo(String sortNo) {
-		this.sortNo = sortNo;
-	}
-
+	
 	public int getIsActive() {
 		return isActive;
 	}

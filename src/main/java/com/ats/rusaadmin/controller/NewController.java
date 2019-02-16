@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,8 @@ import com.ats.rusaadmin.model.Logo;
 import com.ats.rusaadmin.model.MetaData;
 import com.ats.rusaadmin.model.Section;
 import com.ats.rusaadmin.model.SectionDescription;
+import com.ats.rusaadmin.model.SiteMaitenance;
+import com.ats.rusaadmin.model.SocialChannels;
 import com.ats.rusaadmin.model.User;
 
 
@@ -48,6 +51,10 @@ public class NewController {
 	ImageLink editImageLink=new ImageLink();
 	List<MetaData> editMeta = new ArrayList<MetaData>();
 	ContactUs contactUs=new ContactUs();
+	SocialChannels socialChannel=new SocialChannels();
+	SiteMaitenance editSite=new SiteMaitenance();
+	List<SiteMaitenance> editsiteMain= new ArrayList<SiteMaitenance>();
+	
 	@RequestMapping(value = "/addMetaNew", method = RequestMethod.GET)
 	public ModelAndView addMetaData(HttpServletRequest request, HttpServletResponse response) {
 
@@ -450,7 +457,7 @@ public class NewController {
 
 	
 	@RequestMapping(value = "/deleteContact/{id}", method = RequestMethod.GET)
-	public String deleteCategory(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+	public String deleteContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
@@ -475,5 +482,171 @@ public class NewController {
 		}
 
 		return "redirect:/ContactList";
+	}
+	
+	@RequestMapping(value = "/editChannel", method = RequestMethod.POST)
+	public String editChannel(HttpServletRequest request,HttpServletResponse response) {
+
+		 try {
+			 
+				//String remark = request.getParameter("remark");
+				String sortNo = request.getParameter("seqNo");
+				String isActive = request.getParameter("isActive");
+				String urlLink = request.getParameter("urlLink");
+				String id = request.getParameter("id");
+				
+		if(id!=null)
+		{
+			
+			socialChannel.setId(Integer.parseInt(id));
+			socialChannel.setUrllinks(urlLink);
+			socialChannel.setIsActive(Integer.parseInt(isActive));
+			socialChannel.setSortNo(Integer.parseInt(sortNo));
+					
+        }
+		SocialChannels res = rest.postForObject(Constant.url + "/saveSocialChannel", socialChannel, SocialChannels.class);
+
+						
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 return "redirect:/socialChannelList";
+	}
+	@RequestMapping(value = "/socialChannelList", method = RequestMethod.GET)
+	public ModelAndView socialChannelList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/socialChannelList");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			List<SocialChannels> socialList = rest.getForObject(Constant.url + "/getAllSocialList",
+					List.class);
+			//List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
+			model.addObject("channelList", socialList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/editChannel/{id}", method = RequestMethod.GET)
+	public ModelAndView editChannel(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/editSocialChannel");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);
+
+			socialChannel= rest.postForObject(Constant.url + "/getSocialChannelById", map, SocialChannels.class);
+		 /*   ContactUs[] contact = rest.getForObject(Constant.url + "/getContactById", 
+					ContactUs[].class);
+			List<ContactUs> editcontact = new ArrayList<ContactUs>(Arrays.asList(contact));*/
+			
+			
+			model.addObject("editChannel", socialChannel);
+			model.addObject("isEdit", 1);
+			
+			System.out.println(contactUs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	
+	@RequestMapping(value = "/deleteChannel/{id}", method = RequestMethod.GET)
+	public String deleteChannel(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id); 
+			//map.add("delStatus", 0); 
+			Info res = rest.postForObject(Constant.url + "/deleteSocialChannel", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if(id==0)
+			{
+				session.setAttribute("successMsg","Sorry, Can't deleted!");
+			}
+			else
+			{
+			session.setAttribute("successMsg","Infomation deleted successfully!");
+			}
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/socialChannelList";
+	}
+	
+	@RequestMapping(value = "/addSiteMaintenance", method = RequestMethod.GET)
+	public ModelAndView addSiteMaintenance(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/SiteMaintenances");
+		try {
+			SiteMaitenance[] editSiteM = rest.getForObject(Constant.url + "/getAllSiteMaintenancesList", SiteMaitenance[].class);
+			editsiteMain = new ArrayList<SiteMaitenance>(Arrays.asList(editSiteM));
+			
+			model.addObject("editsiteMain", editsiteMain);
+			 
+			//editImageLink=new ImageLink();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/siteMaintenance", method = RequestMethod.POST)
+	public String siteMaintenance(HttpServletRequest request, HttpServletResponse response) {
+
+		 try {
+
+	           /* // you can get an enumeratable list 
+	            // of parameter keys by using request.getParameterNames() 
+	            Enumeration en = request.getParameterNames();
+	 
+	            // enumerate through the keys and extract the values 
+	            // from the keys! 
+	            while (en.hasMoreElements()) {
+	                String parameterName = (String) en.nextElement();
+	                String parameterValue = request.getParameter(parameterName);
+	                System.out.println(parameterName+":"+parameterValue+"<br />");
+	            }
+	               // inset into m_setting ('group','key','va;ue') values('config_site_maintenance',parameterName,parameterValue)
+	             */
+			 	HttpSession session = request.getSession();
+				User UserDetail =(User) session.getAttribute("UserDetail");
+			 
+			 	String group = request.getParameter("group");
+			 	//String key = request.getParameter("config_site_maintenance_message");
+				String value = request.getParameter("message");
+				
+				editSite.setGroup(group);
+				editSite.setValue(value);
+								
+						SiteMaitenance res = rest.postForObject(Constant.url + "/saveSiteMaintace", editSite, SiteMaitenance.class);
+						 
+						if(editSite.getSettingId()==0) {
+							session.setAttribute("successMsg","Infomation added successfully!");
+						}else {
+							session.setAttribute("successMsg","Infomation updated successfully!");
+						}
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 return "redirect:/addSiteMaintenance";
 	}
 }
