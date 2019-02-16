@@ -84,7 +84,7 @@
 									<tr  >
 										<td>${count.index+1}</td>
 										<td>${gallaryDetailList.title}</td> 
-										<td><img src="${imageUrl}${gallaryDetailList.fileName}" style="width:150px; height:auto"></td> 
+										<td><img src="${imageUrl}thumbnail${gallaryDetailList.fileName}" style="width:150px; height:auto"></td> 
 										<td><%-- <a
 											href="${pageContext.request.contextPath}/editCmsContent/${gallaryDetailList.galleryDetailsId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

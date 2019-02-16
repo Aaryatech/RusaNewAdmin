@@ -104,7 +104,7 @@ public class AddContentController {
 			  }else if(moduleId==2){
 				  
 				  url="redirect:/faqForm";
-			  } else if(moduleId==6){
+			  } else if(moduleId==6 || moduleId==8 || moduleId==13){
 				  
 				  url="redirect:/textimonialForm/"+pageId;
 			  }else if(moduleId==10){

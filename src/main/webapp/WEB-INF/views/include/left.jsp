@@ -33,11 +33,14 @@
 					<c:otherwise>
 						<li class="">
 					</c:otherwise>
-				</c:choose><a href="${pageContext.request.contextPath}/dashboard" onclick="selectSubMod(0,0)"> <i
-						class="fa fa-dashboard" ></i> <span class="title">Dashboard</span>
-				</a></li>
-				
-				
+				</c:choose>
+				<a href="${pageContext.request.contextPath}/dashboard"
+					onclick="selectSubMod(0,0)"> <i class="fa fa-dashboard"></i> <span
+					class="title">Dashboard</span>
+				</a>
+				</li>
+
+
 				<c:choose>
 					<c:when test="${sessionScope.sessionModuleId==1}">
 						<li class="open">
@@ -138,21 +141,21 @@
 									onclick="selectSubMod(2,203)">Add Social Links</a>
 							</c:otherwise>
 						</c:choose></li>
-						
+
 					<c:if test="${sessionScope.UserDetail.roles eq 'DA'}">
 						<li><c:choose>
-							<c:when test="${sessionScope.sessionSubModuleId==204}">
-								<a class="active"
-									href="${pageContext.request.contextPath}/sliderPicList"
-									onclick="selectSubMod(2,204)">Header Slider</a>
-							</c:when>
-							<c:otherwise>
-								<a href="${pageContext.request.contextPath}/sliderPicList"
-									onclick="selectSubMod(2,204)">Header Slider</a>
-							</c:otherwise>
-						</c:choose></li> 
+								<c:when test="${sessionScope.sessionSubModuleId==204}">
+									<a class="active"
+										href="${pageContext.request.contextPath}/sliderPicList"
+										onclick="selectSubMod(2,204)">Header Slider</a>
+								</c:when>
+								<c:otherwise>
+									<a href="${pageContext.request.contextPath}/sliderPicList"
+										onclick="selectSubMod(2,204)">Header Slider</a>
+								</c:otherwise>
+							</c:choose></li>
 					</c:if>
-					
+
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==205}">
 								<a class="active"
@@ -199,45 +202,45 @@
 					</c:choose>
 				</a>
 				<ul class="sub-menu">
-				<c:if test="${sessionScope.UserDetail.roles eq 'DA'}">
-					<li><c:choose>
-							<c:when test="${sessionScope.sessionSubModuleId==301}">
+					<c:if test="${sessionScope.UserDetail.roles eq 'DA'}">
+						<li><c:choose>
+								<c:when test="${sessionScope.sessionSubModuleId==301}">
 
-								<a class="active"
-									href="${pageContext.request.contextPath}/sectionList"
-									onclick="selectSubMod(3,301)">Section List </a>
-							</c:when>
-							<c:otherwise>
-								<a class=""
-									href="${pageContext.request.contextPath}/sectionList"
-									onclick="selectSubMod(3,301)">Section List </a>
-							</c:otherwise>
-						</c:choose></li>
-					<li><c:choose>
-							<c:when test="${sessionScope.sessionSubModuleId==302}">
-								<a class="active"
-									href="${pageContext.request.contextPath}/categoryList"
-									onclick="selectSubMod(3,302)">Menu List </a>
-							</c:when>
-							<c:otherwise>
-								<a class=""
-									href="${pageContext.request.contextPath}/categoryList"
-									onclick="selectSubMod(3,302)">Menu List </a>
-							</c:otherwise>
-						</c:choose></li>
-					<li><c:choose>
-							<c:when test="${sessionScope.sessionSubModuleId==303}">
-								<a class="active"
-									href="${pageContext.request.contextPath}/subCategoryList"
-									onclick="selectSubMod(3,303)">Sub Menu List</a>
-							</c:when>
-							<c:otherwise>
-								<a class=""
-									href="${pageContext.request.contextPath}/subCategoryList"
-									onclick="selectSubMod(3,303)">Sub Menu List</a>
-							</c:otherwise>
-						</c:choose></li>
-						</c:if>
+									<a class="active"
+										href="${pageContext.request.contextPath}/sectionList"
+										onclick="selectSubMod(3,301)">Section List </a>
+								</c:when>
+								<c:otherwise>
+									<a class=""
+										href="${pageContext.request.contextPath}/sectionList"
+										onclick="selectSubMod(3,301)">Section List </a>
+								</c:otherwise>
+							</c:choose></li>
+						<li><c:choose>
+								<c:when test="${sessionScope.sessionSubModuleId==302}">
+									<a class="active"
+										href="${pageContext.request.contextPath}/categoryList"
+										onclick="selectSubMod(3,302)">Menu List </a>
+								</c:when>
+								<c:otherwise>
+									<a class=""
+										href="${pageContext.request.contextPath}/categoryList"
+										onclick="selectSubMod(3,302)">Menu List </a>
+								</c:otherwise>
+							</c:choose></li>
+						<li><c:choose>
+								<c:when test="${sessionScope.sessionSubModuleId==303}">
+									<a class="active"
+										href="${pageContext.request.contextPath}/subCategoryList"
+										onclick="selectSubMod(3,303)">Sub Menu List</a>
+								</c:when>
+								<c:otherwise>
+									<a class=""
+										href="${pageContext.request.contextPath}/subCategoryList"
+										onclick="selectSubMod(3,303)">Sub Menu List</a>
+								</c:otherwise>
+							</c:choose></li>
+					</c:if>
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==304}">
 								<a class="active"
@@ -276,6 +279,21 @@
 					</c:choose>
 				</a>
 				<ul class="sub-menu">
+
+					<li><c:choose>
+							<c:when test="${sessionScope.sessionSubModuleId==404}">
+
+								<a class="active"
+									href="${pageContext.request.contextPath}/galleryCategoryList"
+									onclick="selectSubMod(4,404)"> <span class="title"> Category List</span>
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a href="${pageContext.request.contextPath}/galleryCategoryList"
+									onclick="selectSubMod(4,404)"> <span class="title"> Category List</span>
+								</a>
+							</c:otherwise>
+						</c:choose></li>
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==401}">
 								<a class="active"
@@ -305,6 +323,21 @@
 								</a>
 							</c:otherwise>
 						</c:choose></li>
+						<li><c:choose>
+							<c:when test="${sessionScope.sessionSubModuleId==407}">
+								<a class="active"
+									href="${pageContext.request.contextPath}/uploadedImageList"
+									onclick="selectSubMod(4,407)"> <span class="title">Gallery Image
+										List</span>
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a href="${pageContext.request.contextPath}/uploadedImageList"
+									onclick="selectSubMod(4,407)"> <span class="title">Gallery Image
+										List</span>
+								</a>
+							</c:otherwise>
+						</c:choose></li>
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==403}">
 								<a class="active"
@@ -321,23 +354,6 @@
 							</c:otherwise>
 						</c:choose></li>
 
-
-					<li><c:choose>
-							<c:when test="${sessionScope.sessionSubModuleId==404}">
-
-								<a class="active"
-									href="${pageContext.request.contextPath}/galleryCategoryList"
-									onclick="selectSubMod(4,404)"> <span class="title">Gallery
-										Category List</span>
-								</a>
-							</c:when>
-							<c:otherwise>
-								<a href="${pageContext.request.contextPath}/galleryCategoryList"
-									onclick="selectSubMod(4,404)"> <span class="title">Gallery
-										Category List</span>
-								</a>
-							</c:otherwise>
-						</c:choose></li>
 
 					<li>
 					<li><c:choose>
@@ -388,9 +404,9 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="${pageContext.request.contextPath}/uploadOtherMedia" onclick="selectSubMod(5,0)"> <i
-					class="fa fa-columns"  ></i> <span class="title">Upload
-						Media/Files</span>
+				<a href="${pageContext.request.contextPath}/uploadOtherMedia"
+					onclick="selectSubMod(5,0)"> <i class="fa fa-columns"></i> <span
+					class="title">Upload Media/Files</span>
 				</a>
 				</li>
 
@@ -403,12 +419,15 @@
 					<c:otherwise>
 						<li class="">
 					</c:otherwise>
-				</c:choose><a href="${pageContext.request.contextPath}/ContactList" onclick="selectSubMod(6,0)">
-						<i class="fa fa-columns" ></i> <span class="title">Contact List</span> </a>
+				</c:choose>
+				<a href="${pageContext.request.contextPath}/ContactList"
+					onclick="selectSubMod(6,0)"> <i class="fa fa-columns"></i> <span
+					class="title">Contact List</span>
+				</a>
 				</li>
-				
-				<li><a href="${pageContext.request.contextPath}/logout"> <i class="fa fa-lock"></i> <span
-						class="title">Logout</span>
+
+				<li><a href="${pageContext.request.contextPath}/logout"> <i
+						class="fa fa-lock"></i> <span class="title">Logout</span>
 				</a></li>
 			</ul>
 			<div class="menustats"></div>

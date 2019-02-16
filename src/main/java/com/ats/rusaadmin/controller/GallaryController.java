@@ -1,5 +1,10 @@
 package com.ats.rusaadmin.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,18 +27,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
-import com.ats.rusaadmin.common.VpsImageUpload; 
+import com.ats.rusaadmin.common.VpsImageUpload;
+import com.ats.rusaadmin.model.ContentImages;
 import com.ats.rusaadmin.model.GallaryCategory;
 import com.ats.rusaadmin.model.GallaryCategoryDescriptioin;
 import com.ats.rusaadmin.model.GallaryDetail; 
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages; 
 import com.ats.rusaadmin.model.PagesModule; 
-import com.ats.rusaadmin.model.User; 
+import com.ats.rusaadmin.model.User;
+import com.fasterxml.jackson.databind.ObjectMapper; 
 
 @Controller
 @Scope("session")
@@ -418,8 +428,36 @@ public class GallaryController{
 
 		ModelAndView model = new ModelAndView("gallary/uploadOtherMedia");
 		try {
-		  
-			 
+		   
+				List<ContentImages> list = new ArrayList<ContentImages>();
+				
+				File folder = new File(Constant.otherDocURL);
+			    File[] listOfFiles = folder.listFiles();
+				 
+				for (int i = 0; i < listOfFiles.length; i++) {
+				      if (listOfFiles[i].isFile()) {
+				    	   
+				    	  
+				        ContentImages contentImages = new ContentImages();
+				        contentImages.setImage(listOfFiles[i].getName());
+				        contentImages.setThumb(Constant.getOtherDocURL+listOfFiles[i].getName());
+				       
+				        contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
+				        contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
+				         
+				        
+				        DiskFileItem fileItem = new DiskFileItem(listOfFiles[i].getName(), contentImages.getType(), false, listOfFiles[i].getName(), (int) listOfFiles[i].length() , listOfFiles[i].getParentFile());
+				        fileItem.getOutputStream();
+				        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+				        contentImages.setSize(FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
+				        
+				        
+				        list.add(contentImages);
+				      }
+				}
+				System.out.println(list);
+				 
+			 model.addObject("list", list);
 				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -428,6 +466,26 @@ public class GallaryController{
 		return model;
 	}
 	
+	
+	@RequestMapping(value = "/deleteOtherMediaFile/{file}/{extension}", method = RequestMethod.GET)
+	public String uploadOtherMediaProccess(@PathVariable("file") String file,@PathVariable("extension") String extension, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+			
+			File files = new File(Constant.otherDocURL+file);
+			//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+			
+			if(files.delete()){
+	            System.out.println(" File deleted  " + Constant.otherDocURL+file );
+	        }else System.out.println("doesn't exists  " + Constant.otherDocURL+file);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/uploadOtherMedia";
+ 
+	}
 	@RequestMapping(value = "/uploadOtherMediaProccess", method = RequestMethod.POST)
 	public void uploadOtherMediaProccess(@RequestParam("file") List<MultipartFile> file, HttpServletRequest request, HttpServletResponse response) {
 

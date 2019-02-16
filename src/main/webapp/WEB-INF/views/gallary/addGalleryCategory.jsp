@@ -34,7 +34,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Gallery Category</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title"> Category</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -50,7 +50,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Gallery Category</c:when><c:otherwise>Add Gallery Category</c:otherwise></c:choose></h2>
+                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Category</c:when><c:otherwise>Add Category</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/galleryCategoryList"><button type="button" class="btn btn-info"><< Back</button></a>

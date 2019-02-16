@@ -62,7 +62,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Test Imonial</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Content</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -80,7 +80,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add Test Imonial</h2>
+                    <h2 class="title pull-left">Add Content</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/testImonialList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -125,9 +125,9 @@
                           
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_name">Form Name :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_name">  Name :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="Form Name" value="${editTestImonial.fromName}">
+                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="  Name" value="${editTestImonial.fromName}">
                                 </div>
                               </div>
                         </div>
@@ -170,7 +170,7 @@
 											</span>
 										</div>
                                   
-                                 Note: Image size should be  width: 960px   and height: 600px. 
+                                 Note: Image size should be  width: 500px   and height: 500px. 
                               </div>
                            </div></div>
                            
