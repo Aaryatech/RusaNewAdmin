@@ -35,6 +35,7 @@ import com.ats.rusaadmin.model.ImageLink;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.Logo;
+import com.ats.rusaadmin.model.Maintainance;
 import com.ats.rusaadmin.model.MetaData;
 import com.ats.rusaadmin.model.Section;
 import com.ats.rusaadmin.model.SectionDescription;
@@ -52,7 +53,7 @@ public class NewController {
 	List<MetaData> editMeta = new ArrayList<MetaData>();
 	ContactUs contactUs=new ContactUs();
 	SocialChannels socialChannel=new SocialChannels();
-	SiteMaitenance editSite=new SiteMaitenance();
+	Maintainance editSite=new Maintainance();
 	List<SiteMaitenance> editsiteMain= new ArrayList<SiteMaitenance>();
 	
 	@RequestMapping(value = "/addMetaNew", method = RequestMethod.GET)
@@ -588,17 +589,14 @@ public class NewController {
 		return "redirect:/socialChannelList";
 	}
 	
+	
+	
 	@RequestMapping(value = "/addSiteMaintenance", method = RequestMethod.GET)
 	public ModelAndView addSiteMaintenance(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("master/SiteMaintenances");
 		try {
-			SiteMaitenance[] editSiteM = rest.getForObject(Constant.url + "/getAllSiteMaintenancesList", SiteMaitenance[].class);
-			editsiteMain = new ArrayList<SiteMaitenance>(Arrays.asList(editSiteM));
 			
-			model.addObject("editsiteMain", editsiteMain);
-			 
-			//editImageLink=new ImageLink();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -611,42 +609,58 @@ public class NewController {
 	@RequestMapping(value = "/siteMaintenance", method = RequestMethod.POST)
 	public String siteMaintenance(HttpServletRequest request, HttpServletResponse response) {
 
-		 try {
-
-	           /* // you can get an enumeratable list 
-	            // of parameter keys by using request.getParameterNames() 
-	            Enumeration en = request.getParameterNames();
-	 
-	            // enumerate through the keys and extract the values 
-	            // from the keys! 
-	            while (en.hasMoreElements()) {
-	                String parameterName = (String) en.nextElement();
-	                String parameterValue = request.getParameter(parameterName);
-	                System.out.println(parameterName+":"+parameterValue+"<br />");
-	            }
-	               // inset into m_setting ('group','key','va;ue') values('config_site_maintenance',parameterName,parameterValue)
-	             */
+		 try
+		 {	           
 			 	HttpSession session = request.getSession();
-				User UserDetail =(User) session.getAttribute("UserDetail");
 			 
-			 	String group = request.getParameter("group");
-			 	//String key = request.getParameter("config_site_maintenance_message");
-				String value = request.getParameter("message");
-				
-				editSite.setGroup(group);
-				editSite.setValue(value);
-								
-						SiteMaitenance res = rest.postForObject(Constant.url + "/saveSiteMaintace", editSite, SiteMaitenance.class);
+			 	String status = request.getParameter("status"); 
+				String message = request.getParameter("message");  
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				editSite.setMaintenanceStatus(Integer.parseInt(status));
+				editSite.setMessage(message);
+				editSite.setIsCurrent(0);
+				editSite.setAddDate(sf.format(date));
+				editSite.setMessage(message);
+				editSite.setMessage(message);
+				editSite.setMessage(message);
+				Maintainance res = rest.postForObject(Constant.url + "/saveSiteMaintenance",editSite, Maintainance.class);
 						 
-						if(editSite.getSettingId()==0) {
-							session.setAttribute("successMsg","Infomation added successfully!");
+					if(res.getId()==0) {
+							session.setAttribute("successMsg","Error !");
 						}else {
-							session.setAttribute("successMsg","Infomation updated successfully!");
+							session.setAttribute("successMsg","Infomation added successfully!");
 						}
-		 }catch (Exception e) {
-			e.printStackTrace();
-		}
-		 
+		 } catch (Exception e) {
+				e.printStackTrace();
+			}
+		
 	 return "redirect:/addSiteMaintenance";
 	}
+/*	@RequestMapping(value = "/editSiteMaintenance/{id}", method = RequestMethod.GET)
+	public ModelAndView editSiteMaintenance(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/SiteMaintenances");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);
+
+			socialChannel= rest.postForObject(Constant.url + "/getSocialChannelById", map, SocialChannels.class);
+		    ContactUs[] contact = rest.getForObject(Constant.url + "/getContactById", 
+					ContactUs[].class);
+			List<ContactUs> editcontact = new ArrayList<ContactUs>(Arrays.asList(contact));
+			
+			
+			model.addObject("editChannel", socialChannel);
+			model.addObject("isEdit", 1);
+			
+			System.out.println(contactUs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}*/
 }

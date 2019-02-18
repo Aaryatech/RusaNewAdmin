@@ -81,25 +81,24 @@
 							<div class="content-body">
 								<div class="row">
 
-							
-
+						
                     
                      		<div class="col-xs-12">
                                 	  
                                <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_maintenance">Site Maintenance Mode: <span class="text-danger">*</span> </label>
+                                <label class="control-label col-sm-2" for="config_maintenance">Site Maintenance Status: <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                                    <select name="group" id="group" class="form-control">
-                                  	<%-- <c:choose>
-                                  		<c:when test="${editsiteMain.group=='0'}">
+                                    <select name="status" id="status" class="form-control">
+                                  	  <c:choose>
+                                  		<c:when test="${editsiteMain.maintenanceStatus==0}">
                                   			<option value="1" >YES</option>
                                    			<option value="0" selected>NO</option>
                                   		</c:when>
-                                  		<c:otherwise> --%>
-                                  			<option value="1" >YES</option>
+                                  		<c:otherwise>  
+                                  			<option value="1" selected>YES</option>
                                     		<option value="0">NO</option>
-                                  	<%-- 	</c:otherwise>
-                                  	</c:choose> --%>
+                                  	  	</c:otherwise>
+                                  	</c:choose>  
                                     
                                     </select> </div>
                               </div>
@@ -109,7 +108,7 @@
                                 <label class="control-label col-sm-2" for="config_site_maintenance_message">Message:  <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                 <input id="message" class="form-control"
-								placeholder="Message"  style="text-align: left;" name="message" type="text" value="${editsiteMain.value}" required>
+								placeholder="Message"  style="text-align: left;" name="message" type="text" value="${editsiteMain.message}" required>
                                 </div>
                               </div>
                                
