@@ -83,12 +83,13 @@
                          <c:forEach items="${gallaryDetailList}" var="gallaryDetailList" varStatus="count">
 									<tr  >
 										<td>${count.index+1}</td>
-										<td>${gallaryDetailList.title}</td> 
+										<td><input value="${gallaryDetailList.title}" class="col-md-10"
+														type="text" id="title${gallaryDetailList.galleryDetailsId}"> </td> 
+														
 										<td><img src="${imageUrl}thumbnail${gallaryDetailList.fileName}" style="width:150px; height:auto"></td> 
-										<td><%-- <a
-											href="${pageContext.request.contextPath}/editCmsContent/${gallaryDetailList.galleryDetailsId}"><span
+										<td>  <a href="javascript:updateTitleName(${gallaryDetailList.galleryDetailsId});" ><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
-												rel="tooltip" ></span></a> | --%> <a
+												rel="tooltip" ></span></a>     <a
 											href="${pageContext.request.contextPath}/deleteImage?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}&id=${gallaryDetailList.galleryDetailsId}"
 											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
 												class="glyphicon glyphicon-remove"></span></a></td>
@@ -124,6 +125,18 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+   <script type="text/javascript">
+			function updateTitleName(id) {
+				 
+				var title = $("#title"+id).val();
+				//alert(title); 
+			location.href = 'updateTitleName/'+id+"/"+title;
+				 
+			}
+			
+		 
+			
+		</script>
    <script>
 function clearSessionAttribute() {
 	 

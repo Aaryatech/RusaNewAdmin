@@ -356,6 +356,27 @@ public class GallaryController{
 		
 	}
 	
+	@RequestMapping(value = "/updateTitleName/{id}/{title}", method = RequestMethod.GET)
+	public String updateTitleName(@PathVariable("id") int id,@PathVariable("title") String title, HttpServletRequest request, HttpServletResponse response) {
+ 
+		
+		try {
+		    System.out.println(id+""+title);
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				 map.add("galleryDetailsId", id);  
+				 map.add("title", title); 
+				 Info info = rest.postForObject(Constant.url + "/updateTitleName", map, Info.class);
+				 
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+			return "redirect:/uploadedImageList";
+		 
+		
+	}
+	
 	@RequestMapping(value = "/uploadMediaProccess", method = RequestMethod.POST)
 	public void uploadMediaProccess(@RequestParam("file") List<MultipartFile> file, HttpServletRequest request, HttpServletResponse response) {
 

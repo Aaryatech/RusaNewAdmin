@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <body>
 	<c:url var="setSubModId" value="/setSubModId" />
+	<c:url var="clearUserSessionAttribute" value="/clearUserSessionAttribute" />
 	<div class="page-sidebar pagescroll">
 		<!-- MAIN MENU - START -->
 		<div class="page-sidebar-wrapper" id="main-menu-wrapper">
@@ -440,6 +441,22 @@
 					modId : modId,
 					ajax : 'true'
 				});
+				
+				clearUserSessionAttribute();
+			}
+			function clearUserSessionAttribute() {
+				 
+				 
+
+				$.getJSON('${clearUserSessionAttribute}', {
+			  
+					ajax : 'true',
+
+				}, function(data) { 
+					 
+				
+				});
+
 			}
 		</script>
 		<!-- MAIN MENU - END -->
