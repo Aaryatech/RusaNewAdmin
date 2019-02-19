@@ -103,7 +103,37 @@
                                      
                                      <input id="imageName"  value="${editImageLink.sliderImage}"  name="imageName" type="hidden"  >
                                 </div>
-                              </div>
+                                </div>
+                                   <div class="form-group">
+                                    <label class="col-md-2 control-label"> Image: <span class="text-danger">*</span></label>
+                                     <div class="col-md-10">
+                                        <div class="row col-md-5">
+                                     <img src="" id="temppreviewimageki1" class="temppreviewimageki1" style="width:200px; height:auto;display:none">								 </div>
+                                        <div class="row col-md-10">
+                                
+                                        <div class="input-group image-preview1" data-original-title="" title="">
+                                    
+                                     <input type="text" class="form-control image-preview-filename1" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                            <span class="input-group-btn">
+                                                <!-- image-preview-clear button -->
+                                                <button type="button" class="btn btn-default image-preview-clear1" style="display:none;">
+                                                    <span class="glyphicon glyphicon-remove"></span> Clear
+                                                </button>
+                                            <!-- image-preview-input -->
+                                                <div class="btn btn-default image-preview-input">
+                                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                                    <span class="image-preview-input-title image-preview-input-title1">Browse</span>
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" value="${editImageLink.sliderImage}" > <!-- rename it -->
+                                                   
+                                                </div>
+                                            </span>
+                                        </div>
+                                         <span class="help-block">* Only jpg,gif,png * Best image size is 1920px × 700px</span>
+                                          
+                                    </div>
+                                      </div>
+                                 </div>
+                              
                         </c:if>
                              <div class="form-group">
                                     <label class="col-md-2 control-label"> Image: <span class="text-danger">*</span></label>
