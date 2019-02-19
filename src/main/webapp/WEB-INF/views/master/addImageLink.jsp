@@ -95,6 +95,16 @@
                         <div class="col-xs-12"> 
                         <input id="id" value="${editImageLink.id}" name="id" type="hidden"  >
                         
+                        <c:if test="${isEdit==1}">
+                        		<div class="form-group">
+                                <label class="control-label col-sm-2" for="banner_image"> Current Slider Image:</label>
+                                <div class="col-sm-10">
+                                     <img src="${url}${editImageLink.sliderImage}" style="width:250px; height:auto">
+                                     
+                                     <input id="imageName"  value="${editImageLink.sliderImage}"  name="imageName" type="hidden"  >
+                                </div>
+                              </div>
+                        </c:if>
                              <div class="form-group">
                                     <label class="col-md-2 control-label"> Image: <span class="text-danger">*</span></label>
                                      <div class="col-md-10">
@@ -114,7 +124,7 @@
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" required> <!-- rename it -->
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" value="${editImageLink.sliderImage}" required> <!-- rename it -->
                                                    
                                                 </div>
                                             </span>
@@ -124,16 +134,16 @@
                                     </div>
                                       </div>
                                  </div>
-                     <div class="form-group">
+                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL Link : </label>
                                 <div class="col-sm-10"> 
                                   <input id="urlLink" class="form-control"
-								placeholder="URL Link" value="${editImageLink.urlLink}"  style="text-align: left;" name="urlLink" type="text" required>
+								placeholder="URL Link" value="${editImageLink.urlLink}"  style="text-align: left;" name="urlLink" type="text">
                                 </div>
                               </div>
                               
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Sort Order :  </label>
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Sort Order : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
                                   <input id="sortNo" class="form-control"
 								placeholder="Sequence No" value="${editImageLink.sortOrder}"  style="text-align: left;" name="sortNo" type="number" required>
@@ -144,7 +154,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                    
-                                  <select name="isActive" id="isActive" class="form-control">
+                                  <select name="isActive" id="isActive" class="form-control" required>
                                     <c:choose>
                                   		<c:when test="${editImageLink.isActive==0}">
                                   			<option value="1" >YES</option>
