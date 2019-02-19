@@ -249,7 +249,7 @@ public class NewController {
 				int sortOrder = Integer.parseInt(request.getParameter("sortNo"));
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
 				 
-				
+				String imageName=request.getParameter("imageName");
 				VpsImageUpload upload = new VpsImageUpload();
 				String docFile = null;
 				
@@ -276,7 +276,7 @@ public class NewController {
 				  }else {
 					  
 					  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
-						  editImageLink.setSliderImage(docFile);
+						  editImageLink.setSliderImage(imageName);
 						}else {
 							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
 							editImageLink.setSliderImage(docFile);

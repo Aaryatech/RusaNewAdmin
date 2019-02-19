@@ -124,7 +124,7 @@
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" value="${editImageLink.sliderImage}" > <!-- rename it -->
+                                                    <input type="file" accept="image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile"  > <!-- rename it -->
                                                    
                                                 </div>
                                             </span>
