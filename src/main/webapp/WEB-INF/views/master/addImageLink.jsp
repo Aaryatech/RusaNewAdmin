@@ -94,8 +94,9 @@
                         
                         <div class="col-xs-12"> 
                         <input id="id" value="${editImageLink.id}" name="id" type="hidden"  >
-                        
-                        <c:if test="${isEdit==1}">
+                        <c:choose>
+  						  <c:when test="${isEdit==1}">
+                      
                         		<div class="form-group">
                                 <label class="control-label col-sm-2" for="banner_image"> Current Slider Image:</label>
                                 <div class="col-sm-10">
@@ -134,7 +135,8 @@
                                       </div>
                                  </div>
                               
-                        </c:if>
+                       </c:when>
+                        <c:otherwise>
                              <div class="form-group">
                                     <label class="col-md-2 control-label"> Image: <span class="text-danger">*</span></label>
                                      <div class="col-md-10">
@@ -164,6 +166,8 @@
                                     </div>
                                       </div>
                                  </div>
+                                 </c:otherwise>
+							</c:choose>
                              <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL Link : </label>
                                 <div class="col-sm-10"> 
