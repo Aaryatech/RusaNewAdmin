@@ -172,11 +172,11 @@
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==207}">
 								<a class="active"
-									href="${pageContext.request.contextPath}/maintenanceMode"
+									href="${pageContext.request.contextPath}/addSiteMaintenance"
 									onclick="selectSubMod(2,207)">Maintenance Mode</a>
 							</c:when>
 							<c:otherwise>
-								<a href="${pageContext.request.contextPath}/maintenanceMode"
+								<a href="${pageContext.request.contextPath}/addSiteMaintenance"
 									onclick="selectSubMod(2,207)">Maintenance Mode</a>
 							</c:otherwise>
 						</c:choose></li>

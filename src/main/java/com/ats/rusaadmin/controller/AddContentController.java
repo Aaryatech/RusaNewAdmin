@@ -119,11 +119,15 @@ public class AddContentController {
 			  }else if(moduleId==11){
 			  
 			  url="redirect:/gallaryForm/"+pageId;
-			  }else if(moduleId==3 || moduleId==4 || moduleId==5){
+			  }else if(moduleId==3 ){
 				  
 				  url="redirect:/gallaryForm/"+pageId+"/"+moduleId;
-				 }
+           
+			  }else if(moduleId==4 ){
 			  
+			  url="redirect:/videoForm/"+pageId;
+     
+		  }
 			
 		} catch (Exception e) {
 			e.printStackTrace();

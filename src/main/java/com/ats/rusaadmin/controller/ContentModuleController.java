@@ -28,6 +28,9 @@ import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.CMSPageDescription;
 import com.ats.rusaadmin.model.CMSPages;
+import com.ats.rusaadmin.model.GallaryCategory;
+import com.ats.rusaadmin.model.GallaryDetail;
+import com.ats.rusaadmin.model.GetCategory;
 import com.ats.rusaadmin.model.GetPagesModule;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
@@ -48,6 +51,7 @@ public class ContentModuleController {
 	Page page = new Page();  
 	TestImonial editTestImonial=new TestImonial();
     NewsBlog editNewsBlog=new NewsBlog();
+    GallaryDetail editGalleryDetail=new GallaryDetail();
 
 	@RequestMapping(value = "/textimonialForm/{pageId}", method = RequestMethod.GET)
 	public ModelAndView textimonialForm(@PathVariable int pageId,HttpServletRequest request, HttpServletResponse response) {
@@ -891,5 +895,252 @@ public class ContentModuleController {
 
 		return "redirect:/EventFormList";
 	}
+	@RequestMapping(value = "/videoForm/{pageId}", method = RequestMethod.GET)
+	public ModelAndView videoForm(@PathVariable int pageId,HttpServletRequest request, HttpServletResponse response) {
 
+		ModelAndView model = new ModelAndView("moduleForms/vedioForm");
+		try {
+		 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("pageId",pageId);
+			page = rest.postForObject(Constant.url + "/getPageByPageId",map,Page.class);
+			System.out.println("Page List: "+page.toString());
+			model.addObject("page", page);
+			model.addObject("isEdit", 0);
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GallaryCategory[] category = rest.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
+			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
+			System.out.println(""+categoryList.toString());
+			model.addObject("categoryList",categoryList);
+				
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	@RequestMapping(value = "/insertVedioForm", method = RequestMethod.POST)
+	public String insertVedioForm(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+			String catId = request.getParameter("cateId");
+			int isActive = Integer.parseInt(request.getParameter("isActive")); 
+			String titleName = request.getParameter("titleName");
+			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
+			int galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
+			
+			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+			int pageId = Integer.parseInt(request.getParameter("pageId")); 
+			
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			//CMSPages cMSPages = new CMSPages();
+			GallaryDetail gallaryDetail=new GallaryDetail();
+			
+			if(vedio_url==0)
+			{
+				String vedioUrl = request.getParameter("vedioUrl");
+				gallaryDetail.setFileName(vedioUrl);
+			}
+			else
+			{
+				String vedioCode = request.getParameter("vedioCode");
+				gallaryDetail.setFileName(vedioCode);
+			}
+			gallaryDetail.setPageId(pageId);
+			gallaryDetail.setTypeVideoImage("4");
+			
+			gallaryDetail.setTitle(titleName);
+			gallaryDetail.setGalleryCatId(Integer.parseInt(catId));
+			gallaryDetail.setIsActive(isActive);
+			gallaryDetail.setDelStatus(1);
+			gallaryDetail.setAddDate(sf.format(date));
+			//	gallaryDetail.setFeaturedImageAlignment(aligment);
+		
+			System.out.println("gallaryDetail" + gallaryDetail); 
+			GallaryDetail res = rest.postForObject(Constant.url + "/saveGalleryDetails", gallaryDetail, GallaryDetail.class);
+			System.out.println("List : "+res.toString());
+			if(res!=null && isEdit==0) {
+				
+				PagesModule pagesModule = new PagesModule();
+				
+				pagesModule.setPageId(res.getPageId());
+				pagesModule.setPrimaryKeyId(res.getGalleryDetailsId());
+				pagesModule.setModuleId(4);
+				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+				System.out.println("pagesModuleres " + pagesModuleres);  
+				
+				session.setAttribute("successMsg","Infomation added successfully!");
+				session.setAttribute("errorMsg","false");
+			}else {
+				
+				session.setAttribute("successMsg","Error While Uploading Content !");
+				session.setAttribute("errorMsg","true");
+			}
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/VedioFormList";
+	}
+	
+	@RequestMapping(value = "/VedioFormList", method = RequestMethod.GET)
+	public ModelAndView VedioFormList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/vedioGalleryList");
+		try {
+		 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+			 map.add("moduleId", 4);
+			 GallaryDetail[] gallaryDetail = rest.postForObject(Constant.url + "/galleryDetailList", map, GallaryDetail[].class);
+			 List<GallaryDetail> gallaryDetailList = new ArrayList<GallaryDetail>(Arrays.asList(gallaryDetail));
+			 model.addObject("gallaryDetailList", gallaryDetailList);
+			 model.addObject("imageUrl", Constant.getGallryImageURL);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	@RequestMapping(value = "/editVideoContent/{galleryDetailsId}", method = RequestMethod.GET)
+	public ModelAndView editVideoContent(@PathVariable("galleryDetailsId") int galleryDetailsId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/editVideoGallery");
+		try {
+		 System.out.println("id"+galleryDetailsId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("galleryDetailsId", galleryDetailsId);
+			 
+			editGalleryDetail = rest.postForObject(Constant.url + "/getListByGalleryId",map,
+					GallaryDetail.class);
+			 System.out.println("Page ID: "+editNewsBlog.getPageId());
+		
+			 
+			 map = new LinkedMultiValueMap<String, Object>();
+				map.add("pageId", editGalleryDetail.getPageId());
+				Page page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+						 Page.class);
+			
+				 System.out.println("List : "+editNewsBlog.toString());
+					GallaryCategory[] category = rest.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
+					List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
+					System.out.println(""+categoryList.toString());
+					//editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
+			model.addObject("editGalleryDetail", editGalleryDetail);
+			model.addObject("page", page);
+			model.addObject("categoryList",categoryList);
+			model.addObject("isEdit", 1);
+			//model.addObject("url", Constant.getGallryImageURL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	/*@RequestMapping(value = "/updateTitleName/{id}/{title}", method = RequestMethod.GET)
+	public String updateTitleName(@PathVariable("id") int id,@PathVariable("title") String title, HttpServletRequest request, HttpServletResponse response) {
+ 
+		
+		try {
+		    System.out.println(id+""+title);
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				 map.add("galleryDetailsId", id);  
+				 map.add("title", title); 
+				 Info info = rest.postForObject(Constant.url + "/updateTitleName", map, Info.class);
+				 
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+			return "redirect:/uploadedImageList";
+		 
+		
+	}*/
+	
+	@RequestMapping(value = "/deleteVideoGallery/{galleryDetailsId}", method = RequestMethod.GET)
+	public String deleteVideoGallary(@PathVariable int galleryDetailsId, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("galleryDetailsId", galleryDetailsId); 
+			Info res = rest.postForObject(Constant.url + "/deleteGalleryDetails", map, Info.class);
+			System.out.println(res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/VedioFormList";
+	}
+	@RequestMapping(value = "/submitVedioForm", method = RequestMethod.POST)
+	public String submitVedioForm(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+			String catId = request.getParameter("cateId");
+			int isActive = Integer.parseInt(request.getParameter("isActive")); 
+			String titleName = request.getParameter("titleName");
+			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
+			//int galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
+			
+			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+			int pageId = Integer.parseInt(request.getParameter("pageId")); 
+			
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			//CMSPages cMSPages = new CMSPages();
+			//GallaryDetail gallaryDetail=new GallaryDetail();
+			
+			if(vedio_url==0)
+			{
+				String vedioUrl = request.getParameter("vedioUrl");
+				editGalleryDetail.setFileName(vedioUrl);
+			}
+			else
+			{
+				String vedioCode = request.getParameter("vedioCode");
+				editGalleryDetail.setFileName(vedioCode);
+			}
+			editGalleryDetail.setPageId(pageId);
+			editGalleryDetail.setTypeVideoImage("4");
+			
+			editGalleryDetail.setTitle(titleName);
+			editGalleryDetail.setGalleryCatId(Integer.parseInt(catId));
+			editGalleryDetail.setIsActive(isActive);
+			editGalleryDetail.setDelStatus(1);
+			editGalleryDetail.setEditDate(sf.format(date));
+			//	gallaryDetail.setFeaturedImageAlignment(aligment);
+		
+			System.out.println("gallaryDetail" + editGalleryDetail); 
+			GallaryDetail res = rest.postForObject(Constant.url + "/saveGalleryDetails", editGalleryDetail, GallaryDetail.class);
+			System.out.println("List : "+res.toString());
+			
+				session.setAttribute("successMsg","Infomation added successfully!");
+				session.setAttribute("errorMsg","false");
+		
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/VedioFormList";
+	}
 }
