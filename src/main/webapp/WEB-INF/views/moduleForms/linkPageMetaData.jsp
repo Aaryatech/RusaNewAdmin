@@ -61,7 +61,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Link External URL</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Page Meta Data</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,7 +79,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Link External URL</h2>
+                    <h2 class="title pull-left">Page Meta Data</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -92,7 +92,7 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                         <form class="form-horizontal" action="${pageContext.request.contextPath}/submitExtenalUrl" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/submitPageMetaData" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
                          onsubmit="return confirm('Do you really want to submit the form?');">               
                     
                     <ul class="nav nav-tabs">
@@ -124,34 +124,28 @@
                         <hr>
                              	 
                                 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_order">External URL :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="metaTitle">Meta Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="externalUrl" name="externalUrl" placeholder="External URL" value="${page.externalUrl}"  >
+                                  <input type="text" class="form-control" id="metaTitle" name="metaTitle" placeholder="Meta Title" value="${page.pageMetaTitle}" required>
                                 </div>
                               </div>
                                   
-                            	  
-                                 
-                               <div class="form-group">
-                                <label class="control-label col-sm-2" for="status">In New Window  :<span class="text-danger">*</span></label>
+                                  <div class="form-group">
+                                <label class="control-label col-sm-2" for="metaDesc">Meta Desc :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                <select id="newWindow" name="newWindow" class="form-control" required >
-                                <c:choose>
-                                	<c:when test="${page.externalUrlTarget==0}">
-                                			<option value="1" >Yes</option>
-                   					 				<option value="0" selected>No</option>
-                                	</c:when>
-                                	<c:otherwise>
-                                		<option value="1" selected>Yes</option>
-                   					 				<option value="0"  >No</option> 
-                                	</c:otherwise>
-                                </c:choose>
-                                                                    
-                     
-                 
-                                  </select>
+                                  <input type="text" class="form-control" id="metaDesc" name="metaDesc" placeholder="Meta Desc" value="${page.pageMetaDescription}" required>
                                 </div>
                               </div>
+                              
+                              <div class="form-group">
+                                <label class="control-label col-sm-2" for="metaKeyword">Meta Keyword :<span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="metaKeyword" name="metaKeyword" placeholder="Meta Keyword" value="${page.pageMetaKeyword}" required>
+                                <span class="help-block">comma separated</span>
+                                </div>
+                              </div>
+                            	   
+                               
                               <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                   <button type="submit" class="btn btn-primary">Submit</button>  <button type="reset" class="btn btn-default">Reset</button> 

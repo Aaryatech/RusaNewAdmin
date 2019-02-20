@@ -88,5 +88,5 @@
             }
         </style>
         <script type="text/javascript">
-	var st_url = "http://192.168.10.226:8080/RusaAdmin/";
+	var st_url = "${sessionScope.siteAdminUrl}";
 	</script>

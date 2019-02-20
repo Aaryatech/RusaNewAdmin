@@ -383,7 +383,9 @@ public class AddContentController {
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-
+			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+			
+			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -398,7 +400,7 @@ public class AddContentController {
 						request.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId()));
 				editCMSPages.getDetailList().get(i).setPageDesc(request
 						.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId()));
-
+				editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
 			}
 
 			editCMSPages.setEditByUserId(UserDetail.getUserId());
