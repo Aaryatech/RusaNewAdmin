@@ -104,16 +104,16 @@
                     
                     </ul>
     				
-                                	
-                                	
-                                
+                                	   
                       <c:choose>
                 	<c:when test="${isEdit==0}">
                              <input type="hidden" name="pageId" value="${page.pageId}">  
+                              <input type="hidden" name="moduleId" value="${moduleId}">  
                              
                              </c:when>
                              	<c:otherwise>
-                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">  
+                                	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">
+                                	     <input type="hidden" name="moduleId" value="${editTestImonial.sectionId}">   
                                 	</c:otherwise></c:choose>  
                                        
                       <input type="hidden" name="isEdit" value="${isEdit}">  

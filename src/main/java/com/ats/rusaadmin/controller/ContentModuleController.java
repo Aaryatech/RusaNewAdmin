@@ -53,8 +53,8 @@ public class ContentModuleController {
     NewsBlog editNewsBlog=new NewsBlog();
     GallaryDetail editGalleryDetail=new GallaryDetail();
 
-	@RequestMapping(value = "/textimonialForm/{pageId}", method = RequestMethod.GET)
-	public ModelAndView textimonialForm(@PathVariable int pageId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/textimonialForm/{pageId}/{moduleId}", method = RequestMethod.GET)
+	public ModelAndView textimonialForm(@PathVariable int pageId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/textImonialForm");
 		try {
@@ -65,6 +65,7 @@ public class ContentModuleController {
 					 Page.class);
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
+			model.addObject("moduleId", moduleId);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,7 +81,8 @@ public class ContentModuleController {
 		try {
 			HttpSession session = request.getSession();
 			User UserDetail =(User) session.getAttribute("UserDetail");
-		
+			
+			String moduleId = request.getParameter("moduleId");
 			String formName = request.getParameter("form_name");
 			String designation = request.getParameter("designation");
 			String msg = request.getParameter("msg");
@@ -113,7 +115,7 @@ public class ContentModuleController {
 							e.printStackTrace();
 						}
 					}
-				
+				editTestImonial.setSectionId(Integer.parseInt(moduleId));
 				editTestImonial.setPageId(pageId);
 				editTestImonial.setDesignation(designation); 
 				editTestImonial.setFromName(formName);
@@ -167,6 +169,44 @@ public class ContentModuleController {
 			model.addObject("isEdit",1);
 		//	model.addObject("url", Constant.bannerImageURL);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	@RequestMapping(value = "/successStoryList", method = RequestMethod.GET)
+	public ModelAndView successStoryList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/successStoryList");
+		try {
+		 
+			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getSuccessStoryList",
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
+			
+			model.addObject("getPagesModuleList", getPagesModuleList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	@RequestMapping(value = "/teamList", method = RequestMethod.GET)
+	public ModelAndView teamList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("moduleForms/teamList");
+		try {
+		 
+			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getTeamList",
+					GetPagesModule[].class);
+			
+			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
+			
+			model.addObject("getPagesModuleList", getPagesModuleList);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
