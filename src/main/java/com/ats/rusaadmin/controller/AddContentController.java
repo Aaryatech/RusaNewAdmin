@@ -106,7 +106,7 @@ public class AddContentController {
 				url = "redirect:/faqForm";
 			} else if (moduleId == 6 || moduleId == 8 || moduleId == 13) {
 
-				url = "redirect:/textimonialForm/" + pageId;
+				url = "redirect:/textimonialForm/" + pageId + "/" + moduleId;
 			} else if (moduleId == 10) {
 
 				url = "redirect:/linkExternalUrl";
