@@ -133,7 +133,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Category : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                            <select id="cateId" name="cateId" class="form-control chosen"	required>
+                            <select id="cateId" name="cateId" class="form-control chosen" required>
                             <option>Select Category</option>
 							       <c:forEach items="${categoryList}" var="catList" >
 									   <c:choose>
