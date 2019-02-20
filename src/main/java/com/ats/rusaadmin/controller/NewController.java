@@ -591,12 +591,14 @@ public class NewController {
 	
 	
 	
-	@RequestMapping(value = "/addSiteMaintenance", method = RequestMethod.GET)
+	@RequestMapping(value = "/siteMaintenances", method = RequestMethod.GET)
 	public ModelAndView addSiteMaintenance(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("master/SiteMaintenances");
+		ModelAndView model = new ModelAndView("master/siteMaintenances");
 		try {
 			
+			editSite = rest.getForObject(Constant.url + "/getMaintananceRecord", Maintainance.class);
+			model.addObject("editsiteMain", editSite);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -618,49 +620,22 @@ public class NewController {
 				Date date = new Date(); // your date
 				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 				editSite.setMaintenanceStatus(Integer.parseInt(status));
+				 
+				editSite.setEditDate(sf.format(date));
 				editSite.setMessage(message);
-				editSite.setIsCurrent(0);
-				editSite.setAddDate(sf.format(date));
-				editSite.setMessage(message);
-				editSite.setMessage(message);
-				editSite.setMessage(message);
+				 
 				Maintainance res = rest.postForObject(Constant.url + "/saveSiteMaintenance",editSite, Maintainance.class);
 						 
 					if(res.getId()==0) {
 							session.setAttribute("successMsg","Error !");
 						}else {
-							session.setAttribute("successMsg","Infomation added successfully!");
+							session.setAttribute("successMsg","Infomation Updated successfully!");
 						}
 		 } catch (Exception e) {
 				e.printStackTrace();
 			}
 		
-	 return "redirect:/addSiteMaintenance";
+	 return "redirect:/siteMaintenances";
 	}
-/*	@RequestMapping(value = "/editSiteMaintenance/{id}", method = RequestMethod.GET)
-	public ModelAndView editSiteMaintenance(@PathVariable int id, HttpServletRequest request,
-			HttpServletResponse response) {
-
-		ModelAndView model = new ModelAndView("master/SiteMaintenances");
-		try {
-
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-
-			socialChannel= rest.postForObject(Constant.url + "/getSocialChannelById", map, SocialChannels.class);
-		    ContactUs[] contact = rest.getForObject(Constant.url + "/getContactById", 
-					ContactUs[].class);
-			List<ContactUs> editcontact = new ArrayList<ContactUs>(Arrays.asList(contact));
-			
-			
-			model.addObject("editChannel", socialChannel);
-			model.addObject("isEdit", 1);
-			
-			System.out.println(contactUs);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return model;
-	}*/
+ 
 }
