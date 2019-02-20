@@ -134,7 +134,7 @@
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==203}">
 								<a class="active"
-									href="${pageContext.request.contextPath}/addMetaNew"
+									href="${pageContext.request.contextPath}/socialChannelList"
 									onclick="selectSubMod(2,203)">Add Social Links</a>
 							</c:when>
 							<c:otherwise>
@@ -172,11 +172,11 @@
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==207}">
 								<a class="active"
-									href="${pageContext.request.contextPath}/addSiteMaintenance"
+									href="${pageContext.request.contextPath}/siteMaintenance"
 									onclick="selectSubMod(2,207)">Maintenance Mode</a>
 							</c:when>
 							<c:otherwise>
-								<a href="${pageContext.request.contextPath}/addSiteMaintenance"
+								<a href="${pageContext.request.contextPath}/siteMaintenance"
 									onclick="selectSubMod(2,207)">Maintenance Mode</a>
 							</c:otherwise>
 						</c:choose></li>
