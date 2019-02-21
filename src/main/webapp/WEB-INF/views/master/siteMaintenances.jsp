@@ -58,10 +58,13 @@
 								</c:choose>
 							</h2>
 
-
+   								<div class="actions panel_actions pull-right">
+                                    <a class="box_toggle fa fa-chevron-down"></a>
+                                    </div>
 
 						</header>
-
+<div class="content-body">
+								<div class="row">
 						<form class="form-horizontal" id="addSupplier"
 							action="${pageContext.request.contextPath}/siteMaintenance" onsubmit="return confirm('Do you really want to submit the form?');"
 							method="post">
@@ -78,8 +81,7 @@
 									</div>
 								</div>
 							</c:if>
-							<div class="content-body">
-								<div class="row">
+							
 
 						
                     
@@ -131,11 +133,9 @@
 										</div>
 
 									</div>
+								</form>
 								</div>
 							</div>
-
-
-						</form>
 					</section>
 
 				</div>

@@ -104,8 +104,9 @@
                    <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Category : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                            <select id="cateId" name="cateId" class="form-control chosen"	required>
-                            <option>Select Category</option>
+                            
+                            <select id="cateId" name="cateId" class="form-control chosen" required>
+                            
 							       <c:forEach items="${categoryList}" var="catList" >
 									   <c:choose>
 										<c:when test="${catList.galleryCatId==editupload.cateType}">
@@ -123,47 +124,44 @@
                                 </div>
                               </div>
                  
-                          <div class="form-group">
+                         
+                               
+                             
+                         
+                        <c:choose>
+                	<c:when test="${isEdit==0}">
+                	 <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Document Name  :<span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
                                   <input id="docName" class="form-control"
 								placeholder="Document Name" value="${editupload.exVar1}"  style="text-align: left;" name="docName" type="text" required>
                                 </div>
                               </div>
-                               
-                             
-                           <!--   <div class="form-group">
-                                      <label class="col-md-2 control-label"> Upload Document: <span class="text-danger">*</span></label>
-                                      <div class="col-sm-10"> 
-                                           <div class="row col-md-10">
-                                        <div class="input-group image-preview1" data-original-title="" title="">
-                                    
-                                     <input type="text" class="form-control image-preview-filename1" disabled="disabled"> don't give a name === doesn't send on POST/GET
-                                            <span class="input-group-btn">
-                                                image-preview-clear button
-                                                <button type="button" class="btn btn-default image-preview-clear1" style="display:none;">
-                                                    <span class="glyphicon glyphicon-remove"></span> Clear
-                                                </button>
-                                            image-preview-input
-                                                <div class="btn btn-default image-preview-input">
-                                                    <span class="glyphicon glyphicon-folder-open"></span>
-                                                    <span class="image-preview-input-title image-preview-input-title1">Browse</span>
-                                                    <input type="file" accept="doc/txt, doc/docx, doc/pdf, image/png, image/jpeg, image/gif" class="browseimage1" id="1" name="docfile" > rename it
-                                                   
-                                                </div>
-                                            </span>
-                                        </div>
-                                         <span class="help-block">* Only  .TXT,.DOCX,.PSD,.PDF,Image * Best image size Bytes, KB, MB, GB, TB and image size in width: 960px and height: 600px</span>
-                                          </div>
-                                          </div>
-                                   </div> -->
-                                   <div class="form-group row">
+                              <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :<span class="text-danger">*</span></label>
                                           <div class="col-sm-10">
-                                             <input type="file" name="pagePdf" id="pagePdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip,image/png, image/jpeg, image/gif"  required/>
+                                             <input type="file" name="pagePdf" id="pagePdf"  value="${editupload.fileName}"  class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip,image/png, image/jpeg, image/gif"  required/>
                                               
                                           </div>
                                         </div>
+                             </c:when>
+                             	<c:otherwise>
+                             	 <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Document Name  : </label>
+                                <div class="col-sm-10"> 
+                                  <input id="docName" class="form-control"
+								placeholder="Document Name" value="${editupload.exVar1}"  style="text-align: left;" name="docName" type="text" >
+                                </div>
+                              </div>
+                                	  <div class="form-group row">
+                                         <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
+                                          <div class="col-sm-10">
+                                             <input type="file" name="pagePdf" id="pagePdf"  value="${editupload.fileName}"  class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip,image/png, image/jpeg, image/gif"  />
+                                              
+                                          </div>
+                                        </div>  
+                                	</c:otherwise></c:choose> 
+                                  
                                
                                 
                  	

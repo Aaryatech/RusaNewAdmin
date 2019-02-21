@@ -57,7 +57,9 @@
 									<c:otherwise>Add Meta Data</c:otherwise>
 								</c:choose>
 							</h2>
-
+  							 <div class="actions panel_actions pull-right">
+                                    <a class="box_toggle fa fa-chevron-down"></a>
+                                    </div>
 
 
 						</header>

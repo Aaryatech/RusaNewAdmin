@@ -135,7 +135,7 @@
                        <div class="col-xs-12"> 
                     		  
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Heading :</label>
+                                <label class="control-label col-sm-2" for="heading1">Heading :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                   <input type="text" class="form-control" id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" required>
                                 </div>
@@ -151,7 +151,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_description1">Content :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   required="required">
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   >
                                     ${detailList.pageDesc}
                                     </textarea>
                                 </div>

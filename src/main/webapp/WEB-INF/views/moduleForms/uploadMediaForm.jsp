@@ -48,14 +48,21 @@
         <section class="box ">
                 <header class="panel_header">
                     <h2 class="title pull-left">Add Images</h2>
-                     <div class="actions panel_actions pull-right" >
-                	      <a href="${pageContext.request.contextPath}/uploadMediaForm?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}"><button type="button" class="btn btn-success">Add New</button></a>     <a href="${pageContext.request.contextPath}/uploadedImageList"><button type="button" class="btn btn-info"><< Back</button></a>
-                </div>  
+                   
+                	      <a href="${pageContext.request.contextPath}/uploadMediaForm?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}"><button type="button" class="btn btn-success">Add New</button></a> 
+                	          
+                	      <a href="${pageContext.request.contextPath}/uploadedImageList"><button type="button" class="btn btn-info"><< Back</button></a>
+             
+                   <div class="actions panel_actions pull-right">
+                   <a class="box_toggle fa fa-chevron-down"></a>
+                  </div>
+                
+              
                 </header>
                 <div class="content-body">
                     <div class="row">
                         <div class="col-xs-12">
-                        	                              <form class="dropzone" action="${pageContext.request.contextPath}/uploadMediaProccess" method="post" enctype="multipart/form-data">
+                        	    <form class="dropzone" action="${pageContext.request.contextPath}/uploadMediaProccess" method="post" enctype="multipart/form-data">
                                <input name="pageId" value="${pageId}" type="hidden"   />
                                <input name="moduleId" value="${moduleId}" type="hidden"   />
                                <input name="catId" value="${catId}" type="hidden"   />
@@ -77,15 +84,13 @@
     <section class="box "> 
              <header class="panel_header">
                 <h2 class="title pull-left">Images List</h2>
-                <div class="actions panel_actions pull-right">
-                 
-                	<a class="box_toggle fa fa-chevron-down"></a>
-                   
-                     
-                </div>
+                 <div class="actions panel_actions pull-right">
+                   <a class="box_toggle fa fa-chevron-down"></a>
+                  </div>
                  
             </header> 
-            <div class="content-body">    <div class="row">
+            <div class="content-body">   
+             <div class="row">
             
             
         <div class="col-xs-12">

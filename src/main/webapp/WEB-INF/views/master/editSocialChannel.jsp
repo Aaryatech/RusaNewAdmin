@@ -51,25 +51,25 @@
                     <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Social Channels</c:when><c:otherwise>Edit Social Channels</c:otherwise></c:choose></h2>
                    
                     <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/socialChannelList"><button type="button" class="btn btn-info"> Back</button></a>
+                	      <a href="${pageContext.request.contextPath}/socialChannelList"><button type="button" class="btn btn-info"><< Back</button></a>
                 	       <a class="box_toggle fa fa-chevron-down"></a>
                 </div>
                      
                 </header>
-                 <%--  <div class="content-body">    <div class="row">
+                 <%-- 
             <c:if test="${sessionScope.successMsg!=null}">
             <div class="col-lg-12">
     		          <div class="alert alert-success alert-dismissible fade in">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                 
                 <strong>Success : </strong> ${sessionScope.successMsg}</div>
-        	          </c:if>  --%>                             </div> 
+        	          </c:if>  --%>                          
            
+            <div class="content-body">   
+             <div class="row">
                    <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/editChannel" 
                    onsubmit="return confirm('Do you really want to submit the form?');" method="post">
-                   
-                <div class="content-body"> 
-                    <div class="row">
+             
                     <div class="col-xs-12"> 
                     
                                       
@@ -136,11 +136,9 @@
                               </div> 
                             
                         </div>
-                    </div> 
-                </div>
-                
-              
-                </form>
+                  </form>
+                  </div>
+                  </div>
         </section>
         
     </div> 

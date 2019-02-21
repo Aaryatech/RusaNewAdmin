@@ -176,7 +176,7 @@
                                      <div class="form-group" id="newpost1" style="display: none;">
                                 	<label class="control-label col-sm-2" for="status">Type :</label>
                                  	 <div class="col-sm-10"  >
-                             		 	<textarea rows="4" cols="100" id="vedioCode" name="vedioCode" value="${editGalleryDetail.fileName}" >Code</textarea>
+                             		 	<textarea rows="4" cols="100" id="vedioCode" name="vedioCode"  >${editGalleryDetail.fileName}</textarea>
                                     </div>
                                      </div>
                                      

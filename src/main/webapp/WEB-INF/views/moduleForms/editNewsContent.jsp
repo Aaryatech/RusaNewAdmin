@@ -142,7 +142,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">News Source URL :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL" value="${editNewsBlog.newsSourceUrlName}"  >
+                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL" value="${editNewsBlog.newsSourceUrlName}" required >
                                 </div>
                               </div>
                         </div>
@@ -157,7 +157,7 @@
                        <div class="col-xs-12"> 
                     		  
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Heading :</label>
+                                <label class="control-label col-sm-2" for="heading1">Heading :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                   <input type="text" class="form-control" id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" required>
                                 </div>
@@ -165,13 +165,13 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_description1">Content :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"   required="required">
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}" >
                                     ${detailList.descriptions}
                                     </textarea>
                                 </div>
                               </div> 
                                  <div class="form-group">
-                                <label class="control-label col-sm-2" for="meta_title1">Meta Title :</label>
+                                <label class="control-label col-sm-2" for="meta_title1">Meta Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                        <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="${detailList.pageMetaTitle}"  required>
                                 
@@ -180,14 +180,14 @@
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_description1">Meta Description :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   required="required"> 
+                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   > 
                                      ${detailList.pageMetaDescription}</textarea>
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_keyword1">KeyWord :</label>
                                 <div class="col-sm-10">
-                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="${detailList.pageMetaKeyword}"  required>
+                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="${detailList.pageMetaKeyword}"  >
                                 
                                 </div>
                               </div> 

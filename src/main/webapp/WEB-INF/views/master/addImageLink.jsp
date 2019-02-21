@@ -93,6 +93,14 @@
                   
                         
                         <div class="col-xs-12"> 
+                         <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Title :  <span class="text-danger">*</span></label>
+                                <div class="col-sm-10"> 
+                                  <input id="title_name" class="form-control"
+								placeholder="Title" value="${editImageLink.titleName}"  style="text-align: left;" name="title_name" type="text" required>
+                                </div>
+                              </div>
+                        
                         <input id="id" value="${editImageLink.id}" name="id" type="hidden"  >
                         <c:choose>
   						  <c:when test="${isEdit==1}">

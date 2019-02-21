@@ -142,7 +142,7 @@
 		                            </div>
 		                             
 		                              <div class="form-group">
-		                                <label class="control-label col-sm-2" for="page_description1">Answer : <span class="text-danger">*</span></label>
+		                                <label class="control-label col-sm-2" for="page_description1">Answer :</label>
 		                                <div class="col-sm-10">
 		                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${descriptionList.languageId}" 
 		                                    id="ans${descriptionList.languageId}" required="required">${descriptionList.faqAns}</textarea>

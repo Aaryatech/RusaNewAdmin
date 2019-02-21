@@ -246,6 +246,8 @@ public class NewController {
 			 
 			 	String id = request.getParameter("id");
 			 	String urlLink = request.getParameter("urlLink");
+			 	String titleName = request.getParameter("title_name");
+			 	
 				int sortOrder = Integer.parseInt(request.getParameter("sortNo"));
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
 				 
@@ -294,7 +296,7 @@ public class NewController {
 				
 					  
 				  editImageLink.setUrlLink(urlLink);
-				
+				  editImageLink.setTitleName(titleName);
 				  editImageLink.setDelStatus(1); 
 				 // editImageLink.setIsActive(1);
 				  editImageLink.setSortOrder(sortOrder); 
@@ -314,7 +316,7 @@ public class NewController {
 			e.printStackTrace();
 		}
 		 
-	 return "redirect:/addImageLink";
+	 return "redirect:/imageLinkList";
 	}
 	
 	@RequestMapping(value = "/deleteImageLink/{id}", method = RequestMethod.GET)

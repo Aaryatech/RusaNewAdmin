@@ -57,7 +57,8 @@
                 </div>
                  
             </header> 
-            <div class="content-body">    <div class="row">
+            <div class="content-body">    
+            <div class="row">
             <c:if test="${sessionScope.successMsg!=null}">
             <div class="col-lg-12">
     		          <div class="alert alert-success alert-dismissible fade in">
@@ -115,11 +116,7 @@
 								</c:forEach>  
                 </tbody>
             </table>
-
-
-
-
-        </div>
+		</div>
     </div>
     </div>
         </section></div>

@@ -131,16 +131,16 @@
                        <div class="col-xs-12"> 
                     		  
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Question : <span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="heading1">Question : </label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="question${languagesList.languagesId}" name="question${languagesList.languagesId}" placeholder="Question" value="" required>
+                                  <input type="text" class="form-control" id="question${languagesList.languagesId}" name="question${languagesList.languagesId}" placeholder="Question" value="" >
                                 </div>
                             </div>
                              
                               <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_description1">Answer : <span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_description1">Answer :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${languagesList.languagesId}" id="ans${languagesList.languagesId}"   required="required"></textarea>
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${languagesList.languagesId}" id="ans${languagesList.languagesId}"  ></textarea>
                                 </div>
                               </div> 
                               

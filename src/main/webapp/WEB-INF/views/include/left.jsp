@@ -135,11 +135,11 @@
 							<c:when test="${sessionScope.sessionSubModuleId==203}">
 								<a class="active"
 									href="${pageContext.request.contextPath}/socialChannelList"
-									onclick="selectSubMod(2,203)">Add Social Links</a>
+									onclick="selectSubMod(2,203)">Social Links</a>
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath}/socialChannelList"
-									onclick="selectSubMod(2,203)">Add Social Links</a>
+									onclick="selectSubMod(2,203)">Social Links </a>
 							</c:otherwise>
 						</c:choose></li>
 

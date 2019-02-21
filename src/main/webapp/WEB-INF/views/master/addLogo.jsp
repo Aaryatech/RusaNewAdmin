@@ -68,13 +68,16 @@
                                         <c:when test="${isEdit==1}">Edit Slider Image</c:when>
                                         <c:otherwise>Add Logo</c:otherwise>
                                     </c:choose>
-                                </h2>
-                                
-                            </header>
+                                      </h2>
+                                      <div class="actions panel_actions pull-right">
+                                    <a class="box_toggle fa fa-chevron-down"></a>
+                                    </div>
+                              </header>
+                             <div class="content-body">   
+        				     <div class="row">
                             <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/updateOrInsertLogo" 
                                 onsubmit="return confirm('Do you really want to submit the form?');" method="post" enctype="multipart/form-data">
-                                <div class="content-body">
-                                    <div class="row">
+                             
                                         <c:if test="${sessionScope.errorMsg!=null and sessionScope.errorMsg==false}">
                                             <div class="col-lg-12">
                                                 <div class="alert alert-success alert-dismissible fade in">
@@ -195,9 +198,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                 
                             </form>
+                            </div>
+                            </div>
                         </section>
                     </div>
                     <!-- MAIN CONTENT AREA ENDS -->

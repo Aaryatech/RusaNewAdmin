@@ -127,7 +127,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">  Name :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="  Name" value="${editTestImonial.fromName}">
+                                  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="  Name" value="${editTestImonial.fromName}" required>
                                 </div>
                               </div>
                         </div>
@@ -194,9 +194,9 @@
                        
                       <div class="col-xs-12"> 
                     	<div class="form-group">
-                                <label class="control-label col-sm-2" for="page_description1">Message :</label>
+                                <label class="control-label col-sm-2" for="page_description1">Message : </label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="msg" id="msg"   required="required">${editTestImonial.message} </textarea>
+                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="msg" id="msg" required >${editTestImonial.message} </textarea>
                                 </div>
                               </div>
                         </div>
@@ -205,9 +205,9 @@
                         <hr>
                              	 
                                 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_order">Sort No. :</label>
+                                <label class="control-label col-sm-2" for="page_order">Sort No. :<span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order"  value="${editTestImonial.sortNo}" >
+                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order"  value="${editTestImonial.sortNo}" required >
                                 </div>
                               </div>
                                     

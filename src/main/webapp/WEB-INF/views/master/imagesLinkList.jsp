@@ -74,7 +74,7 @@
                     <tr>
                    		<th width="5%">Sr No</th>
                         <th>Image</th>
-                        <th>Sort Order No.</th>  
+                        <th>Title</th>  
                         <th>Add Date</th> 
                         <th>Action</th> 
                     </tr>
@@ -87,7 +87,7 @@
 										<td>${count.index+1}</td>
 										<td> <img src="${url}${imagesLinkList.sliderImage}" style="width:120px; height:100px"></td>
 										
-										<td>${imagesLinkList.sortOrder}</td>
+										<td>${imagesLinkList.titleName}</td>
 										<td>${imagesLinkList.addDate}</td>   
 										<td><a
 											href="${pageContext.request.contextPath}/editImagesLink/${imagesLinkList.id}"><span
