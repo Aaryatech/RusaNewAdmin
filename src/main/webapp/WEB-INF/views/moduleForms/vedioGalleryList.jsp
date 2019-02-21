@@ -73,8 +73,8 @@
                <thead>
                     <tr>
                    		<th width="5%">Sr No</th>
-                        <th>Title</th> 
-                        <th>Video URL / Code</th> 
+                        <th >Title</th> 
+                        <th width="50%">Video URL / Code</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>

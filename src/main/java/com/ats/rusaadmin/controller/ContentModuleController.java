@@ -82,7 +82,7 @@ public class ContentModuleController {
 			HttpSession session = request.getSession();
 			User UserDetail =(User) session.getAttribute("UserDetail");
 			
-			String moduleId = request.getParameter("moduleId");
+			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			String formName = request.getParameter("form_name");
 			String designation = request.getParameter("designation");
 			String msg = request.getParameter("msg");
@@ -115,7 +115,7 @@ public class ContentModuleController {
 							e.printStackTrace();
 						}
 					}
-				editTestImonial.setSectionId(Integer.parseInt(moduleId));
+				editTestImonial.setSectionId(moduleId);
 				editTestImonial.setPageId(pageId);
 				editTestImonial.setDesignation(designation); 
 				editTestImonial.setFromName(formName);
@@ -135,7 +135,7 @@ public class ContentModuleController {
 				
 				pagesModule.setPageId(pageId);
 				pagesModule.setPrimaryKeyId(res.getId());
-				pagesModule.setModuleId(6);
+				pagesModule.setModuleId(moduleId);
 				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 				System.out.println("res " + res);  
 				
