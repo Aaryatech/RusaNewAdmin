@@ -143,7 +143,7 @@ public class ContentModuleController {
 				session.setAttribute("errorMsg","false");
 			}else {
 				
-				session.setAttribute("successMsg","Error While Uploading Content !");
+				session.setAttribute("successMsg","Infomation updated successfully!");
 				session.setAttribute("errorMsg","true");
 			}
 			
