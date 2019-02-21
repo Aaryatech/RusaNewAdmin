@@ -51,6 +51,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Scope("session")
 public class AddContentController {
 
+	
+	
 	RestTemplate rest = new RestTemplate();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	int pageId;
