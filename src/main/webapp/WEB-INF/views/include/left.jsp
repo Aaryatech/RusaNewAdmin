@@ -339,6 +339,22 @@
 								</a>
 							</c:otherwise>
 						</c:choose></li>
+						
+						<li><c:choose>
+							<c:when test="${sessionScope.sessionSubModuleId==409}">
+								<a class="active"
+									href="${pageContext.request.contextPath}/VedioFormList"
+									onclick="selectSubMod(4,409)"> <span class="title">Video List</span>
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a href="${pageContext.request.contextPath}/VedioFormList"
+									onclick="selectSubMod(4,409)"> <span class="title">Video
+										List</span>
+								</a>
+							</c:otherwise>
+						</c:choose></li>
+						
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==403}">
 								<a class="active"
@@ -350,6 +366,38 @@
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath}/testImonialList"
 									onclick="selectSubMod(4,403)"> <span class="title">TestImonial
+										List</span>
+								</a>
+							</c:otherwise>
+						</c:choose></li>
+						
+					<li><c:choose>
+							<c:when test="${sessionScope.sessionSubModuleId==410}">
+								<a class="active"
+									href="${pageContext.request.contextPath}/successStoryList"
+									onclick="selectSubMod(4,410)"> <span class="title">Success Story
+										List</span>
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a href="${pageContext.request.contextPath}/successStoryList"
+									onclick="selectSubMod(4,410)"> <span class="title">Success Story
+										List</span>
+								</a>
+							</c:otherwise>
+						</c:choose></li>
+						
+						<li><c:choose>
+							<c:when test="${sessionScope.sessionSubModuleId==408}">
+								<a class="active"
+									href="${pageContext.request.contextPath}/teamList"
+									onclick="selectSubMod(4,408)"> <span class="title">Team
+										List</span>
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a href="${pageContext.request.contextPath}/teamList"
+									onclick="selectSubMod(4,408)"> <span class="title">Team
 										List</span>
 								</a>
 							</c:otherwise>
@@ -389,6 +437,24 @@
 									href="${pageContext.request.contextPath}/NewsBlogList"
 									onclick="selectSubMod(4,406)"> <span class="title">News
 										Blog List</span>
+								</a>
+							</c:otherwise>
+						</c:choose></li>
+						
+					<li><c:choose>
+							<c:when test="${sessionScope.sessionSubModuleId==411}">
+
+								<a class="active"
+									href="${pageContext.request.contextPath}/EventFormList"
+									onclick="selectSubMod(4,411)"> <span class="title">Event
+										  List</span>
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a class=" "
+									href="${pageContext.request.contextPath}/EventFormList"
+									onclick="selectSubMod(4,411)"> <span class="title">Event
+										  List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>
