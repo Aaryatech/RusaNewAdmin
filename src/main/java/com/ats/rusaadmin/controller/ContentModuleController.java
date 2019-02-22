@@ -36,6 +36,7 @@ import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.NewsBlog;
 import com.ats.rusaadmin.model.NewsBlogDescription;
+import com.ats.rusaadmin.model.NewsDetails;
 import com.ats.rusaadmin.model.Page;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.TestImonial;
