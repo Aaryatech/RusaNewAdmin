@@ -126,21 +126,21 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="metaTitle">Meta Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="metaTitle" name="metaTitle" placeholder="Meta Title" value="${page.pageMetaTitle}" required>
+                                  <input type="text" class="form-control" id="metaTitle" name="metaTitle" placeholder="Meta Title" value="${page.pageMetaTitle}"  >
                                 </div>
                               </div>
                                   
                                   <div class="form-group">
                                 <label class="control-label col-sm-2" for="metaDesc">Meta Desc :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="metaDesc" name="metaDesc" placeholder="Meta Desc" value="${page.pageMetaDescription}" required>
+                                  <input type="text" class="form-control" id="metaDesc" name="metaDesc" placeholder="Meta Desc" value="${page.pageMetaDescription}"  >
                                 </div>
                               </div>
                               
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="metaKeyword">Meta Keyword :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="metaKeyword" name="metaKeyword" placeholder="Meta Keyword" value="${page.pageMetaKeyword}" required>
+                                  <input type="text" class="form-control" id="metaKeyword" name="metaKeyword" placeholder="Meta Keyword" value="${page.pageMetaKeyword}"  >
                                 <span class="help-block">comma separated</span>
                                 </div>
                               </div>
