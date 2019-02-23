@@ -304,9 +304,19 @@ public class ContentModuleController {
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("pageId", pageId);
+			Page page = rest.postForObject(Constant.url + "/getPageByPageId",map, Page.class);
+			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			
+			
+			String text = page.getPageName();
+			text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+		//	System.out.println(text);
+		
 			//CMSPages cMSPages = new CMSPages();
 			NewsBlog newsBlog=new NewsBlog();
 			List<NewsBlogDescription> newsBlogDescriptionList = new ArrayList<NewsBlogDescription>();
@@ -361,6 +371,7 @@ public class ContentModuleController {
 					 
 				}
 				newsBlog.setPageId(pageId);
+				newsBlog.setExVar1(text);
 				newsBlog.setNewsSourceUrlName(urlName);
 				newsBlog.setExInt1(9);
 				newsBlog.setPageOrder(seqNo); 
@@ -487,12 +498,19 @@ public class ContentModuleController {
 		/*	int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			*/
-			
+			String pageName = request.getParameter("page_name");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("pageId", pageId);
+			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
+					 Page.class);
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			 
-			 
+			 String slug=sf.format(date);
+		//	String text = pageName;
+			 String text = pageName.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
+			//System.out.println(text);
+		
 			VpsImageUpload upload = new VpsImageUpload();
 			
 				for(int i = 0 ; i<editNewsBlog.getDetailList().size() ; i++) {
@@ -541,6 +559,7 @@ public class ContentModuleController {
 				}
 				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(9);
+				editNewsBlog.setExVar1(text);
 				editNewsBlog.setPageOrder(seqNo); 
 				editNewsBlog.setIsActive(isActive); 
 				editNewsBlog.setEditDate(sf.format(date));
@@ -833,6 +852,8 @@ public class ContentModuleController {
 		/*	int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			*/
+			
+			String pageName = request.getParameter("page_name");
 			
 			Date date = new Date();
 			SimpleDateFormat sf1 = new SimpleDateFormat(eventDate);
