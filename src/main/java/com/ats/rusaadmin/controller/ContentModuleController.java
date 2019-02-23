@@ -152,8 +152,8 @@ public class ContentModuleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return "redirect:/testImonialList";
+			return "redirect:/sectionTreeList";
+			
 	}
 	@RequestMapping(value = "/editTestImonial/{id}", method = RequestMethod.GET)
 	public ModelAndView editTestImonial(@PathVariable int id, HttpServletRequest request,
