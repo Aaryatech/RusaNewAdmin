@@ -49,11 +49,12 @@
                 <header class="panel_header">
                     <h2 class="title pull-left">Add Images</h2>
                    
-                	      <a href="${pageContext.request.contextPath}/uploadMediaForm?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}"><button type="button" class="btn btn-success">Add New</button></a> 
-                	          
-                	      <a href="${pageContext.request.contextPath}/uploadedImageList"><button type="button" class="btn btn-info"><< Back</button></a>
+                	     
              
                    <div class="actions panel_actions pull-right">
+                    <a href="${pageContext.request.contextPath}/uploadMediaForm?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}"><button type="button" class="btn btn-success">Add New</button></a> 
+                	          
+                	      <a href="${pageContext.request.contextPath}/uploadedImageList"><button type="button" class="btn btn-info"><< Back</button></a>
                    <a class="box_toggle fa fa-chevron-down"></a>
                   </div>
                 

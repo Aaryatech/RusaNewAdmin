@@ -995,7 +995,7 @@ public class ContentModuleController {
 			int isActive = Integer.parseInt(request.getParameter("isActive")); 
 			String titleName = request.getParameter("titleName");
 			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
-			int galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
+			//int galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
 			
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
@@ -1024,6 +1024,7 @@ public class ContentModuleController {
 			gallaryDetail.setIsActive(isActive);
 			gallaryDetail.setDelStatus(1);
 			gallaryDetail.setAddDate(sf.format(date));
+			gallaryDetail.setAddedByUserId(UserDetail.getUserId());
 			//	gallaryDetail.setFeaturedImageAlignment(aligment);
 		
 			System.out.println("gallaryDetail" + gallaryDetail); 
