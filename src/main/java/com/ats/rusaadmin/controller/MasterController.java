@@ -246,29 +246,15 @@ public class MasterController {
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
 			
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("catId", catId);
-
-			Integer count = rest.postForObject(Constant.url + "/getParentIdCountByCatId", map, Integer.class);
-			 System.out.println("count :"+count);
-			 if(count>0)
-			 {
-				 HttpSession session = request.getSession();
-				 session.setAttribute("successMsg","Infomation not deleted successfully!");
-			 }
-			 else
-			 {		
-				 MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
-				 map1.add("catIdList", catId); 
-				 map1.add("delStatus", 0); 
+		 	
+				 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				 map.add("catIdList", catId); 
+				 map.add("delStatus", 0); 
 				 Info res = rest.postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
 				 
 				 HttpSession session = request.getSession();
 				 session.setAttribute("successMsg","Infomation deleted successfully!");
-			 }
-			/*
-			System.out.println(res);
-*/
+			 
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -720,24 +706,12 @@ public class MasterController {
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("sectionId", sectionId);
-
-			Integer count = rest.postForObject(Constant.url + "/getParentIdCountBySectionId", map, Integer.class);
-			 System.out.println("count :"+count);
-			 if(count>0)
-			 {
-				 HttpSession session = request.getSession();
-				 session.setAttribute("successMsg","Infomation not deleted successfully!");
-			 }
-			 else
-			 {		
-				 MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
-				 map1.add("sectionId", sectionId); 
-				 Info res = rest.postForObject(Constant.url + "/deleteSection", map1, Info.class);
+			map.add("sectionId", sectionId); 
+			Info res = rest.postForObject(Constant.url + "/deleteSection", map, Info.class);
 				 
 				 HttpSession session = request.getSession();
 				 session.setAttribute("successMsg","Infomation deleted successfully!");
-			 }
+			 
 	
 		} catch (Exception e) {
 			e.printStackTrace();

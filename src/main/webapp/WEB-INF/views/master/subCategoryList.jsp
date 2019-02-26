@@ -94,10 +94,11 @@
 										<td><a
 											href="${pageContext.request.contextPath}/editSubCategory/${categoryList.catId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
-												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteSubCategory/${categoryList.catId}/${categoryList.exInt2}"
+												rel="tooltip" ></span></a> 
+												<c:if test="${categoryList.externalUrl==0}">| <a
+											href="${pageContext.request.contextPath}/deleteSubCategory/${categoryList.catId}"
 											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
+												class="glyphicon glyphicon-remove"></span></a></c:if></td>
 									</tr>
 								</c:forEach>  
                 </tbody>

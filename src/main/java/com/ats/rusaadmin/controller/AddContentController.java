@@ -834,4 +834,25 @@ public class AddContentController {
 
 		return jsonString;
 	}
+	
+	
+	@RequestMapping(value = "/languageList", method = RequestMethod.GET)
+	public ModelAndView languageList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/sectionTreeList");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("langId", 1);
+			Languages[] Languages = rest.postForObject(Constant.url + "/getLanguageList", map, Languages[].class);
+			List<Languages> list = new ArrayList<Languages>(Arrays.asList(Languages));
+			  
+			System.out.println(list);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
 }

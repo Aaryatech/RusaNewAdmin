@@ -76,7 +76,7 @@
                         <th>Menu Name</th>
                         <th>Menu Desc</th>
                         <th>Section Name</th>
-                        <th>Category Sort No</th> 
+                        <th>Menu Sort No</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
@@ -92,10 +92,11 @@
 										<td><a
 											href="${pageContext.request.contextPath}/editCategory/${categoryList.catId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
-												rel="tooltip" ></span></a> | <a
+												rel="tooltip" ></span></a> 
+												<c:if test="${categoryList.externalUrl==0}">| <a
 											href="${pageContext.request.contextPath}/deleteCategory/${categoryList.catId}"
 											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
+												class="glyphicon glyphicon-remove"></span></a></c:if></td>
 									</tr>
 								</c:forEach>  
                 </tbody>
