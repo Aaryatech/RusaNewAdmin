@@ -257,7 +257,14 @@
                                   </select>
                                 </div>
                               </div>
- 
+  					 <c:if test="${not empty editCMSPages.downloadPdf}">
+                       	<div class="form-group">  
+                                 <label class="col-md-2 control-label">Current PDF :</label>
+                    <div class="col-sm-10">
+							<a href="${url}${editCMSPages.downloadPdf}" target="_blank">${editCMSPages.downloadPdf} <%-- - ${documentUploadList.fileSize} --%></a>
+						</div>
+						</div>
+						</c:if>
  										 <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
                                           <div class="col-sm-7">

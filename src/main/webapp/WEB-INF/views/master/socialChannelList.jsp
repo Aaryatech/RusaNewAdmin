@@ -82,15 +82,7 @@
                     </tr>
                 </thead>
 
-                <tfoot>
-                    <tr>
-                    	<th width="5%">Sr No</th>
-                        <th>Channel Title</th>
-                        <th>URL Links</th>
-                        <th>Sort No</th> 
-                        <th>Action</th> 
-                    </tr>
-                </tfoot>
+              
 
                 <tbody>
                         <c:forEach items="${channelList}" var="channelList" varStatus="count">
@@ -114,6 +106,15 @@
 												
 									</tr>
 								</c:forEach>  
+								  <tfoot>
+                    <tr>
+                    	<th width="5%">Sr No</th>
+                        <th>Channel Title</th>
+                        <th>URL Links</th>
+                        <th>Sort No</th> 
+                        <th>Action</th> 
+                    </tr>
+                </tfoot>
                 </tbody>
             </table>
 		</div>

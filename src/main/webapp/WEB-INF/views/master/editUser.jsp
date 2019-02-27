@@ -164,6 +164,7 @@
 
 										<c:choose>
 											<c:when test="${isEdit==1}">
+											     <c:if test="${not empty editUser.fileName}">
 												<div class="form-group">
 													<label class="col-md-2 control-label">Current
 														Profile Photo</label>
@@ -173,6 +174,7 @@
 													 	<input type="checkbox" name="remove" value="1"> Remove <br>
 												</div>
 												</div>
+													</c:if>
 													<input type="hidden" name="remove" value="0"> 
 											</c:when>
 

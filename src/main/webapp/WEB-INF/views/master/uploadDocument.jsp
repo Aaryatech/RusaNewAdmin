@@ -153,6 +153,16 @@
 								placeholder="Document Name" value="${editupload.exVar1}"  style="text-align: left;" name="docName" type="text" >
                                 </div>
                               </div>
+                               <c:if test="${not empty editupload.fileName}">
+                       	<div class="form-group">  
+                                 <label class="col-md-2 control-label">Current PDF :</label>
+                  				  <div class="col-sm-10">
+							<a href="${url}${editupload.fileName}" target="_blank">${editupload.exVar1}
+								- ${editupload.fileSize}</a>
+						</div>
+
+						</div>
+						</c:if>
                                 	  <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
                                           <div class="col-sm-10">

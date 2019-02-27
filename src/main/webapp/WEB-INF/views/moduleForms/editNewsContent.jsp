@@ -215,7 +215,7 @@
                                  
                                <c:if test="${editNewsBlog.featuredImage!=null}">
                                	<div class="form-group">  
-                                 <label class="col-md-2 control-label">Current Image</label>
+                                 <label class="col-md-2 control-label">Current Image :</label>
                                           <div class="col-md-10">
                                                   <img src="${url}${editNewsBlog.featuredImage}" style="width:150px; height:auto">
                                                   
@@ -255,7 +255,7 @@
                            </div>
                             
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="status">Featured Image Aligned  :</label>
+                                <label class="control-label col-sm-2" for="status">Featured Image Aligned :</label>
                                 <div class="col-sm-10">
                                 <select id="header_top_alignment" name="header_top_alignment" class="form-control"  >
                                 
@@ -291,7 +291,14 @@
                                   </select>
                                 </div>
                               </div>
- 
+ 						 <c:if test="${not empty editNewsBlog.downloadPdf}">
+                       	<div class="form-group">  
+                                 <label class="col-md-2 control-label">Current PDF :</label>
+                  				  <div class="col-sm-10">
+							<a href="${url}${editNewsBlog.downloadPdf}" target="_blank">${editNewsBlog.downloadPdf} <%-- - ${documentUploadList.fileSize} --%></a>
+						</div>
+						</div>
+						</c:if>
  										 <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
                                           <div class="col-sm-7">
