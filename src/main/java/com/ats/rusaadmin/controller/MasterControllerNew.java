@@ -560,7 +560,7 @@ public class MasterControllerNew {
 					 String imageName = null;
 					 String extension = FilenameUtils.getExtension(mainLogo.get(0).getOriginalFilename());
 					 imageName =  Constant.logoName+"."+extension;
-					 
+					 System.err.println("extension " + extension);
 					 try {
 							info = upload.saveUploadedImge(mainLogo.get(0), Constant.lgogImageURL,imageName,Constant.values,0,0,0,0,0 );
 							
