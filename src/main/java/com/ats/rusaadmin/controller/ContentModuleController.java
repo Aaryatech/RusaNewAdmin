@@ -59,7 +59,7 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/textImonialForm");
 		try {
-		 
+			editTestImonial=new TestImonial();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
 			page = rest.postForObject(Constant.url + "/getPageByPageId",map,
@@ -166,7 +166,7 @@ public class ContentModuleController {
 			map.add("id", id); 
 			editTestImonial = rest.postForObject(Constant.url + "/getTestImonialById", map, TestImonial.class);
 			model.addObject("editTestImonial", editTestImonial);
-			model.addObject("url", Constant.gallryImageURL);
+			model.addObject("url", Constant.getGallryImageURL);
 			model.addObject("isEdit",1);
 		//	model.addObject("url", Constant.bannerImageURL);
 

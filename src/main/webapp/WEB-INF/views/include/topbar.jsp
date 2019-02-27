@@ -19,16 +19,17 @@
 			<ul class="info-menu right-links list-inline list-unstyled">
 				<li class="profile"><a href="#" data-toggle="dropdown"
 					class="toggle"> <c:choose>
-							<c:when test="${sessionScope.UserDetail.fileName==null}">
-								<img
-									src="${pageContext.request.contextPath}/resources/assets/images/avatar.png"
+							<c:when test="${not empty sessionScope.UserDetail.fileName}">
+								<img src="${imageProfileUrl}${sessionScope.UserDetail.fileName}"
 									alt="user-image" class="img-circle img-inline">
 								<span>${sessionScope.UserDetail.firstname}
 									${sessionScope.UserDetail.lastname}<i class="fa fa-angle-down"></i>
 								</span>
+
 							</c:when>
 							<c:otherwise>
-								<img src="${imageProfileUrl}${sessionScope.UserDetail.fileName}"
+								<img
+									src="${pageContext.request.contextPath}/resources/assets/images/avatar.png"
 									alt="user-image" class="img-circle img-inline">
 								<span>${sessionScope.UserDetail.firstname}
 									${sessionScope.UserDetail.lastname}<i class="fa fa-angle-down"></i>
@@ -39,10 +40,9 @@
 
 				</a>
 					<ul class="dropdown-menu profile animated fadeIn">
- 
-						<li  ><a
-							href="${pageContext.request.contextPath}/logout"> <i
-								class="fa fa-lock"></i> Logout
+
+						<li><a href="${pageContext.request.contextPath}/logout">
+								<i class="fa fa-lock"></i> Logout
 						</a></li>
 					</ul></li>
 
