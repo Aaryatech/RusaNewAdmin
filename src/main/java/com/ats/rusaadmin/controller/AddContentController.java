@@ -365,6 +365,7 @@ public class AddContentController {
 			model.addObject("editCMSPages", editCMSPages);
 			model.addObject("page", page);
 			model.addObject("url", Constant.getGallryImageURL);
+			model.addObject("pdfUrl", Constant.getCmsPdf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -386,7 +387,11 @@ public class AddContentController {
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+			String removeImage = request.getParameter("removeImage");
+			String removePdf = request.getParameter("removePdf");
 			
+			System.out.println("removeImage " + removeImage);
+			System.out.println("removePdf " + removePdf); 
 			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -406,41 +411,46 @@ public class AddContentController {
 			}
 
 			editCMSPages.setEditByUserId(UserDetail.getUserId());
-			if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+			 
+				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+					System.out.println("in image null");
+				} else {
+					System.out.println("in image not null");
+					
+					String imageName = new String();
+					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
-			} else {
+					try {
+						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0, 0, 0,
+								0, 0);
+						editCMSPages.setFeaturedImage(imageName);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 
-				String imageName = new String();
-				imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
-
-				try {
-					upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0, 0, 0,
-							0, 0);
-					editCMSPages.setFeaturedImage(imageName);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
 				}
+	 
+			
+		 
+				System.out.println("in pdf not null");
+				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
-			}
+				} else {
 
-			if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
+					String pdfName = new String();
+					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
-			} else {
+					try {
+						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
+						editCMSPages.setDownloadPdf(pdfName);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 
-				String pdfName = new String();
-				pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
-
-				try {
-					upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-					editCMSPages.setDownloadPdf(pdfName);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
 				}
-
-			}
-
+		 
 			editCMSPages.setPageOrder(seqNo);
 			editCMSPages.setIsActive(isActive);
 			editCMSPages.setEditDate(sf.format(date));
