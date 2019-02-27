@@ -55,7 +55,7 @@ public class MasterControllerNew {
 	User edituser=new User();
 	Section editSection = new Section();
 	Category editSubCat=new Category();
-	GetSubCategory editSubCategory = new GetSubCategory();
+	//GetSubCategory editSubCategory = new GetSubCategory();
 	Galleryheader editGalleryheader = new Galleryheader();
 	BannerImages editbanner=new BannerImages();
 	List<Languages> languagesList = new ArrayList<Languages>();
@@ -113,6 +113,10 @@ public class MasterControllerNew {
 			String lastName = request.getParameter("lastname");
 			String email = request.getParameter("userEmail");
 			String pass = request.getParameter("userPass");
+		
+			int removePhoto = Integer.parseInt(request.getParameter("remove"));
+			
+			
 		//	String userId = request.getParameter("middlename");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 		
@@ -127,15 +131,21 @@ public class MasterControllerNew {
 			System.out.println(sf.format(date));
 			  if(userId.equalsIgnoreCase(null) || userId.equalsIgnoreCase("")) {
 				  
-				  
-					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-					user.setFileName(docFile);
-					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0);
-						}catch (Exception e) {
-							// TODO: handle exception
-							e.printStackTrace();
-						}
+				  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
+					
+					user.setFileName("");
+					
+				  }
+				  else {
+					  docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+						user.setFileName(docFile);
+						try {
+							Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0);
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
+				  }
 					user.setUserId(0);
 					user.setCreatedDate(sf.format(date));
 					user.setUserName(userName);
@@ -151,19 +161,32 @@ public class MasterControllerNew {
 					user.setLastname(lastName);
 					user.setAddedByUserId(UserDetail.getUserId());
 					//editbanner.setAddedByUserId(UserDetail.getUserId());
+				  
 		  }else {
 			  
 			  if(docfile.get(0).getOriginalFilename()==null || docfile.get(0).getOriginalFilename()=="") {
-				 
+				  try {
+				 System.out.println("File");
+				 if(removePhoto==1) {
+						System.out.println("Remove :"+removePhoto);
+						user.setFileName("");
+						}
+					}catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 				}else {
-					docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-					user.setFileName(docFile);
+					
+						docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
+						user.setFileName(docFile);
+					
 					try {
 						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL,docFile,Constant.values,0,0,0,0,0);
 						}catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
+					
 				}
 			    user.setUserId(Integer.parseInt(userId));
 				//user.setCreatedDate(sf.format(date));
@@ -173,18 +196,15 @@ public class MasterControllerNew {
 				user.setRoles(roles);
 				user.setDelStatus(1);
 				user.setSortNo(seqNo);
-				 
+				user.setUserPass(pass);
 				user.setIsActive(isActive);
 				user.setUserEmail(email);
-				user.setUserPass(pass);
+				//user.setUserPass(pass);
 				user.setLastname(lastName);
 				user.setModifiedDate(yy.format(date));
 				user.setEditByUserId(UserDetail.getUserId());
 			   
-		  }
-		
-		
-		
+		  }		
 			
 			User res = rest.postForObject(Constant.url + "/saveUser", user, User.class);
 
@@ -198,6 +218,31 @@ public class MasterControllerNew {
 				session.setAttribute("successMsg","User Infomation updated successfully!");
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/userList";
+	}
+	@RequestMapping(value = "/changePass", method = RequestMethod.POST)
+	public String changePass(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session1 = request.getSession();
+			User UserDetail =(User) session1.getAttribute("UserDetail");
+			 String userId = request.getParameter("userId");
+			 String pass = request.getParameter("userPass");
+			
+			
+					user.setUserId(Integer.parseInt(userId));					
+					user.setUserPass(pass);
+					
+					User res = rest.postForObject(Constant.url + "/saveUser", user, User.class);
+					System.out.println("Id: "+userId);
+					
+						HttpSession session = request.getSession();
+						session.setAttribute("successMsg","User Infomation updated successfully!");			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -234,7 +279,7 @@ public class MasterControllerNew {
 			e.printStackTrace();
 		}
 
-		return "master/addUser";
+		return "master/editUser";
 	}
 	 
 	@RequestMapping(value = "/clearUserSessionAttribute", method = RequestMethod.GET)

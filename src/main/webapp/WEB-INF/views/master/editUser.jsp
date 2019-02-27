@@ -175,7 +175,7 @@
 											</div>
 										</div>
 
- 									<input type="hidden" name="remove" value="0"> 
+
 
 										<c:choose>
 											<c:when test="${isEdit==1}">
@@ -185,8 +185,10 @@
 													<div class="col-md-10">
 														<img src="${imageUrl}${editUser.fileName}"
 															style="width: 150px; height: auto">
-													</div>
+													 	<input type="checkbox" name="remove" value="1"> Remove <br>
 												</div>
+												</div>
+													<input type="hidden" name="remove" value="0"> 
 											</c:when>
 
 
@@ -228,6 +230,7 @@
 														image size is 100px × 100px </span>
 												</div>
 											</div>
+										
 										</div>
 
 										<div class="form-group">
@@ -252,15 +255,41 @@
 												</select>
 											</div>
 										</div>
-										<hr>
+										
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button type="submit" class="btn btn-primary">Submit</button>
+												<button type="reset" class="btn btn-default">Reset</button>
+
+											</div>
+										</div>
+										<input id="userPass" class="form-control"
+													placeholder="Password" value="${editUser.userPass}"	style="text-align: left;" 
+													name="userPass" type="hidden">
+														<input id="userName" value="${editUser.userName}" name="userName" type="hidden">
+									</div>
+								</div>
+							</div>
+
+
+						</form>
+								<form class="form-horizontal" id="addSupplier"
+							action="${pageContext.request.contextPath}/changePass"
+							onsubmit="return confirm('Do you really want to submit the form?');"
+							method="post" enctype="multipart/form-data">
+
+							<div class="content-body">
+								<div class="row">
 										<div class="row">
 											<div class="col-xs-12">
 												<h3 class="title pull-left">LOGIN DETAIL</h3>
 											</div>
 										</div>
+											<input id="userId" value="${editUser.userId}" name="userId"
+											type="hidden">
 										<c:choose>
 											<c:when test="${isEdit=='1'}">
-
+										
 												<div class="form-group">
 													<label class="control-label col-sm-2"
 														for="config_mail_protocol">User Name : <span
@@ -274,10 +303,7 @@
 															readonly required>
 													</div>
 												</div>
-
-
-											</c:when>
-
+												</c:when>
 											<c:otherwise>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
@@ -304,7 +330,7 @@
 											<div class="col-sm-10">
 												<input id="userPass" class="form-control"
 													placeholder="Password" value="${editUser.userPass}"
-													style="text-align: left;" name="userPass" type="text"
+													style="text-align: left;" name="userPass" type="password"
 													required>
 											</div>
 										</div>
@@ -312,7 +338,7 @@
 
 										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
-												<button type="submit" class="btn btn-primary">Submit</button>
+												<button type="submit" class="btn btn-primary">Change</button>
 												<button type="reset" class="btn btn-default">Reset</button>
 
 											</div>
@@ -320,10 +346,8 @@
 
 									</div>
 								</div>
-							</div>
-
-
-						</form>
+							</form>
+						
 					</section>
 				</div>
 			</section>
