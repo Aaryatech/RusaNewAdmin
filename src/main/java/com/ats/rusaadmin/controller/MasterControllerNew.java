@@ -120,7 +120,7 @@ public class MasterControllerNew {
 		//	String userId = request.getParameter("middlename");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 		
-			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+			//int seqNo = Integer.parseInt(request.getParameter("seqNo"));
             String docFile=null;
         	VpsImageUpload upload = new VpsImageUpload();
 			Date date = new Date();
@@ -153,7 +153,7 @@ public class MasterControllerNew {
 					user.setMiddlename(middleName);
 					user.setRoles(roles);
 					user.setDelStatus(1);
-					user.setSortNo(seqNo);
+					user.setSortNo(0);
 					//user.setCreatedDate(sf.format(date));
 					user.setIsActive(isActive);
 					user.setUserEmail(email);
@@ -195,7 +195,7 @@ public class MasterControllerNew {
 				user.setMiddlename(middleName);
 				user.setRoles(roles);
 				user.setDelStatus(1);
-				user.setSortNo(seqNo);
+				user.setSortNo(0);
 				user.setUserPass(pass);
 				user.setIsActive(isActive);
 				user.setUserEmail(email);

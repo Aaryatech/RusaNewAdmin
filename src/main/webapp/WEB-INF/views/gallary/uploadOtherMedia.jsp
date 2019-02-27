@@ -75,6 +75,11 @@
 
 
 									</form>
+									<br>
+										<div >
+										<a href="${pageContext.request.contextPath}/uploadOtherMedia"><button
+										type="button" style="margin-left:850px" class="btn btn-success">Refresh</button></a>
+										</div>
 								</div>
 							</div>
 						</div>

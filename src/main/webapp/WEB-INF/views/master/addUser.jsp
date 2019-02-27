@@ -162,18 +162,6 @@
 											</div>
 										</div>
 
-										<div class="form-group">
-											<label class="control-label col-sm-2"
-												for="config_mail_protocol">Sort No : <span
-												class="text-danger">*</span>
-											</label>
-											<div class="col-sm-10">
-												<input id="seqNo" class="form-control"
-													placeholder="Sequence No" value="${editUser.sortNo}"
-													style="text-align: left;" name="seqNo" type="number"
-													required>
-											</div>
-										</div>
 
  									<input type="hidden" name="remove" value="0"> 
 
