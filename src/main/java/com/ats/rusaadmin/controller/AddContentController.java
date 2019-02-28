@@ -366,6 +366,7 @@ public class AddContentController {
 			model.addObject("page", page);
 			model.addObject("url", Constant.getGallryImageURL);
 			model.addObject("pdfUrl", Constant.getCmsPdf);
+			model.addObject("isEdit", 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -387,10 +388,10 @@ public class AddContentController {
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
-			String removeImage = request.getParameter("removeImage");
-			String removePdf = request.getParameter("removePdf");
+			int remove = Integer.parseInt(request.getParameter("removeImg"));
+			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
 			
-			System.out.println("removeImage " + removeImage);
+			System.out.println("removeImage " + remove);
 			System.out.println("removePdf " + removePdf); 
 			
 			Date date = new Date();
@@ -414,6 +415,17 @@ public class AddContentController {
 			 
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
 					System.out.println("in image null");
+					 try {
+					
+						 if(remove==1) {
+								System.out.println("Remove :"+remove);
+								editCMSPages.setFeaturedImage("");
+								}
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
+					
 				} else {
 					System.out.println("in image not null");
 					
@@ -436,6 +448,16 @@ public class AddContentController {
 				System.out.println("in pdf not null");
 				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
+					 try {
+							
+						 if(removePdf==1) {
+								System.out.println("Remove :"+removePdf);
+								editCMSPages.setDownloadPdf("");
+								}
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
 				} else {
 
 					String pdfName = new String();

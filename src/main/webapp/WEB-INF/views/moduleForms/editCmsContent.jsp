@@ -209,20 +209,23 @@
 																	value="${editCMSPages.pageOrder}" required>
 															</div>
 														</div>
-
-														<c:if test="${not empty editCMSPages.featuredImage}">
-															<div class="form-group">
-																<label class="col-md-2 control-label">Current
-																	Image</label>
-																<div class="col-md-10">
+														<c:choose>
+															<c:when test="${isEdit==1}">
+																<c:if test="${not empty editCMSPages.featuredImage}">
+																	<div class="form-group">
+																		<label class="col-md-2 control-label">Current
+																			Image</label>
+																			<div class="col-md-10">
 																	<img src="${url}${editCMSPages.featuredImage}"
-																		style="width: 150px; height: auto"> <input
-																		type="checkbox" name="removeImage"> Remove
-																	Image
-
-																</div>
-															</div>
-														</c:if>
+																		style="width: 150px; height: auto"> 
+																			<input type="checkbox" name="removeImg" value="1"> Remove 
+																		</div>
+																	</div>
+																</c:if>
+																<input type="hidden" name="removeImg" value="0"> 
+															</c:when>
+															
+														</c:choose>
 
 
 														<div class="form-group row">
@@ -311,18 +314,28 @@
 																</select>
 															</div>
 														</div>
+														<c:choose>
+															<c:when test="${isEdit==1}">
 														<c:if test="${not empty editCMSPages.downloadPdf}">
 															<div class="form-group">
 																<label class="col-md-2 control-label">Current
-																	PDF</label>
+																	PDF :</label>
 																<div class="col-md-10">
 																	<a href="${pdfUrl}${editCMSPages.downloadPdf}"
-																		target="_blank">${editCMSPages.downloadPdf}</a> <input
-																		type="checkbox" name="removePdf"> Remove PDF
-
+																		target="_blank">${editCMSPages.downloadPdf}</a> 
+																		&nbsp	&nbsp	&nbsp
+																		<input type="checkbox" name="removePdf" value="1"> Remove <br>
 																</div>
+																
 															</div>
 														</c:if>
+																<input type="hidden" name="removePdf" value="0"> 
+														
+														
+											</c:when>
+											</c:choose>
+							
+										
 														<div class="form-group row">
 															<label class="control-label col-sm-2" for="page_pdf">PDF
 																File :</label>
