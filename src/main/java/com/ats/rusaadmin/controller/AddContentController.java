@@ -418,6 +418,13 @@ public class AddContentController {
 					 try {
 					
 						 if(remove==1) {
+							 File files = new File(Constant.gallryImageURL+editCMSPages.getFeaturedImage());
+								//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+								
+								if(files.delete()){
+						            System.out.println(" File deleted  " + Constant.gallryImageURL+editCMSPages.getFeaturedImage() );
+						        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+editCMSPages.getFeaturedImage());
+									
 								System.out.println("Remove :"+remove);
 								editCMSPages.setFeaturedImage("");
 								}
@@ -448,16 +455,23 @@ public class AddContentController {
 				System.out.println("in pdf not null");
 				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
-					 try {
+					try
+					{
+					if(removePdf==1) {
+						 File files = new File(Constant.cmsPdf+editCMSPages.getDownloadPdf());
+							//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
 							
-						 if(removePdf==1) {
-								System.out.println("Remove :"+removePdf);
-								editCMSPages.setDownloadPdf("");
-								}
-							}catch (Exception e) {
-								// TODO: handle exception
-								e.printStackTrace();
-							}
+							if(files.delete()){
+					            System.out.println(" File deleted  " + Constant.cmsPdf+editCMSPages.getDownloadPdf() );
+					        }else System.out.println("doesn't exists  " + Constant.cmsPdf+editCMSPages.getDownloadPdf());
+							
+						System.out.println("Remove :"+removePdf);
+						editCMSPages.setDownloadPdf("");
+						}
+					}catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 				} else {
 
 					String pdfName = new String();

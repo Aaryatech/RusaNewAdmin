@@ -218,11 +218,12 @@
 																			<div class="col-md-10">
 																	<img src="${url}${editCMSPages.featuredImage}"
 																		style="width: 150px; height: auto"> 
-																			<input type="checkbox" name="removeImg" value="1"> Remove 
+																			&nbsp 	&nbsp  <input type="checkbox" name="removeImg" value="1"> Remove 
 																		</div>
 																	</div>
 																</c:if>
 																<input type="hidden" name="removeImg" value="0"> 
+                                 
 															</c:when>
 															
 														</c:choose>

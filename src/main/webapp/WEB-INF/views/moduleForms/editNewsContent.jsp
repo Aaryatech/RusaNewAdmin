@@ -119,17 +119,18 @@
 
                             <div>
 						 <input type="hidden" name="isEdit" value="${isEdit}">  
-                    
-                    <c:choose>
+                      --%>
+                   <%--  <c:choose>
+                   
                 	<c:when test="${isEdit==0}">
-                             <input type="hidden" name="pageId" value="${page.pageId}">  
+                             <input type="hidden" name="newsblogs_id" value="0">  
                              
                              </c:when>
                              	<c:otherwise>
-                                	    <input type="hidden" name="pageId" value="${editNewsBlog.pageId}">  
+                                	    <input type="hidden" name="newsblogs_id" value="${editNewsBlog.newsblogsId}">  
                                 	</c:otherwise></c:choose> 
-                      
                        --%>
+                      
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
@@ -218,10 +219,11 @@
                                  <label class="col-md-2 control-label">Current Image :</label>
                                           <div class="col-md-10">
                                                   <img src="${url}${editNewsBlog.featuredImage}" style="width:150px; height:auto">
-                                                  
-                                          </div>
- 								</div>
-                               </c:if>
+                                              	&nbsp 	&nbsp  <input type="checkbox" name="removeImg" value="1"> Remove 
+																		</div>
+																	</div>
+																</c:if>
+																<input type="hidden" name="removeImg" value="0"> 
                                  
                                   
                            <div class="form-group row">
@@ -291,14 +293,30 @@
                                   </select>
                                 </div>
                               </div>
- 						 <c:if test="${not empty editNewsBlog.downloadPdf}">
+                          
+														<c:if test="${not empty editNewsBlog.downloadPdf}">
+															<div class="form-group">
+																<label class="col-md-2 control-label">Current
+																	PDF :</label>
+																<div class="col-md-10">
+																	<a href="${pdfUrl}${editNewsBlog.downloadPdf}"
+																		target="_blank">${editNewsBlog.downloadPdf}</a> 
+																		&nbsp	&nbsp	&nbsp
+																		<input type="checkbox" name="removePdf" value="1"> Remove <br>
+																</div>
+																
+															</div>
+														</c:if>
+																<input type="hidden" name="removePdf" value="0"> 
+											
+ 						 <%-- <c:if test="${not empty editNewsBlog.downloadPdf}">
                        	<div class="form-group">  
                                  <label class="col-md-2 control-label">Current PDF :</label>
                   				  <div class="col-sm-10">
-							<a href="${url}${editNewsBlog.downloadPdf}" target="_blank">${editNewsBlog.downloadPdf} <%-- - ${documentUploadList.fileSize} --%></a>
+							<a href="${url}${editNewsBlog.downloadPdf}" target="_blank">${editNewsBlog.downloadPdf} - ${documentUploadList.fileSize}</a>
 						</div>
 						</div>
-						</c:if>
+						</c:if> --%>
  										 <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
                                           <div class="col-sm-7">

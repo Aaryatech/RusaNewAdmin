@@ -109,9 +109,11 @@
                 	<c:when test="${isEdit==0}">
                              <input type="hidden" name="pageId" value="${page.pageId}">  
                               <input type="hidden" name="moduleId" value="${moduleId}">  
+                               	<input type="hidden" name="id" value="0">
                              
                              </c:when>
                              	<c:otherwise>
+                             	<input type="hidden" name="id" value="${editTestImonial.id}">
                                 	    <input type="hidden" name="pageId" value="${editTestImonial.pageId}">
                                 	     <input type="hidden" name="moduleId" value="${editTestImonial.sectionId}">   
                                 	</c:otherwise></c:choose>  
@@ -137,10 +139,11 @@
                                  <label class="col-md-2 control-label">Current Image</label>
                                           <div class="col-md-10">
                                                   <img src="${url}${editTestImonial.imageName}" style="width:200px; height:auto">
-                                                  
-                                          </div>
- 								</div>
-                               </c:if>
+                                                 &nbsp 	&nbsp  <input type="checkbox" name="removeImg" value="1"> Remove 
+																		</div>
+																	</div>
+																</c:if>
+																<input type="hidden" name="removeImg" value="0"> 
               
                               </div>
                                 <div class="col-xs-12">

@@ -1,5 +1,6 @@
 package com.ats.rusaadmin.controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,8 +80,9 @@ public class ContentModuleController {
 	public String insertCmsForm(@RequestParam("images") List<MultipartFile> images ,HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		HttpSession session = request.getSession();
 		try {
-			HttpSession session = request.getSession();
+			
 			User UserDetail =(User) session.getAttribute("UserDetail");
 			
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
@@ -92,6 +94,9 @@ public class ContentModuleController {
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+			int id = Integer.parseInt(request.getParameter("id"));
+			int remove = Integer.parseInt(request.getParameter("removeImg"));
+			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -102,7 +107,24 @@ public class ContentModuleController {
 			VpsImageUpload upload = new VpsImageUpload();
 		
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
-				  
+					System.out.println("in image null");
+					 try {
+					
+						 if(remove==1) {
+							 File files = new File(Constant.gallryImageURL+editTestImonial.getImageName());
+								//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+								
+								if(files.delete()){
+						            System.out.println(" File deleted  " + Constant.gallryImageURL+editTestImonial.getImageName() );
+						        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+editTestImonial.getImageName());
+									
+								System.out.println("Remove :"+remove);
+								editTestImonial.setImageName("");
+								}
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
 				}else {
 				 
 					String imageName = new String(); 
@@ -116,6 +138,17 @@ public class ContentModuleController {
 							e.printStackTrace();
 						}
 					}
+				if(id==0)
+				{
+					System.out.println(" add Id :"+ id);
+					editTestImonial. setAddedByUserId(UserDetail.getUserId());
+				}
+				else
+				{
+					System.out.println("edit Id :"+ id);
+					editTestImonial.setEditByUserId(UserDetail.getUserId());
+				}
+				
 				editTestImonial.setSectionId(moduleId);
 				editTestImonial.setPageId(pageId);
 				editTestImonial.setDesignation(designation); 
@@ -145,11 +178,13 @@ public class ContentModuleController {
 			}else {
 				
 				session.setAttribute("successMsg","Infomation updated successfully!");
-				session.setAttribute("errorMsg","true");
+				session.setAttribute("errorMsg","false");
 			}
 			
 			
 		} catch (Exception e) {
+			session.setAttribute("successMsg","Error while updating!");
+			session.setAttribute("errorMsg","true");
 			e.printStackTrace();
 		}
 			return "redirect:/sectionTreeList";
@@ -370,6 +405,7 @@ public class ContentModuleController {
 						}
 					 
 				}
+				newsBlog.setAddedByUserId(UserDetail.getUserId());
 				newsBlog.setPageId(pageId);
 				newsBlog.setExVar1(text);
 				newsBlog.setNewsSourceUrlName(urlName);
@@ -475,6 +511,8 @@ public class ContentModuleController {
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);
 			model.addObject("url", Constant.getGallryImageURL);
+			model.addObject("pdfUrl", Constant.getCmsPdf);
+			//model.addObject("isEdit", 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -495,6 +533,11 @@ public class ContentModuleController {
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
 			String urlName = request.getParameter("url_name");
+			int remove = Integer.parseInt(request.getParameter("removeImg"));
+			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
+			
+			
+			
 		/*	int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			*/
@@ -525,7 +568,24 @@ public class ContentModuleController {
 				 
 				//editCMSPages.setEditByUserId(UserDetail.getUserId());
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
-				  
+					System.out.println("in image null");
+					 try {
+					
+						 if(remove==1) {
+							 File files = new File(Constant.gallryImageURL+editNewsBlog.getFeaturedImage());
+								//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+								
+								if(files.delete()){
+						            System.out.println(" File deleted  " + Constant.gallryImageURL+editNewsBlog.getFeaturedImage() );
+						        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+editNewsBlog.getFeaturedImage());
+									
+								System.out.println("Remove :"+remove);
+								editNewsBlog.setFeaturedImage("");
+								}
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
 				}else {
 				 
 					String imageName = new String(); 
@@ -542,7 +602,23 @@ public class ContentModuleController {
 				}
 				
 				if(pagePdf.get(0).getOriginalFilename()==null || pagePdf.get(0).getOriginalFilename()=="") {
-					  
+					try
+					{
+					if(removePdf==1) {
+						 File files = new File(Constant.cmsPdf+editNewsBlog.getDownloadPdf());
+							//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+							
+							if(files.delete()){
+					            System.out.println(" File deleted  " + Constant.cmsPdf+editNewsBlog.getDownloadPdf() );
+					        }else System.out.println("doesn't exists  " + Constant.cmsPdf+editNewsBlog.getDownloadPdf());
+							
+						System.out.println("Remove :"+removePdf);
+						editNewsBlog.setDownloadPdf("");
+						}
+					}catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 				}else {
 				 
 					String pdfName = new String(); 
@@ -557,6 +633,7 @@ public class ContentModuleController {
 						}
 					 
 				}
+				editNewsBlog.setEditByUserId(UserDetail.getUserId());
 				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(9);
 				editNewsBlog.setExVar1(text);
@@ -716,6 +793,7 @@ public class ContentModuleController {
 						}
 					 
 				}
+				newsBlog.setAddedByUserId(UserDetail.getUserId());
 				newsBlog.setPageId(pageId);
 				newsBlog.setEventContactNumber(eventNo);
 				newsBlog.setEventContactPerson(personName);
@@ -825,6 +903,7 @@ public class ContentModuleController {
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);
 			model.addObject("url", Constant.getGallryImageURL);
+			model.addObject("pdfUrl", Constant.getCmsPdf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -852,6 +931,9 @@ public class ContentModuleController {
 		/*	int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			*/
+			int remove = Integer.parseInt(request.getParameter("removeImg"));
+			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
+			
 			
 			String pageName = request.getParameter("page_name");
 			
@@ -876,7 +958,24 @@ public class ContentModuleController {
 				 
 				//editCMSPages.setEditByUserId(UserDetail.getUserId());
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
-				  
+					System.out.println("in image null");
+					 try {
+					
+						 if(remove==1) {
+							 File files = new File(Constant.gallryImageURL+editNewsBlog.getFeaturedImage());
+								//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+								
+								if(files.delete()){
+						            System.out.println(" File deleted  " + Constant.gallryImageURL+editNewsBlog.getFeaturedImage() );
+						        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+editNewsBlog.getFeaturedImage());
+									
+								System.out.println("Remove :"+remove);
+								 editNewsBlog.setFeaturedImage("");
+								}
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
 				}else {
 				 
 					String imageName = new String(); 
@@ -893,7 +992,23 @@ public class ContentModuleController {
 				}
 				
 				if(pagePdf.get(0).getOriginalFilename()==null || pagePdf.get(0).getOriginalFilename()=="") {
-					  
+					try
+					{
+					if(removePdf==1) {
+						 File files = new File(Constant.cmsPdf+editNewsBlog.getDownloadPdf());
+							//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+							
+							if(files.delete()){
+					            System.out.println(" File deleted  " + Constant.cmsPdf+editNewsBlog.getDownloadPdf() );
+					        }else System.out.println("doesn't exists  " + Constant.cmsPdf+editNewsBlog.getDownloadPdf());
+							
+						System.out.println("Remove :"+removePdf);
+						editNewsBlog.setDownloadPdf("");
+						}
+					}catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 				}else {
 				 
 					String pdfName = new String(); 
@@ -908,6 +1023,7 @@ public class ContentModuleController {
 						}
 					 
 				}
+				editNewsBlog.setEditByUserId(UserDetail.getUserId());
 				editNewsBlog.setEventContactNumber(eventNo);
 				editNewsBlog.setEventContactPerson(personName);
 				editNewsBlog.setEventDateFrom(sf1.format(date)); 
