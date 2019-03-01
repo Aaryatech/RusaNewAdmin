@@ -639,5 +639,36 @@ public class NewController {
 		
 	 return "redirect:/siteMaintenances";
 	}
- 
+	@RequestMapping(value = "/siteMapList", method = RequestMethod.GET)
+	public ModelAndView siteMapList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/siteMapList");
+		try {
+		/*	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			List<SocialChannels> socialList = rest.getForObject(Constant.url + "/getAllSocialList",
+					List.class);
+			//List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
+			model.addObject("channelList", socialList);*/
+			 
+			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+					Section[].class);
+			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
+			model.addObject("sectionList", sectionList);
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GetCategory[] getCategory = rest.postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
+			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(getCategory));
+			model.addObject("categoryList", categoryList);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
 }
