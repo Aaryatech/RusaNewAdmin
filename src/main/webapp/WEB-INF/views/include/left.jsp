@@ -50,7 +50,7 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="javascript:;"> <i class="fa fa-columns"></i> <span
+				<a href="javascript:;"> <i class="fa fa fa-male"></i> <span
 					class="title">Admin</span> <c:choose>
 						<c:when test="${sessionScope.sessionModuleId==1}">
 							<span class="arrow open"></span>
@@ -97,7 +97,7 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="javascript:;"> <i class="fa fa-columns"></i> <span
+				<a href="javascript:;"> <i class="fa fa fa fa-desktop"></i> <span
 					class="title">Front End Control</span> <c:choose>
 						<c:when test="${sessionScope.sessionModuleId==2}">
 							<span class="arrow open"></span>
@@ -192,7 +192,7 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="javascript:;"> <i class="fa fa-columns"></i> <span
+				<a href="javascript:;"> <i class="fa fa-sitemap"></i> <span
 					class="title">Section</span> <c:choose>
 						<c:when test="${sessionScope.sessionModuleId==3}">
 							<span class="arrow open"></span>
@@ -269,7 +269,7 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="javascript:;"> <i class="fa fa-columns"></i> <span
+				<a href="javascript:;"> <i class="fa fa-reorder"></i> <span
 					class="title">Content List</span> <c:choose>
 						<c:when test="${sessionScope.sessionModuleId==4}">
 							<span class="arrow open"></span>
@@ -472,7 +472,7 @@
 					</c:otherwise>
 				</c:choose>
 				<a href="${pageContext.request.contextPath}/uploadOtherMedia"
-					onclick="selectSubMod(5,0)"> <i class="fa fa-columns"></i> <span
+					onclick="selectSubMod(5,0)"> <i class="fa fa-cloud-upload"></i> <span
 					class="title">Upload Media/Files</span>
 				</a>
 				</li>
@@ -488,7 +488,7 @@
 					</c:otherwise>
 				</c:choose>
 				<a href="${pageContext.request.contextPath}/ContactList"
-					onclick="selectSubMod(6,0)"> <i class="fa fa-columns"></i> <span
+					onclick="selectSubMod(6,0)"> <i class="fa fa-envelope"></i> <span
 					class="title">Contact List</span>
 				</a>
 				</li>
