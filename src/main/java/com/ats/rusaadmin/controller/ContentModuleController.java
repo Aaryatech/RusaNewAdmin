@@ -23,23 +23,20 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
-import com.ats.rusaadmin.common.DateConvertor;
+import com.ats.rusaadmin.common.EmailUtility;
 import com.ats.rusaadmin.common.VpsImageUpload;
-import com.ats.rusaadmin.model.BannerImages;
-import com.ats.rusaadmin.model.CMSPageDescription;
-import com.ats.rusaadmin.model.CMSPages;
 import com.ats.rusaadmin.model.GallaryCategory;
 import com.ats.rusaadmin.model.GallaryDetail;
-import com.ats.rusaadmin.model.GetCategory;
 import com.ats.rusaadmin.model.GetPagesModule;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Languages;
 import com.ats.rusaadmin.model.NewsBlog;
 import com.ats.rusaadmin.model.NewsBlogDescription;
-import com.ats.rusaadmin.model.NewsDetails;
 import com.ats.rusaadmin.model.Page;
 import com.ats.rusaadmin.model.PagesModule;
+import com.ats.rusaadmin.model.Registration;
 import com.ats.rusaadmin.model.TestImonial;
 import com.ats.rusaadmin.model.User;
 
@@ -54,6 +51,10 @@ public class ContentModuleController {
 	TestImonial editTestImonial=new TestImonial();
     NewsBlog editNewsBlog=new NewsBlog();
     GallaryDetail editGalleryDetail=new GallaryDetail();
+    
+    static String senderEmail = "atsinfosoft@gmail.com";
+    static String senderPassword = "atsinfosoft@123";
+    static String mailsubject = " RUSA Login Credentials ";
 
 	@RequestMapping(value = "/textimonialForm/{pageId}/{moduleId}", method = RequestMethod.GET)
 	public ModelAndView textimonialForm(@PathVariable int pageId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
@@ -1321,5 +1322,67 @@ public class ContentModuleController {
 		}
 
 		return "redirect:/VedioFormList";
+	}
+	
+	//--------------------------------------Register User Mapping-----------------------------------------------------------//\
+	
+	@RequestMapping(value = "/activeUserList", method = RequestMethod.GET)
+	public ModelAndView activeUserList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("activateUser");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			//map.add("delStatus", 1);
+			List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",	List.class);
+			//List<Registration> userList = new ArrayList<Registration>(Arrays.asList(getUser));
+			model.addObject("regList", getUser);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/activateUser", method = RequestMethod.POST)
+	public String editUser(HttpServletRequest request,HttpServletResponse response,ModelAndView model) {
+
+		try {
+			Info info=null;
+			Info info1=null;
+			String regId=request.getParameter("regId");
+			String email=request.getParameter("email");
+			String name=request.getParameter("name");
+			
+			 HttpSession session = request.getSession();
+			String password=Commons.getAlphaNumericString(5);
+			System.out.println("Password: "+password);
+			System.out.println("Emails: "+email);
+			System.out.println("name: "+name);
+			System.out.println("regId: "+regId);
+			
+			  info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name, password);
+			  
+			  if(info1.isError()==false)
+			  { 
+				  System.out.println("info1");
+				  MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+				  map.add("regId", regId); info = rest.postForObject(Constant.url +"/updateUserByRegId", map, Info.class);
+			  
+			  if(info.isError()==false) 
+			  { 
+				  List<Registration> getUser =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+				  session.setAttribute("regList", getUser);
+				  session.setAttribute("successMsg","Infomation Updated successfully!"); }else
+			  {
+					  session.setAttribute("successMsg","Error while Updateing !"); } }
+			 
+			 
+			//System.out.println(getUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "activateUser";
 	}
 }
