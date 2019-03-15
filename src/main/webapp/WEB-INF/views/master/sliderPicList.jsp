@@ -76,6 +76,7 @@
                         <th>Image</th>
                         <th>Slider Name</th>
                         <th>Add Date</th> 
+                        <th>Status</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
@@ -88,6 +89,14 @@
 										
 										<td>${bannerImagesList.sliderName}</td>
 										<td>${bannerImagesList.addDate}</td>   
+										<c:choose>
+										 <c:when test="${bannerImagesList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose>  
 										<td><a
 											href="${pageContext.request.contextPath}/editSliderImages/${bannerImagesList.id}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

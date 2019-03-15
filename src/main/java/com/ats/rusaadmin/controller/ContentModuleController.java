@@ -1344,6 +1344,30 @@ public class ContentModuleController {
 		return model;
 	}
 	
+	
+	@RequestMapping(value = "/editActivateUser/{regId}", method = RequestMethod.GET)
+	public ModelAndView editActivateUser(@PathVariable("regId") int regId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("userActivationForm");
+		try {
+		 System.out.println("id"+regId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("regId", regId);
+			 
+			Registration editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId",map,
+					Registration.class);
+		System.out.println("User: "+editUser.toString());	
+			
+			model.addObject("editUser", editUser);
+			model.addObject("isEdit", 1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
 	@RequestMapping(value = "/activateUser", method = RequestMethod.POST)
 	public String editUser(HttpServletRequest request,HttpServletResponse response,ModelAndView model) {
 

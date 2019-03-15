@@ -79,8 +79,9 @@
                         <th>User First Name</th>
                         <th>User Last Name</th> 
                          <th>Email</th> 
+                        
                           <th>Roles</th> 
-                      
+                       <th>Status</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
@@ -94,6 +95,15 @@
 										<td>${userList.lastname}</td>  
 										<td>${userList.userEmail}</td>
 										<td>${userList.roles}</td>
+										 <c:choose>
+										 <c:when test="${userList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose>
+										
 									
 										<td><a
 											href="${pageContext.request.contextPath}/editUser/${userList.userId}"><span

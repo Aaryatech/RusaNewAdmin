@@ -81,7 +81,7 @@
                         <th>Mobile Number</th> 
                         <th>Register Via</th> 
                         <th>SMS Verified Status</th> 
-                         <th>Email Verified Status</th> 
+                        <th>Status</th> 
                         <th>Activate</th> 
                     </tr>
                 </thead>
@@ -103,15 +103,31 @@
    											
 										<td>${userList.emails}</td>  
 										<td>${userList.mobileNumber}</td>
-										<td>${userList.registerVia}</td>
-										<td>${userList.smsVerified}</td>
-										<td>${userList.emailVerified}</td>
-										<td><%-- <a
-											href="${pageContext.request.contextPath}/activateUser/${userList.regId}"><span
+										<td>${userList.registerVia}</td>									
+										<c:choose>
+										 <c:when test="${${userList.smsVerified==1}">
+										  <td>Verified</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Not Verified</td>
+										 </c:otherwise>
+										 </c:choose> 
+									
+										<c:choose>
+										 <c:when test="${userList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
+										<td><a
+											href="${pageContext.request.contextPath}/editActivateUser/${userList.regId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
-												rel="tooltip" ></span></a>  --%>
+												rel="tooltip" ></span></a> </td>
+												
 												<%-- <a href="${pageContext.request.contextPath}/activateUser/${userList.regId}/${userList.emails}/${userList.name}"><button type="button" class="btn btn-primary">Activate</button></a>
-									 --%>	
+								<%-- 
 										<form name="loginform" id="loginform" action="${pageContext.request.contextPath}/activateUser" method="post">
             									<input type="hidden" name="email" value="${userList.emails}" >
             									<input type="hidden" name="name"  value="${userList.name}" >
@@ -122,8 +138,8 @@
 									 		   <p class="submit">
                						  			   <input type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary" value="Activate" />
                     			       		  </p>
-                    			       </form>
-										</td>
+                    			       </form> </td>--%>
+										
 												
 								</tr>
 						</c:forEach>  

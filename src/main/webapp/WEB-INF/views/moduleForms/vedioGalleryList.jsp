@@ -75,6 +75,7 @@
                    		<th width="5%">Sr No</th>
                         <th >Title</th> 
                         <th width="50%">Video URL / Code</th> 
+                        <th width="10%">status</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
@@ -85,7 +86,14 @@
 										<td>${count.index+1}</td>
 										<td>${gallaryDetailList.title} </td> 
 										<td>${gallaryDetailList.fileName}</td>
-										 
+										 	<c:choose>
+										 <c:when test="${gallaryDetailList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
 										<td>  <a href="editVideoContent/${gallaryDetailList.galleryDetailsId}" ><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a>     <a

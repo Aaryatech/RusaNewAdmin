@@ -78,6 +78,7 @@
                         <th>Channel Title </th>
                         <th>URL Links</th>
                         <th>Sort No</th> 
+                         <th>Status</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
@@ -90,7 +91,15 @@
 										<td>${count.index+1}</td>
 										<td>${channelList.title}</td>
 										<td>${channelList.urllinks}</td>
-										<td>${channelList.sortNo}</td>  
+										<td>${channelList.sortNo}</td>
+										<c:choose>
+										 <c:when test="${channelList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose>  
 										<td><a
 											href="${pageContext.request.contextPath}/editChannel/${channelList.id}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

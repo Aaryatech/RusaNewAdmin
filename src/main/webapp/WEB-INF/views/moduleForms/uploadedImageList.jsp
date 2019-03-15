@@ -75,6 +75,7 @@
                    		<th width="5%">Sr No</th>
                         <th>Title</th> 
                         <th>Image</th> 
+                         <th>Status</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
@@ -87,6 +88,14 @@
 														type="text" id="title${gallaryDetailList.galleryDetailsId}"> </td> 
 														
 										<td><img src="${imageUrl}thumbnail${gallaryDetailList.fileName}" style="width:150px; height:auto"></td> 
+											<c:choose>
+										 <c:when test="${gallaryDetailList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
 										<td>  <a href="javascript:updateTitleName(${gallaryDetailList.galleryDetailsId});" ><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a>     <a

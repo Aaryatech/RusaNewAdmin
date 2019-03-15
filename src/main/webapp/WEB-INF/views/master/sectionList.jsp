@@ -76,7 +76,8 @@
                         <th>Section Name</th>
                         <th>Section Desc</th>
                         <th>Section Sort No</th> 
-                        <th>Action</th> 
+                        <th>Status</th>
+ 						<th>Action</th> 
                     </tr>
                 </thead>
  
@@ -87,6 +88,14 @@
 										<td>${sectionList.sectionName}</td>
 										<td>${sectionList.sectionDesc}</td>
 										<td>${sectionList.sectionSortNo}</td>  
+										<c:choose>
+										 <c:when test="${sectionList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
 										<td><a
 											href="${pageContext.request.contextPath}/editSection/${sectionList.sectionId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

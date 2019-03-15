@@ -144,6 +144,7 @@ input[type="file"] {
 									<th style="width: 18px">Sr No</th>
 									<th class="col-md-2">Photo</th>
 									 <th >Photo Name</th> 
+									 <th >Status</th>
 									<th class="col-md-1">Action</th>
 								</tr>
 							</thead>
@@ -157,7 +158,14 @@ input[type="file"] {
 																			  /> 
 																	file://${url}${detailList.photoName}</td>
 										<td>${detailList.photoDesc}</td>
-										
+										<c:choose>
+										 <c:when test="${detailList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
 										 
 										<td>
 										 <a

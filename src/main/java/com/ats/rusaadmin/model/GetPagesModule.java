@@ -11,6 +11,7 @@ public class GetPagesModule {
 	private String name; 
 	private String content;
 	private String secctionName;
+	private int isActive;
 	
 	public int getId() {
 		return id;
@@ -60,11 +61,17 @@ public class GetPagesModule {
 	public void setSecctionName(String secctionName) {
 		this.secctionName = secctionName;
 	}
+	public int getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(int isActive) {
+		this.isActive = isActive;
+	}
 	@Override
 	public String toString() {
 		return "GetPagesModule [id=" + id + ", moduleId=" + moduleId + ", pageId=" + pageId + ", primaryKeyId="
 				+ primaryKeyId + ", pageName=" + pageName + ", name=" + name + ", content=" + content
-				+ ", secctionName=" + secctionName + "]";
+				+ ", secctionName=" + secctionName + ", isActive=" + isActive + "]";
 	}
 	
 	

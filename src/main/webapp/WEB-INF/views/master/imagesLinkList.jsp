@@ -76,7 +76,8 @@
                         <th>Image</th>
                         <th>Title</th>  
                         <th>Add Date</th> 
-                        <th>Action</th> 
+                        <th>Status</th> 
+                         <th>Action</th>
                     </tr>
                 </thead>
  
@@ -88,7 +89,15 @@
 										<td> <img src="${url}${imagesLinkList.sliderImage}" style="width:120px; height:100px"></td>
 										
 										<td>${imagesLinkList.titleName}</td>
-										<td>${imagesLinkList.addDate}</td>   
+										<td>${imagesLinkList.addDate}</td> 
+										<c:choose>
+										 <c:when test="${imagesLinkList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose>  
 										<td><a
 											href="${pageContext.request.contextPath}/editImagesLink/${imagesLinkList.id}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

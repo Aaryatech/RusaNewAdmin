@@ -77,6 +77,7 @@
                         <th>Menu Desc</th>
                         <th>Section Name</th>
                         <th>Menu Sort No</th> 
+                        <th>Status</th> 
                         <th>Action</th> 
                     </tr>
                 </thead>
@@ -89,6 +90,14 @@
 										<td>${categoryList.catDesc}</td>
 										<td>${categoryList.sectionName}</td>  
 										<td>${categoryList.catSortNo}</td>  
+										<c:choose>
+										 <c:when test="${categoryList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
 										<td><a
 											href="${pageContext.request.contextPath}/editCategory/${categoryList.catId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

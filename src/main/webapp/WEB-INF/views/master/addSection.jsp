@@ -134,6 +134,23 @@
 								placeholder="Sequence No" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
+                              <!-- 
+                              	<div class="form-group">
+															<label class="control-label col-sm-2" for="isReform"
+																style="text-align: left;">  : <span
+																class="text-danger">*</span>
+															</label>
+															<div class="col-sm-3">
+																<input type="radio" onclick="showReforms2(this.value)"
+																	id="counseling" name="counseling" value="1" checked>Yes
+																<input type="radio" id="counseling"
+																	onclick="showReforms2(this.value)" name="counseling"
+																	value="0">No
+															</div>
+
+
+								</div>
+                               -->
                               
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
@@ -151,7 +168,7 @@
                                   		</c:otherwise>
                                   	</c:choose>
                                     
-                                    </select>
+                                   </select>
                                 </div>
                               </div>
                               

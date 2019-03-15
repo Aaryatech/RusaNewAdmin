@@ -75,6 +75,7 @@
                    		<th width="5%">Sr No</th>
                         <th>Page Name</th> 
                         <th>Desc</th> 
+                         <th>Status</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
@@ -86,7 +87,15 @@
 										<td>${count.index+1}</td>
 										<td>${getPagesModuleList.pageName} </td>
 										 
-										<td>${getPagesModuleList.content}</td>  
+										<td>${getPagesModuleList.content}</td> 
+										<c:choose>
+										 <c:when test="${getPagesModuleList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose>  
 										<td><a
 											href="${pageContext.request.contextPath}/editEventContent/${getPagesModuleList.primaryKeyId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "

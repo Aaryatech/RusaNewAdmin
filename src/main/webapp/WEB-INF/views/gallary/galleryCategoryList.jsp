@@ -75,6 +75,7 @@
                    		<th width="5%">Sr No</th>
                         <th>Category Name</th>  
                         <th>Category Sort No</th> 
+                         <th >Status</th> 
                         <th width="10%">Action</th> 
                     </tr>
                 </thead>
@@ -85,6 +86,14 @@
 										<td>${count.index+1}</td>
 										<td>${categoryList.cateName}</td> 
 										<td>${categoryList.sortNo}</td>  
+										<c:choose>
+										 <c:when test="${categoryList.isActive==1}">
+										  <td>Active</td>
+										 </c:when>
+										 <c:otherwise>
+										   <td>Inactive</td>
+										 </c:otherwise>
+										 </c:choose> 
 										<td><a
 											href="${pageContext.request.contextPath}/editGalleryCategory/${categoryList.galleryCatId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
