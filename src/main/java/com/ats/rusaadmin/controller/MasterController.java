@@ -498,14 +498,25 @@ public class MasterController {
 	@RequestMapping(value = "/addSection", method = RequestMethod.GET)
 	public ModelAndView addSection(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("master/addSection");
+		ModelAndView model = new ModelAndView();
 		try {
-			editSection = new Section();
-			 
-			 Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
-					 Languages[].class);
-			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
-			model.addObject("languagesList", languagesList);
+			HttpSession session = request.getSession();
+			User UserDetail =(User) session.getAttribute("UserDetail");
+			
+			if(UserDetail.getRoles().equals("DA")) {
+				
+				editSection = new Section();
+				model = new ModelAndView("master/addSection");
+				 Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+						 Languages[].class);
+				 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+				model.addObject("languagesList", languagesList);
+				
+			}else {
+				
+				model = new ModelAndView("accessDenied");
+			}
+			
   
 			
 		} catch (Exception e) {
