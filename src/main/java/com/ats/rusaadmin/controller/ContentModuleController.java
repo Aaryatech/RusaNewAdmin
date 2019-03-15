@@ -1353,6 +1353,8 @@ public class ContentModuleController {
 			String regId=request.getParameter("regId");
 			String email=request.getParameter("email");
 			String name=request.getParameter("name");
+			int smsVerified=Integer.parseInt(request.getParameter("smsVerified"));
+			int emailVerified=Integer.parseInt(request.getParameter("emailVerified"));
 			
 			 HttpSession session = request.getSession();
 			String password=Commons.getAlphaNumericString(5);
@@ -1361,22 +1363,50 @@ public class ContentModuleController {
 			System.out.println("name: "+name);
 			System.out.println("regId: "+regId);
 			
-			  info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name, password);
-			  
-			  if(info1.isError()==false)
-			  { 
-				  System.out.println("info1");
-				  MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
-				  map.add("regId", regId); info = rest.postForObject(Constant.url +"/updateUserByRegId", map, Info.class);
-			  
-			  if(info.isError()==false) 
-			  { 
-				  List<Registration> getUser =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-				  session.setAttribute("regList", getUser);
-				  session.setAttribute("successMsg","Infomation Updated successfully!"); }else
-			  {
-					  session.setAttribute("successMsg","Error while Updateing !"); } }
-			 
+			if(smsVerified==1 && emailVerified==1)
+			{
+
+				 List<Registration> getUser1 =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+				  session.setAttribute("regList", getUser1);
+				session.setAttribute("successMsg","Information Already Updated !");
+				
+					
+			}
+			else
+			{
+				if(smsVerified==1 && emailVerified==0)
+				{
+					info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name, password);
+	  
+						if(info1.isError()==false)
+						{ 
+								System.out.println("info1");
+								MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+								map.add("regId", regId); info = rest.postForObject(Constant.url +"/updateUserByRegId", map, Info.class);
+	  
+									if(info.isError()==false) 
+									{ 
+										List<Registration> getUser =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+										session.setAttribute("regList", getUser);
+										session.setAttribute("successMsg","Infomation Updated successfully!"); 
+										session.setAttribute("errorMsg","false");
+									}
+									else
+									{
+											session.setAttribute("successMsg","Error while Updateing !"); 
+											session.setAttribute("errorMsg","true");
+									} 
+						}
+				}
+				else
+				{					
+							List<Registration> getUser1 =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+							session.setAttribute("regList", getUser1);
+							session.setAttribute("successMsg","Please verify your registered mobile number !");	
+							session.setAttribute("errorMsg","true");
+				}
+		
+		}
 			 
 			//System.out.println(getUser);
 		} catch (Exception e) {

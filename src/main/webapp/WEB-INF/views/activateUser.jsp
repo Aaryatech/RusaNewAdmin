@@ -116,7 +116,9 @@
             									<input type="hidden" name="email" value="${userList.emails}" >
             									<input type="hidden" name="name"  value="${userList.name}" >
             									<input type="hidden" name="regId" value="${userList.regId}" >
-            									
+            								<input type="hidden" name="smsVerified" value="${userList.smsVerified}" >            								
+										  <input type="hidden" name="emailVerified" value="${userList.emailVerified}" >
+            								
 									 		   <p class="submit">
                						  			   <input type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary" value="Activate" />
                     			       		  </p>
