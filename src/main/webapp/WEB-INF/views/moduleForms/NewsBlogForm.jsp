@@ -11,6 +11,8 @@
       
         <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
         <!-- CORE CSS TEMPLATE - END -->
+        <link href="../assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" media="screen"/>
+        
 
     </head>
     <!-- END HEAD -->
@@ -61,7 +63,7 @@
         <div class="page-title">
 
             <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add News Blog Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
+                <!-- PAGE HEADING TAG - START --><h1 class="title">Add News Form</h1><!-- PAGE HEADING TAG - END -->                            </div>
 			 
                                 
         </div>
@@ -79,7 +81,7 @@
         <section class="box ">
        
                 <header class="panel_header">
-                    <h2 class="title pull-left">Add News Blog Form</h2>
+                    <h2 class="title pull-left">Add News Form</h2>
                    
                     <div class="actions panel_actions pull-right">
                 	      <a href="${pageContext.request.contextPath}/NewsBlogList"><button type="button" class="btn btn-info"><< Back</button></a>
@@ -101,11 +103,11 @@
                                 <i class="fa fa-home"></i> Home
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#metatage" data-toggle="tab">
                                 <i class="fa fa-user"></i> Meta Tags 
                             </a>
-                        </li>
+                        </li> -->
                         
                     </ul>
 
@@ -252,11 +254,25 @@
                                              <input type="file" name="pagePdf" id="pagePdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip"  />
                                               
                                           </div>
-                                        </div>
-                               
-                                 
-                                 
-                                                
+                                        </div>              
+                                 <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Select Section : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   
+                                  <select name="sectionId" class="form-control" id="s2example-2" multiple="multiple" required>
+                                  
+                                  <option value="">Select Section</option>
+                                  	<c:forEach items="${sectionList}" var="sectionList" >
+                                  		 
+                                   			<option value="${sectionList.sectionId}">${sectionList.sectionName}</option>
+                                  		 
+                                  		 
+                                  	</c:forEach>
+                                    
+                                    </select>
+                                </div>
+                              </div>
+                                                                               
                                  
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
@@ -283,11 +299,11 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane fade" id="metatage">
+                      <!--   <div class="tab-pane fade" id="metatage">
 
                             <p>That said, in some situations it may be desirable to turn this functionality off. Therefore, we also provide the ability to disable the data attribute API by unbinding all events on the document namespaced with data-api. </p>
 
-                        </div>
+                        </div> -->
                          
                          
                     </div>
@@ -304,9 +320,9 @@
     <div class="col-lg-12">
     <section class="box "> 
              <header class="panel_header">
-                <h2 class="title pull-left">News Blogs List</h2>
+                <h2 class="title pull-left">News List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add News Blogs Content</button></a>
+                 <a href="${pageContext.request.contextPath}/sectionTreeList"><button type="button" class="btn btn-success">Add News Content</button></a>
                 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
@@ -513,6 +529,16 @@
 			
             });
             </script>
+            <script type="text/javascript">
+            $("#s2example-2").select2({
+                placeholder: 'Choose your favorite US Countries',
+                allowClear: true
+            }).on('select2-open', function() {
+                // Adding Custom Scrollbar
+                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+            });
+            </script>
+            <script src="${pageContext.request.contextPath}/assets/plugins/select2/select2.min.js" type="text/javascript"></script> 
             
 </body>
 </html>

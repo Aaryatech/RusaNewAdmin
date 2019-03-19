@@ -106,11 +106,7 @@
 											<li class="active"><a href="#home" data-toggle="tab">
 													<i class="fa fa-home"></i> Home
 											</a></li>
-											<!-- <li>
-                            <a href="#metatage" data-toggle="tab">
-                                <i class="fa fa-user"></i> Meta Tags 
-                            </a>
-                        </li> -->
+										
 
 										</ul>
 

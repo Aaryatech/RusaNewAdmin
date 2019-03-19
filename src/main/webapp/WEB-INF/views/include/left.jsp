@@ -429,15 +429,13 @@
 
 								<a class="active"
 									href="${pageContext.request.contextPath}/NewsBlogList"
-									onclick="selectSubMod(4,406)"> <span class="title">News
-										Blog List</span>
+									onclick="selectSubMod(4,406)"> <span class="title">News List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
 								<a class=" "
 									href="${pageContext.request.contextPath}/NewsBlogList"
-									onclick="selectSubMod(4,406)"> <span class="title">News
-										Blog List</span>
+									onclick="selectSubMod(4,406)"> <span class="title">News List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>

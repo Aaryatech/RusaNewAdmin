@@ -58,7 +58,7 @@
 							</h2>
 
 							<div class="actions panel_actions pull-right">
-								<a href="${pageContext.request.contextPath}/ContactList"><button
+								<a href="${pageContext.request.contextPath}/activeUserList"><button
 										type="button" class="btn btn-info">Back</button></a> <a
 									class="box_toggle fa fa-chevron-down"></a>
 							</div>
@@ -74,7 +74,7 @@
         	          </c:if>  --%>
 
 						<form class="form-horizontal" id="addSupplier"
-							action="${pageContext.request.contextPath}/editContactUs"
+							action="${pageContext.request.contextPath}/activateUser"
 							onsubmit="return confirm('Do you really want to submit the form?');"
 							method="post">
 
@@ -83,7 +83,7 @@
 									<div class="col-xs-12">
 
 
-										<input id="id" value="${editUser.regId}" name="id"
+										<input id="id" value="${editUser.regId}" name="regId"
 											type="hidden">
 
 										<c:choose>
@@ -96,10 +96,10 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="contactName" class="form-control"
-															placeholder="Contact Name"
+															placeholder="User Name"
 															value="${editUser.name}"
 															style="text-align: left;" name="name" type="text"
-															readonly required>
+															 required>
 													</div>
 												</div>
 
@@ -110,9 +110,9 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="contactName" class="form-control"
-															placeholder="Contact Name"
+															placeholder="UUID "
 															value="${editUser.userUuid}"
-															style="text-align: left;" name="name" type="text"
+															style="text-align: left;" name="uuid" type="text"
 															readonly required>
 													</div>
 												</div>
@@ -123,33 +123,32 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="contactName" class="form-control"
-															placeholder="Contact Name"
+															placeholder="User Type"
 															value="${editUser.userType}"
-															style="text-align: left;" name="name" type="text"
+															style="text-align: left;" name="type" type="text"
 															readonly required>
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Email : <span class="text-danger">*</span>
+														for="config_mail_protocol"> Email : <span class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
 														<input id="userEmail" class="form-control"
 															placeholder="Email" value="${editUser.emails}"
 															style="text-align: left;" name="userEmail" type="email"
-															readonly required>
+															 required>
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Email : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">Alternate Email :
 													</label>
 													<div class="col-sm-10">
 														<input id="userEmail" class="form-control"
-															placeholder="Email" value="${editUser.alternateEmail}"
-															style="text-align: left;" name="userEmail" type="email"
-															readonly required>
+															placeholder="Alternate Email" value="${editUser.alternateEmail}"
+															style="text-align: left;" name="email" type="email"
+															 >
 													</div>
 												</div>
 												<div class="form-group">
@@ -158,73 +157,67 @@
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
-														<input id="firstname" class="form-control"
-															placeholder="First Name" value="${editUser.mobileNumber}"
-															style="text-align: left;" name="firstname" type="text"
-															readonly required>
+														<input id="firstname" class="form-control" pattern="[7-9]{1}[0-9]{9}" maxlength="10"
+															placeholder="Mobile Number" value="${editUser.mobileNumber}"
+															style="text-align: left;" name="phone" type="text"
+															 required>
 													</div>
 												</div>
 
 
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">AISHE Code : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">AISHE Code : 
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editUser.aisheCode}"
-															style="text-align: left;" name="message" type="text"
-															readonly required>
+															placeholder="AISHE Code" value="${editUser.aisheCode}"
+															style="text-align: left;" name="aishe" type="text"
+															 >
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">College Name : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">College Name : 
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editUser.collegeName}"
-															style="text-align: left;" name="message" type="text"
-															readonly required>
+															placeholder="College Name" value="${editUser.collegeName}"
+															style="text-align: left;" name="collegeN" type="text"
+															 >
 													</div>
 												</div>
 
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">University Name : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">University Name :
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editUser.unversityName}"
-															style="text-align: left;" name="message" type="text"
-															readonly required>
+															placeholder="University Name" value="${editUser.unversityName}"
+															style="text-align: left;" name="uniName" type="text"
+															 >
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Designation : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">Designation : 
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editUser.designationName}"
-															style="text-align: left;" name="message" type="text"
-															readonly required>
-													</div>
-												</div>
+															placeholder="Designation" value="${editUser.designationName}"
+															style="text-align: left;" name="designation" type="text"
+															 >
+													</div>												</div>
 													<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Department Name : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">Department Name : 
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editUser.departmentName}"
-															style="text-align: left;" name="message" type="text"
-															readonly required>
+															placeholder="Department Name" value="${editUser.departmentName}"
+															style="text-align: left;" name="deptN" type="text"
+															 >
 													</div>
 												</div>
 												
@@ -235,12 +228,12 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editUser.authorizedPerson}"
-															style="text-align: left;" name="message" type="text"
-															readonly required>
+															placeholder="Authorized Name" value="${editUser.authorizedPerson}"
+															style="text-align: left;" name="authN" type="text"
+															 required>
 													</div>
 												</div>
-												
+												<!-- 
 
 												<div class="form-group">
 													<label class="control-label col-sm-2"
@@ -253,21 +246,26 @@
 															style="text-align: left;" name="remark" type="text"
 															required>
 													</div>
-												</div>
-
+												</div> -->
+												<input type="hidden" name="smsVerified" value="${editUser.smsVerified}" >            								
+												<input type="hidden" name="emailVerified" value="${editUser.emailVerified}" >
+            								<input type="hidden" name="date" value="${editUser.addDate}" >
+            								
 												   <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Account Status : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
                                    
-                                  <select name="isActive" id="isActive" class="form-control">
+                                  <select name="status" id="status" class="form-control">
                                   	<c:choose>
-                                  		<c:when test="${editcontact.isActive==0}">
-                                  			<option value="1" >YES</option>
-                                   			<option value="0" selected>NO</option>
+                                  		<c:when test="${editUser.emailVerified==0}">
+                                  			<option value="0" >New User</option>
+                                  			<option value="1" >Activate</option>
+                                   			<option value="2" selected>Deactivate</option>
                                   		</c:when>
                                   		<c:otherwise>
-                                  			<option value="1" >YES</option>
-                                    		<option value="0">NO</option>
+                                  			<option value="0" >New User</option>
+                                  			<option value="1" >Activate</option>
+                                    		<option value="2">Deactivate</option>
                                   		</c:otherwise>
                                   	</c:choose>
                                     
@@ -280,18 +278,26 @@
 
 										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
-												<button type="submit" class="btn btn-primary">Submit</button>
-												<button type="reset" class="btn btn-default">Reset</button>
-
-											</div>
+												<button type="submit" class="btn btn-primary">Submit</button></div>
+											<!-- 	<button type="reset" class="btn btn-default">Reset</button> -->
+									<%-- 	<form name="loginform" id="loginform" action="${pageContext.request.contextPath}/activateUser" method="post">
+            									
+            									<input type="hidden" name="email" value="${userList.emails}" >
+            									<input type="hidden" name="name"  value="${userList.name}" >
+            									<input type="hidden" name="regId" value="${userList.regId}" >
+            									<input type="hidden" name="smsVerified" value="${userList.smsVerified}" >            								
+												<input type="hidden" name="emailVerified" value="${userList.emailVerified}" >
+            								
+									 		   <p class="submit">
+               						  			   <input type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary" value="Activate" />
+                    			       		  </p>
+                    			       </form> --%>
+											
 										</div>
-
 									</div>
 								</div>
 							</div>
-
-
-						</form>
+						</form>							
 					</section>
 				</div>
 			</section>

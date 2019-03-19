@@ -50,8 +50,8 @@
              <header class="panel_header">
                 <h2 class="title pull-left">Admin List</h2>
                 <div class="actions panel_actions pull-right">
-                 <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add Admin</button></a>
-                	<a class="box_toggle fa fa-chevron-down"></a>
+             <%--     <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add Admin</button></a>
+                --%> 	<a class="box_toggle fa fa-chevron-down"></a>
                    <!--  <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
                     <a class="box_close fa fa-times"></a> -->
                      
@@ -81,6 +81,7 @@
                         <th>Mobile Number</th> 
                         <th>Register Via</th> 
                         <th>SMS Verified Status</th> 
+                        <th>Email Verified Status</th> 
                         <th>Status</th> 
                         <th>Activate</th> 
                     </tr>
@@ -91,30 +92,40 @@
 									<tr  >
 										<td>${count.index+1}</td>
 										<td>${userList.name}</td>
-										  <c:if test="${userList.userType=='1'}">
+										<c:if test="${userList.userType=='1'}">
 										   		<td>Individual</td>
-										  </c:if>
-										  <c:if test="${userList.userType=='2'}">
+										</c:if>
+										<c:if test="${userList.userType=='2'}">
 										   		<td>College</td>
-										  </c:if>
-										  <c:if test="${userList.userType=='3'}">
+										</c:if>
+										<c:if test="${userList.userType=='3'}">
 										   		<td>University</td>
-										  </c:if>
+										</c:if>
    											
 										<td>${userList.emails}</td>  
 										<td>${userList.mobileNumber}</td>
 										<td>${userList.registerVia}</td>									
 										<c:choose>
-										 <c:when test="${${userList.smsVerified==1}">
+										<c:when test="${userList.smsVerified=='1'}">
 										  <td>Verified</td>
-										 </c:when>
-										 <c:otherwise>
+										</c:when>
+										<c:otherwise>
 										   <td>Not Verified</td>
 										 </c:otherwise>
 										 </c:choose> 
-									
+										  
+							 			 <c:if test="${userList.emailVerified==0}">
+										   		<td>New User</td>
+										  </c:if>
+										   <c:if test="${userList.emailVerified==1}">
+										   		<td>Active</td>
+										  </c:if>
+										   <c:if test="${userList.emailVerified==2}">
+										   		<td>Deactivate</td>
+										  </c:if>
+								
 										<c:choose>
-										 <c:when test="${userList.isActive==1}">
+										 <c:when test="${userList.isActive=='1'}">
 										  <td>Active</td>
 										 </c:when>
 										 <c:otherwise>
