@@ -110,23 +110,6 @@
 
                             <div>
 
-                             <%--    <div class="tab-content">
-                        <div class="tab-pane fade in active" id="home">
-
-                            <div>
-						 <input type="hidden" name="isEdit" value="${isEdit}">  
-                      --%>
-                   <%--  <c:choose>
-                   
-                	<c:when test="${isEdit==0}">
-                             <input type="hidden" name="newsblogs_id" value="0">  
-                             
-                             </c:when>
-                             	<c:otherwise>
-                                	    <input type="hidden" name="newsblogs_id" value="${editNewsBlog.newsblogsId}">  
-                                	</c:otherwise></c:choose> 
-                       --%>
-                      
                       <div class="col-xs-12"> 
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.GallaryCategory;
 import com.ats.rusaadmin.model.GallaryDetail;
@@ -48,6 +51,7 @@ public class ContentModuleController {
 	Page page = new Page();  
 	TestImonial editTestImonial=new TestImonial();
     NewsBlog editNewsBlog=new NewsBlog();
+    List<NewsBlog> newsBlogList=new ArrayList<NewsBlog>();
     GallaryDetail editGalleryDetail=new GallaryDetail();
     
    
@@ -536,6 +540,7 @@ public class ContentModuleController {
 			String urlName = request.getParameter("url_name");
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
 			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
+			//int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			
 			
 			
@@ -725,6 +730,11 @@ public class ContentModuleController {
 			String aligment = request.getParameter("header_top_alignment");
 			String personName = request.getParameter("per_name");
 			String eventNo = request.getParameter("event_no");
+			/*
+			 * String individual = request.getParameter("individual"); String college =
+			 * request.getParameter("college"); String university =
+			 * request.getParameter("university");
+			 */
 			
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
@@ -737,8 +747,10 @@ public class ContentModuleController {
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		
 			
-			SimpleDateFormat sf1 = new SimpleDateFormat(eventDate);
-			SimpleDateFormat dateTimeInGMT2 = new SimpleDateFormat(eventDate+"_HH:mm:ss");
+			/*
+			 * SimpleDateFormat sf1 = new SimpleDateFormat(eventDate); SimpleDateFormat
+			 * dateTimeInGMT2 = new SimpleDateFormat(eventDate+"_HH:mm:ss");
+			 */
 			//System.out.println("date"+sf1.format(date));
 		
 			//CMSPages cMSPages = new CMSPages();
@@ -774,8 +786,7 @@ public class ContentModuleController {
 						}catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
-						}
-					 
+						}					 
 				}
 				
 				if(pagePdf.get(0).getOriginalFilename()==null || pagePdf.get(0).getOriginalFilename()=="") {
@@ -794,15 +805,25 @@ public class ContentModuleController {
 						}
 					 
 				}
+				String[] itemShow = request.getParameterValues("type");
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < itemShow.length; i++) {
+						sb = sb.append(itemShow[i] + ",");
+					}
+				String items = sb.toString();
+				items = items.substring(0, items.length() - 1);
+				
+				System.out.println("type: "+items);
 				newsBlog.setAddedByUserId(UserDetail.getUserId());
 				newsBlog.setPageId(pageId);
 				newsBlog.setEventContactNumber(eventNo);
 				newsBlog.setEventContactPerson(personName);
-				newsBlog.setEventDateFrom(sf1.format(date)); 
+				newsBlog.setEventDateFrom(DateConvertor.convertToYMD(eventDate)); 
 				newsBlog.setEventLocation(location); 
 				newsBlog.setPageOrder(seqNo); 
 				newsBlog.setIsActive(isActive);
 				newsBlog.setExInt1(11);
+				newsBlog.setExVar2(items);
 				newsBlog.setDelStatus(1);
 				newsBlog.setAddDate(sf.format(date));
 				newsBlog.setFeaturedImageAlignment(aligment);
@@ -898,13 +919,40 @@ public class ContentModuleController {
 			}
 			//editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
 			
+			List<Integer> frids = Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			List<NewsBlog> nonSelected = new ArrayList<NewsBlog>();
+			nonSelected.addAll(newsBlogList);
+			List<NewsBlog> selected = new ArrayList<NewsBlog>();
+			if (frids.size() > 0) {
+				for (int i = 0; i < frids.size(); i++) {
+					
+					
+					System.out.println("Split List :"+frids);
+				/*	for (int j = 0; j < newsBlogList.size(); j++) {
+				
+					if (newsBlogList.get(j).getNewsblogsId() == frids.get(i)) {
+						selected.add(newsBlogList.get(j));
+						nonSelected.remove(newsBlogList.get(j));}
+					}*/
+				}
+				}
 			
 			
+			/*model.addObject("nonSelectedItems", frids);
+			model.addObject("selectedItems", selected);*/
+			/*
+			 * if (frids.size() > 0) { for (int i = 0; i < frids.size(); i++) { int
+			 * a=frids[0]; } }
+			 */
+				
+			System.out.println("Split List :"+frids);
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);
 			model.addObject("url", Constant.getGallryImageURL);
 			model.addObject("pdfUrl", Constant.getCmsPdf);
+			model.addObject("isEdit", 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -929,9 +977,10 @@ public class ContentModuleController {
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
 			String urlName = request.getParameter("url_name");
-		/*	int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+			
+			//int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
-			*/
+			
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
 			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
 			
@@ -939,7 +988,7 @@ public class ContentModuleController {
 			String pageName = request.getParameter("page_name");
 			
 			Date date = new Date();
-			SimpleDateFormat sf1 = new SimpleDateFormat(eventDate);
+			//SimpleDateFormat sf1 = new SimpleDateFormat(eventDate);
 			SimpleDateFormat dateTimeInGMT2 = new SimpleDateFormat(eventDate+"_HH:mm:ss");
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -1024,13 +1073,22 @@ public class ContentModuleController {
 						}
 					 
 				}
+				String[] itemShow = request.getParameterValues("type");
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < itemShow.length; i++) {
+						sb = sb.append(itemShow[i] + ",");
+					}
+				String items = sb.toString();
+				items = items.substring(0, items.length() - 1);
+				
 				editNewsBlog.setEditByUserId(UserDetail.getUserId());
 				editNewsBlog.setEventContactNumber(eventNo);
 				editNewsBlog.setEventContactPerson(personName);
-				editNewsBlog.setEventDateFrom(sf1.format(date)); 
+				editNewsBlog.setEventDateFrom(DateConvertor.convertToYMD(eventDate)); 
 				editNewsBlog.setEventLocation(location);
 				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(11);
+				editNewsBlog.setExVar2(items);
 				editNewsBlog.setPageOrder(seqNo); 
 				editNewsBlog.setIsActive(isActive); 
 				editNewsBlog.setEditDate(sf.format(date));

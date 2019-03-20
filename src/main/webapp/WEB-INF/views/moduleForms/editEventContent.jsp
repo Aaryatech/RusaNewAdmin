@@ -94,7 +94,8 @@
                     <div class="col-md-12">
                          <form class="form-horizontal" action="${pageContext.request.contextPath}/submtEditEventForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
                          onsubmit="return confirm('Do you really want to submit the form?');">               
-                    
+                  
+                            
                     <ul class="nav nav-tabs">
                         <li class="active">
                             <a href="#home" data-toggle="tab">
@@ -154,7 +155,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Contact No. :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="event_no" name="event_no" placeholder="Event Contact No" value="${editNewsBlog.eventContactNumber}"   required>
+                                  <input type="text" class="form-control" id="event_no" pattern="[7-9]{1}[0-9]{9}" maxlength="10" name="event_no" placeholder="Event Contact No" value="${editNewsBlog.eventContactNumber}"   required>
                                 </div>
                               </div>
                         </div>
@@ -336,7 +337,44 @@
                                           </div>
                                         </div>
                                
-                                 
+                          <!--        <div class="form-group">
+                                    <label class="control-label col-sm-2" for="page_pdf">Current Applied:</label>
+                                          <div class="col-sm-10">
+                                   <div class="form-check-inline">
+      <label class="form-check-label" for="check1">
+        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" >Individual
+      </label>
+    </div>
+    <div class="form-check-label">
+      <label class="form-check-label" for="check2">
+        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2">College
+      </label>
+    </div>
+    <div class="form-check-label" for="check3" >
+      <label class="form-check-label" >
+        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
+      </label>
+    </div>
+    </div></div> -->
+            <div class="form-group">
+                                    <label class="control-label col-sm-2" for="page_pdf">Apply Only :</label>
+                                          <div class="col-sm-10">
+                                   <div class="form-check-inline">
+      <label class="form-check-label" for="check1">
+        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" >Individual
+      </label>
+    </div>
+    <div class="form-check-label">
+      <label class="form-check-label" for="check2">
+        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2">College
+      </label>
+    </div>
+    <div class="form-check-label" for="check3" >
+      <label class="form-check-label" >
+        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
+      </label>
+    </div>
+    </div></div>
                                  
                                                 
                                  

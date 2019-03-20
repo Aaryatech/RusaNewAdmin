@@ -11,6 +11,10 @@
       
         <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
         <!-- CORE CSS TEMPLATE - END -->
+<link href="${pageContext.request.contextPath}/assets/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css" media="screen"/>
+   <link href="${pageContext.request.contextPath}/assets/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+
 
     </head>
     <!-- END HEAD -->
@@ -162,7 +166,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Contact No. :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="event_no" name="event_no" placeholder="Event Contact No"   required>
+                                  <input type="text" class="form-control" id="event_no"  pattern="[7-9]{1}[0-9]{9}" maxlength="10" name="event_no" placeholder="Event Contact No"   required>
                                 </div>
                               </div>
                         </div>
@@ -270,8 +274,25 @@
                                               
                                           </div>
                                         </div>
-                               
-                                 
+                                 <div class="form-group">
+                                    <label class="control-label col-sm-2" for="page_pdf">Apply Only :</label>
+                                          <div class="col-sm-10">
+                                   <div class="form-check-inline">
+      <label class="form-check-label" for="check1">
+        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" checked>Individual
+      </label>
+    </div>
+    <div class="form-check-label">
+      <label class="form-check-label" for="check2">
+        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2">College
+      </label>
+    </div>
+    <div class="form-check-label" for="check3" >
+      <label class="form-check-label" >
+        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
+      </label>
+    </div>
+    </div></div>
                                  
                                                 
                                  
@@ -279,7 +300,7 @@
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                 <select id="status" name="status" class="form-control" required >
-                                                                    <option value="1" >Active</option>
+                                 <option value="1" >Active</option>
                  			    <option value="0" >Inactive</option>
                      
                  
