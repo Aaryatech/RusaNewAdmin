@@ -560,7 +560,8 @@ public class MasterController {
 			String sectionId = request.getParameter("sectionId");  
 			int seqNo =  Integer.parseInt(request.getParameter("seqNo")); 
 			int isActive =  Integer.parseInt(request.getParameter("isActive")); 
-			
+			int type =  Integer.parseInt(request.getParameter("type")); 
+			System.out.println("type: "+type);
 			List<SectionDescription> sectionDescriptionList = new ArrayList<SectionDescription>();
 			
 			//Section section = new Section();
@@ -620,6 +621,7 @@ public class MasterController {
 			editSection.setSectionDateTime(sf.format(date));
 			editSection.setDelStatus(1);
 			editSection.setIsActive(isActive);
+			editSection.setExInt1(type);
 			
 			editSection.setSectionDescriptionList(sectionDescriptionList);
 			System.out.println("section" + editSection);

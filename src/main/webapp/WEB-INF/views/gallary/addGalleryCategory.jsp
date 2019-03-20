@@ -64,6 +64,7 @@
                    
                 <div class="content-body"> 
                     <div class="row">
+                   <span class="text-danger">*</span> indicates mandatory fields
                     
                     <c:forEach items="${languagesList}" var="languagesList" >
                      <h5 class="title pull-left">${languagesList.name}</h5>

@@ -66,10 +66,8 @@ public class UserController {
 			 System.out.println("id"+regId);
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				map.add("regId", regId);
-				 
-				editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId",map,
-						Registration.class);
-			System.out.println("User: "+editUser.toString());	
+				 editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId",map,Registration.class);
+					System.out.println("User: "+editUser.toString());	
 				
 				model.addObject("editUser", editUser);
 				model.addObject("isEdit", 1);
@@ -82,7 +80,7 @@ public class UserController {
 		}
 		
 		@RequestMapping(value = "/activateUser", method = RequestMethod.POST)
-		public String editUser(HttpServletRequest request,HttpServletResponse response,ModelAndView model) {
+		public String activateUser(HttpServletRequest request,HttpServletResponse response,ModelAndView model) {
 
 			HttpSession session = request.getSession();
 			try {
@@ -102,10 +100,12 @@ public class UserController {
 				String collegeN=request.getParameter("collegeN");
 				String uniName=request.getParameter("uniName");
 				String designation=request.getParameter("designation");
-				String addDate=request.getParameter("date");
-
+				
 				String deptN=request.getParameter("deptN");
+				String btnsendmail=request.getParameter("btnsendmail");
 				String authN=request.getParameter("authN");
+				
+				String btnsubmit=request.getParameter("btnsubmit");
 				int status=Integer.parseInt(request.getParameter("status"));
 				
 				int smsVerified=Integer.parseInt(request.getParameter("smsVerified"));
@@ -118,79 +118,103 @@ public class UserController {
 				System.out.println("Password: "+password);
 				System.out.println("Emails: "+email);
 				System.out.println("name: "+name);
-				System.out.println("regId: "+regId);
+				System.out.println("btnsubmit: "+btnsubmit);
+				System.out.println("btnsendmail: "+btnsendmail);
 				
 				//Registration editUser=new Registration();
-				if(smsVerified==1 && emailVerified==1)
+				
+				if(btnsendmail!=null)
 				{
-					System.out.println("1");
-					 List<Registration> getUser1 =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-					 session.setAttribute("regList", getUser1);
-					 session.setAttribute("successMsg","Information Already Updated !");				
+					  if(smsVerified==1) 
+					  {
+						  System.out.println("btnsendmail");
+						  editUser.setEmailVerified(1);
+						  info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name,  password);
+						  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+						  session.setAttribute("regList", getUser);
+						  session.setAttribute("successMsg","Infomation Updated successfully!");
+						  session.setAttribute("errorMsg","false"); 
+					  }
+					  else
+					  {
+						  editUser.setEmailVerified(0);
+						  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+						  session.setAttribute("regList", getUser);
+						  session.setAttribute("successMsg","Please varify your mobile number !");
+						  session.setAttribute("errorMsg","true"); 
+					  }
+					 
 				}
-				else
+				if(btnsubmit!=null)
 				{
-					System.out.println("2");
-					if(smsVerified==1 && emailVerified==0 || emailVerified==2 && status==1)
-					{
-						System.out.println("3");
-						info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name, password);
-		  
-							if(info1.isError()==false)
-							{ 
-								System.out.println("4");
-									System.out.println("info1");
-									MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
-									map.add("regId", regId); 
-									info = rest.postForObject(Constant.url +"/updateUserByRegId", map, Info.class);
-		  
-										if(info.isError()==false) 
-										{ 
-											System.out.println("5");
-											editUser.setEmailVerified(1);
-											List<Registration> getUser =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-											session.setAttribute("regList", getUser);
-											session.setAttribute("successMsg","Infomation Updated successfully!"); 
-											session.setAttribute("errorMsg","false");
-										}
-										else
-										{
-											editUser.setEmailVerified(2);
-											System.out.println("5");
-											session.setAttribute("successMsg","Error while Updateing !"); 
-											session.setAttribute("errorMsg","true");
-										} 
-							}
-					}
-					else
-					{	System.out.println("6");	
-						editUser.setEmailVerified(2);					
-						List<Registration> getUser1 =  rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-						session.setAttribute("regList", getUser1);
-						session.setAttribute("successMsg","Infomation Updated successfullyr !");	
-					}			
-			}
-				System.out.println("7");
-				editUser.setRegId(regId);
-				editUser.setAlternateEmail(alternateEmail);
-				editUser.setUserUuid(uuid);
-				editUser.setUserType(type);
-				editUser.setEmails(email);				
-				editUser.setUserPassword(password);
-				editUser.setName(name);
-				editUser.setAisheCode(aishe);
-				editUser.setCollegeName(collegeN);
-				editUser.setUnversityName(uniName);
-				editUser.setDesignationName(designation);
-				editUser.setDepartmentName(deptN);
-				
-				editUser.setMobileNumber(phone);
-				editUser.setAuthorizedPerson(authN);					
+					System.out.println("btnsubmit");
+					  editUser.setRegId(regId);
+					  editUser.setAlternateEmail(alternateEmail);
+					  editUser.setUserUuid(uuid);
+					  editUser.setUserType(type);
+					  editUser.setEmails(email);
+					  editUser.setUserPassword(password); 
+					  editUser.setName(name);
+					  editUser.setAisheCode(aishe);
+					  editUser.setCollegeName(collegeN);
+					  editUser.setUnversityName(uniName);
+					  editUser.setDesignationName(designation);
+					  editUser.setDepartmentName(deptN);					  
+					  editUser.setMobileNumber(phone); editUser.setAuthorizedPerson(authN);					  
+					  editUser.setEditByAdminuserId(UserDetail.getUserId()); 
+					  
+					  if(status==0)
+					  {
+						  editUser.setIsActive(status);
+					  }
+					  if(status==1)
+					  {
+						  editUser.setIsActive(status);
+					  }
+					  if(status==2)
+					  {
+						  editUser.setIsActive(status);
+					  }
+					  
+					  Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration",editUser, Registration.class);
+					  
+					  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+					  session.setAttribute("regList", getUser);
+					  session.setAttribute("successMsg","Infomation Updated successfully!");
+					  session.setAttribute("errorMsg","false"); 
+				}
 			
-				editUser.setEditByAdminuserId(UserDetail.getUserId());
-				Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration", editUser, Registration.class);
-				
-				
+			/*
+			 * if(smsVerified==1 && emailVerified==1) { System.out.println("1");
+			 * List<Registration> getUser1 = rest.getForObject(Constant.url +
+			 * "/getAllRegUserList",List.class); session.setAttribute("regList", getUser1);
+			 * session.setAttribute("successMsg","Information Already Updated !"); } else {
+			 * System.out.println("2"); if(smsVerified==1 && emailVerified==0 ||
+			 * emailVerified==2 && status==1) { System.out.println("3");
+			 * 
+			 * if(info1.isError()==false) { System.out.println("4");
+			 * System.out.println("info1"); MultiValueMap<String, Object> map = new
+			 * LinkedMultiValueMap<String, Object>(); map.add("regId", regId); info =
+			 * rest.postForObject(Constant.url +"/updateUserByRegId", map, Info.class);
+			 * 
+			 * if(info.isError()==false) { System.out.println("5");
+			 * editUser.setEmailVerified(1); List<Registration> getUser =
+			 * rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+			 * session.setAttribute("regList", getUser);
+			 * session.setAttribute("successMsg","Infomation Updated successfully!");
+			 * session.setAttribute("errorMsg","false"); } else {
+			 * editUser.setEmailVerified(2); System.out.println("5");
+			 * session.setAttribute("successMsg","Error while Updateing !");
+			 * session.setAttribute("errorMsg","true"); } } } else {
+			 * System.out.println("6"); editUser.setEmailVerified(2); List<Registration>
+			 * getUser1 = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
+			 * session.setAttribute("regList", getUser1);
+			 * session.setAttribute("successMsg","Infomation Updated successfullyr !"); } }
+			 * System.out.println("7");
+			 */
+			
+			  
+			 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

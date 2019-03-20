@@ -151,7 +151,29 @@
 
 								</div>
                                -->
-                              
+                               <div class="form-group">
+                                <label class="control-label col-sm-2" for="config_mail_protocol">Section type : <span class="text-danger">*</span> </label>
+                                <div class="col-sm-10">
+                                   
+                                  <select name="type" id="type" class="form-control">
+                                  	<c:choose>
+                                  		<c:when test="${editSection.exInt1==1}">
+                                  			<option value="1" selected>Main Menu</option>
+                                   			<option value="2" >Other</option>
+                                  		</c:when>
+                                  		<c:when test="${editSection.exInt1==2}">
+                                  			<option value="1" >Main Menu</option>
+                                   			<option value="2" selected>Other</option>
+                                  		</c:when>
+                                  		<c:otherwise>
+                                  			<option value="1" >Main Menu</option>
+                                    		<option value="2">Other</option>
+                                  		</c:otherwise>
+                                  	</c:choose>
+                                    
+                                   </select>
+                                </div>
+                              </div>
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">

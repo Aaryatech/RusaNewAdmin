@@ -60,10 +60,13 @@
 
 							<div class="actions panel_actions pull-right">
 								<a href="${pageContext.request.contextPath}/userList"><button
-										type="button" class="btn btn-info">Back</button></a> <a
-									class="box_toggle fa fa-chevron-down"></a>
+										type="button" class="btn btn-info">Back</button></a>
+										 <a
+									class="box_toggle fa fa-chevron-down"></a>    
 							</div>
-
+							<!-- <div class="actions panel_actions pull-right">
+<span class="text-danger">*</span> indicates mandatory fields</div> -->
+                
 						</header>
 						<%--  <div class="content-body">    <div class="row">
             <c:if test="${sessionScope.successMsg!=null}">
@@ -81,6 +84,7 @@
 
 							<div class="content-body">
 								<div class="row">
+								
 									<div class="col-xs-12">
 										<%-- <div class="form-group">
 											<label class="control-label col-sm-2"
