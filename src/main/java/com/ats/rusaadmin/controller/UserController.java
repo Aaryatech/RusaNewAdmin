@@ -23,6 +23,7 @@ import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.EmailUtility;
 import com.ats.rusaadmin.model.EventDetails;
 import com.ats.rusaadmin.model.EventRegistration;
+import com.ats.rusaadmin.model.EventView;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.Registration;
@@ -261,6 +262,24 @@ public class UserController {
 				model.addObject("editUser", editUser);
 				model.addObject("editEvent", editEvent);
 				model.addObject("isEdit", 1);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return model;
+		}
+		
+		@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
+		public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("allEventList");
+			try {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				//map.add("delStatus", 1);
+				List<EventView> getUser = rest.getForObject(Constant.url + "/getAllEventList",	List.class);
+				//List<Registration> userList = new ArrayList<Registration>(Arrays.asList(getUser));
+				model.addObject("regList", getUser);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -38,7 +38,7 @@
 
 						<div class="pull-left">
 							<!-- PAGE HEADING TAG - START -->
-							<h1 class="title">Admin</h1>
+							<h1 class="title">Approve User</h1>
 							<!-- PAGE HEADING TAG - END -->
 						</div>
 
@@ -53,7 +53,7 @@
 				<div class="col-lg-12">
 					<section class="box ">
 						<header class="panel_header">
-							<h2 class="title pull-left">Admin List</h2>
+							<h2 class="title pull-left">Approve User</h2>
 							<div class="actions panel_actions pull-right">
 								<%--     <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add Admin</button></a>
                 --%>
