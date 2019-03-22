@@ -479,7 +479,7 @@
 
 
 				<c:choose>
-					<c:when test="${sessionScope.sessionModuleId==6}">
+					<c:when test="${sessionScope.sessionModuleId==5}">
 						<li class="open">
 					</c:when>
 					<c:otherwise>
@@ -487,13 +487,13 @@
 					</c:otherwise>
 				</c:choose>
 				<a href="${pageContext.request.contextPath}/ContactList"
-					onclick="selectSubMod(6,0)"> <i class="fa fa-envelope"></i> <span
+					onclick="selectSubMod(5,0)"> <i class="fa fa-envelope"></i> <span
 					class="title">Contact List</span>
 				</a>
 				</li>
-
-	<c:choose>
-					<c:when test="${sessionScope.sessionModuleId==7}">
+						
+					<c:choose>
+					<c:when test="${sessionScope.sessionModuleId==6}">
 						<li class="open">
 					</c:when>
 					<c:otherwise>
@@ -501,8 +501,22 @@
 					</c:otherwise>
 				</c:choose>
 				<a href="${pageContext.request.contextPath}/activeUserList"
-					onclick="selectSubMod(5,0)"> <i class="fa fa-envelope"></i> <span
+					onclick="selectSubMod(6,0)"> <i class="fa fa-envelope"></i> <span
 					class="title">User Registration List</span>
+				</a>
+				</li>
+				
+					<c:choose>
+					<c:when test="${sessionScope.sessionModuleId==7}">
+						<li class="open">
+					</c:when>
+					<c:otherwise>
+						<li class="">
+					</c:otherwise>
+				</c:choose>
+				<a href="${pageContext.request.contextPath}/eventRegList"
+					onclick="selectSubMod(7,0)"> <i class="fa fa-envelope"></i> <span
+					class="title">User Event Applied List</span>
 				</a>
 				</li>
 

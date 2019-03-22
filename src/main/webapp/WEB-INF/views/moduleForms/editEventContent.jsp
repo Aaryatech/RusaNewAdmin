@@ -356,12 +356,69 @@
       </label>
     </div>
     </div></div> -->
-            <div class="form-group">
+  
+  <%--   
+      <div class="form-group">
+                                    <label class="control-label col-sm-2" for="page_pdf">Apply Only :</label>
+                                          <div class="col-sm-10">
+  <c:choose>
+    <c:when test="${selectedSection[23]==1}">
+     <div class="form-check-inline">
+      <label class="form-check-label" for="check1">
+        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" checked>Individual
+      </label>
+    </div>
+    </c:when>
+    <c:otherwise>
+     <div class="form-check-inline">
+      <label class="form-check-label" for="check1">
+        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" >Individual
+      </label>
+    </div>
+    </c:otherwise>
+    </c:choose>
+    
+      <c:choose>
+    <c:when test="${selectedSection[23]==2}">
+     <div class="form-check-label">
+      <label class="form-check-label" for="check2">
+        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2" checked>College
+      </label>
+    </div>
+    </c:when>
+    <c:otherwise>
+      <div class="form-check-label">
+      <label class="form-check-label" for="check2">
+        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2">College
+      </label>
+    </div>
+    </c:otherwise>
+    </c:choose>
+          
+                <c:choose>
+    <c:when test="${selectedSection[23]==3}">
+     <div class="form-check-label" for="check3" >
+      <label class="form-check-label" >
+        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3" checked>University
+      </label>
+    </div>
+    </c:when>
+    <c:otherwise>
+     <div class="form-check-label" for="check3" >
+      <label class="form-check-label" >
+        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
+      </label>
+    </div>
+    </c:otherwise>
+    </c:choose>          </div>       --%>        
+  
+        
+                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="page_pdf">Apply Only :</label>
                                           <div class="col-sm-10">
                                    <div class="form-check-inline">
       <label class="form-check-label" for="check1">
-        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" >Individual
+        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" checked>Individual
       </label>
     </div>
     <div class="form-check-label">
@@ -374,6 +431,7 @@
         <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
       </label>
     </div>
+    </div></div>
     </div></div>
                                  
                                                 

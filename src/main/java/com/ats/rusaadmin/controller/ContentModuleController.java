@@ -89,7 +89,7 @@ public class ContentModuleController {
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			String formName = request.getParameter("form_name");
 			String designation = request.getParameter("designation");
-			String msg = request.getParameter("msg");
+			String message = request.getParameter("message");
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			String location = request.getParameter("location");
 			int isActive = Integer.parseInt(request.getParameter("status")); 
@@ -97,14 +97,16 @@ public class ContentModuleController {
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int id = Integer.parseInt(request.getParameter("id"));
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
+			int formType = Integer.parseInt(request.getParameter("formType"));
+			String video = request.getParameter("video");
+			
+			System.out.println("video :"+video);
+			System.out.println("msg :"+message);
 			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			TestImonial textImonial = new TestImonial();
-			
-			List<TestImonial> TestImonialList = new ArrayList<TestImonial>();
-
+		
 			VpsImageUpload upload = new VpsImageUpload();
 		
 				if(images.get(0).getOriginalFilename()==null || images.get(0).getOriginalFilename()=="") {
@@ -159,7 +161,17 @@ public class ContentModuleController {
 				editTestImonial.setAddDate(sf.format(date));
 				editTestImonial.setLocation(location);
 				editTestImonial.setSortNo(sortNo);
-				editTestImonial.setMessage(msg); 
+			
+					if(message!=null )
+			  		{ 
+						editTestImonial.setMessage(message);
+			  		}
+			  		if(video!=null)
+				    {
+			  			editTestImonial.setExVar1(video); 
+				    }
+			 
+				
 				
 			System.out.println("textImonial" + editTestImonial); 
 			TestImonial res = rest.postForObject(Constant.url + "/saveTextImonial", editTestImonial, TestImonial.class);
@@ -343,6 +355,9 @@ public class ContentModuleController {
 			String urlName = request.getParameter("url_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
+			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+			
+			//int sectionId = Integer.parseInt(request.getParameter("sectionId"));
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
@@ -373,6 +388,7 @@ public class ContentModuleController {
 					newsBlogDescription.setPageMetaDescription(request.getParameter("meta_description1"+languagesList.get(i).getLanguagesId()));
 					newsBlogDescription.setPageMetaKeyword(request.getParameter("meta_keyword1"+languagesList.get(i).getLanguagesId()));
 					newsBlogDescription.setDateTransaction(sf.format(date));
+					newsBlogDescription.setExInt1(onHomePage);
 					newsBlogDescriptionList.add(newsBlogDescription);
 				}
 				 
@@ -410,11 +426,21 @@ public class ContentModuleController {
 						}
 					 
 				}
+				String[] itemShow = request.getParameterValues("sectionId");
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < itemShow.length; i++) {
+						sb = sb.append(itemShow[i] + ",");
+					}
+				String items = sb.toString();
+				items = items.substring(0, items.length() - 1);
+				System.out.println("items :"+items);
 				newsBlog.setAddedByUserId(UserDetail.getUserId());
 				newsBlog.setPageId(pageId);
 				newsBlog.setExVar1(text);
 				newsBlog.setNewsSourceUrlName(urlName);
 				newsBlog.setExInt1(9);
+			
+				newsBlog.setExVar2(items);
 				newsBlog.setPageOrder(seqNo); 
 				newsBlog.setIsActive(isActive);
 				newsBlog.setDelStatus(1);
@@ -491,7 +517,10 @@ public class ContentModuleController {
 				map.add("pageId", editNewsBlog.getPageId());
 				Page page = rest.postForObject(Constant.url + "/getPageByPageId",map,
 						 Page.class);
-			
+				Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+						Section[].class);
+				List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
+				model.addObject("sectionList", sectionList);
 			
 			for(int i = 0 ; i< languagesList.size() ; i++) {
 				
@@ -511,6 +540,31 @@ public class ContentModuleController {
 					editNewsBlog.getDetailList().add(newsBlogDescription);
 				}
 			}
+			//------------------------------------------------------------------------------------------------
+			List<Integer> sectionIdList= Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			
+			List<Section> nonSelectedSection = new ArrayList<Section>();
+			nonSelectedSection.addAll(sectionList);
+			List<Section> selectedSection= new ArrayList<Section>();
+			if (sectionIdList.size() > 0) {
+				for (int i = 0; i < sectionIdList.size(); i++) {
+
+					for (int j = 0; j < sectionList.size(); j++) {
+						if (sectionList.get(j).getSectionId() == sectionIdList.get(i)) {
+							selectedSection.add(sectionList.get(j));
+							nonSelectedSection.remove(sectionList.get(j));
+						}
+					}
+
+				}
+			}
+			model.addObject("nonSelectedSection", nonSelectedSection);
+			model.addObject("selectedSection", selectedSection);
+			//------------------------------------------------------------------------------------------------------
+			System.err.println("nonSelectedSection"+nonSelectedSection.toString());
+			System.err.println("selectedSection"+selectedSection.toString());
+
 			
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
@@ -541,7 +595,15 @@ public class ContentModuleController {
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
 			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
 			//int pageId = Integer.parseInt(request.getParameter("pageId")); 
+			String[] itemShow = request.getParameterValues("sectionId");
+			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
 			
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < itemShow.length; i++) {
+					sb = sb.append(itemShow[i] + ",");
+				}
+			String items = sb.toString();
+			items = items.substring(0, items.length() - 1);
 			
 			
 		/*	int isEdit = Integer.parseInt(request.getParameter("isEdit"));
@@ -569,7 +631,7 @@ public class ContentModuleController {
 					editNewsBlog.getDetailList().get(i).setPageMetaTitle(request.getParameter("meta_title1"+editNewsBlog.getDetailList().get(i).getLanguageId()));
 					editNewsBlog.getDetailList().get(i).setPageMetaDescription(request.getParameter("meta_description1"+editNewsBlog.getDetailList().get(i).getLanguageId()));
 					editNewsBlog.getDetailList().get(i).setPageMetaKeyword(request.getParameter("meta_keyword1"+editNewsBlog.getDetailList().get(i).getLanguageId()));
-					 
+					editNewsBlog.getDetailList().get(i).setExInt1(onHomePage);
 				}
 				 
 				//editCMSPages.setEditByUserId(UserDetail.getUserId());
@@ -639,9 +701,11 @@ public class ContentModuleController {
 						}
 					 
 				}
+				editNewsBlog.setExVar2(items);
 				editNewsBlog.setEditByUserId(UserDetail.getUserId());
 				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(9);
+				editNewsBlog.setExInt2(onHomePage);
 				editNewsBlog.setExVar1(text);
 				editNewsBlog.setPageOrder(seqNo); 
 				editNewsBlog.setIsActive(isActive); 
@@ -822,7 +886,7 @@ public class ContentModuleController {
 				newsBlog.setEventLocation(location); 
 				newsBlog.setPageOrder(seqNo); 
 				newsBlog.setIsActive(isActive);
-				newsBlog.setExInt1(11);
+				newsBlog.setExInt1(11);				
 				newsBlog.setExVar2(items);
 				newsBlog.setDelStatus(1);
 				newsBlog.setAddDate(sf.format(date));
@@ -897,7 +961,12 @@ public class ContentModuleController {
 				map.add("pageId", editNewsBlog.getPageId());
 				Page page = rest.postForObject(Constant.url + "/getPageByPageId",map,
 						 Page.class);
-			
+			/*
+			 * Section[] section = rest.getForObject(Constant.url + "/getAllSectionList",
+			 * Section[].class); List<Section> sectionList = new
+			 * ArrayList<Section>(Arrays.asList(section)); model.addObject("sectionList",
+			 * sectionList);
+			 */
 			
 			for(int i = 0 ; i< languagesList.size() ; i++) {
 				
@@ -919,34 +988,27 @@ public class ContentModuleController {
 			}
 			//editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
 			
-			List<Integer> frids = Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
+			List<Integer> sectionIdList= Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
 					.collect(Collectors.toList());
-			List<NewsBlog> nonSelected = new ArrayList<NewsBlog>();
-			nonSelected.addAll(newsBlogList);
-			List<NewsBlog> selected = new ArrayList<NewsBlog>();
-			if (frids.size() > 0) {
-				for (int i = 0; i < frids.size(); i++) {
-					
-					
-					System.out.println("Split List :"+frids);
-				/*	for (int j = 0; j < newsBlogList.size(); j++) {
-				
-					if (newsBlogList.get(j).getNewsblogsId() == frids.get(i)) {
-						selected.add(newsBlogList.get(j));
-						nonSelected.remove(newsBlogList.get(j));}
-					}*/
-				}
-				}
 			
-			
-			/*model.addObject("nonSelectedItems", frids);
-			model.addObject("selectedItems", selected);*/
 			/*
-			 * if (frids.size() > 0) { for (int i = 0; i < frids.size(); i++) { int
-			 * a=frids[0]; } }
+			 * List<Section> nonSelectedSection = new ArrayList<Section>();
+			 * nonSelectedSection.addAll(sectionList); List<Section> selectedSection= new
+			 * ArrayList<Section>(); if (sectionIdList.size() > 0) { for (int i = 0; i <
+			 * sectionIdList.size(); i++) {
+			 * 
+			 * for (int j = 0; j < sectionList.size(); j++) { if
+			 * (sectionList.get(j).getSectionId() == sectionIdList.get(i)) {
+			 * selectedSection.add(sectionList.get(j));
+			 * nonSelectedSection.remove(sectionList.get(j)); } }
+			 * 
+			 * } } model.addObject("nonSelectedSection", nonSelectedSection);
+			 * model.addObject("selectedSection", selectedSection);
+			 * 
+			 * System.err.println("nonSelectedSection"+nonSelectedSection.toString());
+			 * System.err.println("selectedSection"+selectedSection.toString());
 			 */
-				
-			System.out.println("Split List :"+frids);
+			
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);

@@ -183,7 +183,7 @@ public class AddContentController {
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-
+		//	int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -204,6 +204,7 @@ public class AddContentController {
 						.setPageDesc(request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()));
 				cMSPageDescription.setDateTransaction(sf.format(date));
 				cMSPageDescriptionList.add(cMSPageDescription);
+				
 			}
 
 			cMSPages.setAddedByUserId(UserDetail.getUserId());
@@ -244,6 +245,7 @@ public class AddContentController {
 			cMSPages.setPageId(pageId);
 			cMSPages.setPageOrder(seqNo);
 			cMSPages.setIsActive(isActive);
+			cMSPages.setDelStatus(1);
 			cMSPages.setDelStatus(1);
 			cMSPages.setAddDate(sf.format(date));
 			cMSPages.setFeaturedImageAlignment(aligment);

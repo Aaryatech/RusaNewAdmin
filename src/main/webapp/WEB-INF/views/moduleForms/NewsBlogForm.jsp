@@ -272,7 +272,21 @@
                                     </select>
                                 </div>
                               </div>
-                                                                               
+                                      
+                                 	<div class="form-group row">
+															<label class="control-label col-sm-2" for="page_pdf">On
+																Home Page :</label>
+															<div class="col-sm-7">
+															
+														
+                                              <input type="radio" name="onHomePage" id="onHomePage" value="1" > Yes
+                                          	<input type="radio" name="onHomePage" id="onHomePage" value="0" checked /> No
+																
+															</div>
+														</div>
+                                 
+                                                
+                                                   
                                  
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>

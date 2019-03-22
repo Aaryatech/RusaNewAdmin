@@ -21,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.EmailUtility;
+import com.ats.rusaadmin.model.EventDetails;
+import com.ats.rusaadmin.model.EventRegistration;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.Registration;
@@ -36,7 +38,7 @@ public class UserController {
 	 static String senderPassword = "atsinfosoft@123";
 	 static String mailsubject = " RUSA Login Credentials ";
 	 Registration editUser =new Registration();
-	 
+	 EventRegistration editEvent=new EventRegistration();
 		//--------------------------------------Register User Mapping-----------------------------------------------------------//\
 		
 		@RequestMapping(value = "/activeUserList", method = RequestMethod.GET)
@@ -129,6 +131,7 @@ public class UserController {
 					  {
 						  System.out.println("btnsendmail");
 						  editUser.setEmailVerified(1);
+						  editUser.setUserPassword(password);
 						  info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name,  password);
 						  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
 						  session.setAttribute("regList", getUser);
@@ -221,5 +224,48 @@ public class UserController {
 
 			return "activateUser";
 		}
+//----------------------------------------Event Registration---------------------------------------------------------------------//
+		
+		@RequestMapping(value = "/eventRegList", method = RequestMethod.GET)
+		public ModelAndView eventRegList(HttpServletRequest request, HttpServletResponse response) {
 
+			ModelAndView model = new ModelAndView("approveUser");
+			try {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				//map.add("delStatus", 1);
+				List<EventDetails> getUser = rest.getForObject(Constant.url + "/getUserInfoByUserId",	List.class);
+				//List<Registration> userList = new ArrayList<Registration>(Arrays.asList(getUser));
+				model.addObject("regList", getUser);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return model;
+		}
+		@RequestMapping(value = "/editApproveUser/{regId}/{eventRegId}", method = RequestMethod.GET)
+		public ModelAndView editApproveUser(@PathVariable("regId") int regId,@PathVariable("eventRegId") int eventRegId, HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("approveForm");
+			try {
+			 System.out.println("id"+regId);
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("regId", regId);
+				editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId",map,Registration.class);
+				System.out.println("User: "+editUser.toString());
+				MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+				map1.add("eventRegId", eventRegId);
+				editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId",map1,EventRegistration.class);
+				System.out.println("User: "+editUser.toString());
+					
+				model.addObject("editUser", editUser);
+				model.addObject("editEvent", editEvent);
+				model.addObject("isEdit", 1);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return model;
+		}
 }

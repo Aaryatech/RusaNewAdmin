@@ -66,7 +66,10 @@ public class Registration {
 	
 	private int editByAdminuserId;
 	
+	private String msg;
 	
+	private boolean isError;
+
 	public int getRegId() {
 		return regId;
 	}
@@ -323,6 +326,22 @@ public class Registration {
 		this.editByAdminuserId = editByAdminuserId;
 	}
 
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public boolean isError() {
+		return isError;
+	}
+
+	public void setError(boolean isError) {
+		this.isError = isError;
+	}
+
 	@Override
 	public String toString() {
 		return "Registration [regId=" + regId + ", userUuid=" + userUuid + ", userType=" + userType + ", emails="
@@ -334,8 +353,12 @@ public class Registration {
 				+ delStatus + ", addDate=" + addDate + ", editDate=" + editDate + ", editByUserId=" + editByUserId
 				+ ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2
 				+ ", emailCode=" + emailCode + ", emailVerified=" + emailVerified + ", smsCode=" + smsCode
-				+ ", smsVerified=" + smsVerified + ", editByAdminuserId=" + editByAdminuserId + "]";
+				+ ", smsVerified=" + smsVerified + ", editByAdminuserId=" + editByAdminuserId + ", msg=" + msg
+				+ ", isError=" + isError + "]";
 	}
+	
+	
+	
 
 	
 	
