@@ -617,11 +617,14 @@ public class ContentModuleController {
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			 String slug=sf.format(date);
-		//	String text = pageName;
-			 String text = pageName.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
-			//System.out.println(text);
-		
+			/*
+			 * String slug=sf.format(date); // String text = pageName; String text =
+			 * pageName.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+			 * //System.out.println(text);
+			 */		
+			
+			String text = page.getPageName();
+			text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();   
 			VpsImageUpload upload = new VpsImageUpload();
 			
 				for(int i = 0 ; i<editNewsBlog.getDetailList().size() ; i++) {
@@ -805,6 +808,7 @@ public class ContentModuleController {
 			//String urlName = request.getParameter("url_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
+			int doc = Integer.parseInt(request.getParameter("doc")); 
 			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -886,7 +890,8 @@ public class ContentModuleController {
 				newsBlog.setEventLocation(location); 
 				newsBlog.setPageOrder(seqNo); 
 				newsBlog.setIsActive(isActive);
-				newsBlog.setExInt1(11);				
+				newsBlog.setExInt1(11);	
+				newsBlog.setExInt2(doc);
 				newsBlog.setExVar2(items);
 				newsBlog.setDelStatus(1);
 				newsBlog.setAddDate(sf.format(date));
@@ -1039,6 +1044,7 @@ public class ContentModuleController {
 			int isActive = Integer.parseInt(request.getParameter("status")); 
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
 			String urlName = request.getParameter("url_name");
+			int doc = Integer.parseInt(request.getParameter("doc")); 
 			
 			//int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId")); 
@@ -1150,6 +1156,7 @@ public class ContentModuleController {
 				editNewsBlog.setEventLocation(location);
 				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(11);
+				editNewsBlog.setExInt2(doc);
 				editNewsBlog.setExVar2(items);
 				editNewsBlog.setPageOrder(seqNo); 
 				editNewsBlog.setIsActive(isActive); 

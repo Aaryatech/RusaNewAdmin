@@ -287,4 +287,10 @@ public class UserController {
 
 			return model;
 		}
-}
+		
+}/*
+	 * select count(*) as count from event_registration ,t_newsblogs where
+	 * event_registration.del_status=1 and event_registration.newsblogs_id =
+	 * t_newsblogs.newsblogs_id as countapply
+	 * 
+	 */

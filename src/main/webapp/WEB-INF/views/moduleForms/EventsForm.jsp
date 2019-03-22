@@ -177,7 +177,7 @@
                        <div class="col-xs-12"> 
                     		  
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Heading :</label>
+                                <label class="control-label col-sm-2" for="heading1">Heading :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                   <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
                                 </div>
@@ -185,20 +185,20 @@
                            <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_title1">Meta Title :</label>
                                 <div class="col-sm-10">
-                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="" required>
+                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="" >
                                 
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_description1">Meta Description :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   required="required"></textarea>
+                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"  ></textarea>
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_keyword1">KeyWord :</label>
                                 <div class="col-sm-10">
-                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="" required>
+                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="" >
                                 </div>
                               </div> 
                              </div>
@@ -294,7 +294,22 @@
     </div>
     </div></div>
                                  
-                                                
+                                    
+                                 	<div class="form-group row">
+															<label class="control-label col-sm-2" for="page_pdf">Document Required :</label>
+															<div class="col-sm-7">
+														
+																		<input type="radio" name="doc" id="doc"
+																			value="0" checked/> No
+                                           					   <input type="radio"
+																			name="doc" id="doc" value="1" > Yes
+                                         
+																
+                                          	
+                                        
+
+															</div>
+														</div>            
                                  
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>

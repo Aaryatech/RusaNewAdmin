@@ -91,6 +91,7 @@
 												<th>Event Date</th>
 												<th>Event Manager</th>
 												<th>Event Contact Number</th>
+												<th>Event Location</th>
 												<th>Document Upload</th>
 												<th>Number of Applied Users</th>
 												<th>Number of Approved Users</th>												
@@ -108,6 +109,7 @@
 													<td>${userList.eventDateFrom}</td>
 													<td>${userList.eventContactPerson}</td>
 													<td>${userList.eventContactNumber}</td>
+													<td>${userList.eventLocation}</td>
 													<c:choose>
 														<c:when test="${userList.exInt2==1}">
 															<td>Required</td>

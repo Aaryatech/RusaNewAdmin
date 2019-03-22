@@ -432,9 +432,28 @@
       </label>
     </div>
     </div></div>
-    </div></div>
                                  
-                                                
+                                 	<div class="form-group row">
+															<label class="control-label col-sm-2" for="page_pdf">Document Required :</label>
+															<div class="col-sm-7">
+																<c:choose>
+																	<c:when test="${editNewsBlog.exInt2==1}">
+																		<input type="radio" name="doc" id="doc"
+																			value="0" /> No
+                                              <input type="radio"
+																			name="doc" id="doc" value="1" checked> Yes
+                                          	</c:when>
+																	<c:otherwise>
+																		<input type="radio" name="doc" id="doc"
+																			value="0" checked> No
+                                              <input type="radio"
+																			name="doc" id="doc" value="1"> Yes
+                                          	
+                                          	</c:otherwise>
+																</c:choose>
+
+															</div>
+														</div>
                                  
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
