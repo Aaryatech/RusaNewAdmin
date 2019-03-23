@@ -1,6 +1,8 @@
 package com.ats.rusaadmin.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.EmailUtility;
 import com.ats.rusaadmin.model.EventDetails;
 import com.ats.rusaadmin.model.EventRegistration;
@@ -34,160 +37,157 @@ import com.ats.rusaadmin.model.User;
 public class UserController {
 
 	RestTemplate rest = new RestTemplate();
-	
-	 static String senderEmail = "atsinfosoft@gmail.com";
-	 static String senderPassword = "atsinfosoft@123";
-	 static String mailsubject = " RUSA Login Credentials ";
-	 Registration editUser =new Registration();
-	 EventRegistration editEvent=new EventRegistration();
-		//--------------------------------------Register User Mapping-----------------------------------------------------------//\
-		
-		@RequestMapping(value = "/activeUserList", method = RequestMethod.GET)
-		public ModelAndView activeUserList(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("activateUser");
-			try {
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				//map.add("delStatus", 1);
-				List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",	List.class);
-				//List<Registration> userList = new ArrayList<Registration>(Arrays.asList(getUser));
-				model.addObject("regList", getUser);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
+	static String senderEmail = "atsinfosoft@gmail.com";
+	static String senderPassword = "atsinfosoft@123";
+	static String mailsubject = " RUSA Login Credentials ";
+	static String mailsubjectApprove = " About Event Shedule";
+	Registration editUser = new Registration();
+	EventRegistration editEvent = new EventRegistration();
+	// --------------------------------------Register User
+	// Mapping-----------------------------------------------------------//\
+
+	@RequestMapping(value = "/activeUserList", method = RequestMethod.GET)
+	public ModelAndView activeUserList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("activateUser");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			// map.add("delStatus", 1);
+			List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+			// List<Registration> userList = new
+			// ArrayList<Registration>(Arrays.asList(getUser));
+			model.addObject("regList", getUser);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/editActivateUser/{regId}", method = RequestMethod.GET)
+	public ModelAndView editActivateUser(@PathVariable("regId") int regId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("userActivationForm");
+		try {
+			System.out.println("id" + regId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("regId", regId);
+			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			System.out.println("User: " + editUser.toString());
+
+			model.addObject("editUser", editUser);
+			model.addObject("isEdit", 1);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/activateUser", method = RequestMethod.POST)
+	public String activateUser(HttpServletRequest request, HttpServletResponse response, ModelAndView model) {
+
+		HttpSession session = request.getSession();
+		try {
+			Info info = null;
+			Info info1 = null;
+
+			User UserDetail = (User) session.getAttribute("UserDetail");
+
+			int regId = Integer.parseInt(request.getParameter("regId"));
+			String alternateEmail = request.getParameter("email");
+			String name = request.getParameter("name");
+			String uuid = request.getParameter("uuid");
+			int type = Integer.parseInt(request.getParameter("type"));
+			String email = request.getParameter("userEmail");
+			String phone = request.getParameter("phone");
+			String aishe = request.getParameter("aishe");
+			String collegeN = request.getParameter("collegeN");
+			String uniName = request.getParameter("uniName");
+			String designation = request.getParameter("designation");
+
+			String deptN = request.getParameter("deptN");
+			String btnsendmail = request.getParameter("btnsendmail");
+			String authN = request.getParameter("authN");
+
+			String btnsubmit = request.getParameter("btnsubmit");
+			int status = Integer.parseInt(request.getParameter("status"));
+
+			int smsVerified = Integer.parseInt(request.getParameter("smsVerified"));
+			int emailVerified = Integer.parseInt(request.getParameter("emailVerified"));
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+			String password = Commons.getAlphaNumericString(5);
+			System.out.println("Password: " + password);
+			System.out.println("Emails: " + email);
+			System.out.println("name: " + name);
+			System.out.println("btnsubmit: " + btnsubmit);
+			System.out.println("btnsendmail: " + btnsendmail);
+
+			// Registration editUser=new Registration();
+
+			if (btnsendmail != null) {
+				if (smsVerified == 1) {
+					System.out.println("btnsendmail");
+					editUser.setEmailVerified(1);
+					editUser.setUserPassword(password);
+					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, name, password);
+					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+					session.setAttribute("regList", getUser);
+					session.setAttribute("successMsg", "Infomation Updated successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
+					editUser.setEmailVerified(0);
+					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+					session.setAttribute("regList", getUser);
+					session.setAttribute("successMsg", "Please varify your mobile number !");
+					session.setAttribute("errorMsg", "true");
+				}
+
+			}
+			if (btnsubmit != null) {
+				System.out.println("btnsubmit");
+				editUser.setRegId(regId);
+				editUser.setAlternateEmail(alternateEmail);
+				editUser.setUserUuid(uuid);
+				editUser.setUserType(type);
+				editUser.setEmails(email);
+				editUser.setUserPassword(password);
+				editUser.setName(name);
+				editUser.setAisheCode(aishe);
+				editUser.setCollegeName(collegeN);
+				editUser.setUnversityName(uniName);
+				editUser.setDesignationName(designation);
+				editUser.setDepartmentName(deptN);
+				editUser.setMobileNumber(phone);
+				editUser.setAuthorizedPerson(authN);
+				editUser.setEditByAdminuserId(UserDetail.getUserId());
+
+				if (status == 0) {
+					editUser.setIsActive(status);
+				}
+				if (status == 1) {
+					editUser.setIsActive(status);
+				}
+				if (status == 2) {
+					editUser.setIsActive(status);
+				}
+
+				Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration", editUser,
+						Registration.class);
+
+				List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+				session.setAttribute("regList", getUser);
+				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("errorMsg", "false");
 			}
 
-			return model;
-		}
-		
-		
-		@RequestMapping(value = "/editActivateUser/{regId}", method = RequestMethod.GET)
-		public ModelAndView editActivateUser(@PathVariable("regId") int regId, HttpServletRequest request, HttpServletResponse response) {
-
-			ModelAndView model = new ModelAndView("userActivationForm");
-			try {
-			 System.out.println("id"+regId);
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("regId", regId);
-				 editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId",map,Registration.class);
-					System.out.println("User: "+editUser.toString());	
-				
-				model.addObject("editUser", editUser);
-				model.addObject("isEdit", 1);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			return model;
-		}
-		
-		@RequestMapping(value = "/activateUser", method = RequestMethod.POST)
-		public String activateUser(HttpServletRequest request,HttpServletResponse response,ModelAndView model) {
-
-			HttpSession session = request.getSession();
-			try {
-				Info info=null;
-				Info info1=null;
-
-				User UserDetail =(User) session.getAttribute("UserDetail");
-				
-				int regId=Integer.parseInt(request.getParameter("regId"));
-				String alternateEmail=request.getParameter("email");
-				String name=request.getParameter("name");
-				String uuid=request.getParameter("uuid");
-				int type=Integer.parseInt(request.getParameter("type"));
-				String email=request.getParameter("userEmail");
-				String phone=request.getParameter("phone");
-				String aishe=request.getParameter("aishe");
-				String collegeN=request.getParameter("collegeN");
-				String uniName=request.getParameter("uniName");
-				String designation=request.getParameter("designation");
-				
-				String deptN=request.getParameter("deptN");
-				String btnsendmail=request.getParameter("btnsendmail");
-				String authN=request.getParameter("authN");
-				
-				String btnsubmit=request.getParameter("btnsubmit");
-				int status=Integer.parseInt(request.getParameter("status"));
-				
-				int smsVerified=Integer.parseInt(request.getParameter("smsVerified"));
-				int emailVerified=Integer.parseInt(request.getParameter("emailVerified"));
-				Date date = new Date();
-				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-				 
-				String password=Commons.getAlphaNumericString(5);
-				System.out.println("Password: "+password);
-				System.out.println("Emails: "+email);
-				System.out.println("name: "+name);
-				System.out.println("btnsubmit: "+btnsubmit);
-				System.out.println("btnsendmail: "+btnsendmail);
-				
-				//Registration editUser=new Registration();
-				
-				if(btnsendmail!=null)
-				{
-					  if(smsVerified==1) 
-					  {
-						  System.out.println("btnsendmail");
-						  editUser.setEmailVerified(1);
-						  editUser.setUserPassword(password);
-						  info1 = EmailUtility.sendEmail(senderEmail,senderPassword,email,mailsubject,name,  password);
-						  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-						  session.setAttribute("regList", getUser);
-						  session.setAttribute("successMsg","Infomation Updated successfully!");
-						  session.setAttribute("errorMsg","false"); 
-					  }
-					  else
-					  {
-						  editUser.setEmailVerified(0);
-						  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-						  session.setAttribute("regList", getUser);
-						  session.setAttribute("successMsg","Please varify your mobile number !");
-						  session.setAttribute("errorMsg","true"); 
-					  }
-					 
-				}
-				if(btnsubmit!=null)
-				{
-					System.out.println("btnsubmit");
-					  editUser.setRegId(regId);
-					  editUser.setAlternateEmail(alternateEmail);
-					  editUser.setUserUuid(uuid);
-					  editUser.setUserType(type);
-					  editUser.setEmails(email);
-					  editUser.setUserPassword(password); 
-					  editUser.setName(name);
-					  editUser.setAisheCode(aishe);
-					  editUser.setCollegeName(collegeN);
-					  editUser.setUnversityName(uniName);
-					  editUser.setDesignationName(designation);
-					  editUser.setDepartmentName(deptN);					  
-					  editUser.setMobileNumber(phone); editUser.setAuthorizedPerson(authN);					  
-					  editUser.setEditByAdminuserId(UserDetail.getUserId()); 
-					  
-					  if(status==0)
-					  {
-						  editUser.setIsActive(status);
-					  }
-					  if(status==1)
-					  {
-						  editUser.setIsActive(status);
-					  }
-					  if(status==2)
-					  {
-						  editUser.setIsActive(status);
-					  }
-					  
-					  Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration",editUser, Registration.class);
-					  
-					  List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-					  session.setAttribute("regList", getUser);
-					  session.setAttribute("successMsg","Infomation Updated successfully!");
-					  session.setAttribute("errorMsg","false"); 
-				}
-			
 			/*
 			 * if(smsVerified==1 && emailVerified==1) { System.out.println("1");
 			 * List<Registration> getUser1 = rest.getForObject(Constant.url +
@@ -216,78 +216,160 @@ public class UserController {
 			 * session.setAttribute("successMsg","Infomation Updated successfullyr !"); } }
 			 * System.out.println("7");
 			 */
-			
-			  
-			 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
-			return "activateUser";
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+		return "activateUser";
+	}
 //----------------------------------------Event Registration---------------------------------------------------------------------//
-		
-		@RequestMapping(value = "/eventRegList", method = RequestMethod.GET)
-		public ModelAndView eventRegList(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("approveUser");
-			try {
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				//map.add("delStatus", 1);
-				List<EventDetails> getUser = rest.getForObject(Constant.url + "/getUserInfoByUserId",	List.class);
-				//List<Registration> userList = new ArrayList<Registration>(Arrays.asList(getUser));
+	@RequestMapping(value = "/eventRegList", method = RequestMethod.GET)
+	public ModelAndView eventRegList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("approveUser");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			// map.add("delStatus", 1);
+			List<EventDetails> getUser = rest.getForObject(Constant.url + "/getUserInfoByUserId", List.class);
+			// List<Registration> userList = new
+			// ArrayList<Registration>(Arrays.asList(getUser));
+			model.addObject("regList", getUser);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/editApproveUser/{regId}/{eventRegId}", method = RequestMethod.GET)
+	public ModelAndView editApproveUser(@PathVariable("regId") int regId, @PathVariable("eventRegId") int eventRegId,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("approveForm");
+		try {
+			System.out.println("id" + regId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("regId", regId);
+			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			System.out.println("User: " + editUser.toString());
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("eventRegId", eventRegId);
+			editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
+			System.out.println("User: " + editEvent.toString());
+
+			model.addObject("editUser", editUser);
+			model.addObject("editEvent", editEvent);
+			model.addObject("isEdit", 1);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	
+
+	@RequestMapping(value = "/approveUserStatus", method = RequestMethod.POST)
+	public String approveUserStatus(HttpServletRequest request, HttpServletResponse response) {
+
+		HttpSession session = request.getSession();
+		try {
+			 ModelAndView model=new ModelAndView();
+			
+			User UserDetail = (User) session.getAttribute("UserDetail");
+			Info info = null;
+			Info info1 = null;
+			String approval=null;
+			int status = Integer.parseInt(request.getParameter("status"));
+			String email=request.getParameter("userEmail");
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+			if(status==1)
+			{
+				 approval="Approved";
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval);
+			}
+			else
+			{
+				 approval="Not Approved";
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval);
+			}
+				editEvent.setStatusApproval(status);
+				editEvent.setApprovalDate(sf.format(date));
+				editEvent.setApproveBy(UserDetail.getUserId());
+
+				EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
+						EventRegistration.class);
+				
+				List<EventDetails> getUser = rest.getForObject(Constant.url + "/getUserInfoByUserId", List.class);
+			
 				model.addObject("regList", getUser);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("errorMsg", "false");
+			
 
-			return model;
+	
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		@RequestMapping(value = "/editApproveUser/{regId}/{eventRegId}", method = RequestMethod.GET)
-		public ModelAndView editApproveUser(@PathVariable("regId") int regId,@PathVariable("eventRegId") int eventRegId, HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("approveForm");
-			try {
-			 System.out.println("id"+regId);
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("regId", regId);
-				editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId",map,Registration.class);
-				System.out.println("User: "+editUser.toString());
-				MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
-				map1.add("eventRegId", eventRegId);
-				editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId",map1,EventRegistration.class);
-				System.out.println("User: "+editUser.toString());
-					
-				model.addObject("editUser", editUser);
-				model.addObject("editEvent", editEvent);
-				model.addObject("isEdit", 1);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			return model;
-		}
-		
-		@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
+		return "redirect:/eventRegList";
+	}
+	@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
 		public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
 
 			ModelAndView model = new ModelAndView("allEventList");
 			try {
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				//map.add("delStatus", 1);
-				List<EventView> getUser = rest.getForObject(Constant.url + "/getAllEventList",	List.class);
-				//List<Registration> userList = new ArrayList<Registration>(Arrays.asList(getUser));
-				model.addObject("regList", getUser);
+				EventView[] getUser = rest.getForObject(Constant.url + "/getAllEventList",	EventView[].class);
+				List<EventView> userList = new ArrayList<EventView>(Arrays.asList(getUser));
+				for(int i=0; i<userList.size();i++)
+				{
+					userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));					
+					
+				}
 				
+				model.addObject("regList", userList);
+System.out.println("userList :"+userList)	;	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			return model;
 		}
+
+	@RequestMapping(value = "/detailEventList/{eventRegId}", method = RequestMethod.GET)
+	public ModelAndView detailEventList(@PathVariable("eventRegId") int eventRegId,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("approveForm");
+		try {
+			//System.out.println("id" + regId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			//map.add("regId", regId);
+			map.add("eventRegId", eventRegId);
+			EventRegistration editUser = rest.postForObject(Constant.url + "/getEventDataByRegId", map, EventRegistration.class);
+			System.out.println("User: " + editUser.toString());
 		
+
+			model.addObject("editUser", editUser);
+			model.addObject("editEvent", editEvent);
+			model.addObject("isEdit", 1);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
 }/*
 	 * select count(*) as count from event_registration ,t_newsblogs where
 	 * event_registration.del_status=1 and event_registration.newsblogs_id =

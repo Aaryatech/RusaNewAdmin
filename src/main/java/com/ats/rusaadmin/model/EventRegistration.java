@@ -32,6 +32,7 @@ public class EventRegistration {
 	
 	private String exVar2;
 
+
 	public int getEventRegId() {
 		return eventRegId;
 	}
@@ -160,7 +161,8 @@ public class EventRegistration {
 				+ isActive + ", delStatus=" + delStatus + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1="
 				+ exVar1 + ", exVar2=" + exVar2 + "]";
 	}
-	
+
+
 	
 	
 }

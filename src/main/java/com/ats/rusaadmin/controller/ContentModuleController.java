@@ -991,35 +991,23 @@ public class ContentModuleController {
 					editNewsBlog.getDetailList().add(newsBlogDescription);
 				}
 			}
-			//editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
-			
-			List<Integer> sectionIdList= Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
-					.collect(Collectors.toList());
-			
+				
 			/*
-			 * List<Section> nonSelectedSection = new ArrayList<Section>();
-			 * nonSelectedSection.addAll(sectionList); List<Section> selectedSection= new
-			 * ArrayList<Section>(); if (sectionIdList.size() > 0) { for (int i = 0; i <
-			 * sectionIdList.size(); i++) {
-			 * 
-			 * for (int j = 0; j < sectionList.size(); j++) { if
-			 * (sectionList.get(j).getSectionId() == sectionIdList.get(i)) {
-			 * selectedSection.add(sectionList.get(j));
-			 * nonSelectedSection.remove(sectionList.get(j)); } }
-			 * 
-			 * } } model.addObject("nonSelectedSection", nonSelectedSection);
-			 * model.addObject("selectedSection", selectedSection);
-			 * 
-			 * System.err.println("nonSelectedSection"+nonSelectedSection.toString());
-			 * System.err.println("selectedSection"+selectedSection.toString());
+			 * List<Integer> sectionIdList=
+			 * Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
+			 * .collect(Collectors.toList());
 			 */
 			
 			model.addObject("languagesList", languagesList);
+			model.addObject("eventDate", DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
 			model.addObject("editNewsBlog", editNewsBlog);
 			model.addObject("page", page);
 			model.addObject("url", Constant.getGallryImageURL);
 			model.addObject("pdfUrl", Constant.getCmsPdf);
 			model.addObject("isEdit", 1);
+			
+			String[] array = editNewsBlog.getExVar2().split(",");			
+			model.addObject("array", array);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

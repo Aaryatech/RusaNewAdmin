@@ -74,7 +74,7 @@
         	          </c:if>  --%>
 
 						<form class="form-horizontal" id="addSupplier"
-							action="${pageContext.request.contextPath}/activateUser"
+							action="${pageContext.request.contextPath}/approveUserStatus"
 							onsubmit="return confirm('Do you really want to submit the form?');"
 							method="post">
 							<input type="hidden" name="smsVerified"
@@ -107,7 +107,7 @@
 														<input id="contactName" class="form-control"
 															placeholder="User Name" value="${editUser.name}"
 															style="text-align: left;" name="name" type="text"
-															required>
+															readonly required>
 													</div>
 												</div>
 
@@ -154,7 +154,7 @@
 														<input id="userEmail" class="form-control"
 															placeholder="Email" value="${editUser.emails}"
 															style="text-align: left;" name="userEmail" type="email"
-															required>
+															readonly required>
 													</div>
 												</div>
 												<div class="form-group">
@@ -167,8 +167,8 @@
 															pattern="[7-9]{1}[0-9]{9}" maxlength="10"
 															placeholder="Mobile Number"
 															value="${editUser.mobileNumber}"
-															style="text-align: left;" name="phone" type="text"
-															required>
+															style="text-align: left;" name="phone" type="text" 
+															readonly required>
 													</div>
 												</div>
 												<div class="form-group">
@@ -181,7 +181,7 @@
 															placeholder="Authorized Name"
 															value="${editUser.authorizedPerson}"
 															style="text-align: left;" name="authN" type="text"
-															required>
+															readonly required>
 													</div>
 												</div>
 												<div class="form-group">
@@ -191,7 +191,7 @@
 														<input id="userEmail" class="form-control"
 															placeholder="Alternate Email"
 															value="${editUser.alternateEmail}"
-															style="text-align: left;" name="email" type="email">
+															style="text-align: left;" name="email" type="email" readonly>
 													</div>
 												</div>
 
@@ -202,7 +202,7 @@
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="AISHE Code" value="${editUser.aisheCode}"
-															style="text-align: left;" name="aishe" type="text">
+															style="text-align: left;" name="aishe" type="text" readonly>
 													</div>
 												</div>
 												<div class="form-group">
@@ -212,7 +212,7 @@
 														<input id="middlename" class="form-control"
 															placeholder="College Name"
 															value="${editUser.collegeName}" style="text-align: left;"
-															name="collegeN" type="text">
+															name="collegeN" type="text" readonly>
 													</div>
 												</div>
 
@@ -223,7 +223,7 @@
 														<input id="middlename" class="form-control"
 															placeholder="University Name"
 															value="${editUser.unversityName}"
-															style="text-align: left;" name="uniName" type="text">
+															style="text-align: left;" name="uniName" type="text" readonly>
 													</div>
 												</div>
 												<div class="form-group">
@@ -233,7 +233,7 @@
 														<input id="middlename" class="form-control"
 															placeholder="Designation"
 															value="${editUser.designationName}"
-															style="text-align: left;" name="designation" type="text">
+															style="text-align: left;" name="designation" type="text" readonly>
 													</div>
 												</div>
 												<div class="form-group">
@@ -243,7 +243,7 @@
 														<input id="departmentName" class="form-control"
 															placeholder="Department Name"
 															value="${editUser.departmentName}"
-															style="text-align: left;" name="deptN" type="text">
+															style="text-align: left;" name="deptN" type="text" readonly>
 													</div>
 												</div>
 
@@ -254,16 +254,13 @@
 													<label class="control-label col-sm-2"
 														for="departmentName">Current Status : </label>
 													<div class="col-sm-10">
-													<c:if test="${editEvent.isActive==0}">
-													New User
+													
+													<c:if test="${editEvent.statusApproval==1}">
+													Approve
 													</c:if>
-													<c:if test="${editEvent.isActive==1}">
-													Active
-													</c:if>
-													<c:if test="${editEvent.isActive==2}">
-													Deactive
-													</c:if>
-														
+													<c:if test="${editEvent.statusApproval==2}">
+													Not Approved
+													</c:if>														
 														 
 													</div>
 												</div>
@@ -278,20 +275,16 @@
 
 														<select name="status" id="status" class="form-control">
 															<c:choose>
-																<c:when test="${editEvent.isActive==0}">
-																	<option value="0" selected>New User</option>
-																	<option value="1">Activate</option>
-																	<option value="2" selected>Deactivate</option>
-																</c:when>
-																<c:when test="${editEvent.isActive==1}">
-																	<option value="0" >New User</option>
-																	<option value="1" selected>Activate</option>
-																	<option value="2" >Deactivate</option>
+															
+																<c:when test="${editEvent.statusApproval==1}">
+																
+																	<option value="1" selected>Approve</option>
+																	<option value="2" >Not Approve</option>
 																</c:when>
 																<c:otherwise>
-																	<option value="0">New User</option>
-																	<option value="1">Activate</option>
-																	<option value="2" selected>Deactivate</option>
+																
+																	<option value="1">Approve</option>
+																	<option value="2" selected>Not Approve</option>
 																</c:otherwise>
 															</c:choose>
 
@@ -305,17 +298,9 @@
 										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
 												 
-												<input type="submit" name="btnsubmit" id="btnsubmit" value="Update Status"   class="btn btn-primary">
-												<c:choose>
-																<c:when test="${editEvent.isActive==0}">
-																	 
-																</c:when>
-																<c:when test="${editEvent.isActive==1}">
-																	 <input type="submit" name="btnsendmail" id="btnsendmail" value="Send Password"   class="btn btn-primary">
-												 
-																</c:when>
-																 
-															</c:choose>
+												<input type="submit" name="btnsubmit" id="btnsubmit" value="Approve Status"   class="btn btn-primary">
+											
+															
 												
 												<button type="reset" class="btn btn-default">Reset</button>
 											</div>

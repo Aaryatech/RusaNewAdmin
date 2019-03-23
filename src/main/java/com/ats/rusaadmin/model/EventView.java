@@ -25,6 +25,13 @@ public class EventView {
 
 	private int exInt2;
 	
+	/*
+	 * private int totalApplied;
+	 * 
+	 * private int totalApprove;
+	 */
+
+	
 	public int getNewsblogsId() {
 		return newsblogsId;
 	}
@@ -124,9 +131,5 @@ public class EventView {
 				+ ", eventDateFrom=" + eventDateFrom + ", eventContactPerson=" + eventContactPerson
 				+ ", eventContactNumber=" + eventContactNumber + ", editDate=" + editDate + ", exInt2=" + exInt2 + "]";
 	}
-
-
-
-
 
 }
