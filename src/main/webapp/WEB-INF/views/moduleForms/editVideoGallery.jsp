@@ -158,16 +158,16 @@
 									<input id="titleName" class="form-control" placeholder="Vedio Title" value="${editGalleryDetail.title}"  style="text-align: left;" name="titleName" type="text" required>
 								 </div>
                               </div>
-                               <div class="form-group">
+                              <!--  <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Video :<span class="text-danger">*</span></label>
                                  	 <div class="col-sm-10" >
                              		 	<INPUT TYPE="radio" name="vedio_url" value="0" onclick="showhide(0)" checked>URL 
                              		 	
 										<INPUT TYPE="radio" NAME="vedio_url" VALUE="1"  onclick="showhide(1)">Code<BR>
                                     </div>
-                                     </div>
+                                     </div> --> <INPUT TYPE="hidden" NAME="vedio_url" VALUE="1"  >
                                      
-                                     <div class="form-group" id="newpost"  >
+                                    <%--  <div class="form-group" id="newpost"  >
                                 	<label class="control-label col-sm-2" for="status">Type :</label>
                                  	 <div class="col-sm-10"  >
                              		  <input type="text" class="form-control" id="vedioUrl" name="vedioUrl" placeholder="Video URL" value="${editGalleryDetail.fileName}" >
@@ -177,6 +177,13 @@
                                 	<label class="control-label col-sm-2" for="status">Type :</label>
                                  	 <div class="col-sm-10"  >
                              		 	<textarea rows="4" cols="100" id="vedioCode" name="vedioCode" value="${editGalleryDetail.fileName}" >Code</textarea>
+                                    </div>
+                                     </div> --%>
+                                     
+                                      <div class="form-group" id="newpost1" >
+                                	<label class="control-label col-sm-2" for="status">Video Code :</label>
+                                 	 <div class="col-sm-10"  >
+                             		 	<textarea rows="4" cols="100" id="vedioCode" name="vedioCode"  >${editGalleryDetail.fileName}</textarea>
                                     </div>
                                      </div>
                                      

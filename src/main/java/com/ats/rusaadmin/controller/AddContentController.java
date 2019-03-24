@@ -68,6 +68,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("langId", 1);
+			map.add("type", "1,2");
 			TopMenuList sectionTree = rest.postForObject(Constant.url + "/getTopMenuList", map, TopMenuList.class);
 
 			/*
