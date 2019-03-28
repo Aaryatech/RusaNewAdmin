@@ -265,9 +265,9 @@ public class NewController {
 					  
 					  
 							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-							editImageLink.setSliderImage(docFile);
+							editImageLink.setSliderImage("re"+docFile);
 							try {
-								Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0);
+								Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,1,140,60,0,0);
 								}catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();
@@ -281,9 +281,9 @@ public class NewController {
 						  editImageLink.setSliderImage(imageName);
 						}else {
 							docFile =  dateTimeInGMT.format(date)+"_"+docfile.get(0).getOriginalFilename();
-							editImageLink.setSliderImage(docFile);
+							editImageLink.setSliderImage("re"+docFile);
 							try {
-								Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,0,0,0,0,0 );
+								Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL,docFile,Constant.values,1,140,60,0,0 );
 								}catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();

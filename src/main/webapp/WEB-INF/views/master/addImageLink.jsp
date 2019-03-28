@@ -137,7 +137,7 @@
                                                 </div>
                                             </span>
                                         </div>
-                                         <span class="help-block">* Only jpg,gif,png * Best image size is 1920px × 700px</span>
+                                          <span class="help-block">* Only jpg,gif,png * Best image size is 140px × 60px</span>
                                           
                                     </div>
                                       </div>
@@ -169,7 +169,7 @@
                                                 </div>
                                             </span>
                                         </div>
-                                         <span class="help-block">* Only jpg,gif,png * Best image size is 1920px × 700px</span>
+                                         <span class="help-block">* Only jpg,gif,png * Best image size is 140px × 60px</span>
                                           
                                     </div>
                                       </div>

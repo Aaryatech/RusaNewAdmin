@@ -86,6 +86,65 @@ public class VpsImageUpload {
 
 		}
 	
+	public Info saveUploadedImgeWithResize(MultipartFile file,String uploadPath,String imageName,String[] allowExt,int isResize, int width, int hieght
+			, int isCheckSize, int imageSizeMax) throws IOException {
+
+				Info info = new Info();
+				
+				 try {
+					 String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+					 
+					 if ( ArrayUtils.contains( allowExt, extension ) ) {
+						
+							Path path = Paths.get(uploadPath + imageName);
+				
+							byte[] bytes = file.getBytes();
+				 
+								System.out.println("Inside Image Type =1");
+				
+								//path = Paths.get(uploadPath + imageName);
+				
+								System.out.println("Path= " + path.toString() + "" +file.getSize());
+				
+							 
+				
+							Files.write(path, bytes);
+							
+							if(isResize==1) {
+							 
+								Image img = null;
+								BufferedImage tempPNG = null;
+								 
+								File newFilePNG = null;
+								 
+						        System.out.println("File " + imageName);
+						        img = ImageIO.read(new File(uploadPath+imageName));
+						        tempPNG = resizeImage(img, width, hieght);
+						        
+						        newFilePNG = new File(uploadPath+"re"+imageName);
+						       
+						        ImageIO.write(tempPNG, extension, newFilePNG);
+						       
+								System.out.println("DONE");
+							} 
+						
+						info.setError(false);
+						info.setMsg("Upload Successfully ");
+					 }else {
+						 	info.setError(true);
+							info.setMsg("Error While Uploading Image");
+					 }
+						
+				 }catch (Exception e) {
+					 
+					e.printStackTrace();
+					info.setError(true);
+					info.setMsg("Error While Uploading Image");
+				}
+			return info;
+
+		}
+	
 	public void saveUploadedFiles(MultipartFile file, String filePath, String imageName) throws IOException {
 
 		 
