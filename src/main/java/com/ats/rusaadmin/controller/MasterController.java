@@ -551,6 +551,7 @@ public class MasterController {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+			//request.setCharacterEncoding("UTF-8");
 			HttpSession session = request.getSession();
 			User UserDetail =(User) session.getAttribute("UserDetail");
 			
