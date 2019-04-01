@@ -301,7 +301,7 @@
 																		</div>
 																	</div>
 
-																	<c:if test="${editNewsBlog.featuredImage!=null}">
+																	<c:if test="${not empty editNewsBlog.featuredImage}">
 																		<div class="form-group">
 																			<label class="col-md-2 control-label">Current
 																				Image</label>

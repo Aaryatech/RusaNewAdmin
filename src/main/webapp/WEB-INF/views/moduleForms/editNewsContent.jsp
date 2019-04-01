@@ -185,15 +185,15 @@
                             
                               
            					 <input type="hidden" name="mode" id="mode" value="edit_content">
-                               			 
+                               			  <input type="hidden" name="pageId" id="pageId" value="${editNewsBlog.pageId}">
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                   <input type="text" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="${editNewsBlog.pageOrder}" required>
                                 </div>
                               </div>
-                                 
-                               <c:if test="${editNewsBlog.featuredImage!=null}">
+                              
+                               <c:if test="${not empty editNewsBlog.featuredImage}">
                                	<div class="form-group">  
                                  <label class="col-md-2 control-label">Current Image :</label>
                                           <div class="col-md-10">
@@ -333,18 +333,14 @@
 															<div class="col-sm-7">
 																<c:choose>
 																	<c:when test="${editNewsBlog.detailList[0].exInt1==1}">
-																		<input type="radio" name="onHomePage" id="onHomePage"
-																			value="0" /> No
-                                              <input type="radio"
-																			name="onHomePage" id="onHomePage" value="1" checked> Yes
-                                          	</c:when>
+																		<input type="radio" name="onHomePage" id="onHomePage" value="0" /> No
+                                          							    <input type="radio" name="onHomePage" id="onHomePage" value="1" checked> Yes
+                                          							</c:when>
+                                          							
 																	<c:otherwise>
-																		<input type="radio" name="onHomePage" id="onHomePage"
-																			value="0" checked> No
-                                              <input type="radio"
-																			name="onHomePage" id="onHomePage" value="1"> Yes
-                                          	
-                                          	</c:otherwise>
+																		<input type="radio" name="onHomePage" id="onHomePage" value="0" checked> No
+                                            							 <input type="radio" name="onHomePage" id="onHomePage" value="1"> Yes                                          	
+                                        						  	</c:otherwise>
 																</c:choose>
 
 															</div>

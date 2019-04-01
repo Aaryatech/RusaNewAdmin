@@ -489,7 +489,7 @@ public class GallaryController{
 	
 	
 	@RequestMapping(value = "/deleteOtherMediaFile/{file}/{extension}", method = RequestMethod.GET)
-	public String uploadOtherMediaProccess(@PathVariable("file") String file,@PathVariable("extension") String extension, HttpServletRequest request, HttpServletResponse response) {
+	public String deleteOtherMediaFile(@PathVariable("file") String file,@PathVariable("extension") String extension, HttpServletRequest request, HttpServletResponse response) {
 
 		 
 		try {

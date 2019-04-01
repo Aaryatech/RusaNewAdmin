@@ -270,9 +270,7 @@ public class UserController {
 
 		return model;
 	}
-
 	
-
 	@RequestMapping(value = "/approveUserStatus", method = RequestMethod.POST)
 	public String approveUserStatus(HttpServletRequest request, HttpServletResponse response) {
 
@@ -285,21 +283,26 @@ public class UserController {
 			Info info1 = null;
 			String approval=null;
 			int status = Integer.parseInt(request.getParameter("status"));
+			int regId = Integer.parseInt(request.getParameter("reg"));
 			String email=request.getParameter("userEmail");
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("regId",regId);
+			Registration user = rest.postForObject(Constant.url + "/getRegUserbyRegId",map, Registration .class);
+			
+			
 			if(status==1)
 			{
 				 approval="Approved";
-				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval);
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),"event","","");
 			}
 			else
 			{
 				 approval="Not Approved";
-				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval);
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),"event","","");
 			}
 				editEvent.setStatusApproval(status);
 				editEvent.setApprovalDate(sf.format(date));
@@ -338,7 +341,7 @@ public class UserController {
 				}
 				
 				model.addObject("regList", userList);
-System.out.println("userList :"+userList)	;	
+				System.out.println("userList :"+userList)	;	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

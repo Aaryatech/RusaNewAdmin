@@ -597,7 +597,9 @@ public class ContentModuleController {
 			//int pageId = Integer.parseInt(request.getParameter("pageId")); 
 			String[] itemShow = request.getParameterValues("sectionId");
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+			int pageId = Integer.parseInt(request.getParameter("pageId"));
 			
+			System.out.println("onHomePage :"+onHomePage);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < itemShow.length; i++) {
 					sb = sb.append(itemShow[i] + ",");
