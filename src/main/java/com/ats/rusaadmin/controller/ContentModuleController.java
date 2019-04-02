@@ -161,14 +161,14 @@ public class ContentModuleController {
 				editTestImonial.setAddDate(sf.format(date));
 				editTestImonial.setLocation(location);
 				editTestImonial.setSortNo(sortNo);
-			
-					if(message!=null )
+				editTestImonial.setExInt1(formType);
+					if(formType==1 )
 			  		{ 
 						editTestImonial.setMessage(message);
 			  		}
-			  		if(video!=null)
+					else
 				    {
-			  			editTestImonial.setExVar1(video); 
+			  			editTestImonial.setMessage(video); 
 				    }
 			 
 				
@@ -216,6 +216,7 @@ public class ContentModuleController {
 			model.addObject("editTestImonial", editTestImonial);
 			model.addObject("url", Constant.getGallryImageURL);
 			model.addObject("isEdit",1);
+			model.addObject("moduleId", editTestImonial.getSectionId());
 		//	model.addObject("url", Constant.bannerImageURL);
 
 		} catch (Exception e) {
