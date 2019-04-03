@@ -542,8 +542,15 @@ public class ContentModuleController {
 				}
 			}
 			//------------------------------------------------------------------------------------------------
-			List<Integer> sectionIdList= Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
+			
+			List<Integer> sectionIdList = new ArrayList<>();
+			
+			try {
+			 sectionIdList= Stream.of(editNewsBlog.getExVar2().split(",")).map(Integer::parseInt)
 					.collect(Collectors.toList());
+			}catch(Exception e) {
+				
+			}
 			
 			List<Section> nonSelectedSection = new ArrayList<Section>();
 			nonSelectedSection.addAll(sectionList);
