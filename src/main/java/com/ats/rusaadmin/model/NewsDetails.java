@@ -33,9 +33,9 @@ public class NewsDetails {
 	
 	private int delStatus;
 	
-	private Date addDate;
+	private String addDate;
 	
-	private Date editDate;
+	private String editDate;
 	
 	private int addedByUserId;
 	
@@ -60,12 +60,13 @@ public class NewsDetails {
 	private String pageMetaKeyword;
 	
 	private int languageId;
-	
-	private int applied;
-	
-	private int approved;
-	
-	private int notApproved;
+	/*
+	 * private int applied;
+	 * 
+	 * private int approved;
+	 * 
+	 * private int notApproved;
+	 */
 	
 	public int getNewsblogsId() {
 		return newsblogsId;
@@ -202,20 +203,22 @@ public class NewsDetails {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
-	@JsonFormat(locale = "ENGLISH", timezone = "Asia/Kolkata", pattern = "MMMM d, yyyy")
-	public Date getAddDate() {
+	
+
+
+	public String getAddDate() {
 		return addDate;
 	}
 
-	public void setAddDate(Date addDate) {
+	public void setAddDate(String addDate) {
 		this.addDate = addDate;
 	}
-	@JsonFormat(locale = "ENGLISH", timezone = "Asia/Kolkata", pattern = "MMMM d, yyyy")
-	public Date getEditDate() {
+
+	public String getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(Date editDate) {
+	public void setEditDate(String editDate) {
 		this.editDate = editDate;
 	}
 
@@ -291,31 +294,6 @@ public class NewsDetails {
 		this.languageId = languageId;
 	}
 
-	
-	public int getApplied() {
-		return applied;
-	}
-
-	public void setApplied(int applied) {
-		this.applied = applied;
-	}
-
-	public int getApproved() {
-		return approved;
-	}
-
-	public void setApproved(int approved) {
-		this.approved = approved;
-	}
-
-	public int getNotApproved() {
-		return notApproved;
-	}
-
-	public void setNotApproved(int notApproved) {
-		this.notApproved = notApproved;
-	}
-
 	@Override
 	public String toString() {
 		return "NewsDetails [newsblogsId=" + newsblogsId + ", pageId=" + pageId + ", newsSourceUrlName="
@@ -327,10 +305,9 @@ public class NewsDetails {
 				+ editDate + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId + ", exInt1="
 				+ exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", heading=" + heading
 				+ ", descriptions=" + descriptions + ", pageMetaTitle=" + pageMetaTitle + ", pageMetaDescription="
-				+ pageMetaDescription + ", pageMetaKeyword=" + pageMetaKeyword + ", languageId=" + languageId
-				+ ", applied=" + applied + ", approved=" + approved + ", notApproved=" + notApproved + "]";
+				+ pageMetaDescription + ", pageMetaKeyword=" + pageMetaKeyword + ", languageId=" + languageId + "]";
 	}
 
-
+	
 	
 }

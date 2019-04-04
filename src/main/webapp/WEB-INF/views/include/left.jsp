@@ -520,19 +520,7 @@
 				</a>
 				</li> 
 				
-					<c:choose>
-					<c:when test="${sessionScope.sessionModuleId==9}">
-						<li class="open">
-					</c:when>
-					<c:otherwise>
-						<li class="">
-					</c:otherwise>
-				</c:choose>
-				<a href="${pageContext.request.contextPath}/eventRegList"
-					onclick="selectSubMod(9,0)"> <i class="fa fa-envelope"></i> <span
-					class="title"> User Applied List</span>
-				</a>
-				</li>
+					
 
 				<li><a href="${pageContext.request.contextPath}/logout"> <i
 						class="fa fa-lock"></i> <span class="title">Logout</span>

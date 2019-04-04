@@ -127,7 +127,7 @@
 													
 													
 													<td><a
-														href="${pageContext.request.contextPath}/editApproveUser/${userList.regId}/${userList.eventRegId}"><span
+														href="${pageContext.request.contextPath}/editApproveUser/${userList.userId}/${userList.eventRegId}/${newsblogsId}"><span
 															class="glyphicon glyphicon-edit"
 															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>				
 														</tr>

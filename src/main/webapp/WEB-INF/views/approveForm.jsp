@@ -93,7 +93,8 @@
 											
 										<input id="id" value="${editUser.userType}" name="type"
 											type="hidden">
-											
+													<input id="id" value="${newsblogsId}" name="newsblogsId"
+											type="hidden">
 
 										<c:choose>
 											<c:when test="${isEdit=='1'}">
@@ -254,7 +255,9 @@
 													<label class="control-label col-sm-2"
 														for="departmentName">Current Status : </label>
 													<div class="col-sm-10">
-													
+													<c:if test="${editEvent.statusApproval==0}">
+													Applied
+													</c:if>
 													<c:if test="${editEvent.statusApproval==1}">
 													Approve
 													</c:if>
@@ -276,13 +279,18 @@
 														<select name="status" id="status" class="form-control">
 															<c:choose>
 															
+																<c:when test="${editEvent.statusApproval==0}">
+																	<option value="0" selected>Applied</option>
+																	<option value="1" >Approve</option>
+																	<option value="2" >Not Approve</option>
+																</c:when>
 																<c:when test="${editEvent.statusApproval==1}">
-																
+																<option value="0" >Applied</option>
 																	<option value="1" selected>Approve</option>
 																	<option value="2" >Not Approve</option>
 																</c:when>
 																<c:otherwise>
-																
+																<option value="0" >Applied</option>
 																	<option value="1">Approve</option>
 																	<option value="2" selected>Not Approve</option>
 																</c:otherwise>

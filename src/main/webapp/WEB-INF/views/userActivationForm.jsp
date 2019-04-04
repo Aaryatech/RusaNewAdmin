@@ -181,7 +181,7 @@
 															placeholder="Authorized Name"
 															value="${editUser.authorizedPerson}"
 															style="text-align: left;" name="authN" type="text"
-															required>
+															>
 													</div>
 												</div>
 												<div class="form-group">

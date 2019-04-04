@@ -24,6 +24,7 @@ import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.EmailUtility;
+import com.ats.rusaadmin.model.EventCountDetails;
 import com.ats.rusaadmin.model.EventDetail;
 import com.ats.rusaadmin.model.EventDetails;
 import com.ats.rusaadmin.model.EventRegistration;
@@ -246,15 +247,15 @@ public class UserController {
 		return model;
 	}
 
-	@RequestMapping(value = "/editApproveUser/{regId}/{eventRegId}", method = RequestMethod.GET)
-	public ModelAndView editApproveUser(@PathVariable("regId") int regId, @PathVariable("eventRegId") int eventRegId,
+	@RequestMapping(value = "/editApproveUser/{userId}/{eventRegId}/{newsblogsId}", method = RequestMethod.GET)
+	public ModelAndView editApproveUser(@PathVariable("userId") int userId, @PathVariable("eventRegId") int eventRegId,@PathVariable("newsblogsId") int newsblogsId,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("approveForm");
 		try {
-			System.out.println("id" + regId);
+			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("regId", regId);
+			map.add("regId", userId);
 			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
 			System.out.println("User: " + editUser.toString());
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
@@ -263,6 +264,7 @@ public class UserController {
 			System.out.println("User: " + editEvent.toString());
 
 			model.addObject("editUser", editUser);
+			model.addObject("newsblogsId", newsblogsId);
 			model.addObject("editEvent", editEvent);
 			model.addObject("isEdit", 1);
 
@@ -277,15 +279,18 @@ public class UserController {
 	public String approveUserStatus(HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
+		int newsblogsId = Integer.parseInt(request.getParameter("newsblogsId"));
 		try {
-			 ModelAndView model=new ModelAndView();
+			// ModelAndView model=new ModelAndView("approveUser");
 			
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			Info info = null;
 			Info info1 = null;
 			String approval=null;
 			int status = Integer.parseInt(request.getParameter("status"));
-			int regId = Integer.parseInt(request.getParameter("reg"));
+			int regId = Integer.parseInt(request.getParameter("regId"));
+			
+			System.out.println("newsblogsId : "+newsblogsId);
 			String email=request.getParameter("userEmail");
 
 			Date date = new Date();
@@ -295,16 +300,21 @@ public class UserController {
 			map.add("regId",regId);
 			Registration user = rest.postForObject(Constant.url + "/getRegUserbyRegId",map, Registration .class);
 			
-			
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("newsblogsId", newsblogsId);	
+			map1.add("langId", 1);
+			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1,
+					NewsDetails.class);
+			System.out.println("List :"+eventList.toString());
 			if(status==1)
 			{
 				 approval="Approved";
-				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),"event","","");
+				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
 			}
 			else
 			{
 				 approval="Not Approved";
-				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),"event","","");
+				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
 			}
 				editEvent.setStatusApproval(status);
 				editEvent.setApprovalDate(sf.format(date));
@@ -312,10 +322,9 @@ public class UserController {
 
 				EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
 						EventRegistration.class);
-				
-				List<EventDetails> getUser = rest.getForObject(Constant.url + "/getUserInfoByUserId", List.class);
+				MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
+				map3.add("newsblogsId", newsblogsId);
 			
-				model.addObject("regList", getUser);
 				session.setAttribute("successMsg", "Infomation Updated successfully!");
 				session.setAttribute("errorMsg", "false");
 			
@@ -325,7 +334,7 @@ public class UserController {
 			e.printStackTrace();
 		}
 
-		return "redirect:/eventRegList";
+		return "redirect:/detailEventList/" +newsblogsId ;
 	}
 	@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
 		public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
@@ -333,8 +342,8 @@ public class UserController {
 			ModelAndView model = new ModelAndView("allEventList");
 			try {
 				
-				NewsDetails[] getUser = rest.getForObject(Constant.url + "/getAllEventList",NewsDetails[].class);
-				List<NewsDetails> userList = new ArrayList<NewsDetails>(Arrays.asList(getUser));
+				EventCountDetails[] getUser = rest.getForObject(Constant.url + "/getAllEventList",EventCountDetails[].class);
+				List<EventCountDetails> userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
 				for(int i=0; i<userList.size();i++)
 				{
 					userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));					
@@ -360,9 +369,9 @@ public class UserController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			//map.add("regId", regId);
 			map.add("newsblogsId", newsblogsId);
-			EventDetail[] editUser = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map, EventDetail[].class);
+			List<EventDetail> editUser = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map, List.class);
 			System.out.println("User: " + editUser.toString());
-			List<EventDetail> userList = new ArrayList<EventDetail>(Arrays.asList(editUser));
+			//List<EventDetail> userList = new ArrayList<EventDetail>(Arrays.asList(editUser));
 			
 			/*
 			 * for(int i=0; i<userList.size();i++) {
@@ -372,7 +381,8 @@ public class UserController {
 			 * }
 			 */
 
-			model.addObject("editUser", userList);
+			model.addObject("editUser", editUser);
+			model.addObject("newsblogsId", newsblogsId);
 			model.addObject("editEvent", editEvent);
 			model.addObject("isEdit", 1);
 
@@ -382,4 +392,6 @@ public class UserController {
 
 		return model;
 	}
+	
+
 }
