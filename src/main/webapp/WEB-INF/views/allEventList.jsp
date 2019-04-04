@@ -100,7 +100,7 @@
 										</thead>
 
 										<tbody>
-											<c:forEach items="${regList}" var="userList"
+											<c:forEach items="${userList}" var="userList"
 												varStatus="count">
 												<tr>
 													<td>${count.index+1}</td>
@@ -117,29 +117,12 @@
 														<c:otherwise>
 															<td>Not Required</td>
 														</c:otherwise>
-													</c:choose>
-												<td>0</td>
-												<td>0</td>
-												<%-- 
-													<c:choose>
-														<c:when test="${userList.totalApplied==null}">
-															<td>0</td>
-														</c:when>
-														<c:otherwise>
-															<td>${userList.totalApplied}</td>
-														</c:otherwise>
-													</c:choose> --%>
-													
-														<%-- <c:choose>
-														<c:when test="${userList.totalApproved==null}">
-															<td>0</td>
-														</c:when>
-														<c:otherwise>
-															<td>${userList.totalApproved}</td>
-														</c:otherwise>
-													</c:choose> --%>
+													</c:choose> 
+											<td>${userList.applied}</td>
+												<td>${userList.approved}</td> 
+											
 													<td><a
-														href="${pageContext.request.contextPath}/edetailEventList/${userList.eventRegId}"><span
+														href="${pageContext.request.contextPath}/detailEventList/${userList.newsblogsId}"><span
 															class="glyphicon glyphicon-th-list"
 															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>
 

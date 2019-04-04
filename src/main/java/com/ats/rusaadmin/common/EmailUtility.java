@@ -82,8 +82,8 @@ public class EmailUtility {
 		return info;
 		
 	}
-	public static Info sendApprovalEmail(String senderEmail,String senderPassword,String recipientEmail,String mailsubject,String approval
-			) {
+	public static Info sendApprovalEmail(String senderEmail,String senderPassword,String recipientEmail,String mailsubject,String approval,String name,
+			String eventName,String venue,String date) {
 			
 			Info info=new Info();
 			
@@ -125,7 +125,10 @@ public class EmailUtility {
 				mimeMessage.setFrom(new InternetAddress(username));
 				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
 				mimeMessage.setSubject(subject);
-				mimeMessage.setText(" User Event status is:" + approval );
+				/*mimeMessage.setText(" User Event status is:" + approval );*/
+				mimeMessage.setText("Dear "+ name+  ", I am pleased to invite you to the attend "+ eventName +"  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n" + 
+						"				 Date and Time:" + date+" \n" +
+						"				 Venue:" + venue );
 				
 			
 				Transport.send(mimeMessage);

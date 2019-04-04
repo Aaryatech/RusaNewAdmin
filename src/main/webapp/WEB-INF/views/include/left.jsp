@@ -479,20 +479,6 @@
 
 
 				<c:choose>
-					<c:when test="${sessionScope.sessionModuleId==5}">
-						<li class="open">
-					</c:when>
-					<c:otherwise>
-						<li class="">
-					</c:otherwise>
-				</c:choose>
-				<a href="${pageContext.request.contextPath}/ContactList"
-					onclick="selectSubMod(5,0)"> <i class="fa fa-envelope"></i> <span
-					class="title">Contact List</span>
-				</a>
-				</li>
-						
-					<c:choose>
 					<c:when test="${sessionScope.sessionModuleId==6}">
 						<li class="open">
 					</c:when>
@@ -500,12 +486,12 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="${pageContext.request.contextPath}/activeUserList"
+				<a href="${pageContext.request.contextPath}/ContactList"
 					onclick="selectSubMod(6,0)"> <i class="fa fa-envelope"></i> <span
-					class="title">User Registration List</span>
+					class="title">Contact List</span>
 				</a>
 				</li>
-				
+						
 					<c:choose>
 					<c:when test="${sessionScope.sessionModuleId==7}">
 						<li class="open">
@@ -514,9 +500,37 @@
 						<li class="">
 					</c:otherwise>
 				</c:choose>
-				<a href="${pageContext.request.contextPath}/eventRegList"
+				<a href="${pageContext.request.contextPath}/activeUserList"
 					onclick="selectSubMod(7,0)"> <i class="fa fa-envelope"></i> <span
-					class="title">User Event Applied List</span>
+					class="title">User Registration List</span>
+				</a>
+				</li>
+				
+				 <c:choose>
+					<c:when test="${sessionScope.sessionModuleId==8}">
+						<li class="open">
+					</c:when>
+					<c:otherwise>
+						<li class="">
+					</c:otherwise>
+				</c:choose>
+				<a href="${pageContext.request.contextPath}/getAllEventList"
+					onclick="selectSubMod(8,0)"> <i class="fa fa-envelope"></i> <span
+					class="title">Event Applied List</span>
+				</a>
+				</li> 
+				
+					<c:choose>
+					<c:when test="${sessionScope.sessionModuleId==9}">
+						<li class="open">
+					</c:when>
+					<c:otherwise>
+						<li class="">
+					</c:otherwise>
+				</c:choose>
+				<a href="${pageContext.request.contextPath}/eventRegList"
+					onclick="selectSubMod(9,0)"> <i class="fa fa-envelope"></i> <span
+					class="title"> User Applied List</span>
 				</a>
 				</li>
 

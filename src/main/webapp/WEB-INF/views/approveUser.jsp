@@ -38,7 +38,7 @@
 
 						<div class="pull-left">
 							<!-- PAGE HEADING TAG - START -->
-							<h1 class="title">Approve User</h1>
+							<h1 class="title">User List</h1>
 							<!-- PAGE HEADING TAG - END -->
 						</div>
 
@@ -53,7 +53,7 @@
 				<div class="col-lg-12">
 					<section class="box ">
 						<header class="panel_header">
-							<h2 class="title pull-left">Approve User</h2>
+							<h2 class="title pull-left">Event Applied User List</h2>
 							<div class="actions panel_actions pull-right">
 								<%--     <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add Admin</button></a>
                 --%>
@@ -87,74 +87,50 @@
 										<thead>
 											<tr>
 												<th width="5%">Sr No</th>
-												<th>User Name</th>
-												<th>User Registration Type</th>
-												<th>Email</th>
+												<th>Event Name</th>
+												<th>User Name</th>												
 												<th>Mobile Number</th>
-												<th>Register Via</th>
-												<th>SMS Verified Status</th>
-												<th>Email Verified Status</th>
-												<th>Status</th>
-												<th>Activate</th>
+												<th>Apply Date</th>
+												<th>Approval Status</th>
+												<th>Approval Date</th>												
+												<th>Action</th>
 											</tr>
 										</thead>
 
 										<tbody>
-											<c:forEach items="${regList}" var="userList"
+											<c:forEach items="${editUser}" var="userList"
 												varStatus="count">
 												<tr>
 													<td>${count.index+1}</td>
-													<td>${userList.name}</td>
-													<c:if test="${userList.userType=='1'}">
-														<td>Individual</td>
-													</c:if>
-													<c:if test="${userList.userType=='2'}">
-														<td>College</td>
-													</c:if>
-													<c:if test="${userList.userType=='3'}">
-														<td>University</td>
-													</c:if>
-
-													<td>${userList.emails}</td>
+													<td>${userList.heading}</td>
+													<td>${userList.name}</td>											
 													<td>${userList.mobileNumber}</td>
-													<td>${userList.registerVia}</td>
+													<td>${userList.regDate}</td>
+													<c:if test="${userList.statusApproval==0}">
+													<td>Applied</td>
+													</c:if>
+													<c:if test="${userList.statusApproval==1}">
+													<td>Approve</td>
+													</c:if>
+													<c:if test="${userList.statusApproval==2}">
+													<td>Not Approve</td>
+													</c:if>
 													<c:choose>
-														<c:when test="${userList.smsVerified=='1'}">
-															<td>Verified</td>
-														</c:when>
-														<c:otherwise>
-															<td>Not Verified</td>
-														</c:otherwise>
+													<c:when test="${not empty userList.approvalDate}">
+													<td>${userList.approvalDate}</td>
+													</c:when>
+													<c:otherwise>
+													<td>--</td>
+													</c:otherwise>
 													</c:choose>
-
-
-													<c:choose>
-														<c:when test="${userList.emailVerified==1}">
-															<td>Verified</td>
-														</c:when>
-														<c:otherwise>
-															<td>Not Verified</td>
-														</c:otherwise>
-													</c:choose>
-
-
-													<c:choose>
-														<c:when test="${userList.isActive==0}">
-															<td>New User</td>
-														</c:when>
-														<c:when test="${userList.isActive==1}">
-															<td>Activate</td>
-														</c:when>
-														<c:otherwise>
-															<td>Deactivate</td>
-														</c:otherwise>
-													</c:choose>
+													
+													
+													
 													<td><a
 														href="${pageContext.request.contextPath}/editApproveUser/${userList.regId}/${userList.eventRegId}"><span
 															class="glyphicon glyphicon-edit"
-															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>									
-
-												</tr>
+															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>				
+														</tr>
 												
 											</c:forEach>
 										</tbody>

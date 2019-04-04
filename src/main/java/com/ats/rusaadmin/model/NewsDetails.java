@@ -1,9 +1,12 @@
 package com.ats.rusaadmin.model;
 
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class NewsDetails {
-
+	
 	private int newsblogsId;
-
+	
 	private int pageId;
 	
 	private String newsSourceUrlName;
@@ -11,14 +14,14 @@ public class NewsDetails {
 	private String eventLocation;
 	
 	private String eventDateFrom;
-	
+
 	private String eventDateTo;
 	
 	private String eventContactPerson;
 	
 	private String eventContactNumber;
 	
-	private int pageOrder;
+	private int pageOrder;	
 	
 	private String featuredImage;
 	
@@ -30,16 +33,16 @@ public class NewsDetails {
 	
 	private int delStatus;
 	
-	private String addDate;
+	private Date addDate;
 	
-	private String editDate;
+	private Date editDate;
 	
 	private int addedByUserId;
 	
 	private int editByUserId;
 
 	private int exInt1;
-
+	
 	private int exInt2;
 	
 	private String exVar1;
@@ -51,13 +54,18 @@ public class NewsDetails {
 	private String descriptions;
 	
 	private String pageMetaTitle;
-
+	
 	private String pageMetaDescription;
 	
 	private String pageMetaKeyword;
 	
 	private int languageId;
-
+	
+	private int applied;
+	
+	private int approved;
+	
+	private int notApproved;
 	
 	public int getNewsblogsId() {
 		return newsblogsId;
@@ -147,6 +155,30 @@ public class NewsDetails {
 		this.featuredImageAlignment = featuredImageAlignment;
 	}
 
+    public String getPageMetaTitle() {
+		return pageMetaTitle;
+	}
+
+	public void setPageMetaTitle(String pageMetaTitle) {
+		this.pageMetaTitle = pageMetaTitle;
+	}
+
+	public String getPageMetaDescription() {
+		return pageMetaDescription;
+	}
+
+	public void setPageMetaDescription(String pageMetaDescription) {
+		this.pageMetaDescription = pageMetaDescription;
+	}
+
+	public String getPageMetaKeyword() {
+		return pageMetaKeyword;
+	}
+
+	public void setPageMetaKeyword(String pageMetaKeyword) {
+		this.pageMetaKeyword = pageMetaKeyword;
+	}
+
 	public String getDownloadPdf() {
 		return downloadPdf;
 	}
@@ -170,20 +202,20 @@ public class NewsDetails {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
-
-	public String getAddDate() {
+	@JsonFormat(locale = "ENGLISH", timezone = "Asia/Kolkata", pattern = "MMMM d, yyyy")
+	public Date getAddDate() {
 		return addDate;
 	}
 
-	public void setAddDate(String addDate) {
+	public void setAddDate(Date addDate) {
 		this.addDate = addDate;
 	}
-
-	public String getEditDate() {
+	@JsonFormat(locale = "ENGLISH", timezone = "Asia/Kolkata", pattern = "MMMM d, yyyy")
+	public Date getEditDate() {
 		return editDate;
 	}
 
-	public void setEditDate(String editDate) {
+	public void setEditDate(Date editDate) {
 		this.editDate = editDate;
 	}
 
@@ -251,36 +283,37 @@ public class NewsDetails {
 		this.descriptions = descriptions;
 	}
 
-	public String getPageMetaTitle() {
-		return pageMetaTitle;
-	}
-
-	public void setPageMetaTitle(String pageMetaTitle) {
-		this.pageMetaTitle = pageMetaTitle;
-	}
-
-	public String getPageMetaDescription() {
-		return pageMetaDescription;
-	}
-
-	public void setPageMetaDescription(String pageMetaDescription) {
-		this.pageMetaDescription = pageMetaDescription;
-	}
-
-	public String getPageMetaKeyword() {
-		return pageMetaKeyword;
-	}
-
-	public void setPageMetaKeyword(String pageMetaKeyword) {
-		this.pageMetaKeyword = pageMetaKeyword;
-	}
-
 	public int getLanguageId() {
 		return languageId;
 	}
 
 	public void setLanguageId(int languageId) {
 		this.languageId = languageId;
+	}
+
+	
+	public int getApplied() {
+		return applied;
+	}
+
+	public void setApplied(int applied) {
+		this.applied = applied;
+	}
+
+	public int getApproved() {
+		return approved;
+	}
+
+	public void setApproved(int approved) {
+		this.approved = approved;
+	}
+
+	public int getNotApproved() {
+		return notApproved;
+	}
+
+	public void setNotApproved(int notApproved) {
+		this.notApproved = notApproved;
 	}
 
 	@Override
@@ -294,7 +327,8 @@ public class NewsDetails {
 				+ editDate + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId + ", exInt1="
 				+ exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", heading=" + heading
 				+ ", descriptions=" + descriptions + ", pageMetaTitle=" + pageMetaTitle + ", pageMetaDescription="
-				+ pageMetaDescription + ", pageMetaKeyword=" + pageMetaKeyword + ", languageId=" + languageId + "]";
+				+ pageMetaDescription + ", pageMetaKeyword=" + pageMetaKeyword + ", languageId=" + languageId
+				+ ", applied=" + applied + ", approved=" + approved + ", notApproved=" + notApproved + "]";
 	}
 
 

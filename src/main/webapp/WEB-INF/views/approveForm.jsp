@@ -34,7 +34,7 @@
 
 						<div class="pull-left">
 							<!-- PAGE HEADING TAG - START -->
-							<h1 class="title">Edit User</h1>
+							<h1 class="title">Update User Status</h1>
 							<!-- PAGE HEADING TAG - END -->
 						</div>
 
@@ -298,7 +298,7 @@
 										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
 												 
-												<input type="submit" name="btnsubmit" id="btnsubmit" value="Approve Status"   class="btn btn-primary">
+												<input type="submit" name="btnsubmit" id="btnsubmit" value="Update Status"   class="btn btn-primary">
 											
 															
 												

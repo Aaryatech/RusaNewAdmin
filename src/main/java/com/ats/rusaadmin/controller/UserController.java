@@ -24,10 +24,12 @@ import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.EmailUtility;
+import com.ats.rusaadmin.model.EventDetail;
 import com.ats.rusaadmin.model.EventDetails;
 import com.ats.rusaadmin.model.EventRegistration;
 import com.ats.rusaadmin.model.EventView;
 import com.ats.rusaadmin.model.Info;
+import com.ats.rusaadmin.model.NewsDetails;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.Registration;
 import com.ats.rusaadmin.model.User;
@@ -330,17 +332,16 @@ public class UserController {
 
 			ModelAndView model = new ModelAndView("allEventList");
 			try {
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				//map.add("delStatus", 1);
-				EventView[] getUser = rest.getForObject(Constant.url + "/getAllEventList",	EventView[].class);
-				List<EventView> userList = new ArrayList<EventView>(Arrays.asList(getUser));
+				
+				NewsDetails[] getUser = rest.getForObject(Constant.url + "/getAllEventList",NewsDetails[].class);
+				List<NewsDetails> userList = new ArrayList<NewsDetails>(Arrays.asList(getUser));
 				for(int i=0; i<userList.size();i++)
 				{
 					userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));					
 					
 				}
 				
-				model.addObject("regList", userList);
+				model.addObject("userList", userList);
 				System.out.println("userList :"+userList)	;	
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -349,21 +350,29 @@ public class UserController {
 			return model;
 		}
 
-	@RequestMapping(value = "/detailEventList/{eventRegId}", method = RequestMethod.GET)
-	public ModelAndView detailEventList(@PathVariable("eventRegId") int eventRegId,
+	@RequestMapping(value = "/detailEventList/{newsblogsId}", method = RequestMethod.GET)
+	public ModelAndView detailEventList(@PathVariable("newsblogsId") int newsblogsId,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("approveForm");
+		ModelAndView model = new ModelAndView("approveUser");
 		try {
 			//System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			//map.add("regId", regId);
-			map.add("eventRegId", eventRegId);
-			EventRegistration editUser = rest.postForObject(Constant.url + "/getEventDataByRegId", map, EventRegistration.class);
+			map.add("newsblogsId", newsblogsId);
+			EventDetail[] editUser = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map, EventDetail[].class);
 			System.out.println("User: " + editUser.toString());
-		
+			List<EventDetail> userList = new ArrayList<EventDetail>(Arrays.asList(editUser));
+			
+			/*
+			 * for(int i=0; i<userList.size();i++) {
+			 * userList.get(i).setApprovalDate(DateConvertor.convertToDMY(userList.get(i).
+			 * getApprovalDate()));
+			 * 
+			 * }
+			 */
 
-			model.addObject("editUser", editUser);
+			model.addObject("editUser", userList);
 			model.addObject("editEvent", editEvent);
 			model.addObject("isEdit", 1);
 
@@ -373,9 +382,4 @@ public class UserController {
 
 		return model;
 	}
-}/*
-	 * select count(*) as count from event_registration ,t_newsblogs where
-	 * event_registration.del_status=1 and event_registration.newsblogs_id =
-	 * t_newsblogs.newsblogs_id as countapply
-	 * 
-	 */
+}
