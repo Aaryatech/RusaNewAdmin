@@ -410,6 +410,16 @@
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
    
    <script type="text/javascript">
+   
+   $("#s2example-2").select2({
+       placeholder: 'Choose your favorite US Countries',
+       allowClear: true
+   }).on('select2-open', function() {
+       // Adding Custom Scrollbar
+       $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+   });
+
+   
             jQuery(document).ready(function($) {
             
 			// sub_menu

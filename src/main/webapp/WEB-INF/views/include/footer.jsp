@@ -39,6 +39,7 @@
 
 
   <script src="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap-tag/bootstrap-tagsinput.js"></script>
+     <script src="${pageContext.request.contextPath}/resources/assets/plugins/select2/select2.min.js" type="text/javascript"></script> 
 
 
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
