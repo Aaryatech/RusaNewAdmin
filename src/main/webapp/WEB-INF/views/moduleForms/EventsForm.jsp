@@ -182,6 +182,19 @@
                                   <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
                                 </div>
                             </div>
+                            	<div class="form-group">
+																					<label class="control-label col-sm-2"
+																						for="page_description1">Content :</label>
+																					<div class="col-sm-10">
+																						<textarea class="ckeditor"
+																							style="width: 100%; height: 250px; font-size: 14px; line-height: 23px; padding: 15px;"
+																							name="page_description1${languagesList.languagesId}"
+																							id="page_description1${languagesList.languagesId}"
+																							required="required">
+                               
+                                    </textarea>
+																					</div>
+																				</div>
                            <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_title1">Meta Title :</label>
                                 <div class="col-sm-10">

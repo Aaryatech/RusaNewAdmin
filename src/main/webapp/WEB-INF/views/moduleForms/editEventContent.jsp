@@ -215,7 +215,7 @@
 
 																				<div class="form-group">
 																					<label class="control-label col-sm-2"
-																						for="heading1">Heading :</label>
+																						for="heading1">Heading :<span class="text-danger">*</span></label>
 																					<div class="col-sm-10">
 																						<input type="text" class="form-control"
 																							id="heading1${detailList.languageId}"
