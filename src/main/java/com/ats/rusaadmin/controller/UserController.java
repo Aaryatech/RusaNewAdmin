@@ -112,7 +112,9 @@ public class UserController {
 			String collegeN = request.getParameter("collegeN");
 			String uniName = request.getParameter("uniName");
 			String designation = request.getParameter("designation");
+			String userPass = request.getParameter("userPass");
 
+			
 			String deptN = request.getParameter("deptN");
 			String btnsendmail = request.getParameter("btnsendmail");
 			String authN = request.getParameter("authN");
@@ -126,8 +128,7 @@ public class UserController {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-			String password = Commons.getAlphaNumericString(5);
-			System.out.println("Password: " + password);
+		
 			System.out.println("Emails: " + email);
 			System.out.println("name: " + name);
 			System.out.println("btnsubmit: " + btnsubmit);
@@ -138,17 +139,28 @@ public class UserController {
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
 					System.out.println("btnsendmail");
-					editUser.setEmailVerified(1);
+					if(userPass.equals("0")) {
+					String password = Commons.getAlphaNumericString(5);
+					System.out.println("Password: " + password);					
 					editUser.setUserPassword(password);
-					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, name, password);
-					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
-					session.setAttribute("regList", getUser);
+					editUser.setEmailVerified(1);
+					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email, password);
 					session.setAttribute("successMsg", "Infomation Updated successfully!");
 					session.setAttribute("errorMsg", "false");
+					}
+					else {
+					editUser.setEmailVerified(1);
+					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email, userPass);
+					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+					session.setAttribute("regList", getUser);
+					session.setAttribute("successMsg", "Password Alredy Updated !");
+					session.setAttribute("errorMsg", "false");
+					}
 				} else {
 					editUser.setEmailVerified(0);
 					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
 					session.setAttribute("regList", getUser);
+					
 					session.setAttribute("successMsg", "Please varify your mobile number !");
 					session.setAttribute("errorMsg", "true");
 				}
@@ -156,12 +168,11 @@ public class UserController {
 			}
 			if (btnsubmit != null) {
 				System.out.println("btnsubmit");
-				editUser.setRegId(regId);
+				
 				editUser.setAlternateEmail(alternateEmail);
-				editUser.setUserUuid(uuid);
 				editUser.setUserType(type);
 				editUser.setEmails(email);
-				editUser.setUserPassword(password);
+			
 				editUser.setName(name);
 				editUser.setAisheCode(aishe);
 				editUser.setCollegeName(collegeN);
@@ -172,55 +183,40 @@ public class UserController {
 				editUser.setAuthorizedPerson(authN);
 				editUser.setEditByAdminuserId(UserDetail.getUserId());
 				editUser.setName(name);
+			if(emailVerified==0)
+			{
+				editUser.setEmailVerified(0);
+			}
+			else
+			{
 				editUser.setEmailVerified(1);
+			}
 				
 				if (status == 0) {
 					editUser.setIsActive(status);
+					
 				}
 				if (status == 1) {
 					editUser.setIsActive(status);
+					
 				}
 				if (status == 2) {
-					editUser.setIsActive(status);
+					editUser.setEmailVerified(0);
+					
 				}
 
-				Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration", editUser,
-						Registration.class);
-
-				List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
-				session.setAttribute("regList", getUser);
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
-				session.setAttribute("errorMsg", "false");
+			
 			}
+			editUser.setRegId(regId);
+			editUser.setEditDate(sf.format(date));
+			Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration", editUser,
+					Registration.class);
 
-			/*
-			 * if(smsVerified==1 && emailVerified==1) { System.out.println("1");
-			 * List<Registration> getUser1 = rest.getForObject(Constant.url +
-			 * "/getAllRegUserList",List.class); session.setAttribute("regList", getUser1);
-			 * session.setAttribute("successMsg","Information Already Updated !"); } else {
-			 * System.out.println("2"); if(smsVerified==1 && emailVerified==0 ||
-			 * emailVerified==2 && status==1) { System.out.println("3");
-			 * 
-			 * if(info1.isError()==false) { System.out.println("4");
-			 * System.out.println("info1"); MultiValueMap<String, Object> map = new
-			 * LinkedMultiValueMap<String, Object>(); map.add("regId", regId); info =
-			 * rest.postForObject(Constant.url +"/updateUserByRegId", map, Info.class);
-			 * 
-			 * if(info.isError()==false) { System.out.println("5");
-			 * editUser.setEmailVerified(1); List<Registration> getUser =
-			 * rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-			 * session.setAttribute("regList", getUser);
-			 * session.setAttribute("successMsg","Infomation Updated successfully!");
-			 * session.setAttribute("errorMsg","false"); } else {
-			 * editUser.setEmailVerified(2); System.out.println("5");
-			 * session.setAttribute("successMsg","Error while Updateing !");
-			 * session.setAttribute("errorMsg","true"); } } } else {
-			 * System.out.println("6"); editUser.setEmailVerified(2); List<Registration>
-			 * getUser1 = rest.getForObject(Constant.url + "/getAllRegUserList",List.class);
-			 * session.setAttribute("regList", getUser1);
-			 * session.setAttribute("successMsg","Infomation Updated successfullyr !"); } }
-			 * System.out.println("7");
-			 */
+			List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+			session.setAttribute("regList", getUser);
+			session.setAttribute("successMsg", "Infomation Updated successfully!");
+			session.setAttribute("errorMsg", "false");
+		
 
 		} catch (Exception e) {
 			e.printStackTrace();

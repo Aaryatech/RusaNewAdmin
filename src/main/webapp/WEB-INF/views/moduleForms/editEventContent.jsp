@@ -245,7 +245,7 @@
 																							id="meta_title1${languagesList.languagesId}"
 																							name="meta_title1${languagesList.languagesId}"
 																							placeholder="Meta Title"
-																							value="${detailList.pageMetaTitle}" required>
+																							value="${detailList.pageMetaTitle}" >
 
 																					</div>
 																				</div>
@@ -257,7 +257,7 @@
 																							style="width: 100%; height: 50px; font-size: 14px; line-height: 23px; padding: 15px;"
 																							name="meta_description1${languagesList.languagesId}"
 																							id="meta_description1${languagesList.languagesId}"
-																							required="required"> 
+																						> 
                                      ${detailList.pageMetaDescription}</textarea>
 																					</div>
 																				</div>
@@ -269,7 +269,7 @@
 																							id="meta_keyword1${languagesList.languagesId}"
 																							name="meta_keyword1${languagesList.languagesId}"
 																							placeholder="Meta Keywords"
-																							value="${detailList.pageMetaKeyword}" required>
+																							value="${detailList.pageMetaKeyword}" >
 
 																					</div>
 																				</div>

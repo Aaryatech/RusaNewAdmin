@@ -82,7 +82,8 @@
 												<input type="hidden" name="emailVerified"
 													value="${editUser.emailVerified}">
 												<input type="hidden" name="date" value="${editUser.addDate}">
-
+	<input type="hidden" name="userPass"
+													value="${editUser.userPassword}">
 							<div class="content-body">
 								<div class="row">
 									<div class="col-xs-12">
@@ -280,7 +281,7 @@
 																<c:when test="${editUser.isActive==0}">
 																	<option value="0" selected>New User</option>
 																	<option value="1">Activate</option>
-																	<option value="2" selected>Deactivate</option>
+																	<option value="2" >Deactivate</option>
 																</c:when>
 																<c:when test="${editUser.isActive==1}">
 																	<option value="0" >New User</option>
