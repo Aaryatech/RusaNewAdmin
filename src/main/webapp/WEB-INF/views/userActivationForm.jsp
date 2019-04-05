@@ -173,8 +173,7 @@
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Authorized Person : <span
-														class="text-danger">*</span>
+														for="config_mail_protocol">Authorized Person : 
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"

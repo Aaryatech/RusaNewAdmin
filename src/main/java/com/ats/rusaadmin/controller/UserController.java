@@ -171,7 +171,9 @@ public class UserController {
 				editUser.setMobileNumber(phone);
 				editUser.setAuthorizedPerson(authN);
 				editUser.setEditByAdminuserId(UserDetail.getUserId());
-
+				editUser.setName(name);
+				editUser.setEmailVerified(1);
+				
 				if (status == 0) {
 					editUser.setIsActive(status);
 				}
@@ -311,7 +313,7 @@ public class UserController {
 				 approval="Approved";
 				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
 			}
-			else
+			if(status==2)
 			{
 				 approval="Not Approved";
 				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());

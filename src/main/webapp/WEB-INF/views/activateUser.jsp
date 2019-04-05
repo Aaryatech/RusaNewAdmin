@@ -119,7 +119,7 @@
 													<td>${userList.mobileNumber}</td>
 													<td>${userList.registerVia}</td>
 													<c:choose>
-														<c:when test="${userList.smsVerified=='1'}">
+														<c:when test="${userList.smsVerified==1}">
 															<td>Verified</td>
 														</c:when>
 														<c:otherwise>
