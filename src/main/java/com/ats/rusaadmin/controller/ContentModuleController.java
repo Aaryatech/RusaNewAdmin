@@ -1069,7 +1069,7 @@ public class ContentModuleController {
 					editNewsBlog.getDetailList().get(i).setPageMetaTitle(request.getParameter("meta_title1"+editNewsBlog.getDetailList().get(i).getLanguageId()));
 					editNewsBlog.getDetailList().get(i).setPageMetaDescription(request.getParameter("meta_description1"+editNewsBlog.getDetailList().get(i).getLanguageId()));
 					editNewsBlog.getDetailList().get(i).setPageMetaKeyword(request.getParameter("meta_keyword1"+editNewsBlog.getDetailList().get(i).getLanguageId()));
-					 
+					editNewsBlog.getDetailList().get(i).setDateTransaction(sf.format(date));
 				}
 				 
 				//editCMSPages.setEditByUserId(UserDetail.getUserId());

@@ -33,18 +33,18 @@
 		<section id="main-content" class=" ">
 			<section class="wrapper main-wrapper row" style=''>
 
-				<div class='col-xs-12'>
+				<!-- <div class='col-xs-12'>
 					<div class="page-title">
 
 						<div class="pull-left">
-							<!-- PAGE HEADING TAG - START -->
+							PAGE HEADING TAG - START
 							<h1 class="title">User List</h1>
-							<!-- PAGE HEADING TAG - END -->
+							PAGE HEADING TAG - END
 						</div>
 
 
 					</div>
-				</div>
+				</div> -->
 				<div class="clearfix"></div>
 				<!-- MAIN CONTENT AREA STARTS -->
 
@@ -127,9 +127,8 @@
 													
 													
 													<td><a
-														href="${pageContext.request.contextPath}/editApproveUser/${userList.userId}/${userList.eventRegId}/${newsblogsId}"><span
-															class="glyphicon glyphicon-edit"
-															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>				
+														href="${pageContext.request.contextPath}/approveUser?userId=${userList.userId}&regId=${userList.eventRegId}&newsId=${newsblogsId}&status=1" onclick="return confirm('Are you want to approve ?')">
+														<span class="glyphicon glyphicon-ok-circle" data-animate="  animated fadeIn " rel="tooltip" title="Approve"></span></a></td>				
 														</tr>
 												
 											</c:forEach>

@@ -88,7 +88,7 @@
 											<tr>
 												<th width="5%">Sr No</th>
 												<th>Event Name</th>
-												<th>Event Date</th>
+												<th width="10%">Event Date</th>
 												<th>Event Manager</th>
 												<th>Event Contact Number</th>
 												<th>Event Location</th>

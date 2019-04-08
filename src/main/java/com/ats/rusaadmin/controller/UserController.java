@@ -41,8 +41,8 @@ public class UserController {
 
 	RestTemplate rest = new RestTemplate();
 
-	static String senderEmail = "atsinfosoft@gmail.com";
-	static String senderPassword = "atsinfosoft@123";
+	static String senderEmail = "akshaykasar72@gmail.com";
+	static String senderPassword = "mh151889";
 	static String mailsubject = " RUSA Login Credentials ";
 	static String mailsubjectApprove = " About Event Shedule";
 	Registration editUser = new Registration();
@@ -334,6 +334,76 @@ public class UserController {
 
 		return "redirect:/detailEventList/" +newsblogsId ;
 	}
+	
+	@RequestMapping(value = "/approveUser", method = RequestMethod.GET)
+	public String approveUser( HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		int newsId= 0;
+		try {
+			Info info = null;
+			Info info1 = null;
+			String approval=null;
+			
+			HttpSession session = request.getSession();
+			User UserDetail = (User) session.getAttribute("UserDetail");
+			
+			int userId= Integer.parseInt(request.getParameter("userId"));
+			int regId= Integer.parseInt(request.getParameter("regId"));
+			newsId= Integer.parseInt(request.getParameter("newsId"));
+			int status= Integer.parseInt(request.getParameter("status"));
+			
+			
+			System.out.println("id" + userId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("regId", userId);
+			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class); 
+			
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("eventRegId", regId);
+			editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
+			
+			
+		 
+		 
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			 
+			
+			 map = new LinkedMultiValueMap<String, Object>();
+			map1.add("newsblogsId", newsId);	
+			map1.add("langId", 1);
+			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1,
+					NewsDetails.class);
+			System.out.println("List :"+eventList.toString());
+			if(status==1)
+			{
+				 approval="Approved";
+				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
+			}
+			if(status==2)
+			{
+				 approval="Not Approved";
+				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
+			}
+				editEvent.setStatusApproval(status);
+				editEvent.setApprovalDate(sf.format(date));
+				editEvent.setApproveBy(UserDetail.getUserId());
+
+				EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
+						EventRegistration.class);
+			  
+				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("errorMsg", "false");
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/detailEventList/"+newsId ;
+	}
+	
 	@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
 		public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
 
