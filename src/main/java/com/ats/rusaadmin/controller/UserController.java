@@ -182,7 +182,7 @@ public class UserController {
 				editUser.setMobileNumber(phone);
 				editUser.setAuthorizedPerson(authN);
 				editUser.setEditByAdminuserId(UserDetail.getUserId());
-				editUser.setName(name);
+				editUser.setName(name); 
 			if(emailVerified==0)
 			{
 				editUser.setEmailVerified(0);
@@ -192,18 +192,9 @@ public class UserController {
 				editUser.setEmailVerified(1);
 			}
 				
-				if (status == 0) {
+				 
 					editUser.setIsActive(status);
-					
-				}
-				if (status == 1) {
-					editUser.setIsActive(status);
-					
-				}
-				if (status == 2) {
-					editUser.setEmailVerified(0);
-					
-				}
+				 
 
 			
 			}

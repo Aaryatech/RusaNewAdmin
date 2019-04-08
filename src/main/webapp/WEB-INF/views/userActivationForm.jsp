@@ -278,20 +278,20 @@
 
 														<select name="status" id="status" class="form-control">
 															<c:choose>
-																<c:when test="${editUser.isActive==0}">
-																	<option value="0" selected>New User</option>
-																	<option value="1">Activate</option>
-																	<option value="2" >Deactivate</option>
-																</c:when>
 																<c:when test="${editUser.isActive==1}">
 																	<option value="0" >New User</option>
 																	<option value="1" selected>Activate</option>
 																	<option value="2" >Deactivate</option>
 																</c:when>
-																<c:otherwise>
-																	<option value="0">New User</option>
-																	<option value="1">Activate</option>
+																<c:when test="${editUser.isActive==2}">
+																	<option value="0" >New User</option>
+																	<option value="1" >Activate</option>
 																	<option value="2" selected>Deactivate</option>
+																</c:when>
+																<c:otherwise>
+																	<option value="0" selected>New User</option>
+																	<option value="1">Activate</option>
+																	<option value="2" >Deactivate</option>
 																</c:otherwise>
 															</c:choose>
 
