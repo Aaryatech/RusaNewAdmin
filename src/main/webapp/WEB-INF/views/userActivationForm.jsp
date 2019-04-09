@@ -205,7 +205,7 @@
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="AISHE Code" value="${editUser.aisheCode}"
-															style="text-align: left;" name="aishe" type="text" required>
+															style="text-align: left;" name="aishe" type="text" >
 													</div>
 												</div></c:if>
 												<c:if test="${editUser.userType==1}">
@@ -220,8 +220,8 @@
 															name="collegeN" type="text" required>
 													</div>
 												</div>
-</c:if>
-	<c:if test="${editUser.userType==1 || editUser.userType==2}">
+												</c:if>
+												<c:if test="${editUser.userType==1 || editUser.userType==2}">
 												<div class="form-group">
 													<label class="control-label col-sm-2"
 														for="config_mail_protocol">University Name :<span
