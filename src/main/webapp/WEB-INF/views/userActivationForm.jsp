@@ -115,7 +115,7 @@
 
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">User Type: <span
+														for="config_mail_protocol">User Type : <span
 														class="text-danger">*</span>
 													</label>
 													<c:if test="${editUser.userType==1}">
@@ -148,7 +148,7 @@
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol"> Email : <span
+														for="config_mail_protocol"> Email-ID : <span
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
@@ -172,63 +172,72 @@
 															required>
 													</div>
 												</div>
+														<c:if test="${editUser.userType==2 || editUser.userType==3}">
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Authorized Person : 
+														for="config_mail_protocol">Authorized Person Name : <span
+														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="Authorized Name"
 															value="${editUser.authorizedPerson}"
-															style="text-align: left;" name="authN" type="text"
+															style="text-align: left;" name="authN" type="text" required
 															>
 													</div>
-												</div>
+												</div></c:if>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Alternate Email : </label>
+														for="config_mail_protocol">Alternate Email-ID : </label>
 													<div class="col-sm-10">
 														<input id="userEmail" class="form-control"
 															placeholder="Alternate Email"
 															value="${editUser.alternateEmail}"
-															style="text-align: left;" name="email" type="email">
+															style="text-align: left;" name="email" type="email" >
 													</div>
 												</div>
 
-
+											<c:if test="${editUser.userType==2 || editUser.userType==3}">
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">AISHE Code : </label>
+														for="config_mail_protocol">AISHE Code : <span
+														class="text-danger">*</span></label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="AISHE Code" value="${editUser.aisheCode}"
-															style="text-align: left;" name="aishe" type="text">
+															style="text-align: left;" name="aishe" type="text" required>
 													</div>
-												</div>
+												</div></c:if>
+												<c:if test="${editUser.userType==1}">
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">College Name : </label>
+														for="config_mail_protocol">College Name : <span
+														class="text-danger">*</span> </label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="College Name"
 															value="${editUser.collegeName}" style="text-align: left;"
-															name="collegeN" type="text">
+															name="collegeN" type="text" required>
 													</div>
 												</div>
-
+</c:if>
+	<c:if test="${editUser.userType==1 || editUser.userType==2}">
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">University Name : </label>
+														for="config_mail_protocol">University Name :<span
+														class="text-danger">*</span> </label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="University Name"
 															value="${editUser.unversityName}"
-															style="text-align: left;" name="uniName" type="text">
+															style="text-align: left;" name="uniName" type="text" required>
 													</div>
 												</div>
+												</c:if>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="config_mail_protocol">Designation : </label>
+														for="config_mail_protocol">Designation of Person :<span
+														class="text-danger">*</span> </label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
 															placeholder="Designation"
@@ -238,7 +247,8 @@
 												</div>
 												<div class="form-group">
 													<label class="control-label col-sm-2"
-														for="departmentName">Department Name : </label>
+														for="departmentName"> Name of Department :<span
+														class="text-danger">*</span> </label>
 													<div class="col-sm-10">
 														<input id="departmentName" class="form-control"
 															placeholder="Department Name"
