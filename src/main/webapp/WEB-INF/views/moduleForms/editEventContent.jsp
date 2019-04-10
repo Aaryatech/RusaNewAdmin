@@ -116,8 +116,7 @@
 
 												<div>
 
-													<div class="tab-content">
-														<div class="tab-pane fade in active" id="home">
+												 
 
 															<div>
 																<input type="hidden" name="isEdit" value="${isEdit}">
@@ -156,8 +155,8 @@
 																		<div class="col-sm-10">
 																			<input type="text" class="form-control datepicker"
 																				id="from_date" name="from_date"
-																				placeholder="Event Date"
-																				value="${eventDate}" required>
+																				placeholder="Event Date" value="${eventDate}"
+																				required>
 																		</div>
 																	</div>
 																</div>
@@ -215,7 +214,8 @@
 
 																				<div class="form-group">
 																					<label class="control-label col-sm-2"
-																						for="heading1">Heading :<span class="text-danger">*</span></label>
+																						for="heading1">Heading :<span
+																						class="text-danger">*</span></label>
 																					<div class="col-sm-10">
 																						<input type="text" class="form-control"
 																							id="heading1${detailList.languageId}"
@@ -245,7 +245,7 @@
 																							id="meta_title1${languagesList.languagesId}"
 																							name="meta_title1${languagesList.languagesId}"
 																							placeholder="Meta Title"
-																							value="${detailList.pageMetaTitle}" >
+																							value="${detailList.pageMetaTitle}">
 
 																					</div>
 																				</div>
@@ -256,8 +256,7 @@
 																						<textarea class="form-control"
 																							style="width: 100%; height: 50px; font-size: 14px; line-height: 23px; padding: 15px;"
 																							name="meta_description1${languagesList.languagesId}"
-																							id="meta_description1${languagesList.languagesId}"
-																						> 
+																							id="meta_description1${languagesList.languagesId}"> 
                                      ${detailList.pageMetaDescription}</textarea>
 																					</div>
 																				</div>
@@ -269,7 +268,7 @@
 																							id="meta_keyword1${languagesList.languagesId}"
 																							name="meta_keyword1${languagesList.languagesId}"
 																							placeholder="Meta Keywords"
-																							value="${detailList.pageMetaKeyword}" >
+																							value="${detailList.pageMetaKeyword}">
 
 																					</div>
 																				</div>
@@ -430,83 +429,6 @@
 																		</div>
 																	</div>
 
-																	<!--        <div class="form-group">
-                                    <label class="control-label col-sm-2" for="page_pdf">Current Applied:</label>
-                                          <div class="col-sm-10">
-                                   <div class="form-check-inline">
-      <label class="form-check-label" for="check1">
-        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" >Individual
-      </label>
-    </div>
-    <div class="form-check-label">
-      <label class="form-check-label" for="check2">
-        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2">College
-      </label>
-    </div>
-    <div class="form-check-label" for="check3" >
-      <label class="form-check-label" >
-        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
-      </label>
-    </div>
-    </div></div> -->
-
-																	<%--   
-      <div class="form-group">
-                                    <label class="control-label col-sm-2" for="page_pdf">Apply Only :</label>
-                                          <div class="col-sm-10">
-  <c:choose>
-    <c:when test="${selectedSection[23]==1}">
-     <div class="form-check-inline">
-      <label class="form-check-label" for="check1">
-        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" checked>Individual
-      </label>
-    </div>
-    </c:when>
-    <c:otherwise>
-     <div class="form-check-inline">
-      <label class="form-check-label" for="check1">
-        <input type="checkbox" class="form-check-input" id="check1" name="type" value="1" >Individual
-      </label>
-    </div>
-    </c:otherwise>
-    </c:choose>
-    
-      <c:choose>
-    <c:when test="${selectedSection[23]==2}">
-     <div class="form-check-label">
-      <label class="form-check-label" for="check2">
-        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2" checked>College
-      </label>
-    </div>
-    </c:when>
-    <c:otherwise>
-      <div class="form-check-label">
-      <label class="form-check-label" for="check2">
-        <input type="checkbox" class="form-check-input" id="check2" name="type" value="2">College
-      </label>
-    </div>
-    </c:otherwise>
-    </c:choose>
-          
-                <c:choose>
-    <c:when test="${selectedSection[23]==3}">
-     <div class="form-check-label" for="check3" >
-      <label class="form-check-label" >
-        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3" checked>University
-      </label>
-    </div>
-    </c:when>
-    <c:otherwise>
-     <div class="form-check-label" for="check3" >
-      <label class="form-check-label" >
-        <input type="checkbox" class="form-check-input" id="check3" name="type" value="3">University
-      </label>
-    </div>
-    </c:otherwise>
-    </c:choose>          </div>       --%>
-
-
-
 																	<div class="form-group">
 																		<label class="control-label col-sm-2" for="page_pdf">Apply
 																			Only :</label>
@@ -639,8 +561,7 @@
 
 															</div>
 
-														</div>
-													</div>
+													 
 												</div>
 											</div>
 

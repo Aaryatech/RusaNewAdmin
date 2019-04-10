@@ -92,14 +92,9 @@
 										<td>${contactList.emailId}</td>
 										<td>${contactList.mobileNo}</td>  
 										<td>${contactList.message}</td>
-										<c:choose>
-										 <c:when test="${contactList.isActive==1}">
-										  <td>Active</td>
-										 </c:when>
-										 <c:otherwise>
-										   <td>Inactive</td>
-										 </c:otherwise>
-										 </c:choose> 
+										 
+										  <td>${contactList.exVar1}</td>
+										 
 									
 										<td><a
 											href="${pageContext.request.contextPath}/editContact/${contactList.id}"><span
