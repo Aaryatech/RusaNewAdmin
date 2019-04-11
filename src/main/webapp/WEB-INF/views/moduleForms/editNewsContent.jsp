@@ -310,7 +310,6 @@
                                    
                                   <select name="sectionId" class="form-control" id="s2example-2" multiple="multiple" required>
                                   
-                                  <option value="">Select Section</option>
                                   	<c:forEach items="${nonSelectedSection}" var="sectionList" >
                                   		 
                                    			<option value="${sectionList.sectionId}">${sectionList.sectionName}</option>

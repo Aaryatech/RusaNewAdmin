@@ -97,7 +97,7 @@
 											
 
 										<c:choose>
-											<c:when test="${isEdit=='1'}">
+											<c:when test="${isEdit==1}">
 
 												<div class="form-group">
 													<label class="control-label col-sm-2"
@@ -354,14 +354,7 @@
 		}
 	</script>
 
-	<!-- MAIN CONTENT AREA ENDS -->
-	</section>
-	</section>
-	<!-- END CONTENT -->
 
-
-
-	</div>
 	<!-- END CONTAINER -->
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
