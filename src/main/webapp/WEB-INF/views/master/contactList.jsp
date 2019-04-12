@@ -78,7 +78,7 @@
                    		<th>Email</th> 
                         <th>Mobile No</th>
                         <th>Message</th> 
-                        <th>Status</th> 
+                        <th>Feedback Type</th> 
                          <th>Action</th>
                     </tr>
                 </thead>

@@ -166,7 +166,7 @@
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath}/imageLinkList"
-									onclick="selectSubMod(2,205)">Other GOV Links</a>
+									onclick="selectSubMod(2,205)">Other Links</a>
 							</c:otherwise>
 						</c:choose></li>
 
