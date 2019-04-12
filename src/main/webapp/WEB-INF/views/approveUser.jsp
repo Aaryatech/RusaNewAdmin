@@ -91,6 +91,7 @@
 												<th>User Name</th>												
 												<th>Mobile Number</th>
 												<th>Apply Date</th>
+												<th>Document</th>
 												<th>Approval Status</th>
 												<th>Approval Date</th>												
 												<th>Action</th>
@@ -106,6 +107,10 @@
 													<td>${userList.name}</td>											
 													<td>${userList.mobileNumber}</td>
 													<td>${userList.regDate}</td>
+													<c:if test="${not empty userList.doc1}">
+													<td><a href="${documentUrl}${userList.doc1}" target="_blank"><span
+													class="icon-download-2"></span> Download</a></td>
+													</c:if>
 													<c:if test="${userList.statusApproval==0}">
 													<td>Applied</td>
 													</c:if>

@@ -443,6 +443,7 @@ public class UserController {
 			model.addObject("editUser", editUser);
 			model.addObject("newsblogsId", newsblogsId);
 			model.addObject("editEvent", editEvent);
+			model.addObject("documentUrl", Constant.getCmsPdf);
 			model.addObject("isEdit", 1);
 
 		} catch (Exception e) {
