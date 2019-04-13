@@ -24,6 +24,7 @@ public class VpsImageUpload {
 	
 	 
 	
+	
 	//public static final String galleryImage= "/home/devour/apache-tomcat-9.0.12/webapps/mongistoreuploads/";
 	public static final String galleryImage= "/home/lenovo/Documents/pdf/";
 	 
