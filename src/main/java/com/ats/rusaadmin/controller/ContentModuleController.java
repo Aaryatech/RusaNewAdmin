@@ -807,6 +807,7 @@ public class ContentModuleController {
 			String aligment = request.getParameter("header_top_alignment");
 			String personName = request.getParameter("per_name");
 			String eventNo = request.getParameter("event_no");
+			String docType = request.getParameter("docType");
 			/*
 			 * String individual = request.getParameter("individual"); String college =
 			 * request.getParameter("college"); String university =
@@ -903,6 +904,7 @@ public class ContentModuleController {
 				newsBlog.setExInt1(11);	
 				newsBlog.setExInt2(doc);
 				newsBlog.setExVar2(items);
+				newsBlog.setExVar1(docType);
 				newsBlog.setDelStatus(1);
 				newsBlog.setAddDate(sf.format(date));
 				newsBlog.setFeaturedImageAlignment(aligment);
@@ -1049,7 +1051,7 @@ public class ContentModuleController {
 			
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
 			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
-			
+			String docType = request.getParameter("docType");
 			
 			String pageName = request.getParameter("page_name");
 			
@@ -1155,6 +1157,14 @@ public class ContentModuleController {
 				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(11);
 				editNewsBlog.setExInt2(doc);
+				if(doc==1)
+				{
+				editNewsBlog.setExVar1(docType);
+				}
+				else
+				{
+					editNewsBlog.setExVar1("");
+				}
 				editNewsBlog.setExVar2(items);
 				editNewsBlog.setPageOrder(seqNo); 
 				editNewsBlog.setIsActive(isActive); 
