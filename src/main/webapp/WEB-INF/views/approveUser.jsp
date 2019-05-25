@@ -87,13 +87,15 @@
 										<thead>
 											<tr>
 												<th width="5%">Sr No</th>
-												<th>Event Name</th>
-												<th>User Name</th>												
+												<!-- <th>Event Name</th> -->
+												<th>User Name</th>
+												<th>Type</th>
 												<th>Mobile Number</th>
 												<th>Apply Date</th>
 												<th>Document</th>
 												<th>Approval Status</th>
-												<th>Approval Date</th>												
+												<th>Approval Date</th>
+												<th>Feedback</th>
 												<th>Action</th>
 											</tr>
 										</thead>
@@ -103,39 +105,67 @@
 												varStatus="count">
 												<tr>
 													<td>${count.index+1}</td>
-													<td>${userList.heading}</td>
-													<td>${userList.name}</td>											
+													<%-- <td>${userList.heading}</td> --%>
+													<td>${userList.name}</td>
+													<td><c:choose>
+															<c:when test="${userList.userType==2}">
+																 Institute
+															</c:when>
+															<c:when test="${userList.userType==3}">
+																University
+															</c:when>
+															<c:otherwise>
+															Individuals
+															</c:otherwise>
+														</c:choose></td>
 													<td>${userList.mobileNumber}</td>
-													<td>${userList.regDate}</td>
-													<c:if test="${not empty userList.doc1}">
-													<td><a href="${documentUrl}${userList.doc1}" target="_blank"><span
-													class="icon-download-2"></span> Download</a></td>
-													</c:if>
+													<td>${userList.regDate}</td> 
+													<td><c:choose>
+															<c:when test="${not empty userList.doc1}">
+																<a href="${documentUrl}${userList.doc1}" target="_blank"><span
+																	class="icon-download-2"></span> Download</a>
+															</c:when>
+															<c:otherwise>
+															-
+															</c:otherwise>
+														</c:choose></td>
 													<c:if test="${userList.statusApproval==0}">
-													<td>Applied</td>
+														<td>Applied</td>
 													</c:if>
 													<c:if test="${userList.statusApproval==1}">
-													<td>Approve</td>
+														<td>Approve</td>
 													</c:if>
 													<c:if test="${userList.statusApproval==2}">
-													<td>Not Approve</td>
+														<td>Not Approve</td>
 													</c:if>
 													<c:choose>
-													<c:when test="${not empty userList.approvalDate}">
-													<td>${userList.approvalDate}</td>
-													</c:when>
-													<c:otherwise>
-													<td>--</td>
-													</c:otherwise>
+														<c:when test="${not empty userList.approvalDate}">
+															<td>${userList.approvalDate}</td>
+														</c:when>
+														<c:otherwise>
+															<td>--</td>
+														</c:otherwise>
 													</c:choose>
-													
-													
-													
+													<c:choose>
+														<c:when test="${not empty userList.exVar1}">
+															<td>${userList.exVar1}</td>
+														</c:when>
+														<c:otherwise>
+															<td>-</td>
+														</c:otherwise>
+													</c:choose>
+
+
+
 													<td><a
-														href="${pageContext.request.contextPath}/approveUser?userId=${userList.userId}&regId=${userList.eventRegId}&newsId=${newsblogsId}&status=1" onclick="return confirm('Are you want to approve ?')">
-														<span class="glyphicon glyphicon-ok-circle" data-animate="  animated fadeIn " rel="tooltip" title="Approve"></span></a></td>				
-														</tr>
-												
+														href="${pageContext.request.contextPath}/approveUser?userId=${userList.userId}&regId=${userList.eventRegId}&newsId=${newsblogsId}&status=1"
+														onclick="return confirm('Are you want to approve ?')">
+															<span class="glyphicon glyphicon-ok-circle"
+															data-animate="  animated fadeIn " rel="tooltip"
+															title="Approve"></span>
+													</a></td>
+												</tr>
+
 											</c:forEach>
 										</tbody>
 									</table>
@@ -165,34 +195,29 @@
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 	<script>
-function clearSessionAttribute() {
-	 
-	 
+		function clearSessionAttribute() {
 
-	$.getJSON('${clearSessionAttribute}', {
-  
-		ajax : 'true',
+			$.getJSON('${clearSessionAttribute}', {
 
-	}, function(data) { 
-		 
-		clearUserSessionAttribute();
-	});
+				ajax : 'true',
 
-}
-function clearUserSessionAttribute() {
-	 
-	 
+			}, function(data) {
 
-	$.getJSON('${clearUserSessionAttribute}', {
-  
-		ajax : 'true',
+				clearUserSessionAttribute();
+			});
 
-	}, function(data) { 
-		 
-	
-	});
+		}
+		function clearUserSessionAttribute() {
 
-}
- </script>
+			$.getJSON('${clearUserSessionAttribute}', {
+
+				ajax : 'true',
+
+			}, function(data) {
+
+			});
+
+		}
+	</script>
 </body>
 </html>

@@ -371,12 +371,31 @@ public class UserController {
 			{
 				 approval="Approved";
 				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
+				 RestTemplate restTemplate = new RestTemplate();
+				map = new LinkedMultiValueMap<String, Object>();
+				 
+				 map.add("senderID", "RUSAMH");
+				 map.add("user", "spdrusamah@gmail.com:Cyber@mva");
+				 map.add("receipientno", editUser.getMobileNumber().trim());
+				 map.add("dcs", "0");
+				 map.add("msgtxt","Dear " +editUser.getName()+", \n" + 
+				 		"	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n" + 
+				 		"Date and Time:"+eventList.getEventDateFrom()+" \n" + 
+				 		"Venue:"+eventList.getEventLocation());
+				 map.add("state", "4");
+
+
+				 //String response = restTemplate.postForObject("http://control.bestsms.co.in/api/sendhttp.php", map, String.class);
+
+				 String respons = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
+				 String.class);	
+ 
 			}
-			if(status==2)
+			/*if(status==2)
 			{
 				 approval="Not Approved";
 				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
-			}
+			}*/
 				editEvent.setStatusApproval(status);
 				editEvent.setApprovalDate(sf.format(date));
 				editEvent.setApproveBy(UserDetail.getUserId());
@@ -430,15 +449,7 @@ public class UserController {
 			map.add("newsblogsId", newsblogsId);
 			List<EventDetail> editUser = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map, List.class);
 			System.out.println("User: " + editUser.toString());
-			//List<EventDetail> userList = new ArrayList<EventDetail>(Arrays.asList(editUser));
-			
-			/*
-			 * for(int i=0; i<userList.size();i++) {
-			 * userList.get(i).setApprovalDate(DateConvertor.convertToDMY(userList.get(i).
-			 * getApprovalDate()));
-			 * 
-			 * }
-			 */
+			 
 
 			model.addObject("editUser", editUser);
 			model.addObject("newsblogsId", newsblogsId);

@@ -31,18 +31,18 @@
 		<section id="main-content" class=" ">
 			<section class="wrapper main-wrapper row" style=''>
 
-				<div class='col-xs-12'>
+				<!-- <div class='col-xs-12'>
 					<div class="page-title">
 
 						<div class="pull-left">
-							<!-- PAGE HEADING TAG - START -->
+							PAGE HEADING TAG - START
 							<h1 class="title">Contact List</h1>
-							<!-- PAGE HEADING TAG - END -->
+							PAGE HEADING TAG - END
 						</div>
 
 
 					</div>
-				</div>
+				</div> -->
 				<div class="clearfix"></div>
 				<!-- MAIN CONTENT AREA STARTS -->
 

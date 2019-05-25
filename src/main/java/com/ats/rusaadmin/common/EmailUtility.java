@@ -126,9 +126,10 @@ public class EmailUtility {
 				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
 				mimeMessage.setSubject(subject);
 				mimeMessage.setText(" User Event status is:" + approval );
-				mimeMessage.setText("Dear "+ name+  ", I am pleased to invite you to the attend "+ eventName +"  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n" + 
-						"				 Date and Time:" + date+" \n" +
-						"				 Venue:" + venue );
+				mimeMessage.setText(" Dear "+ name +", \n" + 
+						"	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n" + 
+						"Date and Time:"+ date + "\n" + 
+						"Venue:" + venue );
 				
 			
 				Transport.send(mimeMessage);
