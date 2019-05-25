@@ -159,7 +159,7 @@
 												<div class="col-xs-12">
 													<div class="form-group">
 														<label class="control-label col-sm-2" for="page_name">
-															Name :<span class="text-danger">*</span>
+															Parson Name :<span class="text-danger">*</span>
 														</label>
 														<div class="col-sm-10">
 															<input type="text" class="form-control" id="form_name"
