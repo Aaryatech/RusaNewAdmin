@@ -52,7 +52,7 @@
 						<header class="panel_header">
 							<h2 class="title pull-left">
 								<c:choose>
-									<c:when test="${isEdit==1}">Edit User</c:when>
+									<c:when test="${isEdit==1}">Edit Contact</c:when>
 									<c:otherwise>Edit Contact</c:otherwise>
 								</c:choose>
 							</h2>
@@ -73,10 +73,9 @@
                 <strong>Success : </strong> ${sessionScope.successMsg}</div>
         	          </c:if>  --%>
 
-						<form class="form-horizontal" id="addSupplier"
-							action="${pageContext.request.contextPath}/editContactUs"
-							onsubmit="return confirm('Do you really want to submit the form?');"
-							method="post">
+						<form class="form-horizontal" id="submitEditContactUs"
+							action="${pageContext.request.contextPath}/editContactUs" 
+							method="post" >
 
 							<div class="content-body">
 								<div class="row">
@@ -124,7 +123,7 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="middlename" class="form-control"
-															placeholder="Middle Name" value="${editcontact.message}"
+															placeholder="Message" value="${editcontact.message}"
 															style="text-align: left;" name="message" type="text"
 															readonly required>
 													</div>
@@ -153,7 +152,7 @@
 														<input id="remark" class="form-control"
 															placeholder="remark" value="${editcontact.remark}"
 															style="text-align: left;" name="remark" type="text"
-															required>
+															onkeyup="trim(this)" required autocomplete="off">
 													</div>
 												</div>
 
@@ -182,7 +181,7 @@
 
 										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
-												<button type="submit" class="btn btn-primary">Submit</button>
+												<button type="submit" class="btn btn-primary" id="submtbtn">Submit</button>
 												<button type="reset" class="btn btn-default">Reset</button>
 
 											</div>
@@ -201,7 +200,7 @@
 
 	</div>
 
-
+<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 
 	<script type="text/javascript">
 		function RestrictSpace() {
@@ -211,7 +210,38 @@
 			}
 		}
 	</script>
+	<script type="text/javascript">
+	$(document).ready(function($) {
 
+			$("#submitEditContactUs").submit(function(e) {
+				var isError = false;
+				var errMsg = ""; 
+				if (!$("#remark").val()) {
+
+					isError = true;
+					return false;
+				}  
+
+				if (!isError) {
+
+					var x = true;
+					if (x == true) {
+
+						document.getElementById("submtbtn").disabled = true;
+						return true;
+					}
+					//end ajax send this to php page
+				}
+				return false;
+			});
+		});
+	function trim(el) {
+		el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+		replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+		replace(/\n +/, "\n"); // Removes spaces after newlines
+		return;
+	}
+	</script>
 	<!-- MAIN CONTENT AREA ENDS -->
 	</section>
 	</section>
@@ -223,6 +253,6 @@
 	<!-- END CONTAINER -->
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
-	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	
 </body>
 </html>
