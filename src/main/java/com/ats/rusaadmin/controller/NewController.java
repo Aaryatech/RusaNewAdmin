@@ -487,6 +487,39 @@ public class NewController {
 		return "redirect:/ContactList";
 	}
 	
+	@RequestMapping(value = "/multipleContactDelete", method = RequestMethod.GET)
+	public String multipleContactDelete(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			String[] ids = request.getParameterValues("ids");
+			String id = "0";
+			
+			for(int i=0 ; i<ids.length ; i++) {
+				id=id+","+ids[i];
+			}
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);  
+			Info res = rest.postForObject(Constant.url + "/deleteMultipleContact", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if(res.isError()==true)
+			{
+				session.setAttribute("successMsg","Sorry, Can't deleted!");
+			}
+			else
+			{
+			session.setAttribute("successMsg","Infomation deleted successfully!");
+			}
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/ContactList";
+	}
+	
 	@RequestMapping(value = "/editChannel", method = RequestMethod.POST)
 	public String editChannel(HttpServletRequest request,HttpServletResponse response) {
 

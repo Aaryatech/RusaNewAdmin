@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.model.Category;
+import com.ats.rusaadmin.model.DashboardCount;
 import com.ats.rusaadmin.model.GetCategory;
 import com.ats.rusaadmin.model.LoginLogs;
 import com.ats.rusaadmin.model.LoginResponse;
@@ -71,12 +72,12 @@ public class HomeController {
 	}
 	
 	@RequestMapping("/loginProcess")
-	public ModelAndView helloWorld(HttpServletRequest request, HttpServletResponse res) throws IOException {
+	public String helloWorld(HttpServletRequest request, HttpServletResponse res,Model model) throws IOException {
 
 		String name = request.getParameter("username");
 		String password = request.getParameter("password");
 
-		ModelAndView mav = new ModelAndView("login");
+		String mav = new String();
 		RestTemplate rest = new RestTemplate();
 		res.setContentType("text/html");
 		HttpSession session = request.getSession();
@@ -85,8 +86,8 @@ public class HomeController {
 
 			if (name.equalsIgnoreCase("") || password.equalsIgnoreCase("") || name == null || password == null) {
 
-				mav = new ModelAndView("login");
-				mav.addObject("msg", "Invalid login");
+				mav =  "login";
+				model.addAttribute("msg", "Invalid login");
 			} else {
  
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -99,7 +100,7 @@ public class HomeController {
 				if (loginResponse.isError()==false) {
 					 
 					
-					mav = new ModelAndView("welcome");
+					mav =  "redirect:/dashboard" ;
 					 
 						session.setAttribute("UserDetail", loginResponse.getUser());
 						session.setAttribute("imageProfileUrl", Constant.getUserProfileURL);
@@ -124,9 +125,9 @@ public class HomeController {
 					
 				} else {
 
-					mav = new ModelAndView("login");
+					mav = "login";
 					System.out.println("Invalid login credentials");
-					mav.addObject("msg", "Invalid login");
+					model.addAttribute("msg", "Invalid login");
 				}
 
 				
@@ -134,7 +135,7 @@ public class HomeController {
 		} catch (Exception e) {
 			System.out.println("HomeController Login API Excep:  " + e.getMessage());
 			e.printStackTrace();
-			mav.addObject("msg", "Invalid login");
+			model.addAttribute("msg", "Invalid login");
 		}
 
 		return mav;
@@ -147,7 +148,9 @@ public class HomeController {
 
 		ModelAndView model = new ModelAndView("welcome"); 
 		try {
-			 
+			RestTemplate rest = new RestTemplate();
+			DashboardCount resp = rest.getForObject(Constant.url + "/dashboardCount", DashboardCount.class);
+			model.addObject("count", resp);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

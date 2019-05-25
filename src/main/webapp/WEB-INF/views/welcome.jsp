@@ -50,7 +50,7 @@
                 <i class="pull-left fa fa-envelope icon-md icon-rounded icon-primary"></i>
                 <div class="stats">
                      
-                    <h4><strong>0</strong></h4>
+                    <h4><strong>${count.contactCount}</strong></h4>
                     <span>New Message</span>
                 </div>
             </div>
@@ -59,7 +59,7 @@
             <div class="r4_counter db_box">
                 <i class="pull-left fa fa fa-male icon-md icon-rounded icon-accent"></i>
                 <div class="stats">
-                    <h4><strong>0</strong></h4>
+                    <h4><strong>${count.newUserCount}</strong></h4>
                     <span>New User</span>
                 </div>
             </div>
@@ -68,7 +68,7 @@
             <div class="r4_counter db_box">
                 <i class="pull-left fa fa-th-large  icon-md icon-rounded icon-purple"></i>
                 <div class="stats">
-                    <h4><strong>0</strong></h4>
+                    <h4><strong>${count.collageUserCount}</strong></h4>
                     <span>New Institute </span>
                 </div>
             </div>
@@ -77,7 +77,7 @@
             <div class="r4_counter db_box">
                 <i class="pull-left fa fa-university  icon-md icon-rounded icon-warning"></i>
                 <div class="stats">
-                    <h4><strong>0</strong></h4>
+                    <h4><strong>${count.univercityUserCount}</strong></h4>
                     <span>New University </span>
                 </div>
             </div>
