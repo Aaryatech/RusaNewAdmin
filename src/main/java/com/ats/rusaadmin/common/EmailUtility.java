@@ -42,7 +42,8 @@ public class EmailUtility {
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.port", "587");
-
+		props.put("mail.smtp.starttls.enable", "true");
+		
 		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
@@ -100,12 +101,24 @@ public class EmailUtility {
 			System.out.println("recipientEmail: " + recipientEmail);
 			System.out.println("mailsubject: " + mailsubject);
 		
-			Properties props = new Properties();
+			 Properties props = new Properties();
 			props.put("mail.smtp.host", "smtp.gmail.com");
 			props.put("mail.smtp.socketFactory.port", "465");
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.port", "587"); 
+			props.put("mail.smtp.starttls.enable", "true");
+
+			/*Properties props = new Properties();  
+		    props.setProperty("mail.transport.protocol", "smtp");     
+		    props.setProperty("mail.host", "smtp.gmail.com");  
+		    props.put("mail.smtp.auth", "true");  
+		    props.put("mail.smtp.port", "25");  
+		    props.put("mail.debug", "true");  
+		    props.put("mail.smtp.socketFactory.port", "465");  
+		    props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");  
+		    props.put("mail.smtp.socketFactory.fallback", "false");  */
+		    
 
 			Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {

@@ -114,7 +114,6 @@ public class UserController {
 			String designation = request.getParameter("designation");
 			String userPass = request.getParameter("userPass");
 
-			
 			String deptN = request.getParameter("deptN");
 			String btnsendmail = request.getParameter("btnsendmail");
 			String authN = request.getParameter("authN");
@@ -128,7 +127,6 @@ public class UserController {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-		
 			System.out.println("Emails: " + email);
 			System.out.println("name: " + name);
 			System.out.println("btnsubmit: " + btnsubmit);
@@ -139,28 +137,42 @@ public class UserController {
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
 					System.out.println("btnsendmail");
-					if(userPass.equals("0")) {
-					String password = Commons.getAlphaNumericString(5);
-					System.out.println("Password: " + password);					
-					editUser.setUserPassword(password);
-					editUser.setEmailVerified(1);
-					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email, password);
-					session.setAttribute("successMsg", "Infomation Updated successfully!");
-					session.setAttribute("errorMsg", "false");
-					}
-					else {
-					editUser.setEmailVerified(1);
-					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email, userPass);
-					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
-					session.setAttribute("regList", getUser);
-					session.setAttribute("successMsg", "Password Alredy Updated !");
-					session.setAttribute("errorMsg", "false");
+					if (userPass.equals("0")) {
+						String password = Commons.getAlphaNumericString(5);
+						System.out.println("Password: " + password);
+						editUser.setUserPassword(password);
+						editUser.setEmailVerified(1);
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email,
+								password);
+						session.setAttribute("successMsg", "Infomation Updated successfully!");
+						session.setAttribute("errorMsg", "false");
+						RestTemplate restTemplate = new RestTemplate();
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+						map.add("senderID", "RUSAMH");
+						map.add("user", "spdrusamah@gmail.com:Cyber@mva");
+						map.add("receipientno", editUser.getMobileNumber());
+						map.add("dcs", "0");
+						map.add("msgtxt", "Your Username " + editUser.getEmails() + "\n Password " + password
+								+ "\n don't share with any one.");
+						map.add("state", "4");
+
+						String res = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
+								String.class);
+					} else {
+						editUser.setEmailVerified(1);
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email,
+								userPass);
+						List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+						session.setAttribute("regList", getUser);
+						session.setAttribute("successMsg", "Password Alredy Updated !");
+						session.setAttribute("errorMsg", "false"); 
 					}
 				} else {
 					editUser.setEmailVerified(0);
 					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
 					session.setAttribute("regList", getUser);
-					
+
 					session.setAttribute("successMsg", "Please varify your mobile number !");
 					session.setAttribute("errorMsg", "true");
 				}
@@ -168,11 +180,11 @@ public class UserController {
 			}
 			if (btnsubmit != null) {
 				System.out.println("btnsubmit");
-				
+
 				editUser.setAlternateEmail(alternateEmail);
 				editUser.setUserType(type);
 				editUser.setEmails(email);
-			
+
 				editUser.setName(name);
 				editUser.setAisheCode(aishe);
 				editUser.setCollegeName(collegeN);
@@ -182,21 +194,15 @@ public class UserController {
 				editUser.setMobileNumber(phone);
 				editUser.setAuthorizedPerson(authN);
 				editUser.setEditByAdminuserId(UserDetail.getUserId());
-				editUser.setName(name); 
-			if(emailVerified==0)
-			{
-				editUser.setEmailVerified(0);
-			}
-			else
-			{
-				editUser.setEmailVerified(1);
-			}
-				
-				 
-					editUser.setIsActive(status);
-				 
+				editUser.setName(name);
+				if (emailVerified == 0) {
+					editUser.setEmailVerified(0);
+				} else {
+					editUser.setEmailVerified(1);
+				}
 
-			
+				editUser.setIsActive(status);
+
 			}
 			editUser.setRegId(regId);
 			editUser.setEditDate(sf.format(date));
@@ -207,7 +213,6 @@ public class UserController {
 			session.setAttribute("regList", getUser);
 			session.setAttribute("successMsg", "Infomation Updated successfully!");
 			session.setAttribute("errorMsg", "false");
-		
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -237,8 +242,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/editApproveUser/{userId}/{eventRegId}/{newsblogsId}", method = RequestMethod.GET)
-	public ModelAndView editApproveUser(@PathVariable("userId") int userId, @PathVariable("eventRegId") int eventRegId,@PathVariable("newsblogsId") int newsblogsId,
-			HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView editApproveUser(@PathVariable("userId") int userId, @PathVariable("eventRegId") int eventRegId,
+			@PathVariable("newsblogsId") int newsblogsId, HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("approveForm");
 		try {
@@ -263,7 +268,7 @@ public class UserController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/approveUserStatus", method = RequestMethod.POST)
 	public String approveUserStatus(HttpServletRequest request, HttpServletResponse response) {
 
@@ -271,185 +276,180 @@ public class UserController {
 		int newsblogsId = Integer.parseInt(request.getParameter("newsblogsId"));
 		try {
 			// ModelAndView model=new ModelAndView("approveUser");
-			
+
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			Info info = null;
 			Info info1 = null;
-			String approval=null;
+			String approval = null;
 			int status = Integer.parseInt(request.getParameter("status"));
 			int regId = Integer.parseInt(request.getParameter("regId"));
-			
-			System.out.println("newsblogsId : "+newsblogsId);
-			String email=request.getParameter("userEmail");
+
+			System.out.println("newsblogsId : " + newsblogsId);
+			String email = request.getParameter("userEmail");
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("regId",regId);
-			Registration user = rest.postForObject(Constant.url + "/getRegUserbyRegId",map, Registration .class);
-			
+			map.add("regId", regId);
+			Registration user = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
-			map1.add("newsblogsId", newsblogsId);	
+			map1.add("newsblogsId", newsblogsId);
 			map1.add("langId", 1);
-			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1,
-					NewsDetails.class);
-			System.out.println("List :"+eventList.toString());
-			if(status==1)
-			{
-				 approval="Approved";
-				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
+			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
+			System.out.println("List :" + eventList.toString());
+			if (status == 1) {
+				approval = "Approved";
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove, approval,
+						user.getName(), eventList.getHeading(), eventList.getEventLocation(),
+						eventList.getEventDateFrom());
 			}
-			if(status==2)
-			{
-				 approval="Not Approved";
-				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove,approval,user.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
+			if (status == 2) {
+				approval = "Not Approved";
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove, approval,
+						user.getName(), eventList.getHeading(), eventList.getEventLocation(),
+						eventList.getEventDateFrom());
 			}
-				editEvent.setStatusApproval(status);
-				editEvent.setApprovalDate(sf.format(date));
-				editEvent.setApproveBy(UserDetail.getUserId());
+			editEvent.setStatusApproval(status);
+			editEvent.setApprovalDate(sf.format(date));
+			editEvent.setApproveBy(UserDetail.getUserId());
 
-				EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
-						EventRegistration.class);
-				MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
-				map3.add("newsblogsId", newsblogsId);
-			
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
-				session.setAttribute("errorMsg", "false");
-			
+			EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
+					EventRegistration.class);
+			MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
+			map3.add("newsblogsId", newsblogsId);
 
-	
+			session.setAttribute("successMsg", "Infomation Updated successfully!");
+			session.setAttribute("errorMsg", "false");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/detailEventList/" +newsblogsId ;
+		return "redirect:/detailEventList/" + newsblogsId;
 	}
-	
-	@RequestMapping(value = "/approveUser", method = RequestMethod.GET)
-	public String approveUser( HttpServletRequest request, HttpServletResponse response) {
 
-		 
-		int newsId= 0;
+	@RequestMapping(value = "/approveUser", method = RequestMethod.GET)
+	public String approveUser(HttpServletRequest request, HttpServletResponse response) {
+
+		int newsId = 0;
 		try {
 			Info info = null;
 			Info info1 = null;
-			String approval=null;
-			
+			String approval = null;
+
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
-			
-			int userId= Integer.parseInt(request.getParameter("userId"));
-			int regId= Integer.parseInt(request.getParameter("regId"));
-			newsId= Integer.parseInt(request.getParameter("newsId"));
-			int status= Integer.parseInt(request.getParameter("status"));
-			
-			
+
+			int userId = Integer.parseInt(request.getParameter("userId"));
+			int regId = Integer.parseInt(request.getParameter("regId"));
+			newsId = Integer.parseInt(request.getParameter("newsId"));
+			int status = Integer.parseInt(request.getParameter("status"));
+
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class); 
-			
+			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", regId);
 			editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
-			
-			
-		 
-		 
+
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			 
-			
-			 map = new LinkedMultiValueMap<String, Object>();
-			map1.add("newsblogsId", newsId);	
+
+			map = new LinkedMultiValueMap<String, Object>();
+			map1.add("newsblogsId", newsId);
 			map1.add("langId", 1);
-			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1,
-					NewsDetails.class);
-			System.out.println("List :"+eventList.toString());
-			if(status==1)
-			{
-				 approval="Approved";
-				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
-				 RestTemplate restTemplate = new RestTemplate();
+			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
+			System.out.println("List :" + eventList.toString());
+			if (status == 1) {
+				approval = "Approved";
+				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(),
+						mailsubjectApprove, approval, editUser.getName(), eventList.getHeading(),
+						eventList.getEventLocation(), eventList.getEventDateFrom());
+				RestTemplate restTemplate = new RestTemplate();
 				map = new LinkedMultiValueMap<String, Object>();
-				 
-				 map.add("senderID", "RUSAMH");
-				 map.add("user", "spdrusamah@gmail.com:Cyber@mva");
-				 map.add("receipientno", editUser.getMobileNumber().trim());
-				 map.add("dcs", "0");
-				 map.add("msgtxt","Dear " +editUser.getName()+", \n" + 
-				 		"	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n" + 
-				 		"Date and Time:"+eventList.getEventDateFrom()+" \n" + 
-				 		"Venue:"+eventList.getEventLocation());
-				 map.add("state", "4");
 
+				map.add("senderID", "RUSAMH");
+				map.add("user", "spdrusamah@gmail.com:Cyber@mva");
+				map.add("receipientno", editUser.getMobileNumber().trim());
+				map.add("dcs", "0");
+				map.add("msgtxt", "Dear " + editUser.getName() + ", \n"
+						+ "	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n"
+						+ "Date and Time:" + eventList.getEventDateFrom() + " \n" + "Venue:"
+						+ eventList.getEventLocation());
+				map.add("state", "4");
 
-				 //String response = restTemplate.postForObject("http://control.bestsms.co.in/api/sendhttp.php", map, String.class);
+				// String response =
+				// restTemplate.postForObject("http://control.bestsms.co.in/api/sendhttp.php",
+				// map, String.class);
 
-				 String respons = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
-				 String.class);	
- 
+				String respons = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
+						String.class);
+
 			}
-			/*if(status==2)
-			{
-				 approval="Not Approved";
-				 info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),eventList.getEventLocation(),eventList.getEventDateFrom());
-			}*/
-				editEvent.setStatusApproval(status);
-				editEvent.setApprovalDate(sf.format(date));
-				editEvent.setApproveBy(UserDetail.getUserId());
+			/*
+			 * if(status==2) { approval="Not Approved"; info1 =
+			 * EmailUtility.sendApprovalEmail(senderEmail, senderPassword,
+			 * editUser.getEmails(),
+			 * mailsubjectApprove,approval,editUser.getName(),eventList.getHeading(),
+			 * eventList.getEventLocation(),eventList.getEventDateFrom()); }
+			 */
+			editEvent.setStatusApproval(status);
+			editEvent.setApprovalDate(sf.format(date));
+			editEvent.setApproveBy(UserDetail.getUserId());
 
-				EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
-						EventRegistration.class);
-			  
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
-				session.setAttribute("errorMsg", "false");
-			 
+			EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
+					EventRegistration.class);
+
+			session.setAttribute("successMsg", "Infomation Updated successfully!");
+			session.setAttribute("errorMsg", "false");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/detailEventList/"+newsId ;
+		return "redirect:/detailEventList/" + newsId;
 	}
-	
-	@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
-		public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("allEventList");
-			try {
-				
-				EventCountDetails[] getUser = rest.getForObject(Constant.url + "/getAllEventList",EventCountDetails[].class);
-				List<EventCountDetails> userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
-				for(int i=0; i<userList.size();i++)
-				{
-					userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));					
-					
-				}
-				
-				model.addObject("userList", userList);
-				System.out.println("userList :"+userList)	;	
-			} catch (Exception e) {
-				e.printStackTrace();
+	@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
+	public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("allEventList");
+		try {
+
+			EventCountDetails[] getUser = rest.getForObject(Constant.url + "/getAllEventList",
+					EventCountDetails[].class);
+			List<EventCountDetails> userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
+			for (int i = 0; i < userList.size(); i++) {
+				userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
+
 			}
 
-			return model;
+			model.addObject("userList", userList);
+			System.out.println("userList :" + userList);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
+		return model;
+	}
+
 	@RequestMapping(value = "/detailEventList/{newsblogsId}", method = RequestMethod.GET)
-	public ModelAndView detailEventList(@PathVariable("newsblogsId") int newsblogsId,
-			HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView detailEventList(@PathVariable("newsblogsId") int newsblogsId, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("approveUser");
 		try {
-			//System.out.println("id" + regId);
+			// System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			//map.add("regId", regId);
+			// map.add("regId", regId);
 			map.add("newsblogsId", newsblogsId);
-			List<EventDetail> editUser = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map, List.class);
+			List<EventDetail> editUser = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map,
+					List.class);
 			System.out.println("User: " + editUser.toString());
-			 
 
 			model.addObject("editUser", editUser);
 			model.addObject("newsblogsId", newsblogsId);
@@ -463,6 +463,5 @@ public class UserController {
 
 		return model;
 	}
-	
 
 }
