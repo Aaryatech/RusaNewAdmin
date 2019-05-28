@@ -86,7 +86,7 @@
                         <c:forEach items="${imagesLinkList}" var="imagesLinkList" varStatus="count">
 									<tr  >
 										<td>${count.index+1}</td>
-										<td> <img src="${url}${imagesLinkList.sliderImage}" style="width:120px; height:100px"></td>
+										<td> <img src="${url}${imagesLinkList.sliderImage}" style="width:120px; height:100px"></td>  <!-- style="width:120px; height:100px" -->
 										
 										<td>${imagesLinkList.titleName}</td>
 										<td>${imagesLinkList.addDate}</td> 
