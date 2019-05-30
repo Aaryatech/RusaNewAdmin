@@ -103,12 +103,18 @@
 								</c:if>
 
 								<div class="col-xs-12">
-								
-								<div style="text-align: right;">
-										<a href="${pageContext.request.contextPath}/activeUserListPdf" target="_blank"><button type="button" class="btn btn-primary">PDF</button></a>
-										 
-									</div><br>
- 
+
+									<div style="text-align: right;">
+										<input type="button" class="btn btn-primary"
+											onclick="tableToExcel('example-1', 'name', 'userlist.xls')"
+											value="Export to Excel">&nbsp;<a
+											href="${pageContext.request.contextPath}/activeUserListPdf"
+											target="_blank"><button type="button"
+												class="btn btn-primary">PDF</button></a>
+
+									</div>
+									<br>
+
 									<table id="example-1"
 										class="table table-striped dt-responsive display">
 										<thead>
@@ -235,35 +241,29 @@
 
 		}
 	</script>
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-	<script
-		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript">
+		function tableToExcel(table, name, filename) {
+			let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
+					s) {
+				return window.btoa(decodeURIComponent(encodeURIComponent(s)))
+			}, format = function(s, c) {
+				return s.replace(/{(\w+)}/g, function(m, p) {
+					return c[p];
+				})
+			}
 
-	<script
-		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-	<script
-		src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-	<script
-		src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+			if (!table.nodeType)
+				table = document.getElementById(table)
+			var ctx = {
+				worksheet : name || 'Worksheet',
+				table : table.innerHTML
+			}
 
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-	<script
-		src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-	<script
-		src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
-
-	<script>
-		$(document).ready(function() {
-			$('#example-1').DataTable({
-				dom : 'Bfrtip',
-				buttons : [ 'excel', 'pdf' ]
-			});
-		});
-	</script> -->
+			var link = document.createElement('a');
+			link.download = filename;
+			link.href = uri + base64(format(template, ctx));
+			link.click();
+		}
+	</script>
 </body>
 </html>

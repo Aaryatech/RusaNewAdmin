@@ -744,6 +744,53 @@ public class NewController {
 		return "redirect:/ContactList";
 	}
 	
+	@RequestMapping(value = "/deletedContactList", method = RequestMethod.GET)
+	public ModelAndView deletedContactList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/deletedContactList");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 0 );
+			ContactUs[] ContactUs = rest.getForObject(Constant.url + "/getAllContactListDeleted",
+					ContactUs[].class);
+			contactList = new ArrayList<ContactUs>(Arrays.asList(ContactUs));
+			model.addObject("contactList", contactList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/retriveContact/{id}", method = RequestMethod.GET)
+	public String retriveContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id); 
+			//map.add("delStatus", 0); 
+			Info res = rest.postForObject(Constant.url + "/retriveContact", map, Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if(id==0)
+			{
+				session.setAttribute("successMsg","Sorry, Can't Retrieve!");
+			}
+			else
+			{
+			session.setAttribute("successMsg","Infomation Retrieve successfully!");
+			}
+			} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/deletedContactList";
+	}
+	
 	@RequestMapping(value = "/editChannel", method = RequestMethod.POST)
 	public String editChannel(HttpServletRequest request,HttpServletResponse response) {
 

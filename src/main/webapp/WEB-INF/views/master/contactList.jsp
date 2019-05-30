@@ -103,9 +103,15 @@
 
 								<div class="col-xs-12">
 									<div style="text-align: right;">
-										<a href="${pageContext.request.contextPath}/ContactListPdf"
+										<input type="button" class="btn btn-primary"
+											onclick="tableToExcel('example-1', 'name', 'contactlist.xls')"
+											value="Export to Excel">&nbsp;<a
+											href="${pageContext.request.contextPath}/ContactListPdf"
 											target="_blank"><button type="button"
-												class="btn btn-primary">PDF</button></a>
+												class="btn btn-primary">PDF</button></a> <a
+											href="${pageContext.request.contextPath}/deletedContactList"><button
+												type="button" class="btn btn-primary">Retrieve
+												Message</button></a>
 
 									</div>
 									<br>
@@ -133,29 +139,31 @@
 													varStatus="count">
 													<tr>
 														<td>${count.index+1}</td>
-														<td><input type="checkbox" class="chk" name="ids"
+														<td style="text-align: center;"><input
+															type="checkbox" class="chk" name="ids"
 															id="contact${contactList.id}" value="${contactList.id}" /></td>
 														<td>${contactList.contactName}</td>
 														<td>${contactList.emailId}</td>
-														<td>${contactList.mobileNo}</td>
+														<td style="text-align: center;">${contactList.mobileNo}</td>
 														<td>${contactList.message}</td>
 
 														<td>${contactList.exVar1}</td>
 
 
 														<td><a
-															href="${pageContext.request.contextPath}/editContact/${contactList.id}"><span
-																class="glyphicon glyphicon-edit"
+															href="${pageContext.request.contextPath}/editContact/${contactList.id}"
+															title="Edit"><span class="glyphicon glyphicon-edit"
 																data-animate=" animated fadeIn " rel="tooltip"></span></a> <c:choose>
 																<c:when test="${userList.userId=='1'}">
 																	<br />
 																</c:when>
 																<c:otherwise>
 																	<%-- href="${pageContext.request.contextPath}/deleteContact/${contactList.id}" --%>
-																	<a onclick="singleDelete(${contactList.id});"
-																		href="#" rel="tooltip" data-color-class="danger"
+																	<a onclick="singleDelete(${contactList.id});" href="#"
+																		rel="tooltip" data-color-class="danger"
 																		data-animate=" animated fadeIn " data-toggle="tooltip"
-																		data-original-title="Delete  record"><span
+																		data-original-title="Delete  record"
+																		title="Delete Record"><span
 																		class="glyphicon glyphicon-remove"></span></a>
 																	<br />
 																</c:otherwise>
@@ -261,6 +269,30 @@
 			 
 		}
 	</script>
+	<script type="text/javascript">
+function tableToExcel(table, name, filename) {
+let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
+s) {
+return window.btoa(decodeURIComponent(encodeURIComponent(s)))
+}, format = function(s, c) {
+return s.replace(/{(\w+)}/g, function(m, p) {
+return c[p];
+})
+}
+
+if (!table.nodeType)
+table = document.getElementById(table)
+var ctx = {
+worksheet : name || 'Worksheet',
+table : table.innerHTML
+}
+
+var link = document.createElement('a');
+link.download = filename;
+link.href = uri + base64(format(template, ctx));
+link.click();
+}
+</script>
 	<div id="modal_scrollable" class="modal fade" data-backdrop="false"
 		tabindex="-1">
 		<div class="modal-dialog modal-dialog-scrollable">
@@ -276,15 +308,16 @@
 				</div>
 
 				<div class="modal-footer pt-3">
-					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
-					<button type="button" class="btn bg-primary" onclick="submitForm()">Yes</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary"
+						onclick="submitForm()">Yes</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<div id="modal_scrollable_single" class="modal fade" data-backdrop="false"
-		tabindex="-1">
+
+	<div id="modal_scrollable_single" class="modal fade"
+		data-backdrop="false" tabindex="-1">
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header pb-3">
@@ -298,9 +331,11 @@
 				</div>
 
 				<div class="modal-footer pt-3">
-				<input type="hidden" id="conid" name="conid">
-					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
-					<button type="button" class="btn bg-primary" onclick="submitFormSingle()">Yes</button>
+					<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn btn btn-primary"
+						data-dismiss="modal">No</button>
+					<button type="button" class="btn btn btn-primary"
+						onclick="submitFormSingle()">Yes</button>
 				</div>
 			</div>
 		</div>
