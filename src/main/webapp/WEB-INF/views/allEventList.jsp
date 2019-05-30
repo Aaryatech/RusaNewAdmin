@@ -11,7 +11,7 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <!-- CORE CSS TEMPLATE - END -->
 <c:url var="clearSessionAttribute" value="/clearSessionAttribute" />
-<link rel="stylesheet"
+<!-- <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<link rel="stylesheet"
@@ -32,7 +32,7 @@
 .btn:hover {
 	background-color: blue;
 }
-</style>
+</style> -->
 <!-- CORE CSS TEMPLATE - END -->
 <c:url var="clearSessionAttribute" value="/clearSessionAttribute" />
 <c:url var="clearUserSessionAttribute"
@@ -105,7 +105,10 @@
 
 								<div class="col-xs-12">
 
-
+									<div style="text-align: right;">
+										<a href="${pageContext.request.contextPath}/showEventListPdf" target="_blank"><button type="button" class="btn btn-primary">PDF</button></a>
+										 
+									</div><br>
 									<table id="example-1"
 										class="table table-striped dt-responsive display">
 										<thead>
@@ -141,10 +144,10 @@
 														<c:otherwise>
 															<td>Not Required</td>
 														</c:otherwise>
-													</c:choose> 
-											<td>${userList.applied}</td>
-												<td>${userList.approved}</td> 
-											
+													</c:choose>
+													<td>${userList.applied}</td>
+													<td>${userList.approved}</td>
+
 													<td><a
 														href="${pageContext.request.contextPath}/detailEventList/${userList.newsblogsId}"><span
 															class="glyphicon glyphicon-th-list"
@@ -181,36 +184,31 @@
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 	<script>
-function clearSessionAttribute() {
-	 
-	 
+		function clearSessionAttribute() {
 
-	$.getJSON('${clearSessionAttribute}', {
-  
-		ajax : 'true',
+			$.getJSON('${clearSessionAttribute}', {
 
-	}, function(data) { 
-		 
-		clearUserSessionAttribute();
-	});
+				ajax : 'true',
 
-}
-function clearUserSessionAttribute() {
-	 
-	 
+			}, function(data) {
 
-	$.getJSON('${clearUserSessionAttribute}', {
-  
-		ajax : 'true',
+				clearUserSessionAttribute();
+			});
 
-	}, function(data) { 
-		 
-	
-	});
+		}
+		function clearUserSessionAttribute() {
 
-}
- </script>
- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+			$.getJSON('${clearUserSessionAttribute}', {
+
+				ajax : 'true',
+
+			}, function(data) {
+
+			});
+
+		}
+	</script>
+	<!--  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -232,6 +230,6 @@ $(document).ready(function() {
         ]
     } );
 } );
-</script>
+</script> -->
 </body>
 </html>

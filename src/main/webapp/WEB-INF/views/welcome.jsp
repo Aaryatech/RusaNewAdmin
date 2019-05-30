@@ -69,7 +69,7 @@
                 <i class="pull-left fa fa-th-large  icon-md icon-rounded icon-purple"></i>
                 <div class="stats">
                     <h4><strong>${count.collageUserCount}</strong></h4>
-                    <span>New Institute </span>
+                    <span>Institute Registration</span>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
                 <i class="pull-left fa fa-university  icon-md icon-rounded icon-warning"></i>
                 <div class="stats">
                     <h4><strong>${count.univercityUserCount}</strong></h4>
-                    <span>New University </span>
+                    <span>University Registration</span>
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@
 <c:url var="clearSessionAttribute" value="/clearSessionAttribute" />
 <c:url var="clearUserSessionAttribute"
 	value="/clearUserSessionAttribute" />
-<link rel="stylesheet"
+<!-- <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <link rel="stylesheet"
@@ -34,7 +34,7 @@
 .btn:hover {
 	background-color: blue;
 }
-</style>
+</style> -->
 <!-- CORE CSS TEMPLATE - END -->
 </head>
 <!-- END HEAD -->
@@ -103,8 +103,12 @@
 								</c:if>
 
 								<div class="col-xs-12">
-
-
+								
+								<div style="text-align: right;">
+										<a href="${pageContext.request.contextPath}/activeUserListPdf" target="_blank"><button type="button" class="btn btn-primary">PDF</button></a>
+										 
+									</div><br>
+ 
 									<table id="example-1"
 										class="table table-striped dt-responsive display">
 										<thead>
@@ -231,7 +235,7 @@
 
 		}
 	</script>
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script
 		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
@@ -260,6 +264,6 @@
 				buttons : [ 'excel', 'pdf' ]
 			});
 		});
-	</script>
+	</script> -->
 </body>
 </html>
