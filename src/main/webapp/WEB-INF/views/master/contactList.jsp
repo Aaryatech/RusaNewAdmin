@@ -107,7 +107,8 @@
 											target="_blank"><button type="button"
 												class="btn btn-primary">PDF</button></a>
 
-									</div><br>
+									</div>
+									<br>
 									<form
 										action="${pageContext.request.contextPath}/multipleContactDelete"
 										method="get" id="multipleDelete">
@@ -150,10 +151,9 @@
 																	<br />
 																</c:when>
 																<c:otherwise>
-																	<a
-																		href="${pageContext.request.contextPath}/deleteContact/${contactList.id}"
-																		onClick="return confirm('Are you sure want to delete this record');"
-																		rel="tooltip" data-color-class="danger"
+																	<%-- href="${pageContext.request.contextPath}/deleteContact/${contactList.id}" --%>
+																	<a onclick="singleDelete(${contactList.id});"
+																		href="#" rel="tooltip" data-color-class="danger"
 																		data-animate=" animated fadeIn " data-toggle="tooltip"
 																		data-original-title="Delete  record"><span
 																		class="glyphicon glyphicon-remove"></span></a>
@@ -233,38 +233,77 @@
 					var x = true;
 					if (x == true) {
 
-						//document.getElementById("submtbtn").disabled = true;
-						return true;
+						$('#modal_scrollable').modal('show');
 					}
 					//end ajax send this to php page
 				}
 				return false;
 			});
 		});
+		 
 	</script>
+	<script>
+		function submitForm() {
+			 $('#modal_scrollable').modal('hide'); 
+			document.getElementById("multipleDelete").submit();
+			 
+		}
+		function singleDelete(id) {
+			 
+			$('#modal_scrollable_single').modal('show');
+			document.getElementById("conid").value = id;
+		}
+		function submitFormSingle() {
+			 $('#modal_scrollable_single').modal('hide'); 
+			 var id = document.getElementById("conid").value;
+			 location.href = "${pageContext.request.contextPath}/deleteContact/"+id;
+			//document.getElementById("multipleDelete").submit();
+			 
+		}
+	</script>
+	<div id="modal_scrollable" class="modal fade" data-backdrop="false"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
 
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
 
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+				</div>
 
-<script>
-$(document).ready(function() {
-    $('#example-1').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-             'excel', 'pdf'
-        ]
-    } );
-} );
-</script> -->
+				<div class="modal-footer pt-3">
+					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn bg-primary" onclick="submitForm()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="modal_scrollable_single" class="modal fade" data-backdrop="false"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+				<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn bg-primary" onclick="submitFormSingle()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
