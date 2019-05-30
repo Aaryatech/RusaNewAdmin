@@ -79,7 +79,6 @@
 
 						<form class="form-horizontal" id="addSupplier"
 							action="${pageContext.request.contextPath}/insertUser"
-							onsubmit="return confirm('Do you really want to submit the form?');"
 							method="post" enctype="multipart/form-data">
 
 							<div class="content-body">

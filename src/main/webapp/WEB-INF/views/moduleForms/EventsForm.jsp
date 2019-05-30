@@ -108,8 +108,7 @@
 									<form class="form-horizontal"
 										action="${pageContext.request.contextPath}/insertEventForm"
 										method="post" enctype="multipart/form-data"
-										name="form_sample_2" id="form_sample_2"
-										onsubmit="return confirm('Do you really want to submit the form?');">
+										name="form_sample_2" id="form_sample_2">
 
 										<ul class="nav nav-tabs">
 											<li class="active"><a href="#home" data-toggle="tab">

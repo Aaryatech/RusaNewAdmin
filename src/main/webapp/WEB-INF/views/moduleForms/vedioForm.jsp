@@ -92,8 +92,7 @@
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
-                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertVedioForm" method="post"  
-                         onsubmit="return confirm('Do you really want to submit the form?');">               
+                         <form class="form-horizontal" action="${pageContext.request.contextPath}/insertVedioForm" method="post">               
                     
                     <ul class="nav nav-tabs">
                         <li class="active">

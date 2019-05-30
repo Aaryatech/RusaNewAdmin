@@ -68,7 +68,7 @@
             <div class="content-body">   
              <div class="row">
                    <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/editChannel" 
-                   onsubmit="return confirm('Do you really want to submit the form?');" method="post">
+                   method="post">
              
                     <div class="col-xs-12"> 
                     

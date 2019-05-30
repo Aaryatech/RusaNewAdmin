@@ -66,7 +66,7 @@
 <div class="content-body">
 								<div class="row">
 						<form class="form-horizontal" id="addSupplier"
-							action="${pageContext.request.contextPath}/siteMaintenance" onsubmit="return confirm('Do you really want to submit the form?');"
+							action="${pageContext.request.contextPath}/siteMaintenance" 
 							method="post">
 							
 							

@@ -100,9 +100,10 @@
 											href="${pageContext.request.contextPath}/editEventContent/${getPagesModuleList.primaryKeyId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteEventContent/${getPagesModuleList.primaryKeyId}"
-											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
+											href="#"
+											onClick="singleDelete(${getPagesModuleList.primaryKeyId});" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
 											class="glyphicon glyphicon-remove"></span></a></td>
+											<!-- ${pageContext.request.contextPath}/deleteEventContent/${getPagesModuleList.primaryKeyId} -->
 									</tr>
 								</c:forEach>  
                 </tbody>
@@ -151,5 +152,41 @@ function clearSessionAttribute() {
 
 }
  </script>
+  <script type="text/javascript">
+   function singleDelete(id) {
+		 
+		$('#modal_scrollable_single').modal('show');
+		document.getElementById("conid").value = id;
+	}
+	function submitFormSingle() {
+		 $('#modal_scrollable_single').modal('hide'); 
+		 var id = document.getElementById("conid").value;
+		 location.href = "${pageContext.request.contextPath}/deleteEventContent/"+id;
+		//document.getElementById("multipleDelete").submit();
+		 
+	}
+   </script>
+ <div id="modal_scrollable_single" class="modal fade" data-backdrop="false"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+				<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn bg-primary" onclick="submitFormSingle()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

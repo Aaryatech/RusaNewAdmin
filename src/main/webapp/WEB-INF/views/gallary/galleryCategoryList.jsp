@@ -82,7 +82,7 @@
  
                 <tbody>
                         <c:forEach items="${gallaryCategoryList}" var="categoryList" varStatus="count">
-									<tr  >
+									<tr>
 										<td>${count.index+1}</td>
 										<td>${categoryList.cateName}</td> 
 										<td>${categoryList.sortNo}</td>  
@@ -98,9 +98,9 @@
 											href="${pageContext.request.contextPath}/editGalleryCategory/${categoryList.galleryCatId}"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteGalleryCategory/${categoryList.galleryCatId}"
-											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
+											href="#"
+											onClick="singleDelete(${categoryList.galleryCatId});" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
+												class="glyphicon glyphicon-remove"></span></a></td><!-- ${pageContext.request.contextPath}/deleteGalleryCategory/${categoryList.galleryCatId} -->
 									</tr>
 								</c:forEach>  
                 </tbody>
@@ -133,6 +133,7 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+   
    <script>
 function clearSessionAttribute() {
 	 
@@ -149,5 +150,42 @@ function clearSessionAttribute() {
 
 }
  </script>
+ <script type="text/javascript">
+   function singleDelete(id) {
+		 
+		$('#modal_scrollable_single').modal('show');
+		document.getElementById("conid").value = id;
+	}
+	function submitFormSingle() {
+		 $('#modal_scrollable_single').modal('hide'); 
+		 var id = document.getElementById("conid").value;
+		 location.href = "${pageContext.request.contextPath}/deleteGalleryCategory/"+id;
+		//document.getElementById("multipleDelete").submit();
+		 
+	}
+   </script>
+ <div id="modal_scrollable_single" class="modal fade" data-backdrop="false"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+				<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn bg-primary" onclick="submitFormSingle()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+ 
 </body>
 </html>

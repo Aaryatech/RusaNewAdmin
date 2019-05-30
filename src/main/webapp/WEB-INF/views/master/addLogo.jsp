@@ -80,7 +80,6 @@
 							<div class="row">
 								<form class="form-horizontal" id="addSupplier"
 									action="${pageContext.request.contextPath}/updateOrInsertLogo"
-									onsubmit="return confirm('Do you really want to submit the form?');"
 									method="post" enctype="multipart/form-data">
 
 									<c:if

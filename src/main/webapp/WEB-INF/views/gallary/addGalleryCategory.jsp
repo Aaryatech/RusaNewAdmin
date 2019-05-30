@@ -60,7 +60,7 @@
                 </header>
                 
                    <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertGalleryCategory" 
-                   onsubmit="return confirm('Do you really want to submit the form?');" method="post">
+                    method="post">
                    
                 <div class="content-body"> 
                     <div class="row">

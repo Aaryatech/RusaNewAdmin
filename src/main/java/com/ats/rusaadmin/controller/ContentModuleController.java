@@ -244,6 +244,32 @@ public class ContentModuleController {
 
 		return model;
 	}
+	
+	@RequestMapping(value = "/deletesuccessStory/{id}", method = RequestMethod.GET)
+	public String deletesuccessStory(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {		 
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("id", id);
+			 Info info = rest.postForObject(Constant.url + "/deleteTestImonial",map,
+					 Info.class);
+			  
+			 HttpSession session = request.getSession();
+			 
+			 if(info.isError()==false) {
+				 session.setAttribute("successMsg","Infomation Delete successfully!"); 
+			 }else {
+				 session.setAttribute("successMsg","Error while Deleting !");
+			 }
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/successStoryList";
+	}
+	
 	@RequestMapping(value = "/teamList", method = RequestMethod.GET)
 	public ModelAndView teamList(HttpServletRequest request, HttpServletResponse response) {
 
@@ -262,6 +288,31 @@ public class ContentModuleController {
 		}
 
 		return model;
+	}
+	
+	@RequestMapping(value = "/deleteteamList/{id}", method = RequestMethod.GET)
+	public String deleteteamList(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {		 
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("id", id);
+			 Info info = rest.postForObject(Constant.url + "/deleteTestImonial",map,
+					 Info.class);
+			  
+			 HttpSession session = request.getSession();
+			 
+			 if(info.isError()==false) {
+				 session.setAttribute("successMsg","Infomation Delete successfully!"); 
+			 }else {
+				 session.setAttribute("successMsg","Error while Deleting !");
+			 }
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/teamList";
 	}
 	@RequestMapping(value = "/testImonialList", method = RequestMethod.GET)
 	public ModelAndView testImonialList(HttpServletRequest request, HttpServletResponse response) {
