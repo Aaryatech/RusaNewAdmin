@@ -76,7 +76,7 @@
 									<c:when test="${moduleId==13}">Team</c:when>
 									<c:otherwise>Testimonial</c:otherwise>
 								</c:choose>
-								
+
 							</h1>
 							<!-- PAGE HEADING TAG - END -->
 						</div>
@@ -100,7 +100,8 @@
 									<c:when test="${isEdit==1}">Edit</c:when>
 									<c:otherwise> Add</c:otherwise>
 								</c:choose>
-								Content for <c:choose>
+								Content for
+								<c:choose>
 									<c:when test="${moduleId==8}">Success Story</c:when>
 									<c:when test="${moduleId==13}">Team</c:when>
 									<c:otherwise>Testimonial</c:otherwise>
@@ -354,13 +355,29 @@
 																	for="page_description1">Message : </label>
 																<div class="col-sm-10">
 
-																	<textarea
+																	<%-- <textarea class="form-control"
 																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
 																		name="message" id="message">
 															
 															 ${editTestImonial.message}
 																
-															</textarea>
+															</textarea> --%>
+
+																	<c:choose>
+																		<c:when test="${editTestImonial.exInt1==2}">
+
+																			<textarea rows="3" cols="3" class="form-control"
+																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																				name="message" id="message"></textarea>
+																		</c:when>
+																		<c:otherwise>
+																			<textarea rows="3" cols="3" class="form-control"
+																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																				name="message" id="message">${editTestImonial.message}</textarea>
+																		</c:otherwise>
+																	</c:choose>
+
+
 																</div>
 															</div>
 														</div>
@@ -371,13 +388,30 @@
 																	for="page_description1">Video : </label>
 																<div class="col-sm-10">
 
-																	<textarea
+																	<%-- <textarea class="form-control"
 																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
 																		name="video" id="video">	
 															
 																    ${editTestImonial.message}
 																  															
-															</textarea>
+															</textarea> --%>
+
+																	<c:choose>
+																		<c:when test="${editTestImonial.exInt1==2}">
+
+																			<textarea rows="3" cols="3" class="form-control"
+																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																				name="video" id="video">${editTestImonial.message}</textarea>
+																		</c:when>
+																		<c:otherwise>
+																			<textarea rows="3" cols="3" class="form-control"
+																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																				name="video" id="video"></textarea>
+																		</c:otherwise>
+																	</c:choose>
+
+
+
 																</div>
 															</div>
 														</div>
