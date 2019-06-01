@@ -403,7 +403,7 @@
 																	<label class="col-md-2 control-label">Current
 																		PDF :</label>
 																	<div class="col-sm-10">
-																		<a href="${url}${editNewsBlog.downloadPdf}"
+																		<a href="${pdfUrl}${editNewsBlog.downloadPdf}"
 																			target="_blank">${editNewsBlog.downloadPdf} <%-- - ${documentUploadList.fileSize} --%></a>
 																		&nbsp &nbsp &nbsp <input type="checkbox"
 																			name="removePdf" value="1"> Remove <br>

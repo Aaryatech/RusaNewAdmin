@@ -108,58 +108,64 @@
 									<div style="text-align: right;">
 										<input type="button" class="btn btn-primary"
 											onclick="tableToExcel('example-1', 'name', 'eventlist.xls')"
-											value="Export to Excel">&nbsp;<a href="${pageContext.request.contextPath}/showEventListPdf" target="_blank"><button type="button" class="btn btn-primary">PDF</button></a>
-										 
-									</div><br>
-									<table id="example-1"
-										class="table table-striped dt-responsive display">
-										<thead>
-											<tr>
-												<th width="5%">Sr No</th>
-												<th>Event Name</th>
-												<th width="10%">Event Date</th>
-												<th>Event Manager</th>
-												<th>Event Contact Number</th>
-												<th>Event Location</th>
-												<th>Document Upload</th>
-												<th>Number of Applied Users</th>
-												<th>Number of Approved Users</th>
-												<th>Activate</th>
-											</tr>
-										</thead>
+											value="Export to Excel">&nbsp;<a
+											href="${pageContext.request.contextPath}/showEventListPdf"
+											target="_blank"><button type="button"
+												class="btn btn-primary">PDF</button></a>
 
-										<tbody>
-											<c:forEach items="${userList}" var="userList"
-												varStatus="count">
+									</div>
+									<br>
+									<div class="table-responsive">
+										<table id="example-1"
+											class="table table-striped dt-responsive display">
+											<thead>
 												<tr>
-													<td>${count.index+1}</td>
-													<td>${userList.heading}</td>
-
-													<td>${userList.eventDateFrom}</td>
-													<td>${userList.eventContactPerson}</td>
-													<td>${userList.eventContactNumber}</td>
-													<td>${userList.eventLocation}</td>
-													<c:choose>
-														<c:when test="${userList.exInt2==1}">
-															<td>Required</td>
-														</c:when>
-														<c:otherwise>
-															<td>Not Required</td>
-														</c:otherwise>
-													</c:choose>
-													<td>${userList.applied}</td>
-													<td>${userList.approved}</td>
-
-													<td><a
-														href="${pageContext.request.contextPath}/detailEventList/${userList.newsblogsId}"><span
-															class="glyphicon glyphicon-th-list"
-															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>
-
+													<th width="5%">Sr No</th>
+													<th>Event Name</th>
+													<th width="10%">Event Date</th>
+													<th>Event Manager</th>
+													<th>Event Contact Number</th>
+													<th>Event Location</th>
+													<th>Document Upload</th>
+													<th>Number of Applied Users</th>
+													<th>Number of Approved Users</th>
+													<th>Activate</th>
 												</tr>
+											</thead>
 
-											</c:forEach>
-										</tbody>
-									</table>
+											<tbody>
+												<c:forEach items="${userList}" var="userList"
+													varStatus="count">
+													<tr>
+														<td>${count.index+1}</td>
+														<td>${userList.heading}</td>
+
+														<td>${userList.eventDateFrom}</td>
+														<td>${userList.eventContactPerson}</td>
+														<td>${userList.eventContactNumber}</td>
+														<td>${userList.eventLocation}</td>
+														<c:choose>
+															<c:when test="${userList.exInt2==1}">
+																<td>Required</td>
+															</c:when>
+															<c:otherwise>
+																<td>Not Required</td>
+															</c:otherwise>
+														</c:choose>
+														<td>${userList.applied}</td>
+														<td>${userList.approved}</td>
+
+														<td><a
+															href="${pageContext.request.contextPath}/detailEventList/${userList.newsblogsId}"><span
+																class="glyphicon glyphicon-th-list"
+																data-animate=" animated fadeIn " rel="tooltip"></span></a></td>
+
+													</tr>
+
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -211,28 +217,28 @@
 		}
 	</script>
 	<script type="text/javascript">
-function tableToExcel(table, name, filename) {
-let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
-s) {
-return window.btoa(decodeURIComponent(encodeURIComponent(s)))
-}, format = function(s, c) {
-return s.replace(/{(\w+)}/g, function(m, p) {
-return c[p];
-})
-}
+		function tableToExcel(table, name, filename) {
+			let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
+					s) {
+				return window.btoa(decodeURIComponent(encodeURIComponent(s)))
+			}, format = function(s, c) {
+				return s.replace(/{(\w+)}/g, function(m, p) {
+					return c[p];
+				})
+			}
 
-if (!table.nodeType)
-table = document.getElementById(table)
-var ctx = {
-worksheet : name || 'Worksheet',
-table : table.innerHTML
-}
+			if (!table.nodeType)
+				table = document.getElementById(table)
+			var ctx = {
+				worksheet : name || 'Worksheet',
+				table : table.innerHTML
+			}
 
-var link = document.createElement('a');
-link.download = filename;
-link.href = uri + base64(format(template, ctx));
-link.click();
-}
-</script>
+			var link = document.createElement('a');
+			link.download = filename;
+			link.href = uri + base64(format(template, ctx));
+			link.click();
+		}
+	</script>
 </body>
 </html>

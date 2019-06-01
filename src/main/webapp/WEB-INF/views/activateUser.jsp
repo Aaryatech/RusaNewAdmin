@@ -114,83 +114,84 @@
 
 									</div>
 									<br>
-
-									<table id="example-1"
-										class="table table-striped dt-responsive display">
-										<thead>
-											<tr>
-												<th width="5%">Sr No</th>
-												<th>User Name</th>
-												<th>User Registration Type</th>
-												<th>Email</th>
-												<th>Mobile Number</th>
-												<th>Register Via</th>
-												<th>SMS Verified Status</th>
-												<th>Email Verified Status</th>
-												<th>Status</th>
-												<th>Activate</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<c:forEach items="${regList}" var="userList"
-												varStatus="count">
+									<div class="table-responsive">
+										<table id="example-1"
+											class="table table-striped dt-responsive display">
+											<thead>
 												<tr>
-													<td>${count.index+1}</td>
-													<td>${userList.name}</td>
-													<c:if test="${userList.userType=='1'}">
-														<td>Individual</td>
-													</c:if>
-													<c:if test="${userList.userType=='2'}">
-														<td>College</td>
-													</c:if>
-													<c:if test="${userList.userType=='3'}">
-														<td>University</td>
-													</c:if>
-
-													<td>${userList.emails}</td>
-													<td>${userList.mobileNumber}</td>
-													<td>${userList.registerVia}</td>
-													<c:choose>
-														<c:when test="${userList.smsVerified==1}">
-															<td>Verified</td>
-														</c:when>
-														<c:otherwise>
-															<td>Not Verified</td>
-														</c:otherwise>
-													</c:choose>
-
-
-													<c:choose>
-														<c:when test="${userList.emailVerified==1}">
-															<td>Verified</td>
-														</c:when>
-														<c:otherwise>
-															<td>Not Verified</td>
-														</c:otherwise>
-													</c:choose>
-
-
-													<c:choose>
-														<c:when test="${userList.isActive==0}">
-															<td>New User</td>
-														</c:when>
-														<c:when test="${userList.isActive==1}">
-															<td>Activate</td>
-														</c:when>
-														<c:otherwise>
-															<td>Deactivate</td>
-														</c:otherwise>
-													</c:choose>
-													<td><a
-														href="${pageContext.request.contextPath}/editActivateUser/${userList.regId}"><span
-															class="glyphicon glyphicon-edit"
-															data-animate=" animated fadeIn " rel="tooltip"></span></a></td>
-
+													<th width="5%">Sr No</th>
+													<th>User Name</th>
+													<th>User Registration Type</th>
+													<th>Email</th>
+													<th>Mobile Number</th>
+													<th>Register Via</th>
+													<th>SMS Verified Status</th>
+													<th>Email Verified Status</th>
+													<th>Status</th>
+													<th>Activate</th>
 												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
+											</thead>
+
+											<tbody>
+												<c:forEach items="${regList}" var="userList"
+													varStatus="count">
+													<tr>
+														<td>${count.index+1}</td>
+														<td>${userList.name}</td>
+														<c:if test="${userList.userType=='1'}">
+															<td>Individual</td>
+														</c:if>
+														<c:if test="${userList.userType=='2'}">
+															<td>College</td>
+														</c:if>
+														<c:if test="${userList.userType=='3'}">
+															<td>University</td>
+														</c:if>
+
+														<td>${userList.emails}</td>
+														<td>${userList.mobileNumber}</td>
+														<td>${userList.registerVia}</td>
+														<c:choose>
+															<c:when test="${userList.smsVerified==1}">
+																<td>Verified</td>
+															</c:when>
+															<c:otherwise>
+																<td>Not Verified</td>
+															</c:otherwise>
+														</c:choose>
+
+
+														<c:choose>
+															<c:when test="${userList.emailVerified==1}">
+																<td>Verified</td>
+															</c:when>
+															<c:otherwise>
+																<td>Not Verified</td>
+															</c:otherwise>
+														</c:choose>
+
+
+														<c:choose>
+															<c:when test="${userList.isActive==0}">
+																<td>New User</td>
+															</c:when>
+															<c:when test="${userList.isActive==1}">
+																<td>Activate</td>
+															</c:when>
+															<c:otherwise>
+																<td>Deactivate</td>
+															</c:otherwise>
+														</c:choose>
+														<td><a
+															href="${pageContext.request.contextPath}/editActivateUser/${userList.regId}"><span
+																class="glyphicon glyphicon-edit"
+																data-animate=" animated fadeIn " rel="tooltip"></span></a></td>
+
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>

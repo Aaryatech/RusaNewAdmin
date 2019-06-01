@@ -112,98 +112,103 @@
 									<div style="text-align: right;">
 										<input type="button" class="btn btn-primary"
 											onclick="tableToExcel('example-1', 'name', 'applieduserlist.xls')"
-											value="Export to Excel">&nbsp;<a href="${pageContext.request.contextPath}/showEventDetailListPdf"
+											value="Export to Excel">&nbsp;<a
+											href="${pageContext.request.contextPath}/showEventDetailListPdf"
 											target="_blank"><button type="button"
 												class="btn btn-primary">PDF</button></a>
 
-									</div><br>
-									<table id="example-1"
-										class="table table-striped dt-responsive display">
-										<thead>
-											<tr>
-												<th width="5%">Sr No</th>
-												<!-- <th>Event Name</th> -->
-												<th>User Name</th>
-												<th>Type</th>
-												<th>Mobile Number</th>
-												<th>Apply Date</th>
-												<th>Document</th>
-												<th>Approval Status</th>
-												<th>Approval Date</th>
-												<th>Feedback</th>
-												<th>Action</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<c:forEach items="${editUser}" var="userList"
-												varStatus="count">
+									</div>
+									<br>
+									<div class="table-responsive">
+										<table id="example-1"
+											class="table table-striped dt-responsive display">
+											<thead>
 												<tr>
-													<td>${count.index+1}</td>
-													<%-- <td>${userList.heading}</td> --%>
-													<td>${userList.name}</td>
-													<td><c:choose>
-															<c:when test="${userList.userType==2}">
+													<th width="5%">Sr No</th>
+													<!-- <th>Event Name</th> -->
+													<th>User Name</th>
+													<th>Type</th>
+													<th>Mobile Number</th>
+													<th>Apply Date</th>
+													<th>Document</th>
+													<th>Approval Status</th>
+													<th>Approval Date</th>
+													<th>Feedback</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<c:forEach items="${editUser}" var="userList"
+													varStatus="count">
+													<tr>
+														<td>${count.index+1}</td>
+														<%-- <td>${userList.heading}</td> --%>
+														<td>${userList.name}</td>
+														<td><c:choose>
+																<c:when test="${userList.userType==2}">
 																 Institute
 															</c:when>
-															<c:when test="${userList.userType==3}">
+																<c:when test="${userList.userType==3}">
 																University
 															</c:when>
-															<c:otherwise>
+																<c:otherwise>
 															Individuals
 															</c:otherwise>
-														</c:choose></td>
-													<td>${userList.mobileNumber}</td>
-													<td>${userList.regDate}</td>
-													<td><c:choose>
-															<c:when test="${not empty userList.doc1}">
-																<a href="${documentUrl}${userList.doc1}" target="_blank"><span
-																	class="icon-download-2"></span> Download</a>
-															</c:when>
-															<c:otherwise>
+															</c:choose></td>
+														<td>${userList.mobileNumber}</td>
+														<td>${userList.regDate}</td>
+														<td><c:choose>
+																<c:when test="${not empty userList.doc1}">
+																	<a href="${documentUrl}${userList.doc1}"
+																		target="_blank"><span class="icon-download-2"></span>
+																		Download</a>
+																</c:when>
+																<c:otherwise>
 															-
 															</c:otherwise>
-														</c:choose></td>
-													<c:if test="${userList.statusApproval==0}">
-														<td>Applied</td>
-													</c:if>
-													<c:if test="${userList.statusApproval==1}">
-														<td>Approve</td>
-													</c:if>
-													<c:if test="${userList.statusApproval==2}">
-														<td>Not Approve</td>
-													</c:if>
-													<c:choose>
-														<c:when test="${not empty userList.approvalDate}">
-															<td>${userList.approvalDate}</td>
-														</c:when>
-														<c:otherwise>
-															<td>--</td>
-														</c:otherwise>
-													</c:choose>
-													<c:choose>
-														<c:when test="${not empty userList.exVar1}">
-															<td>${userList.exVar1}</td>
-														</c:when>
-														<c:otherwise>
-															<td>-</td>
-														</c:otherwise>
-													</c:choose>
+															</c:choose></td>
+														<c:if test="${userList.statusApproval==0}">
+															<td>Applied</td>
+														</c:if>
+														<c:if test="${userList.statusApproval==1}">
+															<td>Approve</td>
+														</c:if>
+														<c:if test="${userList.statusApproval==2}">
+															<td>Not Approve</td>
+														</c:if>
+														<c:choose>
+															<c:when test="${not empty userList.approvalDate}">
+																<td>${userList.approvalDate}</td>
+															</c:when>
+															<c:otherwise>
+																<td>--</td>
+															</c:otherwise>
+														</c:choose>
+														<c:choose>
+															<c:when test="${not empty userList.exVar1}">
+																<td>${userList.exVar1}</td>
+															</c:when>
+															<c:otherwise>
+																<td>-</td>
+															</c:otherwise>
+														</c:choose>
 
 
 
-													<td><a
-														href="${pageContext.request.contextPath}/approveUser?userId=${userList.userId}&regId=${userList.eventRegId}&newsId=${newsblogsId}&status=1"
-														onclick="return confirm('Are you want to approve ?')">
-															<span class="glyphicon glyphicon-ok-circle"
-															data-animate="  animated fadeIn " rel="tooltip"
-															title="Approve"></span>
-													</a></td>
-												</tr>
+														<td><a
+															href="${pageContext.request.contextPath}/approveUser?userId=${userList.userId}&regId=${userList.eventRegId}&newsId=${newsblogsId}&status=1"
+															onclick="return confirm('Are you want to approve ?')">
+																<span class="glyphicon glyphicon-ok-circle"
+																data-animate="  animated fadeIn " rel="tooltip"
+																title="Approve"></span>
+														</a></td>
+													</tr>
 
-											</c:forEach>
-										</tbody>
-									</table>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -254,7 +259,7 @@
 
 		}
 	</script>
- <script type="text/javascript">
+	<script type="text/javascript">
 		function tableToExcel(table, name, filename) {
 			let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
 					s) {

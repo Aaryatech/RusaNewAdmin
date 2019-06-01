@@ -118,64 +118,67 @@
 									<form
 										action="${pageContext.request.contextPath}/multipleContactDelete"
 										method="get" id="multipleDelete">
-										<table id="example-1"
-											class="table table-striped dt-responsive display">
-											<thead>
-												<tr>
-													<th width="5%">Sr No</th>
-													<th width="2%">Delete</th>
-													<th>Contact Name</th>
-													<th>Email</th>
-													<th>Mobile No</th>
-													<th>Message</th>
-													<th>Feedback Type</th>
-													<th>Action</th>
-												</tr>
-											</thead>
-
-
-											<tbody>
-												<c:forEach items="${contactList}" var="contactList"
-													varStatus="count">
+										<div class="table-responsive">
+											<table id="example-1"
+												class="table table-striped dt-responsive display">
+												<thead>
 													<tr>
-														<td>${count.index+1}</td>
-														<td style="text-align: center;"><input
-															type="checkbox" class="chk" name="ids"
-															id="contact${contactList.id}" value="${contactList.id}" /></td>
-														<td>${contactList.contactName}</td>
-														<td>${contactList.emailId}</td>
-														<td style="text-align: center;">${contactList.mobileNo}</td>
-														<td>${contactList.message}</td>
-
-														<td>${contactList.exVar1}</td>
-
-
-														<td><a
-															href="${pageContext.request.contextPath}/editContact/${contactList.id}"
-															title="Edit"><span class="glyphicon glyphicon-edit"
-																data-animate=" animated fadeIn " rel="tooltip"></span></a> <c:choose>
-																<c:when test="${userList.userId=='1'}">
-																	<br />
-																</c:when>
-																<c:otherwise>
-																	<%-- href="${pageContext.request.contextPath}/deleteContact/${contactList.id}" --%>
-																	<a onclick="singleDelete(${contactList.id});" href="#"
-																		rel="tooltip" data-color-class="danger"
-																		data-animate=" animated fadeIn " data-toggle="tooltip"
-																		data-original-title="Delete  record"
-																		title="Delete Record"><span
-																		class="glyphicon glyphicon-remove"></span></a>
-																	<br />
-																</c:otherwise>
-															</c:choose></td>
-
+														<th width="5%">Sr No</th>
+														<th width="2%">Delete</th>
+														<th>Contact Name</th>
+														<th>Email</th>
+														<th>Mobile No</th>
+														<th>Message</th>
+														<th>Feedback Type</th>
+														<th>Action</th>
 													</tr>
-												</c:forEach>
-											</tbody>
+												</thead>
 
 
-										</table>
+												<tbody>
+													<c:forEach items="${contactList}" var="contactList"
+														varStatus="count">
+														<tr>
+															<td>${count.index+1}</td>
+															<td style="text-align: center;"><input
+																type="checkbox" class="chk" name="ids"
+																id="contact${contactList.id}" value="${contactList.id}" /></td>
+															<td>${contactList.contactName}</td>
+															<td>${contactList.emailId}</td>
+															<td style="text-align: center;">${contactList.mobileNo}</td>
+															<td>${contactList.message}</td>
 
+															<td>${contactList.exVar1}</td>
+
+
+															<td><a
+																href="${pageContext.request.contextPath}/editContact/${contactList.id}"
+																title="Edit"><span class="glyphicon glyphicon-edit"
+																	data-animate=" animated fadeIn " rel="tooltip"></span></a>
+																<c:choose>
+																	<c:when test="${userList.userId=='1'}">
+																		<br />
+																	</c:when>
+																	<c:otherwise>
+																		<%-- href="${pageContext.request.contextPath}/deleteContact/${contactList.id}" --%>
+																		<a onclick="singleDelete(${contactList.id});" href="#"
+																			rel="tooltip" data-color-class="danger"
+																			data-animate=" animated fadeIn "
+																			data-toggle="tooltip"
+																			data-original-title="Delete  record"
+																			title="Delete Record"><span
+																			class="glyphicon glyphicon-remove"></span></a>
+																		<br />
+																	</c:otherwise>
+																</c:choose></td>
+
+														</tr>
+													</c:forEach>
+												</tbody>
+
+
+											</table>
+										</div>
 										<span class="validation-invalid-label" id="error_table1"
 											style="display: none;">Please select one record.</span>
 										<div class="form-group" style="text-align: center;">
