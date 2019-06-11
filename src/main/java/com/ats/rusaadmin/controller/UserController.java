@@ -43,6 +43,7 @@ import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.NewsDetails;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.Registration;
+import com.ats.rusaadmin.model.RegistrationUserDetail;
 import com.ats.rusaadmin.model.User;
 import com.ats.rusaadmin.util.ItextPageEvent;
 import com.itextpdf.text.Document;
@@ -63,10 +64,10 @@ public class UserController {
 	RestTemplate rest = new RestTemplate();
 
 	static String senderEmail = "akshaykasar72@gmail.com";
-	static String senderPassword = "mh151889";
+	static String senderPassword = "mh151772@123";
 	static String mailsubject = " RUSA Login Credentials ";
 	static String mailsubjectApprove = " About Event Shedule";
-	Registration editUser = new Registration();
+	RegistrationUserDetail editUser = new RegistrationUserDetail();
 	EventRegistration editEvent = new EventRegistration();
 	// --------------------------------------Register User
 	// Mapping-----------------------------------------------------------//\
@@ -354,7 +355,7 @@ public class UserController {
 			System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			editUser = rest.postForObject(Constant.url + "/getRegUserDetailbyRegId", map, RegistrationUserDetail.class);
 			System.out.println("User: " + editUser.toString());
 
 			model.addObject("editUser", editUser);
@@ -380,9 +381,9 @@ public class UserController {
 			int regId = Integer.parseInt(request.getParameter("regId"));
 			String alternateEmail = request.getParameter("email");
 			String name = request.getParameter("name");
-			String uuid = request.getParameter("uuid");
+			 
 			int type = Integer.parseInt(request.getParameter("type"));
-			String email = request.getParameter("userEmail");
+			//String email = request.getParameter("userEmail");
 			String phone = request.getParameter("phone");
 			String aishe = request.getParameter("aishe");
 			String collegeN = request.getParameter("collegeN");
@@ -402,13 +403,7 @@ public class UserController {
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-
-			System.out.println("Emails: " + email);
-			System.out.println("name: " + name);
-			System.out.println("btnsubmit: " + btnsubmit);
-			System.out.println("btnsendmail: " + btnsendmail);
-
-			// Registration editUser=new Registration();
+ 
 
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
@@ -418,7 +413,7 @@ public class UserController {
 						System.out.println("Password: " + password);
 						editUser.setUserPassword(password);
 						editUser.setEmailVerified(1);
-						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email,
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
 								password);
 						session.setAttribute("successMsg", "Infomation Updated successfully!");
 						session.setAttribute("errorMsg", "false");
@@ -437,7 +432,7 @@ public class UserController {
 								String.class);
 					} else {
 						editUser.setEmailVerified(1);
-						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, email, mailsubject, email,
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
 								userPass);
 						List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
 						session.setAttribute("regList", getUser);
@@ -455,22 +450,7 @@ public class UserController {
 
 			}
 			if (btnsubmit != null) {
-				System.out.println("btnsubmit");
-
-				editUser.setAlternateEmail(alternateEmail);
-				editUser.setUserType(type);
-				editUser.setEmails(email);
-
-				editUser.setName(name);
-				editUser.setAisheCode(aishe);
-				editUser.setCollegeName(collegeN);
-				editUser.setUnversityName(uniName);
-				editUser.setDesignationName(designation);
-				editUser.setDepartmentName(deptN);
-				editUser.setMobileNumber(phone);
-				editUser.setAuthorizedPerson(authN);
-				editUser.setEditByAdminuserId(UserDetail.getUserId());
-				editUser.setName(name);
+				 
 				if (emailVerified == 0) {
 					editUser.setEmailVerified(0);
 				} else {
@@ -480,7 +460,7 @@ public class UserController {
 				editUser.setIsActive(status);
 
 			}
-			editUser.setRegId(regId);
+			 
 			editUser.setEditDate(sf.format(date));
 			Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration", editUser,
 					Registration.class);
@@ -494,7 +474,7 @@ public class UserController {
 			e.printStackTrace();
 		}
 
-		return "activateUser";
+		return "redirect:/activeUserList";
 	}
 //----------------------------------------Event Registration---------------------------------------------------------------------//
 
@@ -526,7 +506,7 @@ public class UserController {
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
 			System.out.println("User: " + editUser.toString());
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", eventRegId);
@@ -626,7 +606,7 @@ public class UserController {
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
 
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", regId);
