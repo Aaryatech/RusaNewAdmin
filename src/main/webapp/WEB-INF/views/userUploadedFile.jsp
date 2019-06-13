@@ -76,7 +76,7 @@
 				<div class="col-lg-12">
 					<section class="box ">
 						<header class="panel_header">
-							<h2 class="title pull-left">User Registered List</h2>
+							<h2 class="title pull-left">Uploaded Document List</h2>
 							<div class="actions panel_actions pull-right">
 								<%--     <a href="${pageContext.request.contextPath}/addUser"><button type="button" class="btn btn-success">Add Admin</button></a>
                 --%>
@@ -104,7 +104,7 @@
 
 								<div class="col-xs-12">
 
-									<%-- <div style="text-align: right;">
+									<div style="text-align: right;">
 										<input type="button" class="btn btn-primary"
 											onclick="tableToExcel('example-1', 'name', 'userlist.xls')"
 											value="Export to Excel">&nbsp;<a
@@ -112,7 +112,7 @@
 											target="_blank"><button type="button"
 												class="btn btn-primary">PDF</button></a>
 
-									</div> --%>
+									</div>
 									<br>
 									<div class="table-responsive">
 										<table id="example-1"
@@ -120,76 +120,25 @@
 											<thead>
 												<tr>
 													<th width="5%">Sr No</th>
-													<th>User Name</th>
-													<th>AISHE Code</th>
-													<th>User Registration Type</th>
-													<th>Email</th>
-													<th>Mobile Number</th>
-													<!-- <th>Register Via</th> -->
-													<th>SMS Verified Status</th>
-													<th>Email Verified Status</th>
-													<th>Status</th>
-													<th>Activate</th>
+													<th>Document Name</th>
+													<th>Type</th>
+													<th>Size</th>
+													<th width="5%">Download</th>
 												</tr>
 											</thead>
 
 											<tbody>
-												<c:forEach items="${regList}" var="userList"
-													varStatus="count">
+												<c:forEach items="${uploadDocumentList}"
+													var="uploadDocumentList" varStatus="count">
 													<tr>
 														<td>${count.index+1}</td>
-														<td>${userList.name}</td>
-														<td>${userList.aisheCode}</td>
-														<c:if test="${userList.userType=='1'}">
-															<td>Individual</td>
-														</c:if>
-														<c:if test="${userList.userType=='2'}">
-															<td>College</td>
-														</c:if>
-														<c:if test="${userList.userType=='3'}">
-															<td>University</td>
-														</c:if>
-
-														<td>${userList.emails}</td>
-														<td>${userList.mobileNumber}</td>
-														<%-- <td>${userList.registerVia}</td> --%>
-														<c:choose>
-															<c:when test="${userList.smsVerified==1}">
-																<td>Verified</td>
-															</c:when>
-															<c:otherwise>
-																<td>Not Verified</td>
-															</c:otherwise>
-														</c:choose>
-
-
-														<c:choose>
-															<c:when test="${userList.emailVerified==1}">
-																<td>Verified</td>
-															</c:when>
-															<c:otherwise>
-																<td>Not Verified</td>
-															</c:otherwise>
-														</c:choose>
-
-
-														<c:choose>
-															<c:when test="${userList.isActive==0}">
-																<td>New User</td>
-															</c:when>
-															<c:when test="${userList.isActive==1}">
-																<td>Activate</td>
-															</c:when>
-															<c:otherwise>
-																<td>Deactivate</td>
-															</c:otherwise>
-														</c:choose>
-														<td><a
-															href="${pageContext.request.contextPath}/editActivateUser/${userList.regId}"><span
-																class="glyphicon glyphicon-edit"
-																data-animate=" animated fadeIn " rel="tooltip"></span></a> | <a
-															href="${pageContext.request.contextPath}/userUploadedFile/${userList.regId}" title="Uploaded Document"><i
-																class="fa fa-download" aria-hidden="true"></i></a></td>
+														<td>${uploadDocumentList.title}</td>
+														<td>${uploadDocumentList.typeName}</td>
+														<td style="text-align: right;">${uploadDocumentList.docSize}</td>
+														<td style="text-align: center;"><a
+															href="${frontDocUrl}${uploadDocumentList.fileName}"
+															target="_blank"><i class="fa fa-download"
+																aria-hidden="true"></i></a></td>
 
 													</tr>
 												</c:forEach>

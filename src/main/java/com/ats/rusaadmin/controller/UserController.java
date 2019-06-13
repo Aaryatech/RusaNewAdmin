@@ -44,6 +44,7 @@ import com.ats.rusaadmin.model.NewsDetails;
 import com.ats.rusaadmin.model.PagesModule;
 import com.ats.rusaadmin.model.Registration;
 import com.ats.rusaadmin.model.RegistrationUserDetail;
+import com.ats.rusaadmin.model.UploadDocument;
 import com.ats.rusaadmin.model.User;
 import com.ats.rusaadmin.util.ItextPageEvent;
 import com.itextpdf.text.Document;
@@ -73,15 +74,36 @@ public class UserController {
 	// Mapping-----------------------------------------------------------//\
 
 	List<Registration> getUser = new ArrayList<Registration>();
+	
 	@RequestMapping(value = "/activeUserList", method = RequestMethod.GET)
 	public ModelAndView activeUserList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("activateUser");
+		
 		try {
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+			 
 			Registration[] userList = rest.getForObject(Constant.url + "/getAllRegUserList", Registration[].class);
 			getUser = new ArrayList<Registration>(Arrays.asList(userList));
 			model.addObject("regList", getUser);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/userUploadedFile/{regId}", method = RequestMethod.GET)
+	public ModelAndView userUploadedFile(@PathVariable("regId") int regId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("userUploadedFile");
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+			map.add("regId", regId);
+			UploadDocument[] uploadDocument = rest.postForObject(Constant.url + "/getDocumentByRegId",map, UploadDocument[].class);
+			List<UploadDocument> uploadDocumentList = new ArrayList<UploadDocument>(Arrays.asList(uploadDocument));
+			model.addObject("uploadDocumentList", uploadDocumentList);
+			model.addObject("frontDocUrl", Constant.getUserDocURL);
 
 		} catch (Exception e) {
 			e.printStackTrace();
