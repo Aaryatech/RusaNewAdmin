@@ -104,7 +104,7 @@
 
 								<div class="col-xs-12">
 
-									<%-- <div style="text-align: right;">
+									  <div style="text-align: right;">
 										<input type="button" class="btn btn-primary"
 											onclick="tableToExcel('example-1', 'name', 'userlist.xls')"
 											value="Export to Excel">&nbsp;<a
@@ -112,7 +112,7 @@
 											target="_blank"><button type="button"
 												class="btn btn-primary">PDF</button></a>
 
-									</div> --%>
+									</div> 
 									<br>
 									<div class="table-responsive">
 										<table id="example-1"

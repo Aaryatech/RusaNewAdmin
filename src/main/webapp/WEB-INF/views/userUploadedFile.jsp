@@ -56,18 +56,17 @@
 		<section id="main-content" class=" ">
 			<section class="wrapper main-wrapper row" style=''>
 
-				<div class='col-xs-12'>
+				  <div class='col-xs-12'>
 					<div class="page-title">
 
-						<div class="pull-left">
-							<!-- PAGE HEADING TAG - START -->
-							<h1 class="title">User List</h1>
-							<!-- PAGE HEADING TAG - END -->
+						<div class="pull-left"> 
+							<h1 class="title">Uploaded Document List</h1>
+							 
 						</div>
 
 
 					</div>
-				</div>
+				</div>  
 				<div class="clearfix"></div>
 				<!-- MAIN CONTENT AREA STARTS -->
 
@@ -103,17 +102,7 @@
 								</c:if>
 
 								<div class="col-xs-12">
-
-									<div style="text-align: right;">
-										<input type="button" class="btn btn-primary"
-											onclick="tableToExcel('example-1', 'name', 'userlist.xls')"
-											value="Export to Excel">&nbsp;<a
-											href="${pageContext.request.contextPath}/activeUserListPdf"
-											target="_blank"><button type="button"
-												class="btn btn-primary">PDF</button></a>
-
-									</div>
-									<br>
+ 
 									<div class="table-responsive">
 										<table id="example-1"
 											class="table table-striped dt-responsive display">
@@ -134,7 +123,7 @@
 														<td>${count.index+1}</td>
 														<td>${uploadDocumentList.title}</td>
 														<td>${uploadDocumentList.typeName}</td>
-														<td style="text-align: right;">${uploadDocumentList.docSize}</td>
+														<td style="text-align: right;">${uploadDocumentList.extraVarchar1}</td>
 														<td style="text-align: center;"><a
 															href="${frontDocUrl}${uploadDocumentList.fileName}"
 															target="_blank"><i class="fa fa-download"

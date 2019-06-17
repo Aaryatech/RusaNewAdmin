@@ -46,41 +46,51 @@
     <section class="box nobox marginBottom0">
                 <div class="content-body">    <div class="row">
         <div class="col-lg-3 col-sm-6 col-xs-12">
-            <div class="r4_counter db_box">
+            <a href="${pageContext.request.contextPath}/ContactList"><div class="r4_counter db_box">
                 <i class="pull-left fa fa-envelope icon-md icon-rounded icon-primary"></i>
                 <div class="stats">
                      
                     <h4><strong>${count.contactCount}</strong></h4>
                     <span>New Message</span>
                 </div>
-            </div>
+            </div></a>
         </div>
         <div class="col-lg-3 col-sm-6 col-xs-12">
-            <div class="r4_counter db_box">
+            <a href="${pageContext.request.contextPath}/activeUserList"><div class="r4_counter db_box">
                 <i class="pull-left fa fa fa-male icon-md icon-rounded icon-accent"></i>
                 <div class="stats">
                     <h4><strong>${count.newUserCount}</strong></h4>
                     <span>New User</span>
                 </div>
-            </div>
+            </div></a>
+        </div>
+        
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a href="${pageContext.request.contextPath}/activeUserList"><div class="r4_counter db_box">
+                <i class="pull-left fa fa fa-male icon-md icon-rounded icon-accent"></i>
+                <div class="stats">
+                    <h4><strong>${count.individualUserCount}</strong></h4>
+                    <span>Individuals Registration</span>
+                </div>
+            </div></a>
         </div>
         <div class="col-lg-3 col-sm-6 col-xs-12">
-            <div class="r4_counter db_box">
+            <a href="${pageContext.request.contextPath}/activeUserList"><div class="r4_counter db_box">
                 <i class="pull-left fa fa-th-large  icon-md icon-rounded icon-purple"></i>
                 <div class="stats">
                     <h4><strong>${count.collageUserCount}</strong></h4>
                     <span>Institute Registration</span>
                 </div>
-            </div>
+            </div></a>
         </div>
       <div class="col-lg-3 col-sm-6 col-xs-12">
-            <div class="r4_counter db_box">
+            <a href="${pageContext.request.contextPath}/activeUserList"><div class="r4_counter db_box">
                 <i class="pull-left fa fa-university  icon-md icon-rounded icon-warning"></i>
                 <div class="stats">
                     <h4><strong>${count.univercityUserCount}</strong></h4>
                     <span>University Registration</span>
                 </div>
-            </div>
+            </div></a>
         </div>
     </div> <!-- End .row -->    
     </div>

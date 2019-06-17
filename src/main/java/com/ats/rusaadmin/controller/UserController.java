@@ -102,6 +102,19 @@ public class UserController {
 			map.add("regId", regId);
 			UploadDocument[] uploadDocument = rest.postForObject(Constant.url + "/getDocumentByRegId",map, UploadDocument[].class);
 			List<UploadDocument> uploadDocumentList = new ArrayList<UploadDocument>(Arrays.asList(uploadDocument));
+			
+			for(int i=0;i<uploadDocumentList.size() ; i++) {
+				
+				long bytes = uploadDocumentList.get(i).getDocSize(); 
+				 String size = new String();
+				  
+				  int unit = true ? 1000 : 1024; if (bytes < unit) size = bytes + " B"; int exp
+				  = (int) (Math.log(bytes) / Math.log(unit)); String pre = (true ? "kMGTPE" :
+				  "KMGTPE").charAt(exp-1) + (true ? "" : "i"); size = String.format("%.1f %sB",
+				  bytes / Math.pow(unit, exp), pre);
+				  uploadDocumentList.get(i).setExtraVarchar1(size);
+			}
+			
 			model.addObject("uploadDocumentList", uploadDocumentList);
 			model.addObject("frontDocUrl", Constant.getUserDocURL);
 
