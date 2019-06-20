@@ -356,8 +356,8 @@ public class GallaryController{
 		
 	}
 	
-	@RequestMapping(value = "/updateTitleName/{id}/{title}", method = RequestMethod.GET)
-	public String updateTitleName(@PathVariable("id") int id,@PathVariable("title") String title, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/updateTitleName/{id}/{title}/{sortNo}", method = RequestMethod.GET)
+	public String updateTitleName(@PathVariable("id") int id,@PathVariable("title") String title,@PathVariable("sortNo") int sortNo, HttpServletRequest request, HttpServletResponse response) {
  
 		
 		try {
@@ -365,6 +365,8 @@ public class GallaryController{
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				 map.add("galleryDetailsId", id);  
 				 map.add("title", title); 
+				 map.add("sortNo", sortNo); 
+				 System.out.println(map);
 				 Info info = rest.postForObject(Constant.url + "/updateTitleName", map, Info.class);
 				 
 				
