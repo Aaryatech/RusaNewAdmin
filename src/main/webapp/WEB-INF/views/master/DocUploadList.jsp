@@ -65,7 +65,10 @@
                 <strong>Success : </strong> ${sessionScope.successMsg}</div>
         	                                       </div> 
             </c:if>
-            
+            <br>
+									<form
+										action="${pageContext.request.contextPath}/multipleDocumentListDelete"
+										method="get" id="multipleDelete">
         <div class="col-xs-12">
 
 
@@ -73,6 +76,7 @@
                 <thead>
                     <tr>
                    		<th width="5%">Sr No</th>
+                   		<th width="2%">Delete</th>
                         <th>File Name</th> 
                         <th>File Type</th> 
                         <th>File Size</th> 
@@ -87,6 +91,9 @@
                         <c:forEach items="${docList}" var="getDocList" varStatus="count">
 									<tr  >
 										<td>${count.index+1}</td>
+										<td style="text-align: center;"><input
+																type="checkbox" class="chk" name="ids"
+																id="contact${getDocList.docId}" value="${getDocList.docId}" /></td>
 										<td>${getDocList.fileName} </td> 
 										<td>${getDocList.fileType}</td>  
 										<td>${getDocList.fileSize}</td>  
@@ -117,6 +124,13 @@
 
 
         </div>
+        <span class="validation-invalid-label" id="error_table1"
+											style="display: none;">Please select one record.</span>
+										<div class="form-group" style="text-align: center;">
+											<button type="submit" class="btn btn-primary" id="submtbtn">Multiple
+												Delete</button>
+										</div>
+        </form>
     </div>
     </div>
         </section></div>
@@ -157,6 +171,39 @@ function clearSessionAttribute() {
 }
  </script>
   <script type="text/javascript">
+  $(document).ready(function($) {
+
+		$("#multipleDelete").submit(function(e) {
+			var isError = false;
+			var errMsg = "";
+
+			var checkedVals = $('.chk:checkbox:checked').map(function() {
+				return this.value;
+			}).get();
+			checkedVals = checkedVals.join(',');
+
+			if (checkedVals == '') {
+				$("#error_table1").show();
+				return false;
+			}
+
+			if (!isError) {
+
+				var x = true;
+				if (x == true) {
+
+					$('#modal_scrollable').modal('show');
+				}
+				//end ajax send this to php page
+			}
+			return false;
+		});
+	});
+		function submitForm() {
+			 $('#modal_scrollable').modal('hide'); 
+			document.getElementById("multipleDelete").submit();
+			 
+		}
    function singleDelete(id) {
 		 
 		$('#modal_scrollable_single').modal('show');
@@ -170,7 +217,7 @@ function clearSessionAttribute() {
 		 
 	}
    </script>
-    <div id="modal_scrollable_single" class="modal fade" data-backdrop="false"
+    <div id="modal_scrollable" class="modal fade" data-backdrop="false"
 		tabindex="-1">
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
@@ -185,9 +232,34 @@ function clearSessionAttribute() {
 				</div>
 
 				<div class="modal-footer pt-3">
-				<input type="hidden" id="conid" name="conid">
-					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
-					<button type="button" class="btn bg-primary" onclick="submitFormSingle()">Yes</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary"
+						onclick="submitForm()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal_scrollable_single" class="modal fade"
+		data-backdrop="false" tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+					<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn btn btn-primary"
+						data-dismiss="modal">No</button>
+					<button type="button" class="btn btn btn-primary"
+						onclick="submitFormSingle()">Yes</button>
 				</div>
 			</div>
 		</div>

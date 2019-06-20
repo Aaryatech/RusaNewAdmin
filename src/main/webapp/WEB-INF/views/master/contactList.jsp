@@ -223,37 +223,38 @@
 			});
 
 		}
-		$(document).ready(function($) {
-
-			$("#multipleDelete").submit(function(e) {
-				var isError = false;
-				var errMsg = "";
-
-				var checkedVals = $('.chk:checkbox:checked').map(function() {
-					return this.value;
-				}).get();
-				checkedVals = checkedVals.join(',');
-
-				if (checkedVals == '') {
-					$("#error_table1").show();
-					return false;
-				}
-
-				if (!isError) {
-
-					var x = true;
-					if (x == true) {
-
-						$('#modal_scrollable').modal('show');
-					}
-					//end ajax send this to php page
-				}
-				return false;
-			});
-		});
+		
 		 
 	</script>
 	<script>
+	$(document).ready(function($) {
+
+		$("#multipleDelete").submit(function(e) {
+			var isError = false;
+			var errMsg = "";
+
+			var checkedVals = $('.chk:checkbox:checked').map(function() {
+				return this.value;
+			}).get();
+			checkedVals = checkedVals.join(',');
+
+			if (checkedVals == '') {
+				$("#error_table1").show();
+				return false;
+			}
+
+			if (!isError) {
+
+				var x = true;
+				if (x == true) {
+
+					$('#modal_scrollable').modal('show');
+				}
+				//end ajax send this to php page
+			}
+			return false;
+		});
+	});
 		function submitForm() {
 			 $('#modal_scrollable').modal('hide'); 
 			document.getElementById("multipleDelete").submit();
