@@ -329,13 +329,16 @@ public class GallaryController{
 		int catId = 0;
 		int id = 0;
 		int flag=0;
-		
+		String fileName = new String();
 		try {
 		   try {
+			   
+			 fileName=request.getParameter("file");
 			 id = Integer.parseInt(request.getParameter("id"));
 			 moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			 pageId = Integer.parseInt(request.getParameter("pageId"));
 			 catId = Integer.parseInt(request.getParameter("catId"));
+			
 			 
 		   }catch (Exception e) {
 			   flag=1;
@@ -344,6 +347,20 @@ public class GallaryController{
 				 map.add("galleryDetailsId", id);  
 				 Info info = rest.postForObject(Constant.url + "/deleteGalleryDetails", map, Info.class);
 				 
+				 System.out.println(" fileName" + fileName);
+				 File files = new File(Constant.gallryImageURL+fileName);
+					//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
+					
+					if(files.delete()){
+			            System.out.println(" File orignal deleted  " + Constant.gallryImageURL+fileName );
+			        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+fileName);
+					
+					
+					 files = new File(Constant.gallryImageURL+"thumbnail"+fileName);
+					 if(files.delete()){
+				            System.out.println(" File orignal deleted  " + Constant.gallryImageURL+"thumbnail"+fileName );
+				        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+"thumbnail"+fileName);
+						
 				
 		} catch (Exception e) {
 			e.printStackTrace();
