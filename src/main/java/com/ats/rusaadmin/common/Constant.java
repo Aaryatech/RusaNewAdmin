@@ -1,15 +1,19 @@
 package com.ats.rusaadmin.common;
 
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
+import org.springframework.web.client.RestTemplate;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 
 public class Constant {
 
-	//public static final String url="http://ats.aaryatechindia.in:15063/rusawebapi/";
+	//public static final String url = "http://ats.aaryatechindia.in:15063/rusawebapi/";
 	public static final String url = "http://localhost:8094/";
 
 	// Local path------------------------
+
 	/*
 	 * public static final int gallryImage = 1; public static final String
 	 * lgogImageURL =
@@ -41,9 +45,9 @@ public class Constant {
 	 * static final String getCmsPdf = "http://192.168.2.17:8080/media/pdf/"; public
 	 * static final String getOtherDocURL = "http://192.168.2.17:8080/media/other/";
 	 * public static final String getUserProfileURL =
-	 * "http://192.168.2.17:8080/media/userprofile/"; // public static final String
-	 * siteAdminUrl = // "http://192.168.10.226:8080/RusaAdmin/"; public static
-	 * final String siteAdminUrl = "http://localhost:8081/rusaadmin/";
+	 * "http://192.168.2.17:8080/media/userprofile/"; //public static final String
+	 * siteAdminUrl = "http://192.168.10.226:8080/RusaAdmin/"; public static final
+	 * String siteAdminUrl = "http://localhost:8081/rusaadmin/";
 	 */
 
 	public static final int gallryImage = 1;
@@ -55,7 +59,7 @@ public class Constant {
 	public static final String cmsPdf = "/home/tomcataaryatechi/ats.aaryatechindia.in/tomcat-8.0.18/webapps/media/pdf/";
 	public static final String userProfileURL = "/home/tomcataaryatechi/ats.aaryatechindia.in/tomcat-8.0.18/webapps/media/userprofile/";
 	public static String[] values = { "jpg", "jpeg", "gif", "png" };
-	public static String[] DocValues = { "txt", "doc", "pdf", "xls", ".ppt",".pptx" };
+	public static String[] DocValues = { "txt", "doc", "pdf", "xls", ".ppt", ".pptx" };
 	public static String[] DocImgValues = { "txt", "doc", "pdf", "xls", "jpg", "jpeg", "gif", "png" };
 	public static int mod = 0;
 	public static int subMod = 0;
@@ -68,7 +72,10 @@ public class Constant {
 	public static final String getOtherDocURL = "http://ats.aaryatechindia.in:15063/media/other/";
 	public static final String getUserProfileURL = "http://ats.aaryatechindia.in:15063/media/userprofile/";
 	public static final String siteAdminUrl = "http://ats.aaryatechindia.in:15063/ats/";
-	public static final String getUserDocURL = "http://192.168.2.17:8080/media/userdocument/";
+
+	// public static final String getUserDocURL =
+	// "http://192.168.2.17:8080/media/userdocument/";
+	public static final String getUserDocURL = "http://ats.aaryatechindia.in:15063/media/userdocument/";
 	public static Font headFontData = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
 	public static Font tableHeaderFont = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 	public static final BaseColor tableHeaderFontBaseColor = BaseColor.WHITE;
@@ -81,6 +88,16 @@ public class Constant {
 	public static float marginTop = 50;
 	public static float marginBottom = 50;
 	public static final String REPORT_SAVE = "/home/tomcataaryatechi/ats.aaryatechindia.in/tomcat-8.0.18/webapps/ats/rusa_report2019.pdf";
-	 //public static final String REPORT_SAVE = "/home/lenovo/Documents/rusa_report2019.pdf";
+	// public static final String REPORT_SAVE =
+	// "/home/lenovo/Documents/rusa_report2019.pdf";
+	
+	
+	public static RestTemplate rest = new RestTemplate();
+	 public static RestTemplate getRestTemplate() {
+			rest=new RestTemplate();
+			rest.getInterceptors().add(new BasicAuthorizationInterceptor("aaryatech", "Aaryatech@1cr"));
+			return rest;
+
+			} 
 
 }

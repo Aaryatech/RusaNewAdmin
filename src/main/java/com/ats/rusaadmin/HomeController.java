@@ -78,7 +78,7 @@ public class HomeController {
 		String password = request.getParameter("password");
 
 		String mav = new String();
-		RestTemplate rest = new RestTemplate();
+		 
 		res.setContentType("text/html");
 		HttpSession session = request.getSession();
 		try {
@@ -93,7 +93,7 @@ public class HomeController {
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				map.add("userName", name);
 				map.add("password", password);
-				LoginResponse loginResponse = rest.postForObject(Constant.url + "/loginResponse", map,
+				LoginResponse loginResponse = Constant.getRestTemplate().postForObject(Constant.url + "/loginResponse", map,
 						LoginResponse.class);
 				
 				 
@@ -117,7 +117,7 @@ public class HomeController {
 				        saveLoginLogs.setCreatedDate(sf.format(date));
 				        saveLoginLogs.setUserId(loginResponse.getUser().getUserId());
 				        
-				        LoginLogs resp = rest.postForObject(Constant.url + "/saveLoginLogs", saveLoginLogs, LoginLogs.class);
+				        LoginLogs resp = Constant.getRestTemplate().postForObject(Constant.url + "/saveLoginLogs", saveLoginLogs, LoginLogs.class);
 						
 				        System.out.println(resp);
 
@@ -148,8 +148,8 @@ public class HomeController {
 
 		ModelAndView model = new ModelAndView("welcome"); 
 		try {
-			RestTemplate rest = new RestTemplate();
-			DashboardCount resp = rest.getForObject(Constant.url + "/dashboardCount", DashboardCount.class);
+			 
+			DashboardCount resp = Constant.getRestTemplate().getForObject(Constant.url + "/dashboardCount", DashboardCount.class);
 			model.addObject("count", resp);
 			
 		} catch (Exception e) {
