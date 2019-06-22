@@ -61,12 +61,12 @@ public class MasterController {
 		ModelAndView model = new ModelAndView("master/addCategory");
 		try {
 			editcat = new GetCategory();  
-			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+			Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
 			
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -86,7 +86,7 @@ public class MasterController {
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			GetCategory[] getCategory = rest.postForObject(Constant.url + "/getAllCatList", map,
+			GetCategory[] getCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllCatList", map,
 					GetCategory[].class);
 			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(getCategory));
 			model.addObject("categoryList", categoryList);
@@ -170,7 +170,7 @@ public class MasterController {
 			editcat.setDelStatus(1);
 			System.out.println("category" + editcat);
 
-			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
+			Category res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
 
 			System.out.println("res " + res);
 			
@@ -197,14 +197,14 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("catId", catId);
 
-			 editcat = rest.postForObject(Constant.url + "/getCategoryByCatId", map, GetCategory.class);
+			 editcat =  Constant.getRestTemplate().postForObject(Constant.url + "/getCategoryByCatId", map, GetCategory.class);
 			 
-			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+			Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
 			
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -250,7 +250,7 @@ public class MasterController {
 				 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				 map.add("catIdList", catId); 
 				 map.add("delStatus", 0); 
-				 Info res = rest.postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
+				 Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
 				 
 				 HttpSession session = request.getSession();
 				 session.setAttribute("successMsg","Infomation deleted successfully!");
@@ -270,12 +270,12 @@ public class MasterController {
 		try {
 			editcat = new GetCategory();
 			
-			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+			Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
 			
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -295,7 +295,7 @@ public class MasterController {
 			 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			GetCategory[] getCategory = rest.postForObject(Constant.url + "/getSubCatList", map,
+			GetCategory[] getCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getSubCatList", map,
 					GetCategory[].class);
 			List<GetCategory> subCategoryList = new ArrayList<GetCategory>(Arrays.asList(getCategory));
 			model.addObject("subCategoryList", subCategoryList);
@@ -381,7 +381,7 @@ public class MasterController {
 			editcat.setDelStatus(1);
 			System.out.println("category" + editcat);
 
-			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
+			Category res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
 
 			System.out.println("res " + res);
 			
@@ -409,14 +409,14 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("catId", subCatId);
 
-			 editcat = rest.postForObject(Constant.url + "/getCategoryByCatId", map, GetCategory.class);
+			 editcat =  Constant.getRestTemplate().postForObject(Constant.url + "/getCategoryByCatId", map, GetCategory.class);
 			 
-			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+			Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
 			
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -462,7 +462,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("sectionId", sectionId);
 
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatIdBySectionId", map,
+			GetCategory[] category =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllCatIdBySectionId", map,
 					GetCategory[].class);
 
 			categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
@@ -483,7 +483,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("catIdList", catId); 
 			map.add("delStatus", 0); 
-			Info res = rest.postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -507,7 +507,7 @@ public class MasterController {
 				
 				editSection = new Section();
 				model = new ModelAndView("master/addSection");
-				 Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+				 Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 						 Languages[].class);
 				 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 				model.addObject("languagesList", languagesList);
@@ -533,7 +533,7 @@ public class MasterController {
 		try {
 			
 			 
-			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+			Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList", 
 					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
@@ -627,7 +627,7 @@ public class MasterController {
 			editSection.setSectionDescriptionList(sectionDescriptionList);
 			System.out.println("section" + editSection);
 
-			Section res = rest.postForObject(Constant.url + "/saveSection", editSection, Section.class);
+			Section res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveSection", editSection, Section.class);
 
 			System.out.println("res " + res);
 			
@@ -655,12 +655,12 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("sectionId", sectionId);
 
-			 editSection = rest.postForObject(Constant.url + "/getSectionBySectionId", map, Section.class);
+			 editSection =  Constant.getRestTemplate().postForObject(Constant.url + "/getSectionBySectionId", map, Section.class);
 			
 
 			System.out.println(editSection);
 			
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -721,7 +721,7 @@ public class MasterController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("sectionId", sectionId); 
-			Info res = rest.postForObject(Constant.url + "/deleteSection", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteSection", map, Info.class);
 				 
 				 HttpSession session = request.getSession();
 				 session.setAttribute("successMsg","Infomation deleted successfully!");
@@ -742,19 +742,19 @@ public class MasterController {
 		try {
 		 
 			 
-			GetGalleryHeaderByCatId[] galleryheader = rest.getForObject(Constant.url + "/getGalleryHeaderList", 
+			GetGalleryHeaderByCatId[] galleryheader =  Constant.getRestTemplate().getForObject(Constant.url + "/getGalleryHeaderList", 
 					GetGalleryHeaderByCatId[].class);
 			List<GetGalleryHeaderByCatId> galleryheaderList = new ArrayList<GetGalleryHeaderByCatId>(Arrays.asList(galleryheader));
 			model.addObject("galleryheaderList", galleryheaderList);
 			 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+			GetCategory[] category =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllCatList", map,
 					GetCategory[].class);
 			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
 			model.addObject("categoryList", categoryList);
 			
-			/*GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatList", map,
+			/*GetSubCategory[] getSubCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllSubCatList", map,
 					GetSubCategory[].class);
 			List<GetSubCategory> subCategoryList = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
 			model.addObject("subCategoryList", subCategoryList);*/
@@ -776,14 +776,14 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryHeaderId);
 
-			editGalleryheader = rest.postForObject(Constant.url + "/getGalleryHeaderById", map, Galleryheader.class);
+			editGalleryheader =  Constant.getRestTemplate().postForObject(Constant.url + "/getGalleryHeaderById", map, Galleryheader.class);
 			model.addObject("editGalleryheader", editGalleryheader);
 
 			System.out.println(editGalleryheader);
 			
 			 map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+			GetCategory[] category =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllCatList", map,
 					GetCategory[].class);
 			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
 			model.addObject("categoryList", categoryList);
@@ -791,12 +791,12 @@ public class MasterController {
 			map = new LinkedMultiValueMap<String, Object>();
 			 map.add("catId", editGalleryheader.getCatId());
 			 map.add("delStatus", 1);
-			 GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatByCatId", map,
+			 GetSubCategory[] getSubCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllSubCatByCatId", map,
 					 GetSubCategory[].class);
 			 List<GetSubCategory> list = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
 			model.addObject("subCategoryList", list);
 			
-			GetGalleryHeaderByCatId[] galleryheader = rest.getForObject(Constant.url + "/getGalleryHeaderList", 
+			GetGalleryHeaderByCatId[] galleryheader =  Constant.getRestTemplate().getForObject(Constant.url + "/getGalleryHeaderList", 
 					GetGalleryHeaderByCatId[].class);
 			List<GetGalleryHeaderByCatId> galleryheaderList = new ArrayList<GetGalleryHeaderByCatId>(Arrays.asList(galleryheader));
 			model.addObject("galleryheaderList", galleryheaderList);
@@ -818,7 +818,7 @@ public class MasterController {
 			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			 map.add("catId", catId);
 			 map.add("delStatus", 1);
-			 GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatByCatId", map,
+			 GetSubCategory[] getSubCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllSubCatByCatId", map,
 					 GetSubCategory[].class);
 			 list = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
 			 
@@ -864,7 +864,7 @@ public class MasterController {
 			
 			System.out.println("sub category" + editSubCategory);
 
-			Galleryheader res = rest.postForObject(Constant.url + "/saveGalleryHeader", editGalleryheader, Galleryheader.class);
+			Galleryheader res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryHeader", editGalleryheader, Galleryheader.class);
 
 			System.out.println("res " + res);
 
@@ -883,7 +883,7 @@ public class MasterController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryHeaderId); 
-			Info res = rest.postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
 			System.out.println(res);
 
 		} catch (Exception e) {
@@ -903,7 +903,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryHeaderId);
 
-			editGalleryheader = rest.postForObject(Constant.url + "/getGalleryHeaderById", map, Galleryheader.class);
+			editGalleryheader =  Constant.getRestTemplate().postForObject(Constant.url + "/getGalleryHeaderById", map, Galleryheader.class);
 			model.addObject("editGalleryheader", editGalleryheader);
 			model.addObject("url", Constant.gallryImageURL);
 			System.out.println(editGalleryheader);
@@ -967,7 +967,7 @@ public class MasterController {
 			}*/
 			 
 
-			GalleryDetail[] res = rest.postForObject(Constant.url + "/saveGalleryDetail", detailList, GalleryDetail[].class);
+			GalleryDetail[] res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetail", detailList, GalleryDetail[].class);
 			 
 
 			System.out.println(editGalleryheader);
@@ -987,7 +987,7 @@ public class MasterController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryDetailId); 
-			Info res = rest.postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
 			System.out.println(res);
 
 		} catch (Exception e) {

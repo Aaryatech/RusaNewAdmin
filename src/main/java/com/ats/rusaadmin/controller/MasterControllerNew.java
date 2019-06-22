@@ -85,7 +85,7 @@ public class MasterControllerNew {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			List<User> getUser = rest.getForObject(Constant.url + "/getAllUserList",
+			List<User> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllUserList",
 					List.class);
 			//List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
 			model.addObject("userList", getUser);
@@ -206,7 +206,7 @@ public class MasterControllerNew {
 			   
 		  }		
 			
-			User res = rest.postForObject(Constant.url + "/saveUser", user, User.class);
+			User res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
 
 			//System.out.println("res " + res);
 			
@@ -238,7 +238,7 @@ public class MasterControllerNew {
 					user.setUserId(Integer.parseInt(userId));					
 					user.setUserPass(pass);
 					
-					User res = rest.postForObject(Constant.url + "/saveUser", user, User.class);
+					User res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
 					System.out.println("Id: "+userId);
 					
 						HttpSession session = request.getSession();
@@ -259,9 +259,9 @@ public class MasterControllerNew {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("userId", userId);
 
-			user = rest.postForObject(Constant.url + "/getUserByUserId", map, User.class);
+			user =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserByUserId", map, User.class);
 			   
-			 User[] user1 = rest.getForObject(Constant.url + "/getAllUserList", 
+			 User[] user1 =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllUserList", 
 					 User[].class);
 			List<User> userList = new ArrayList<User>(Arrays.asList(user1));
 			model.addObject("userList", userList);
@@ -309,7 +309,7 @@ public class MasterControllerNew {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("userId", userId); 
 			//map.add("delStatus", 0); 
-			Info res = rest.postForObject(Constant.url + "/deleteUser", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteUser", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -414,7 +414,7 @@ public class MasterControllerNew {
 						 
 						System.out.println("editbanner" + editbanner);
 						
-						BannerImages res = rest.postForObject(Constant.url + "/saveBannerImages", editbanner, BannerImages.class);
+						BannerImages res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveBannerImages", editbanner, BannerImages.class);
 						 
 						if(editbanner.getId()==0) {
 							session.setAttribute("successMsg","Infomation added successfully!");
@@ -437,7 +437,7 @@ public class MasterControllerNew {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);  
-			Info res = rest.postForObject(Constant.url + "/deleteBanner", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteBanner", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -457,7 +457,7 @@ public class MasterControllerNew {
 		try {
 		 
 			
-			BannerImages[] bannerImages = rest.getForObject(Constant.url + "/getAllBannerList",  BannerImages[].class);
+			BannerImages[] bannerImages =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllBannerList",  BannerImages[].class);
 			List<BannerImages> bannerImagesList = new ArrayList<BannerImages>(Arrays.asList(bannerImages));
 		
 			for(int i=0 ; i<bannerImagesList.size() ; i++) {
@@ -482,7 +482,7 @@ public class MasterControllerNew {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id); 
-			editbanner = rest.postForObject(Constant.url + "/getSliderImagesById", map, BannerImages.class);
+			editbanner =  Constant.getRestTemplate().postForObject(Constant.url + "/getSliderImagesById", map, BannerImages.class);
 			model.addObject("editbanner", editbanner);
 			model.addObject("isEdit", 1);
 			model.addObject("url", Constant.getBannerImageURL);
@@ -505,7 +505,7 @@ public class MasterControllerNew {
 			editbanner=new BannerImages();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", 1); 
-			logo = rest.postForObject(Constant.url + "/getLogoListById", map, Logo.class);
+			logo =  Constant.getRestTemplate().postForObject(Constant.url + "/getLogoListById", map, Logo.class);
 			model.addObject("logo", logo);
 			model.addObject("url", Constant.getLgogImageURL);
 			
@@ -620,7 +620,7 @@ public class MasterControllerNew {
 										 
 										System.out.println("logo" + logo);
 								
-								Logo res = rest.postForObject(Constant.url + "/saveLogo", logo, Logo.class);
+								Logo res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveLogo", logo, Logo.class);
 						 }
 				 }  
 				 
@@ -643,9 +643,9 @@ public class MasterControllerNew {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page = rest.postForObject(Constant.url + "/getPageByPageId",map, Page.class);
+			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId",map, Page.class);
 			//map.add("delStatus",1);
-			GallaryCategory[] category = rest.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
+			GallaryCategory[] category =  Constant.getRestTemplate().getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
 			System.out.println(""+categoryList.toString());
 			model.addObject("categoryList",categoryList);
@@ -749,7 +749,7 @@ public class MasterControllerNew {
 			    editupload.setDelStatus(1); 
 			
 				
-				DocumentUpload res = rest.postForObject(Constant.url + "/saveDocumentFiles", editupload, DocumentUpload.class);
+				DocumentUpload res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveDocumentFiles", editupload, DocumentUpload.class);
 				if(res!=null && isEdit==0) {
 					
 					PagesModule pagesModule = new PagesModule();
@@ -757,7 +757,7 @@ public class MasterControllerNew {
 					pagesModule.setPageId(pageId);
 					pagesModule.setPrimaryKeyId(res.getDocId());
 					pagesModule.setModuleId(7);
-					PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+					PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 					System.out.println("res " + res);  
 					
 					session.setAttribute("successMsg","Infomation added successfully!");
@@ -782,7 +782,7 @@ public class MasterControllerNew {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			DocumentUpload[] getDoc = rest.getForObject(Constant.url + "/getDocumentList",	DocumentUpload[].class);
+			DocumentUpload[] getDoc =  Constant.getRestTemplate().getForObject(Constant.url + "/getDocumentList",	DocumentUpload[].class);
 			List<DocumentUpload> getDocList = new ArrayList<DocumentUpload>(Arrays.asList(getDoc));
 			
 			for(int i=0 ; i<getDocList.size() ; i++) {
@@ -807,10 +807,10 @@ public class MasterControllerNew {
   
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", docId); 
-			editupload = rest.postForObject(Constant.url + "/getDocumentById", map, DocumentUpload.class);
+			editupload =  Constant.getRestTemplate().postForObject(Constant.url + "/getDocumentById", map, DocumentUpload.class);
 			// System.out.println("sdf");
 			//map.add("delStatus",1);
-			GallaryCategory[] category = rest.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
+			GallaryCategory[] category =  Constant.getRestTemplate().getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
 			model.addObject("categoryList",categoryList);
 			model.addObject("editupload", editupload);
@@ -832,7 +832,7 @@ public class MasterControllerNew {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("docId", docId); 
 			//map.add("delStatus", 0); 
-			Info res = rest.postForObject(Constant.url + "/deleteDocument", map, Info.class);
+			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteDocument", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();

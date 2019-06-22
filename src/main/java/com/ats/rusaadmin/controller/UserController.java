@@ -82,7 +82,7 @@ public class UserController {
 		
 		try {
 			 
-			Registration[] userList = rest.getForObject(Constant.url + "/getAllRegUserList", Registration[].class);
+			Registration[] userList =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", Registration[].class);
 			getUser = new ArrayList<Registration>(Arrays.asList(userList));
 			model.addObject("regList", getUser);
 
@@ -100,7 +100,7 @@ public class UserController {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
 			map.add("regId", regId);
-			UploadDocument[] uploadDocument = rest.postForObject(Constant.url + "/getDocumentByRegId",map, UploadDocument[].class);
+			UploadDocument[] uploadDocument =  Constant.getRestTemplate().postForObject(Constant.url + "/getDocumentByRegId",map, UploadDocument[].class);
 			List<UploadDocument> uploadDocumentList = new ArrayList<UploadDocument>(Arrays.asList(uploadDocument));
 			
 			for(int i=0;i<uploadDocumentList.size() ; i++) {
@@ -390,7 +390,7 @@ public class UserController {
 			System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserDetailbyRegId", map, RegistrationUserDetail.class);
+			editUser =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserDetailbyRegId", map, RegistrationUserDetail.class);
 			System.out.println("User: " + editUser.toString());
 
 			model.addObject("editUser", editUser);
@@ -469,14 +469,14 @@ public class UserController {
 						editUser.setEmailVerified(1);
 						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
 								userPass);
-						List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+						List<Registration> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", List.class);
 						session.setAttribute("regList", getUser);
 						session.setAttribute("successMsg", "Password Alredy Updated !");
 						session.setAttribute("errorMsg", "false");
 					}
 				} else {
 					editUser.setEmailVerified(0);
-					List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+					List<Registration> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", List.class);
 					session.setAttribute("regList", getUser);
 
 					session.setAttribute("successMsg", "Please varify your mobile number !");
@@ -497,10 +497,10 @@ public class UserController {
 			}
 			 
 			editUser.setEditDate(sf.format(date));
-			Registration regResponse = rest.postForObject(Constant.url + "/saveRegistration", editUser,
+			Registration regResponse =  Constant.getRestTemplate().postForObject(Constant.url + "/saveRegistration", editUser,
 					Registration.class);
 
-			List<Registration> getUser = rest.getForObject(Constant.url + "/getAllRegUserList", List.class);
+			List<Registration> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", List.class);
 			session.setAttribute("regList", getUser);
 			session.setAttribute("successMsg", "Infomation Updated successfully!");
 			session.setAttribute("errorMsg", "false");
@@ -520,7 +520,7 @@ public class UserController {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			// map.add("delStatus", 1);
-			List<EventDetails> getUser = rest.getForObject(Constant.url + "/getUserInfoByUserId", List.class);
+			List<EventDetails> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getUserInfoByUserId", List.class);
 			// List<Registration> userList = new
 			// ArrayList<Registration>(Arrays.asList(getUser));
 			model.addObject("regList", getUser);
@@ -541,11 +541,11 @@ public class UserController {
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
+			editUser =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
 			System.out.println("User: " + editUser.toString());
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", eventRegId);
-			editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
+			editEvent =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
 			System.out.println("User: " + editEvent.toString());
 
 			model.addObject("editUser", editUser);
@@ -583,12 +583,12 @@ public class UserController {
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
-			Registration user = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			Registration user =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
 
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("newsblogsId", newsblogsId);
 			map1.add("langId", 1);
-			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
+			NewsDetails eventList =  Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
 			System.out.println("List :" + eventList.toString());
 			if (status == 1) {
 				approval = "Approved";
@@ -606,7 +606,7 @@ public class UserController {
 			editEvent.setApprovalDate(sf.format(date));
 			editEvent.setApproveBy(UserDetail.getUserId());
 
-			EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
+			EventRegistration regResponse =  Constant.getRestTemplate().postForObject(Constant.url + "/saveEventRegister", editEvent,
 					EventRegistration.class);
 			MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
 			map3.add("newsblogsId", newsblogsId);
@@ -641,11 +641,11 @@ public class UserController {
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser = rest.postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
+			editUser =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
 
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", regId);
-			editEvent = rest.postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
+			editEvent =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -653,7 +653,7 @@ public class UserController {
 			map = new LinkedMultiValueMap<String, Object>();
 			map1.add("newsblogsId", newsId);
 			map1.add("langId", 1);
-			NewsDetails eventList = rest.postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
+			NewsDetails eventList =  Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
 			System.out.println("List :" + eventList.toString());
 			if (status == 1) {
 				approval = "Approved";
@@ -692,7 +692,7 @@ public class UserController {
 			editEvent.setApprovalDate(sf.format(date));
 			editEvent.setApproveBy(UserDetail.getUserId());
 
-			EventRegistration regResponse = rest.postForObject(Constant.url + "/saveEventRegister", editEvent,
+			EventRegistration regResponse =  Constant.getRestTemplate().postForObject(Constant.url + "/saveEventRegister", editEvent,
 					EventRegistration.class);
 
 			session.setAttribute("successMsg", "Infomation Updated successfully!");
@@ -713,7 +713,7 @@ public class UserController {
 		ModelAndView model = new ModelAndView("allEventList");
 		try {
 
-			EventCountDetails[] getUser = rest.getForObject(Constant.url + "/getAllEventList",
+			EventCountDetails[] getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllEventList",
 					EventCountDetails[].class);
 			userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
 			for (int i = 0; i < userList.size(); i++) {
@@ -984,7 +984,7 @@ public class UserController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			// map.add("regId", regId);
 			map.add("newsblogsId", newsblogsId);
-			EventDetail[] eventDetail = rest.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map,
+			EventDetail[] eventDetail =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserInfoByNewsblogsId", map,
 					EventDetail[].class);
 			
 			eventDetailList = new ArrayList<>(Arrays.asList(eventDetail));

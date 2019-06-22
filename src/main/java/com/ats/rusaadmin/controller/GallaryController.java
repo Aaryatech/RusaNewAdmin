@@ -57,7 +57,7 @@ public class GallaryController{
 		ModelAndView model = new ModelAndView("gallary/addGalleryCategory");
 		try {
 			editGallaryCategory = new GallaryCategory();
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -138,7 +138,7 @@ public class GallaryController{
 			editGallaryCategory.setDelStatus(1);
 			System.out.println("category" + editGallaryCategory);
 
-			GallaryCategory res = rest.postForObject(Constant.url + "/saveGalleryCategory", editGallaryCategory, GallaryCategory.class);
+			GallaryCategory res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryCategory", editGallaryCategory, GallaryCategory.class);
 
 			System.out.println("res " + res);
 			
@@ -164,9 +164,9 @@ public class GallaryController{
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryCatId", galleryCatId); 
-			editGallaryCategory = rest.postForObject(Constant.url + "/getGalleryCatByCatId", map, GallaryCategory.class);
+			editGallaryCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getGalleryCatByCatId", map, GallaryCategory.class);
 			 
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", 
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", 
 					 Languages[].class);
 			 languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
@@ -208,7 +208,7 @@ public class GallaryController{
 		try {
 			
 			 
-			GallaryCategory[] getCategory = rest.getForObject(Constant.url + "/getGalleryCategoryList", 
+			GallaryCategory[] getCategory =  Constant.getRestTemplate().getForObject(Constant.url + "/getGalleryCategoryList", 
 					GallaryCategory[].class);
 			List<GallaryCategory> gallaryCategoryList = new ArrayList<GallaryCategory>(Arrays.asList(getCategory));
 			model.addObject("gallaryCategoryList", gallaryCategoryList);
@@ -230,7 +230,7 @@ public class GallaryController{
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryCatId", galleryCatId);
 			 
-			Info info = rest.postForObject(Constant.url + "/deleteGalleryCategory",map ,
+			Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryCategory",map ,
 					Info.class);
 			HttpSession session = request.getSession();
 			session.setAttribute("successMsg","Infomation deleted successfully!");
@@ -252,7 +252,7 @@ public class GallaryController{
 			 model.addObject("pageId", pageId);
 			 model.addObject("moduleId", moduleId);
 			
-			 GallaryCategory[] getCategory = rest.getForObject(Constant.url + "/getGalleryCategoryList", 
+			 GallaryCategory[] getCategory =  Constant.getRestTemplate().getForObject(Constant.url + "/getGalleryCategoryList", 
 						GallaryCategory[].class);
 				List<GallaryCategory> gallaryCategoryList = new ArrayList<GallaryCategory>(Arrays.asList(getCategory));
 				model.addObject("catList", gallaryCategoryList);
@@ -283,7 +283,7 @@ public class GallaryController{
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				 map.add("catId", catId); 
 				 map.add("moduleId", moduleId);
-				 GallaryDetail[] gallaryDetail = rest.postForObject(Constant.url + "/galleryDetailListByCatId", map, GallaryDetail[].class);
+				 GallaryDetail[] gallaryDetail =  Constant.getRestTemplate().postForObject(Constant.url + "/galleryDetailListByCatId", map, GallaryDetail[].class);
 				 List<GallaryDetail> gallaryDetailList = new ArrayList<GallaryDetail>(Arrays.asList(gallaryDetail));
 				 model.addObject("gallaryDetailList", gallaryDetailList);
 				 model.addObject("imageUrl", Constant.getGallryImageURL);
@@ -306,7 +306,7 @@ public class GallaryController{
 			 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
 				 map.add("moduleId", 3);
-				 GallaryDetail[] gallaryDetail = rest.postForObject(Constant.url + "/galleryDetailList", map, GallaryDetail[].class);
+				 GallaryDetail[] gallaryDetail =  Constant.getRestTemplate().postForObject(Constant.url + "/galleryDetailList", map, GallaryDetail[].class);
 				 List<GallaryDetail> gallaryDetailList = new ArrayList<GallaryDetail>(Arrays.asList(gallaryDetail));
 				 model.addObject("gallaryDetailList", gallaryDetailList);
 				 model.addObject("imageUrl", Constant.getGallryImageURL);
@@ -345,7 +345,7 @@ public class GallaryController{
 		}
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				 map.add("galleryDetailsId", id);  
-				 Info info = rest.postForObject(Constant.url + "/deleteGalleryDetails", map, Info.class);
+				 Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map, Info.class);
 				 
 				 System.out.println(" fileName" + fileName);
 				 File files = new File(Constant.gallryImageURL+fileName);
@@ -384,7 +384,7 @@ public class GallaryController{
 				 map.add("title", title); 
 				 map.add("sortNo", sortNo); 
 				 System.out.println(map);
-				 Info info = rest.postForObject(Constant.url + "/updateTitleName", map, Info.class);
+				 Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/updateTitleName", map, Info.class);
 				 
 				
 		} catch (Exception e) {
@@ -434,19 +434,19 @@ public class GallaryController{
 				 gallaryDetail.setIsActive(1);
 				 gallaryDetail.setDelStatus(1);
 				 
-				 GallaryDetail res = rest.postForObject(Constant.url + "/saveGalleryDetails", gallaryDetail, GallaryDetail.class);
+				 GallaryDetail res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetails", gallaryDetail, GallaryDetail.class);
 				 
 				 if(res!=null) {
 					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 					 map.add("moduleId", moduleId);
 					 map.add("pageId", pageId);
-					 PagesModule pagesModule = rest.postForObject(Constant.url + "/findPageModuleByModuleIdAndPageId", map, PagesModule.class);
+					 PagesModule pagesModule =  Constant.getRestTemplate().postForObject(Constant.url + "/findPageModuleByModuleIdAndPageId", map, PagesModule.class);
 					 
 					 if(pagesModule.getId()==0) {
 						 pagesModule.setModuleId(Integer.parseInt(moduleId));
 						 pagesModule.setPageId(pageId);
 						 pagesModule.setPrimaryKeyId(pageId);
-						 PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						 PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 					 }
 				 }
 				 

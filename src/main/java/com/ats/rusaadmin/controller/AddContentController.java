@@ -69,7 +69,7 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("langId", 1);
 			map.add("type", "1,2");
-			TopMenuList sectionTree = rest.postForObject(Constant.url + "/getTopMenuList", map, TopMenuList.class);
+			TopMenuList sectionTree =  Constant.getRestTemplate().postForObject(Constant.url + "/getTopMenuList", map, TopMenuList.class);
 
 			/*
 			 * SectionTree[] sectionTree = rest.getForObject(Constant.url +
@@ -78,7 +78,7 @@ public class AddContentController {
 			 */
 			model.addObject("list", sectionTree);
 
-			ModulesNames[] mdulesNames = rest.getForObject(Constant.url + "/getAllModuleNameList",
+			ModulesNames[] mdulesNames =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllModuleNameList",
 					ModulesNames[].class);
 			List<ModulesNames> mdulesList = new ArrayList<ModulesNames>(Arrays.asList(mdulesNames));
 			model.addObject("mdulesList", mdulesList);
@@ -149,16 +149,16 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("moduleForms/cmsForm");
 		try {
 
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page = rest.postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
-			GetPagesModule[] getPagesModule = rest.postForObject(Constant.url + "/getCmsPagesModuleListByPageId", map,
+			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().postForObject(Constant.url + "/getCmsPagesModuleListByPageId", map,
 					GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
@@ -253,7 +253,7 @@ public class AddContentController {
 			cMSPages.setDetailList(cMSPageDescriptionList);
 
 			System.out.println("category" + cMSPages);
-			CMSPages res = rest.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
+			CMSPages res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
 
 			if (res != null && res.getDetailList() != null) {
 
@@ -262,7 +262,7 @@ public class AddContentController {
 				pagesModule.setPageId(res.getPageId());
 				pagesModule.setPrimaryKeyId(res.getCmsPageId());
 				pagesModule.setModuleId(1);
-				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule,
+				PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule,
 						PagesModule.class);
 				System.out.println("res " + res);
 
@@ -287,7 +287,7 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("moduleForms/cmsList");
 		try {
 
-			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getCmsPagesModuleList",
+			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().getForObject(Constant.url + "/getCmsPagesModuleList",
 					GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
@@ -309,7 +309,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("cmsPageId", cmsPageId);
-			Info info = rest.postForObject(Constant.url + "/deleteCmsContent", map, Info.class);
+			Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteCmsContent", map, Info.class);
 
 			HttpSession session = request.getSession();
 
@@ -336,14 +336,14 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("cmsPageId", cmsPageId);
 
-			editCMSPages = rest.postForObject(Constant.url + "/getCmsPagebyId", map, CMSPages.class);
+			editCMSPages =  Constant.getRestTemplate().postForObject(Constant.url + "/getCmsPagebyId", map, CMSPages.class);
 
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", editCMSPages.getPageId());
-			Page page = rest.postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			Page page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 
 			for (int i = 0; i < languagesList.size(); i++) {
 
@@ -496,7 +496,7 @@ public class AddContentController {
 			editCMSPages.setFeaturedImageAlignment(aligment);
 
 			System.out.println("editCMSPages" + editCMSPages);
-			CMSPages res = rest.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", editCMSPages,
+			CMSPages res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", editCMSPages,
 					CMSPages.class);
 
 			session.setAttribute("successMsg", "Infomation Updated successfully!");
@@ -514,16 +514,16 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("moduleForms/faqForm");
 		try {
 
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page = rest.postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
-			GetPagesModule[] getPagesModule = rest.postForObject(Constant.url + "/getFaqPagesModuleListByPageId", map,
+			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().postForObject(Constant.url + "/getFaqPagesModuleListByPageId", map,
 					GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
@@ -576,7 +576,7 @@ public class AddContentController {
 			freqAskQue.setDescriptionList(freqAskQueDescriptionList);
 
 			System.out.println("freqAskQue " + freqAskQue);
-			FreqAskQue res = rest.postForObject(Constant.url + "/saveUpdateFreqAskQue", freqAskQue, FreqAskQue.class);
+			FreqAskQue res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue", freqAskQue, FreqAskQue.class);
 
 			if (res != null && res.getDescriptionList() != null) {
 
@@ -585,7 +585,7 @@ public class AddContentController {
 				pagesModule.setPageId(res.getPageId());
 				pagesModule.setPrimaryKeyId(res.getFaqId());
 				pagesModule.setModuleId(2);
-				PagesModule pagesModuleres = rest.postForObject(Constant.url + "/savePagesModules", pagesModule,
+				PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule,
 						PagesModule.class);
 				System.out.println("res " + res);
 
@@ -610,7 +610,7 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("moduleForms/faqList");
 		try {
 
-			GetPagesModule[] getPagesModule = rest.getForObject(Constant.url + "/getFaqPagesModuleList",
+			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().getForObject(Constant.url + "/getFaqPagesModuleList",
 					GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
@@ -633,7 +633,7 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("faqIdList", faqId);
 			map.add("delStatus", 0);
-			Info info = rest.postForObject(Constant.url + "/deleteFaq", map, Info.class);
+			Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteFaq", map, Info.class);
 			HttpSession session = request.getSession();
 
 			if (info.isError() == false) {
@@ -659,14 +659,14 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("faqId", faqId);
 
-			editFreqAskQue = rest.postForObject(Constant.url + "/getFaqById", map, FreqAskQue.class);
+			editFreqAskQue =  Constant.getRestTemplate().postForObject(Constant.url + "/getFaqById", map, FreqAskQue.class);
 
-			Languages[] languages = rest.getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", editFreqAskQue.getPageId());
-			Page page = rest.postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			Page page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 
 			for (int i = 0; i < languagesList.size(); i++) {
 
@@ -730,7 +730,7 @@ public class AddContentController {
 			editFreqAskQue.setEditDate(sf.format(date));
 
 			System.out.println("editFreqAskQue " + editFreqAskQue);
-			FreqAskQue res = rest.postForObject(Constant.url + "/saveUpdateFreqAskQue", editFreqAskQue,
+			FreqAskQue res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue", editFreqAskQue,
 					FreqAskQue.class);
 
 			if (res != null) {
@@ -754,7 +754,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page = rest.postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
 		} catch (Exception e) {
@@ -779,7 +779,7 @@ public class AddContentController {
 			page.setExternalUrlTarget(newWindow);
 
 			System.out.println("page " + page);
-			Page res = rest.postForObject(Constant.url + "/savePage", page, Page.class);
+			Page res =  Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
 			if (res != null) {
 
@@ -805,7 +805,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page = rest.postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
 		} catch (Exception e) {
@@ -831,7 +831,7 @@ public class AddContentController {
 			page.setPageMetaKeyword(metaKeyword);
 			 
 			System.out.println("page " + page);
-			Page res = rest.postForObject(Constant.url + "/savePage", page, Page.class);
+			Page res =  Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
 			if (res != null) {
 
@@ -893,7 +893,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("langId", 1);
-			Languages[] Languages = rest.postForObject(Constant.url + "/getLanguageList", map, Languages[].class);
+			Languages[] Languages =  Constant.getRestTemplate().postForObject(Constant.url + "/getLanguageList", map, Languages[].class);
 			List<Languages> list = new ArrayList<Languages>(Arrays.asList(Languages));
 			  
 			System.out.println(list);
