@@ -152,6 +152,12 @@ public class HomeController {
 			DashboardCount resp = Constant.getRestTemplate().getForObject(Constant.url + "/dashboardCount", DashboardCount.class);
 			model.addObject("count", resp);
 			
+			/*String aks = "             akshay  kasar      ";
+			
+			aks = aks.trim().replaceAll("[ ]{2,}", " ");
+			
+			System.out.println(aks);*/
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
