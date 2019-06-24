@@ -105,7 +105,7 @@
 											<li class="active"><a href="#home" data-toggle="tab">
 													<i class="fa fa-home"></i> Home
 											</a></li>
-										
+
 
 										</ul>
 
@@ -122,7 +122,7 @@
 																Title :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control"  id="page_name"
+																<input type="text" class="form-control" id="page_name"
 																	name="page_name" placeholder="Page/Menu Title"
 																	value="${page.pageName}" readonly>
 															</div>
@@ -157,7 +157,8 @@
 																		<label class="control-label col-sm-2"
 																			for="smallheading">Small heading :</label>
 																		<div class="col-sm-10">
-																			<input type="text" class="form-control" onchange="trim(this)"
+																			<input type="text" class="form-control"
+																				onchange="trim(this)"
 																				id="smallheading${detailList.languageId}"
 																				name="smallheading${detailList.languageId}"
 																				placeholder="Small heading"
@@ -171,7 +172,8 @@
 																		<div class="col-sm-10">
 																			<textarea class="ckeditor"
 																				style="width: 100%; height: 250px; font-size: 14px; line-height: 23px; padding: 15px;"
-																				onchange="trim(this)" name="page_description1${languagesList.languagesId}"
+																				onchange="trim(this)"
+																				name="page_description1${languagesList.languagesId}"
 																				id="page_description1${languagesList.languagesId}">
                                     ${detailList.pageDesc}
                                     </textarea>
@@ -198,9 +200,10 @@
 															<label class="control-label col-sm-2" for="page_order">Sort
 																Order :<span class="text-danger">*</span>
 															</label>
-															<div class="col-sm-10"> 
-																<input type="text" class="form-control" id="page_order" onchange="trim(this)"
-																	name="page_order" placeholder="Sort Order"
+															<div class="col-sm-10">
+																<input type="text" class="form-control" id="page_order"
+																	onchange="trim(this)" name="page_order"
+																	placeholder="Sort Order"
 																	value="${editCMSPages.pageOrder}" required>
 															</div>
 														</div>
@@ -210,17 +213,18 @@
 																	<div class="form-group">
 																		<label class="col-md-2 control-label">Current
 																			Image</label>
-																			<div class="col-md-10">
-																	<img src="${url}${editCMSPages.featuredImage}"
-																		style="width: 150px; height: auto"> 
-																			&nbsp 	&nbsp  <input type="checkbox" name="removeImg" value="1"> Remove 
+																		<div class="col-md-10">
+																			<img src="${url}${editCMSPages.featuredImage}"
+																				style="width: 150px; height: auto"> &nbsp
+																			&nbsp <input type="checkbox" name="removeImg"
+																				value="1"> Remove
 																		</div>
 																	</div>
 																</c:if>
-																<input type="hidden" name="removeImg" value="0"> 
-                                 
+																<input type="hidden" name="removeImg" value="0">
+
 															</c:when>
-															
+
 														</c:choose>
 
 
@@ -312,26 +316,26 @@
 														</div>
 														<c:choose>
 															<c:when test="${isEdit==1}">
-														<c:if test="${not empty editCMSPages.downloadPdf}">
-															<div class="form-group">
-																<label class="col-md-2 control-label">Current
-																	PDF :</label>
-																<div class="col-md-10">
-																	<a href="${pdfUrl}${editCMSPages.downloadPdf}"
-																		target="_blank">${editCMSPages.downloadPdf}</a> 
-																		&nbsp	&nbsp	&nbsp
-																		<input type="checkbox" name="removePdf" value="1"> Remove <br>
-																</div>
-																
-															</div>
-														</c:if>
-																<input type="hidden" name="removePdf" value="0"> 
-														
-														
-											</c:when>
-											</c:choose>
-							
-										
+																<c:if test="${not empty editCMSPages.downloadPdf}">
+																	<div class="form-group">
+																		<label class="col-md-2 control-label">Current
+																			PDF :</label>
+																		<div class="col-md-10">
+																			<a href="${pdfUrl}${editCMSPages.downloadPdf}"
+																				target="_blank">${editCMSPages.downloadPdf}</a>
+																			&nbsp &nbsp &nbsp <input type="checkbox"
+																				name="removePdf" value="1"> Remove <br>
+																		</div>
+
+																	</div>
+																</c:if>
+																<input type="hidden" name="removePdf" value="0">
+
+
+															</c:when>
+														</c:choose>
+
+
 														<div class="form-group row">
 															<label class="control-label col-sm-2" for="page_pdf">PDF
 																File :</label>

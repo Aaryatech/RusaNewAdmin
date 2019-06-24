@@ -132,7 +132,7 @@
 		                         <div class="form-group">
 		                                <label class="control-label col-sm-2" for="heading1">Question : <span class="text-danger">*</span></label>
 		                                <div class="col-sm-10">
-		                                  <input type="text" class="form-control" id="question${descriptionList.languageId}" name="question${descriptionList.languageId}"
+		                                  <input type="text" class="form-control" onchange="trim(this)" id="question${descriptionList.languageId}" name="question${descriptionList.languageId}"
 		                                   placeholder="Question" value="${descriptionList.faqQue}" required>
 		                                </div>
 		                            </div>
@@ -140,7 +140,7 @@
 		                              <div class="form-group">
 		                                <label class="control-label col-sm-2" for="page_description1">Answer :</label>
 		                                <div class="col-sm-10">
-		                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${descriptionList.languageId}" 
+		                                    <textarea  class="ckeditor"  onchange="trim(this)" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="ans${descriptionList.languageId}" 
 		                                    id="ans${descriptionList.languageId}" required="required">${descriptionList.faqAns}</textarea>
 		                                </div>
 		                              </div> 
@@ -158,14 +158,14 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order" value="${freqAskQue.faqSortNo}" required>
+                                  <input type="text" class="form-control" id="sortNo"  onchange="trim(this)" name="sortNo" placeholder="Sort Order" value="${freqAskQue.faqSortNo}" required>
                                 </div>
                               </div>
                                     
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="status">Status  :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                <select id="status" name="status" class="form-control" required >
+                                <select id="status" name="status" class="form-control" onchange="trim(this)"  required >
                                 
                                 <c:choose>
                                 	<c:when test="${freqAskQue.isActive==0}">
@@ -224,7 +224,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+     <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
             jQuery(document).ready(function($) {
             

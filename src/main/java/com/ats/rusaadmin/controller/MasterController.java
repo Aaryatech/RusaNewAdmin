@@ -217,6 +217,8 @@ public class MasterController {
 				} else {
 					session.setAttribute("successMsg", "Failed to Add Information!");
 				}
+			} else {
+				session.setAttribute("successMsg", "Failed to Add Information!");
 			}
 
 		} catch (Exception e) {
@@ -461,16 +463,19 @@ public class MasterController {
 			editcat.setIsActive(isActive);
 			editcat.setDelStatus(1);
 			System.out.println("category" + editcat);
+			if (ret == false) {
+				Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
+						Category.class);
 
-			Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
-					Category.class);
+				System.out.println("res " + res);
 
-			System.out.println("res " + res);
-
-			if (res.getCatId() != 0) {
-				session.setAttribute("successMsg", "Infomation added successfully!");
+				if (res.getCatId() != 0) {
+					session.setAttribute("successMsg", "Infomation added successfully!");
+				} else {
+					session.setAttribute("successMsg", "Failed to add Infomation !");
+				}
 			} else {
-				session.setAttribute("successMsg", "Failed to add Infomation !");
+				session.setAttribute("successMsg", "invalid Infomation !");
 			}
 
 		} catch (Exception e) {
@@ -744,6 +749,10 @@ public class MasterController {
 					session.setAttribute("successMsg", "Failed to add Infomation !");
 					session.setAttribute("errorMsg", "true");
 				}
+			}
+			else {
+				session.setAttribute("successMsg", "Invalid Infomation !");
+				session.setAttribute("errorMsg", "true");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

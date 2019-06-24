@@ -118,7 +118,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
+                                  <input type="text" class="form-control" id="page_name"   onchange="trim(this)" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
                                 </div>
                               </div>
                         </div>
@@ -145,7 +145,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_description1">Content :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"  ></textarea>
+                                    <textarea  class="ckeditor"  style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}"  ></textarea>
                                 </div>
                               </div> 
                               

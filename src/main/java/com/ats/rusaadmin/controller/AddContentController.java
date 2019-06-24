@@ -179,7 +179,6 @@ public class AddContentController {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
-			int flag = 0;
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
@@ -210,7 +209,6 @@ public class AddContentController {
 						"") == true) {
 
 					ret = true;
-					flag = 1;
 					break;
 				}
 
@@ -228,7 +226,7 @@ public class AddContentController {
 				cMSPageDescriptionList.add(cMSPageDescription);
 
 			}
-			if (flag == 0) {
+			if (ret == false) {
 				cMSPages.setAddedByUserId(UserDetail.getUserId());
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
 
@@ -273,31 +271,30 @@ public class AddContentController {
 				cMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 				cMSPages.setDetailList(cMSPageDescriptionList);
 
-				//System.out.println("category" + cMSPages);
+				CMSPages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail",
+						cMSPages, CMSPages.class);
+				if (res != null && res.getDetailList() != null) {
 
-				if (flag == 0 && ret == false) {
-					CMSPages res = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
-					if (res != null && res.getDetailList() != null) {
+					PagesModule pagesModule = new PagesModule();
 
-						PagesModule pagesModule = new PagesModule();
+					pagesModule.setPageId(res.getPageId());
+					pagesModule.setPrimaryKeyId(res.getCmsPageId());
+					pagesModule.setModuleId(1);
+					PagesModule pagesModuleres = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+					// System.out.println("res " + res);
 
-						pagesModule.setPageId(res.getPageId());
-						pagesModule.setPrimaryKeyId(res.getCmsPageId());
-						pagesModule.setModuleId(1);
-						PagesModule pagesModuleres = Constant.getRestTemplate()
-								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-						//System.out.println("res " + res);
+					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
 
-						session.setAttribute("successMsg", "Infomation added successfully!");
-						session.setAttribute("errorMsg", "false");
-					} else {
-
-						session.setAttribute("successMsg", "Error While Uploading Content !");
-						session.setAttribute("errorMsg", "true");
-					}
+					session.setAttribute("successMsg", "Error While Uploading Content !");
+					session.setAttribute("errorMsg", "true");
 				}
 
+			} else {
+				session.setAttribute("successMsg", "Invalid Information !");
+				session.setAttribute("errorMsg", "true");
 			}
 
 		} catch (Exception e) {
@@ -312,11 +309,9 @@ public class AddContentController {
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
-			int flag = 0;
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
@@ -344,7 +339,6 @@ public class AddContentController {
 						"") == true) {
 
 					ret = true;
-					flag = 1;
 					break;
 				}
 
@@ -362,11 +356,11 @@ public class AddContentController {
 				editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
 			}
 
-			if (flag == 0) {
+			if (ret == false) {
 				editCMSPages.setEditByUserId(UserDetail.getUserId());
 
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					//System.out.println("in image null");
+					// System.out.println("in image null");
 					try {
 
 						if (remove == 1) {
@@ -391,7 +385,7 @@ public class AddContentController {
 					}
 
 				} else {
-					//System.out.println("in image not null");
+					// System.out.println("in image not null");
 
 					String imageName = new String();
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
@@ -407,7 +401,7 @@ public class AddContentController {
 
 				}
 
-				//System.out.println("in pdf not null");
+				// System.out.println("in pdf not null");
 				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
 					try {
@@ -423,7 +417,7 @@ public class AddContentController {
 								System.out
 										.println("doesn't exists  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
 
-						//	System.out.println("Remove :" + removePdf);
+							// System.out.println("Remove :" + removePdf);
 							editCMSPages.setDownloadPdf("");
 						}
 					} catch (Exception e) {
@@ -449,10 +443,6 @@ public class AddContentController {
 				editCMSPages.setIsActive(isActive);
 				editCMSPages.setEditDate(sf.format(date));
 				editCMSPages.setFeaturedImageAlignment(aligment);
-
-				//System.out.println("editCMSPages" + editCMSPages);
-			}
-			if (ret == false && flag == 0) {
 
 				CMSPages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail",
 						editCMSPages, CMSPages.class);
@@ -608,55 +598,72 @@ public class AddContentController {
 
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("sortNo"));
+			Boolean ret = false;
 
+			if (FormValidation.Validaton(request.getParameter("status"), "") == true
+					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
+
+				ret = true;
+			}
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 			FreqAskQue freqAskQue = new FreqAskQue();
 
 			List<FreqAskQueDescription> freqAskQueDescriptionList = new ArrayList<FreqAskQueDescription>();
+			
 
-			for (int i = 0; i < languagesList.size(); i++) {
+				for (int i = 0; i < languagesList.size(); i++) {
+					if(FormValidation.Validaton(request.getParameter("question" + languagesList.get(i).getLanguagesId()), "") == true) {
+						ret=true;
+						break;
+					}
 
-				FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
-				freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				freqAskQueDescription
-						.setFaqQue(request.getParameter("question" + languagesList.get(i).getLanguagesId()));
-				freqAskQueDescription.setFaqAns(request.getParameter("ans" + languagesList.get(i).getLanguagesId()));
-				freqAskQueDescriptionList.add(freqAskQueDescription);
-			}
+					FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
+					freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					freqAskQueDescription
+							.setFaqQue(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
+					freqAskQueDescription
+							.setFaqAns(request.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
+					freqAskQueDescriptionList.add(freqAskQueDescription);
+				}
+				if (ret == false) {
+				freqAskQue.setAddedByUserId(UserDetail.getUserId());
 
-			freqAskQue.setAddedByUserId(UserDetail.getUserId());
+				freqAskQue.setPageId(pageId);
+				freqAskQue.setFaqSortNo(seqNo);
+				freqAskQue.setIsActive(isActive);
+				freqAskQue.setDelStatus(1);
+				freqAskQue.setAddDate(sf.format(date));
 
-			freqAskQue.setPageId(pageId);
-			freqAskQue.setFaqSortNo(seqNo);
-			freqAskQue.setIsActive(isActive);
-			freqAskQue.setDelStatus(1);
-			freqAskQue.setAddDate(sf.format(date));
+				freqAskQue.setDescriptionList(freqAskQueDescriptionList);
 
-			freqAskQue.setDescriptionList(freqAskQueDescriptionList);
+				System.out.println("freqAskQue " + freqAskQue);
+				FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
+						freqAskQue, FreqAskQue.class);
 
-			System.out.println("freqAskQue " + freqAskQue);
-			FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
-					freqAskQue, FreqAskQue.class);
+				if (res != null && res.getDescriptionList() != null) {
 
-			if (res != null && res.getDescriptionList() != null) {
+					PagesModule pagesModule = new PagesModule();
 
-				PagesModule pagesModule = new PagesModule();
+					pagesModule.setPageId(res.getPageId());
+					pagesModule.setPrimaryKeyId(res.getFaqId());
+					pagesModule.setModuleId(2);
+					PagesModule pagesModuleres = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+					System.out.println("res " + res);
 
-				pagesModule.setPageId(res.getPageId());
-				pagesModule.setPrimaryKeyId(res.getFaqId());
-				pagesModule.setModuleId(2);
-				PagesModule pagesModuleres = Constant.getRestTemplate()
-						.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-				System.out.println("res " + res);
+					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
 
-				session.setAttribute("successMsg", "Infomation added successfully!");
-				session.setAttribute("errorMsg", "false");
+					session.setAttribute("successMsg", "Error While Uploading Content !");
+					session.setAttribute("errorMsg", "true");
+				}
 			} else {
-
-				session.setAttribute("successMsg", "Error While Uploading Content !");
+				session.setAttribute("successMsg", "Invalid Infomation !");
 				session.setAttribute("errorMsg", "true");
+
 			}
 
 		} catch (Exception e) {
@@ -776,16 +783,28 @@ public class AddContentController {
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			Boolean ret = false;
 
+			if (FormValidation.Validaton(request.getParameter("status"), "") == true
+					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
+
+				ret = true;
+			}
+			
 			for (int i = 0; i < editFreqAskQue.getDescriptionList().size(); i++) {
 
+				if (FormValidation.Validaton(request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()), "") == true) {
+					ret=true;
+					break;
+				}
+				
 				editFreqAskQue.getDescriptionList().get(i).setFaqQue(
-						request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()));
+						request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
 				editFreqAskQue.getDescriptionList().get(i).setFaqAns(
-						request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()));
+						request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
 
 			}
-
+			if(ret==false) {
 			editFreqAskQue.setEditByUserId(UserDetail.getUserId());
 
 			editFreqAskQue.setFaqSortNo(seqNo);
@@ -799,10 +818,17 @@ public class AddContentController {
 
 			if (res != null) {
 
-				session.setAttribute("successMsg", "Infomation updated successfully!");
-
+				session.setAttribute("successMsg", "Infomation added successfully!");
+				session.setAttribute("errorMsg", "false");
+			}else {
+				session.setAttribute("successMsg", "Failed to add Infomation !");
+				session.setAttribute("errorMsg", "true");
 			}
-
+ 			}
+			else {
+				session.setAttribute("successMsg", "Invalid Infomation !");
+				session.setAttribute("errorMsg", "true");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

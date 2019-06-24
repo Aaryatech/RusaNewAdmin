@@ -115,7 +115,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
+                                  <input type="text" class="form-control" onchange="trim(this)" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
                                 </div>
                               </div>
                         </div>
@@ -126,9 +126,9 @@
                        <div class="col-xs-12"> 
                     		  
                          <div class="form-group">
-                                <label class="control-label col-sm-2" for="heading1">Question : </label>
+                                <label class="control-label col-sm-2" for="heading1">Question :<span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="question${languagesList.languagesId}" name="question${languagesList.languagesId}" placeholder="Question" value="" >
+                                  <input type="text" class="form-control" onchange="trim(this)" id="question${languagesList.languagesId}" name="question${languagesList.languagesId}" placeholder="Question" value="" >
                                 </div>
                             </div>
                              
@@ -150,7 +150,7 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="sortNo" name="sortNo" placeholder="Sort Order" value="" required>
+                                  <input type="number" class="form-control" id="sortNo" onchange="trim(this)" name="sortNo" placeholder="Sort Order" value="" required>
                                 </div>
                               </div>
                                     
@@ -266,7 +266,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+     <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
             jQuery(document).ready(function($) {
             

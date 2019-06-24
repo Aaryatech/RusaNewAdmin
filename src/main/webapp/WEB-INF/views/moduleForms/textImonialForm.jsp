@@ -162,7 +162,7 @@
 														</label>
 														<div class="col-sm-10">
 															<input type="text" class="form-control" id="form_name"
-																name="form_name" placeholder="  Name"
+																name="form_name" onchange="trim(this)"  placeholder="  Name"
 																value="${editTestImonial.fromName}" required>
 														</div>
 													</div>
@@ -235,7 +235,7 @@
 															:</label>
 														<div class="col-sm-10">
 															<input type="text" class="form-control" id="designation"
-																name="designation" placeholder="Designation"
+																name="designation" placeholder="Designation" onchange="trim(this)"
 																value="${editTestImonial.designation}">
 														</div>
 													</div>
@@ -245,7 +245,7 @@
 														<label class="control-label col-sm-2" for="page_name">Location
 															:</label>
 														<div class="col-sm-10">
-															<input type="text" class="form-control" id="location"
+															<input type="text" class="form-control" id="location" onchange="trim(this)"
 																name="location" placeholder="Location"
 																value="${editTestImonial.location}">
 														</div>
@@ -265,7 +265,7 @@
 
 																	<textarea
 																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																		name="message" id="message">
+																		name="message"  onchange="trim(this)" id="message">
 															
 															 ${editTestImonial.message}
 																
@@ -506,7 +506,14 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-
+ <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script type="text/javascript">
 		function check(temp) {
 			//alert("hii");

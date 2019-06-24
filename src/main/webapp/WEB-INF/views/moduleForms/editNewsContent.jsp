@@ -93,7 +93,7 @@
                     <div class="row">
                     <div class="col-md-12">
                          <form class="form-horizontal" action="${pageContext.request.contextPath}/submtEditNewsBlogForm" method="post" enctype="multipart/form-data" name="form_sample_2" id="form_sample_2" 
-                         onsubmit="return confirm('Do you really want to submit the form?');">               
+                        >               
                     
                     <ul class="nav nav-tabs">
                         <li class="active">
@@ -114,7 +114,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
+                                  <input type="text" class="form-control" id="page_name" onchange="trim(this)" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
                                 </div>
                               </div>
                         </div>
@@ -122,7 +122,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">News Source URL :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL" value="${editNewsBlog.newsSourceUrlName}" required >
+                                  <input type="text" class="form-control" id="url_name" onchange="trim(this)" name="url_name" placeholder="News Source URL" value="${editNewsBlog.newsSourceUrlName}" required >
                                 </div>
                               </div>
                         </div>
@@ -139,13 +139,13 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="heading1">Heading :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" required>
+                                  <input type="text" class="form-control" onchange="trim(this)"  id="heading1${detailList.languageId}" name="heading1${detailList.languageId}" placeholder="Heading" value="${detailList.heading}" required>
                                 </div>
                             </div>
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_description1">Content :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="ckeditor" style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}" >
+                                    <textarea  class="ckeditor"   style="width: 100%; height: 250px; font-size: 14px; line-height: 23px;padding:15px;" name="page_description1${languagesList.languagesId}" id="page_description1${languagesList.languagesId}" >
                                     ${detailList.descriptions}
                                     </textarea>
                                 </div>
@@ -153,21 +153,21 @@
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_title1">Meta Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="${detailList.pageMetaTitle}"  required>
+                                       <input type="text" class="form-control" onchange="trim(this)" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="${detailList.pageMetaTitle}"  required>
                                 
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_description1">Meta Description :</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="form-control" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   > 
+                                    <textarea  class="form-control" onchange="trim(this)" style="width: 100%; height: 50px; font-size: 14px; line-height: 23px;padding:15px;" name="meta_description1${languagesList.languagesId}" id="meta_description1${languagesList.languagesId}"   > 
                                      ${detailList.pageMetaDescription}</textarea>
                                 </div>
                               </div> 
                                  <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_keyword1">KeyWord :</label>
                                 <div class="col-sm-10">
-                                     <input type="text" class="form-control" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="${detailList.pageMetaKeyword}"  >
+                                     <input type="text" class="form-control"  onchange="trim(this)" id="meta_keyword1${languagesList.languagesId}" name="meta_keyword1${languagesList.languagesId}" placeholder="Meta Keywords" value="${detailList.pageMetaKeyword}"  >
                                 
                                 </div>
                               </div> 
@@ -407,7 +407,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+   <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
    
    $("#s2example-2").select2({

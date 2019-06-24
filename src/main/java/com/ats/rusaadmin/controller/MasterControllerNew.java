@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
+import com.ats.rusaadmin.common.FormValidation;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.Category;
@@ -681,6 +682,16 @@ public class MasterControllerNew {
 				VpsImageUpload upload = new VpsImageUpload();
 				String pdfName = null;
 				
+				boolean ret = false;
+				if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
+						|| FormValidation.Validaton(request.getParameter("docName"), "") == true
+						|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true
+						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
+
+					ret = true;
+				}
+
+				
 				Date date = new Date(); // your date
 				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -688,11 +699,12 @@ public class MasterControllerNew {
 				 String extension = null;
 				 long fileSize =0;
 				
-				//final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-				String fileType= null;
+ 				String fileType= null;
 				//System.out.println("docfile extension:"+fileType);
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(date);
+				
+				if(ret==false) {
 			    if(docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
 			    	System.out.println("id null");
 					
@@ -741,7 +753,7 @@ public class MasterControllerNew {
 					  //editbanner.setEditByUserId(UserDetail.getUserId());
 				  }
 			 //   editupload.setDocId(0);
-			    editupload.setExVar1(docName); 
+			    editupload.setExVar1(docName.trim().replaceAll("[ ]{2,}", " ")); 
 			    editupload.setPageId(pageId);
 			    editupload.setCateType(catId);
 			    editupload.setSortNo(sortNo);
@@ -759,6 +771,8 @@ public class MasterControllerNew {
 					pagesModule.setModuleId(7);
 					PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 					System.out.println("res " + res);  
+				}
+				if(res!=null) {
 					
 					session.setAttribute("successMsg","Infomation added successfully!");
 					session.setAttribute("errorMsg","false");
@@ -766,7 +780,11 @@ public class MasterControllerNew {
 					session.setAttribute("successMsg","Infomation added successfully!");
 					session.setAttribute("errorMsg","false");
 				}
-			
+				}
+				else {
+					session.setAttribute("successMsg", "Invalid Infomation!");
+					session.setAttribute("errorMsg", "false");
+				}
 				
 						
 		 }catch (Exception e) {
