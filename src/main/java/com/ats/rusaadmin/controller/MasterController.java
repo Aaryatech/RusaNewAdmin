@@ -571,7 +571,6 @@ public class MasterController {
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			int type = Integer.parseInt(request.getParameter("type"));
-			System.out.println("type: " + type+ isActive+seqNo);
 
 			Boolean ret = false;
 
@@ -588,124 +587,109 @@ public class MasterController {
 				ret = true;
 			}
 
-		
-
 			List<SectionDescription> sectionDescriptionList = new ArrayList<SectionDescription>();
-			System.out.println("all  "+ret);
-			if (ret == false) {
-				System.out.println("all true"+sectionId);
 
-				if (sectionId == "" || sectionId == null) {
-					System.out.println("in if : " + languagesList.size());
-					editSection.setSectionId(0);
-					editSection.setSectionAddDate(sf.format(date));
-					for (int i = 0; i < languagesList.size(); i++) {
-				
+			if (sectionId == "" || sectionId == null) {
+				editSection.setSectionId(0);
+				editSection.setSectionAddDate(sf.format(date));
+				for (int i = 0; i < languagesList.size(); i++) {
 
-						Boolean ret1 = false;
-						if (FormValidation.Validaton(
-								request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()),
-								"") == true) {
+					if (FormValidation.Validaton(
+							request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()), "") == true) {
 
-							ret1 = true;
-						}
-
-						System.out.println("ret1   "+ret1);
-
-						if (ret1 == false) {
-							
-							System.out.println("ret1 in if "+ret1);
-							SectionDescription sectionDescription = new SectionDescription();
-							sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-							sectionDescription.setSectionName(
-									request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-							sectionDescription.setSectionDesc(
-									request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-
-							if (languagesList.get(i).getLanguagesId() == 1) {
-
-								editSection.setSectionName(
-										request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-								editSection.setSectionDesc(
-										request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-								String text = editSection.getSectionName();
-								text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-								System.out.println(text);
-								editSection.setSectionSlugname(text);
-							}
-							sectionDescriptionList.add(sectionDescription);
-						}
+						ret = true;
+						break;
 					}
 
-				} else {
-					System.out.println("in else : "  );
-					editSection.setSectionId(Integer.parseInt(sectionId));
-					editSection.setSectionEditDate(sf.format(date));
-					sectionDescriptionList = editSection.getSectionDescriptionList();
+					SectionDescription sectionDescription = new SectionDescription();
+					sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					sectionDescription
+							.setSectionName(request.getParameter("sectionName" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
+					sectionDescription
+							.setSectionDesc(request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
 
-					for (int i = 0; i < sectionDescriptionList.size(); i++) {
-						// start
-						
-						Boolean ret1 = false;
-						if (FormValidation.Validaton(
-								request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()),
-								"") == true) {
+					if (languagesList.get(i).getLanguagesId() == 1) {
 
-							ret1 = true;
-						}
-
-						if (ret1 = false) {
-						try {
-
-							sectionDescriptionList.get(i).setSectionName(request
-									.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
-							sectionDescriptionList.get(i).setSectionDesc(request
-									.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
-						} catch (Exception e) {
-
-						}
-						if (sectionDescriptionList.get(i).getLanguageId() == 1) {
-
-							editSection.setSectionName(request
-									.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
-							editSection.setSectionDesc(request
-									.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
-							String text = editSection.getSectionName();
-							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-							System.out.println(text);
-							editSection.setSectionSlugname(text);
-						}
-						
+						editSection.setSectionName(
+								request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim()
+										.replaceAll("[ ]{2,}", " "));
+						editSection.setSectionDesc(
+								request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim()
+										.replaceAll("[ ]{2,}", " "));
+						String text = editSection.getSectionName();
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+						editSection.setSectionSlugname(text);
 					}
+					sectionDescriptionList.add(sectionDescription);
 
-					}
-					 
 				}
 
-				editSection.setSectionSortNo(seqNo);
-				editSection.setSectionDateTime(sf.format(date));
-				editSection.setDelStatus(1);
-				editSection.setIsActive(isActive);
-				editSection.setExInt1(type);
+			} else {
+				editSection.setSectionId(Integer.parseInt(sectionId));
+				editSection.setSectionEditDate(sf.format(date));
+				sectionDescriptionList = editSection.getSectionDescriptionList();
 
-				editSection.setSectionDescriptionList(sectionDescriptionList);
-				System.out.println("section" + editSection);
+				for (int i = 0; i < sectionDescriptionList.size(); i++) {
 
+					if (FormValidation.Validaton(
+							request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()),
+							"") == true) {
+
+						ret = true;
+						break;
+					}
+
+					try {
+
+						sectionDescriptionList.get(i)
+								.setSectionName(request
+										.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId())
+										.trim().replaceAll("[ ]{2,}", " "));
+						sectionDescriptionList.get(i)
+								.setSectionDesc(request
+										.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId())
+										.trim().replaceAll("[ ]{2,}", " "));
+					} catch (Exception e) {
+
+					}
+					if (sectionDescriptionList.get(i).getLanguageId() == 1) {
+
+						editSection.setSectionName(
+								request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId())
+										.trim().replaceAll("[ ]{2,}", " "));
+						editSection.setSectionDesc(
+								request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId())
+										.trim().replaceAll("[ ]{2,}", " "));
+						String text = editSection.getSectionName();
+						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+						editSection.setSectionSlugname(text);
+					}
+				}
+			}
+
+			editSection.setSectionSortNo(seqNo);
+			editSection.setSectionDateTime(sf.format(date));
+			editSection.setDelStatus(1);
+			editSection.setIsActive(isActive);
+			editSection.setExInt1(type);
+
+			editSection.setSectionDescriptionList(sectionDescriptionList);
+			if (ret == false) {
 				Section res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSection", editSection,
 						Section.class);
-
-				System.out.println("res " + res);
-
+				System.out.println("res save is " + res.toString());
 				session = request.getSession();
 				if (editSection.getSectionId() == 0) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
 				} else {
-					session.setAttribute("successMsg", "Infomation updated successfully!");
+					session.setAttribute("successMsg", "Failed to add Infomation !");
 					session.setAttribute("errorMsg", "true");
 				}
 			} else {
-				session.setAttribute("successMsg", "Infomation updated successfully!");
+				session.setAttribute("successMsg", "Invalid Infomation!");
 				session.setAttribute("errorMsg", "true");
 
 			}

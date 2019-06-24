@@ -78,7 +78,7 @@
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Section Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10">
-				                                   <input id="sectionName${languagesList.languagesId}" class="form-control"
+				                                   <input id="sectionName${languagesList.languagesId}" class="form-control" onchange="trim(this)"
 												placeholder="Section Name"  value="${sectionDescriptionList.sectionName}"  style="text-align: left;" name="sectionName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
@@ -87,7 +87,7 @@
 				                              <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Section Description:</label>
 				                                <div class="col-sm-10">
-				                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
+				                                <input id="sectionDesc${languagesList.languagesId}" class="form-control" onchange="trim(this)"
 												placeholder="Section Description"  value="${sectionDescriptionList.sectionDesc}"  style="text-align: left;" name="sectionDesc${languagesList.languagesId}" type="text"  >
 				                                </div>
 				                              </div>
@@ -104,7 +104,7 @@
                                <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Section Name : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                                   <input id="sectionName${languagesList.languagesId}" class="form-control"
+                                   <input id="sectionName${languagesList.languagesId}" class="form-control" onchange="trim(this)"
 								placeholder="Section Name"    style="text-align: left;" name="sectionName${languagesList.languagesId}" type="text" required>
                                 </div>
                               </div>
@@ -113,7 +113,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_smtp_host">Section Description:</label>
                                 <div class="col-sm-10">
-                                <input id="sectionDesc${languagesList.languagesId}" class="form-control"
+                                <input id="sectionDesc${languagesList.languagesId}" class="form-control" onchange="trim(this)"
 								placeholder="Section Description"    style="text-align: left;" name="sectionDesc${languagesList.languagesId}" type="text"  >
                                 </div>
                               </div>
@@ -131,7 +131,7 @@
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
                                   <input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
+								placeholder="Sequence No"  onchange="trim(this)" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
                               <!-- 
@@ -227,6 +227,16 @@
     <!-- END CONTAINER -->
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
+
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+   
+   <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 </body>
 </html>
