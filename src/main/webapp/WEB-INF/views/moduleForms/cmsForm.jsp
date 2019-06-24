@@ -131,14 +131,14 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="heading1">Heading :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
+                                  <input type="text" class="form-control"  onchange="trim(this)"id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
                                 </div>
                             </div>
                             
                           <div class="form-group">
                                 <label class="control-label col-sm-2" for="smallheading">Small heading :</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="smallheading${languagesList.languagesId}" name="smallheading${languagesList.languagesId}" placeholder="Small heading" value="" >
+                                  <input type="text" class="form-control" onchange="trim(this)" id="smallheading${languagesList.languagesId}" name="smallheading${languagesList.languagesId}" placeholder="Small heading" value="" >
                                 </div>
                               </div>
                               
@@ -163,7 +163,7 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">Sort Order :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="page_order" name="page_order" placeholder="Sort Order" value="" required>
+                                  <input type="number" class="form-control" onchange="trim(this)"  id="page_order" name="page_order" placeholder="Sort Order" value="" required>
                                 </div>
                               </div>
                                  
@@ -216,7 +216,7 @@
  										 <div class="form-group row">
                                          <label class="control-label col-sm-2" for="page_pdf">PDF File :</label>
                                           <div class="col-sm-7">
-                                             <input type="file" name="pagePdf" id="pagePdf"   class="form-control"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip"  />
+                                             <input type="file" name="pagePdf" id="pagePdf"   class="form-control" onchange="trim(this)"  data-parsley-minlength="2" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.zip"  />
                                               
                                           </div>
                                         </div>
@@ -345,7 +345,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+     <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
             jQuery(document).ready(function($) {
             

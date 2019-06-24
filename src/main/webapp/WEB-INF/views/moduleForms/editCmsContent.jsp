@@ -122,7 +122,7 @@
 																Title :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control" id="page_name"
+																<input type="text" class="form-control"  id="page_name"
 																	name="page_name" placeholder="Page/Menu Title"
 																	value="${page.pageName}" readonly>
 															</div>
@@ -157,7 +157,7 @@
 																		<label class="control-label col-sm-2"
 																			for="smallheading">Small heading :</label>
 																		<div class="col-sm-10">
-																			<input type="text" class="form-control"
+																			<input type="text" class="form-control" onchange="trim(this)"
 																				id="smallheading${detailList.languageId}"
 																				name="smallheading${detailList.languageId}"
 																				placeholder="Small heading"
@@ -171,7 +171,7 @@
 																		<div class="col-sm-10">
 																			<textarea class="ckeditor"
 																				style="width: 100%; height: 250px; font-size: 14px; line-height: 23px; padding: 15px;"
-																				name="page_description1${languagesList.languagesId}"
+																				onchange="trim(this)" name="page_description1${languagesList.languagesId}"
 																				id="page_description1${languagesList.languagesId}">
                                     ${detailList.pageDesc}
                                     </textarea>
@@ -198,8 +198,8 @@
 															<label class="control-label col-sm-2" for="page_order">Sort
 																Order :<span class="text-danger">*</span>
 															</label>
-															<div class="col-sm-10">
-																<input type="text" class="form-control" id="page_order"
+															<div class="col-sm-10"> 
+																<input type="text" class="form-control" id="page_order" onchange="trim(this)"
 																	name="page_order" placeholder="Sort Order"
 																	value="${editCMSPages.pageOrder}" required>
 															</div>

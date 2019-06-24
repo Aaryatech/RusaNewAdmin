@@ -82,7 +82,7 @@
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
-												<input id="catName${languagesList.languagesId}" class="form-control"
+												<input id="catName${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
 								placeholder="Menu Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
@@ -92,7 +92,7 @@
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Menu Description:</label>
 				                                <div class="col-sm-10">
 				                                
-				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
+				                                <input id="catDesc${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
 								placeholder="Menu Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
@@ -110,7 +110,7 @@
 				                               <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
-												<input id="catName${languagesList.languagesId}" class="form-control"
+												<input id="catName${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
 								placeholder="Menu Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
 				                                </div>
 				                              </div>
@@ -120,7 +120,7 @@
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Menu Description:</label>
 				                                <div class="col-sm-10">
 				                                
-				                                <input id="catDesc${languagesList.languagesId}" class="form-control"
+				                                <input id="catDesc${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
 								placeholder="Menu Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
 				                                 
 				                                </div>
@@ -159,7 +159,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
-                                  <input id="seqNo" class="form-control"
+                                  <input id="seqNo" class="form-control"  onchange="trim(this)"
 								placeholder="Sequence No" value="${editCategory.catSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
@@ -216,5 +216,13 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+   <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 </body>
 </html>

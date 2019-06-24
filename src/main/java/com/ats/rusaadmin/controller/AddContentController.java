@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
+import com.ats.rusaadmin.common.FormValidation;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.CMSPageDescription;
 import com.ats.rusaadmin.model.CMSPages;
@@ -51,8 +52,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Scope("session")
 public class AddContentController {
 
-	
-	
 	RestTemplate rest = new RestTemplate();
 	List<Languages> languagesList = new ArrayList<Languages>();
 	int pageId;
@@ -69,7 +68,8 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("langId", 1);
 			map.add("type", "1,2");
-			TopMenuList sectionTree =  Constant.getRestTemplate().postForObject(Constant.url + "/getTopMenuList", map, TopMenuList.class);
+			TopMenuList sectionTree = Constant.getRestTemplate().postForObject(Constant.url + "/getTopMenuList", map,
+					TopMenuList.class);
 
 			/*
 			 * SectionTree[] sectionTree = rest.getForObject(Constant.url +
@@ -78,7 +78,7 @@ public class AddContentController {
 			 */
 			model.addObject("list", sectionTree);
 
-			ModulesNames[] mdulesNames =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllModuleNameList",
+			ModulesNames[] mdulesNames = Constant.getRestTemplate().getForObject(Constant.url + "/getAllModuleNameList",
 					ModulesNames[].class);
 			List<ModulesNames> mdulesList = new ArrayList<ModulesNames>(Arrays.asList(mdulesNames));
 			model.addObject("mdulesList", mdulesList);
@@ -149,17 +149,18 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("moduleForms/cmsForm");
 		try {
 
-			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
-			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().postForObject(Constant.url + "/getCmsPagesModuleListByPageId", map,
-					GetPagesModule[].class);
+			GetPagesModule[] getPagesModule = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/getCmsPagesModuleListByPageId", map, GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
 			model.addObject("getPagesModuleList", getPagesModuleList);
@@ -178,13 +179,22 @@ public class AddContentController {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+			int flag = 0;
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-		//	int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+
+			Boolean ret = false;
+
+			if (FormValidation.Validaton(request.getParameter("page_order"), "") == true
+					|| FormValidation.Validaton(request.getParameter("status"), "") == true) {
+
+				ret = true;
+			}
+
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -196,82 +206,98 @@ public class AddContentController {
 
 			for (int i = 0; i < languagesList.size(); i++) {
 
+				if (FormValidation.Validaton(request.getParameter("heading1" + languagesList.get(i).getLanguagesId()),
+						"") == true) {
+
+					ret = true;
+					flag = 1;
+					break;
+				}
+
 				CMSPageDescription cMSPageDescription = new CMSPageDescription();
 				cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				cMSPageDescription.setHeading(request.getParameter("heading1" + languagesList.get(i).getLanguagesId()));
+				cMSPageDescription.setHeading(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
 				cMSPageDescription
-						.setSmallheading(request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()));
+						.setSmallheading(request.getParameter("smallheading" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
 				cMSPageDescription
-						.setPageDesc(request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()));
+						.setPageDesc(request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
 				cMSPageDescription.setDateTransaction(sf.format(date));
 				cMSPageDescriptionList.add(cMSPageDescription);
-				
+
 			}
+			if (flag == 0) {
+				cMSPages.setAddedByUserId(UserDetail.getUserId());
+				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
 
-			cMSPages.setAddedByUserId(UserDetail.getUserId());
-			if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+				} else {
 
-			} else {
+					String imageName = new String();
+					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
-				String imageName = new String();
-				imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
+					try {
+						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
+								0, 0, 0, 0);
+						cMSPages.setFeaturedImage(imageName);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 
-				try {
-					upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0, 0, 0,
-							0, 0);
-					cMSPages.setFeaturedImage(imageName);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
 				}
 
-			}
+				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
-			if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
+				} else {
 
-			} else {
+					String pdfName = new String();
+					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
-				String pdfName = new String();
-				pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
+					try {
+						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
+						cMSPages.setDownloadPdf(pdfName);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
 
-				try {
-					upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-					cMSPages.setDownloadPdf(pdfName);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
+				}
+				cMSPages.setPageId(pageId);
+				cMSPages.setPageOrder(seqNo);
+				cMSPages.setIsActive(isActive);
+				cMSPages.setDelStatus(1);
+				cMSPages.setDelStatus(1);
+				cMSPages.setAddDate(sf.format(date));
+				cMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
+				cMSPages.setDetailList(cMSPageDescriptionList);
+
+				//System.out.println("category" + cMSPages);
+
+				if (flag == 0 && ret == false) {
+					CMSPages res = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
+					if (res != null && res.getDetailList() != null) {
+
+						PagesModule pagesModule = new PagesModule();
+
+						pagesModule.setPageId(res.getPageId());
+						pagesModule.setPrimaryKeyId(res.getCmsPageId());
+						pagesModule.setModuleId(1);
+						PagesModule pagesModuleres = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						//System.out.println("res " + res);
+
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+
+						session.setAttribute("successMsg", "Error While Uploading Content !");
+						session.setAttribute("errorMsg", "true");
+					}
 				}
 
-			}
-			cMSPages.setPageId(pageId);
-			cMSPages.setPageOrder(seqNo);
-			cMSPages.setIsActive(isActive);
-			cMSPages.setDelStatus(1);
-			cMSPages.setDelStatus(1);
-			cMSPages.setAddDate(sf.format(date));
-			cMSPages.setFeaturedImageAlignment(aligment);
-			cMSPages.setDetailList(cMSPageDescriptionList);
-
-			System.out.println("category" + cMSPages);
-			CMSPages res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
-
-			if (res != null && res.getDetailList() != null) {
-
-				PagesModule pagesModule = new PagesModule();
-
-				pagesModule.setPageId(res.getPageId());
-				pagesModule.setPrimaryKeyId(res.getCmsPageId());
-				pagesModule.setModuleId(1);
-				PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule,
-						PagesModule.class);
-				System.out.println("res " + res);
-
-				session.setAttribute("successMsg", "Infomation added successfully!");
-				session.setAttribute("errorMsg", "false");
-			} else {
-
-				session.setAttribute("successMsg", "Error While Uploading Content !");
-				session.setAttribute("errorMsg", "true");
 			}
 
 		} catch (Exception e) {
@@ -281,14 +307,177 @@ public class AddContentController {
 		return "redirect:/sectionTreeList";
 	}
 
+	@RequestMapping(value = "/submtEditCmsForm", method = RequestMethod.POST)
+	public String submtEditCmsForm(@RequestParam("images") List<MultipartFile> images,
+			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+			HttpSession session = request.getSession();
+			User UserDetail = (User) session.getAttribute("UserDetail");
+			int flag = 0;
+			String aligment = request.getParameter("header_top_alignment");
+			int isActive = Integer.parseInt(request.getParameter("status"));
+			int seqNo = Integer.parseInt(request.getParameter("page_order"));
+			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+			int remove = Integer.parseInt(request.getParameter("removeImg"));
+			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
+			Boolean ret = false;
+
+			if (FormValidation.Validaton(request.getParameter("page_order"), "") == true
+					|| FormValidation.Validaton(request.getParameter("status"), "") == true) {
+
+				ret = true;
+			}
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+			VpsImageUpload upload = new VpsImageUpload();
+
+			for (int i = 0; i < editCMSPages.getDetailList().size(); i++) {
+
+				if (FormValidation.Validaton(
+						request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()),
+						"") == true) {
+
+					ret = true;
+					flag = 1;
+					break;
+				}
+
+				editCMSPages.getDetailList().get(i).setHeading(
+						request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				editCMSPages.getDetailList().get(i)
+						.setSmallheading(request
+								.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
+				editCMSPages.getDetailList().get(i)
+						.setPageDesc(request
+								.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
+				editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
+			}
+
+			if (flag == 0) {
+				editCMSPages.setEditByUserId(UserDetail.getUserId());
+
+				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+					//System.out.println("in image null");
+					try {
+
+						if (remove == 1) {
+							File files = new File(Constant.gallryImageURL + editCMSPages.getFeaturedImage());
+							// File files = new
+							// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
+							// (1).jpeg");
+
+							if (files.delete()) {
+								System.out.println(
+										" File deleted  " + Constant.gallryImageURL + editCMSPages.getFeaturedImage());
+							} else
+								System.out.println(
+										"doesn't exists  " + Constant.gallryImageURL + editCMSPages.getFeaturedImage());
+
+							System.out.println("Remove :" + remove);
+							editCMSPages.setFeaturedImage("");
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+
+				} else {
+					//System.out.println("in image not null");
+
+					String imageName = new String();
+					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
+
+					try {
+						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
+								0, 0, 0, 0);
+						editCMSPages.setFeaturedImage(imageName);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+
+				}
+
+				//System.out.println("in pdf not null");
+				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
+
+					try {
+						if (removePdf == 1) {
+							File files = new File(Constant.cmsPdf + editCMSPages.getDownloadPdf());
+							// File files = new
+							// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
+							// (1).jpeg");
+
+							if (files.delete()) {
+								System.out.println(" File deleted  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
+							} else
+								System.out
+										.println("doesn't exists  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
+
+						//	System.out.println("Remove :" + removePdf);
+							editCMSPages.setDownloadPdf("");
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+				} else {
+
+					String pdfName = new String();
+					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
+
+					try {
+						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
+						editCMSPages.setDownloadPdf(pdfName);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+
+				}
+
+				editCMSPages.setPageOrder(seqNo);
+				editCMSPages.setIsActive(isActive);
+				editCMSPages.setEditDate(sf.format(date));
+				editCMSPages.setFeaturedImageAlignment(aligment);
+
+				//System.out.println("editCMSPages" + editCMSPages);
+			}
+			if (ret == false && flag == 0) {
+
+				CMSPages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail",
+						editCMSPages, CMSPages.class);
+
+				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("errorMsg", "false");
+			} else {
+				session.setAttribute("successMsg", "Error while updating Content!");
+				session.setAttribute("errorMsg", "true");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/cmsList";
+	}
+
 	@RequestMapping(value = "/cmsList", method = RequestMethod.GET)
 	public ModelAndView cmsList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/cmsList");
 		try {
 
-			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().getForObject(Constant.url + "/getCmsPagesModuleList",
-					GetPagesModule[].class);
+			GetPagesModule[] getPagesModule = Constant.getRestTemplate()
+					.getForObject(Constant.url + "/getCmsPagesModuleList", GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
 
@@ -309,7 +498,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("cmsPageId", cmsPageId);
-			Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteCmsContent", map, Info.class);
+			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteCmsContent", map, Info.class);
 
 			HttpSession session = request.getSession();
 
@@ -336,14 +525,16 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("cmsPageId", cmsPageId);
 
-			editCMSPages =  Constant.getRestTemplate().postForObject(Constant.url + "/getCmsPagebyId", map, CMSPages.class);
+			editCMSPages = Constant.getRestTemplate().postForObject(Constant.url + "/getCmsPagebyId", map,
+					CMSPages.class);
 
-			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", editCMSPages.getPageId());
-			Page page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 
 			for (int i = 0; i < languagesList.size(); i++) {
 
@@ -377,154 +568,24 @@ public class AddContentController {
 		return model;
 	}
 
-	@RequestMapping(value = "/submtEditCmsForm", method = RequestMethod.POST)
-	public String submtEditCmsForm(@RequestParam("images") List<MultipartFile> images,
-			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
-			HttpServletResponse response) {
-
-		// ModelAndView model = new ModelAndView("masters/addEmployee");
-		try {
-			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
-
-			String aligment = request.getParameter("header_top_alignment");
-			int isActive = Integer.parseInt(request.getParameter("status"));
-			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
-			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
-			
-			System.out.println("removeImage " + remove);
-			System.out.println("removePdf " + removePdf); 
-			
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-
-			VpsImageUpload upload = new VpsImageUpload();
-
-			for (int i = 0; i < editCMSPages.getDetailList().size(); i++) {
-
-				editCMSPages.getDetailList().get(i).setHeading(
-						request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()));
-				editCMSPages.getDetailList().get(i).setSmallheading(
-						request.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId()));
-				editCMSPages.getDetailList().get(i).setPageDesc(request
-						.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId()));
-				editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
-			}
-
-			editCMSPages.setEditByUserId(UserDetail.getUserId());
-			 
-				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					System.out.println("in image null");
-					 try {
-					
-						 if(remove==1) {
-							 File files = new File(Constant.gallryImageURL+editCMSPages.getFeaturedImage());
-								//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
-								
-								if(files.delete()){
-						            System.out.println(" File deleted  " + Constant.gallryImageURL+editCMSPages.getFeaturedImage() );
-						        }else System.out.println("doesn't exists  " + Constant.gallryImageURL+editCMSPages.getFeaturedImage());
-									
-								System.out.println("Remove :"+remove);
-								editCMSPages.setFeaturedImage("");
-								}
-							}catch (Exception e) {
-								// TODO: handle exception
-								e.printStackTrace();
-							}
-					
-				} else {
-					System.out.println("in image not null");
-					
-					String imageName = new String();
-					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
-
-					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0, 0, 0,
-								0, 0);
-						editCMSPages.setFeaturedImage(imageName);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-
-				}
-	 
-			
-		 
-				System.out.println("in pdf not null");
-				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
-
-					try
-					{
-					if(removePdf==1) {
-						 File files = new File(Constant.cmsPdf+editCMSPages.getDownloadPdf());
-							//File files = new File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download (1).jpeg");
-							
-							if(files.delete()){
-					            System.out.println(" File deleted  " + Constant.cmsPdf+editCMSPages.getDownloadPdf() );
-					        }else System.out.println("doesn't exists  " + Constant.cmsPdf+editCMSPages.getDownloadPdf());
-							
-						System.out.println("Remove :"+removePdf);
-						editCMSPages.setDownloadPdf("");
-						}
-					}catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				} else {
-
-					String pdfName = new String();
-					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
-
-					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						editCMSPages.setDownloadPdf(pdfName);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-
-				}
-		 
-			editCMSPages.setPageOrder(seqNo);
-			editCMSPages.setIsActive(isActive);
-			editCMSPages.setEditDate(sf.format(date));
-			editCMSPages.setFeaturedImageAlignment(aligment);
-
-			System.out.println("editCMSPages" + editCMSPages);
-			CMSPages res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", editCMSPages,
-					CMSPages.class);
-
-			session.setAttribute("successMsg", "Infomation Updated successfully!");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return "redirect:/cmsList";
-	}
-
 	@RequestMapping(value = "/faqForm", method = RequestMethod.GET)
 	public ModelAndView faqForm(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/faqForm");
 		try {
 
-			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
-			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().postForObject(Constant.url + "/getFaqPagesModuleListByPageId", map,
-					GetPagesModule[].class);
+			GetPagesModule[] getPagesModule = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/getFaqPagesModuleListByPageId", map, GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
 
@@ -576,7 +637,8 @@ public class AddContentController {
 			freqAskQue.setDescriptionList(freqAskQueDescriptionList);
 
 			System.out.println("freqAskQue " + freqAskQue);
-			FreqAskQue res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue", freqAskQue, FreqAskQue.class);
+			FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
+					freqAskQue, FreqAskQue.class);
 
 			if (res != null && res.getDescriptionList() != null) {
 
@@ -585,8 +647,8 @@ public class AddContentController {
 				pagesModule.setPageId(res.getPageId());
 				pagesModule.setPrimaryKeyId(res.getFaqId());
 				pagesModule.setModuleId(2);
-				PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule,
-						PagesModule.class);
+				PagesModule pagesModuleres = Constant.getRestTemplate()
+						.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 				System.out.println("res " + res);
 
 				session.setAttribute("successMsg", "Infomation added successfully!");
@@ -610,8 +672,8 @@ public class AddContentController {
 		ModelAndView model = new ModelAndView("moduleForms/faqList");
 		try {
 
-			GetPagesModule[] getPagesModule =  Constant.getRestTemplate().getForObject(Constant.url + "/getFaqPagesModuleList",
-					GetPagesModule[].class);
+			GetPagesModule[] getPagesModule = Constant.getRestTemplate()
+					.getForObject(Constant.url + "/getFaqPagesModuleList", GetPagesModule[].class);
 
 			List<GetPagesModule> getPagesModuleList = new ArrayList<GetPagesModule>(Arrays.asList(getPagesModule));
 
@@ -633,7 +695,7 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("faqIdList", faqId);
 			map.add("delStatus", 0);
-			Info info =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteFaq", map, Info.class);
+			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteFaq", map, Info.class);
 			HttpSession session = request.getSession();
 
 			if (info.isError() == false) {
@@ -659,14 +721,16 @@ public class AddContentController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("faqId", faqId);
 
-			editFreqAskQue =  Constant.getRestTemplate().postForObject(Constant.url + "/getFaqById", map, FreqAskQue.class);
+			editFreqAskQue = Constant.getRestTemplate().postForObject(Constant.url + "/getFaqById", map,
+					FreqAskQue.class);
 
-			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", editFreqAskQue.getPageId());
-			Page page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 
 			for (int i = 0; i < languagesList.size(); i++) {
 
@@ -730,8 +794,8 @@ public class AddContentController {
 			editFreqAskQue.setEditDate(sf.format(date));
 
 			System.out.println("editFreqAskQue " + editFreqAskQue);
-			FreqAskQue res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue", editFreqAskQue,
-					FreqAskQue.class);
+			FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
+					editFreqAskQue, FreqAskQue.class);
 
 			if (res != null) {
 
@@ -745,7 +809,7 @@ public class AddContentController {
 
 		return "redirect:/faqList";
 	}
-	
+
 	@RequestMapping(value = "/linkExternalUrl", method = RequestMethod.GET)
 	public ModelAndView linkExternalUrl(HttpServletRequest request, HttpServletResponse response) {
 
@@ -754,7 +818,7 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
 		} catch (Exception e) {
@@ -779,7 +843,7 @@ public class AddContentController {
 			page.setExternalUrlTarget(newWindow);
 
 			System.out.println("page " + page);
-			Page res =  Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
 			if (res != null) {
 
@@ -798,14 +862,15 @@ public class AddContentController {
 	}
 
 	@RequestMapping(value = "/linkPageMetaData/{pageId}", method = RequestMethod.GET)
-	public ModelAndView linkPageMetaData(@PathVariable("pageId") int pageId, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView linkPageMetaData(@PathVariable("pageId") int pageId, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/linkPageMetaData");
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
-			page =  Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 			model.addObject("page", page);
 
 		} catch (Exception e) {
@@ -814,24 +879,24 @@ public class AddContentController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/submitPageMetaData", method = RequestMethod.POST)
 	public String submitPageMetaData(HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-		  
+
 			String metaTitle = request.getParameter("metaTitle");
 			String metaDesc = request.getParameter("metaDesc");
 			String metaKeyword = request.getParameter("metaKeyword");
-			
+
 			page.setPageMetaTitle(metaTitle);
 			page.setPageMetaDescription(metaDesc);
 			page.setPageMetaKeyword(metaKeyword);
-			 
+
 			System.out.println("page " + page);
-			Page res =  Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
 			if (res != null) {
 
@@ -848,7 +913,7 @@ public class AddContentController {
 
 		return "redirect:/sectionTreeList";
 	}
-	
+
 	@RequestMapping(value = "/sitebrowse", method = RequestMethod.GET)
 	public @ResponseBody String sitebrowse(HttpServletRequest request, HttpServletResponse response) {
 
@@ -883,8 +948,7 @@ public class AddContentController {
 
 		return jsonString;
 	}
-	
-	
+
 	@RequestMapping(value = "/languageList", method = RequestMethod.GET)
 	public ModelAndView languageList(HttpServletRequest request, HttpServletResponse response) {
 
@@ -893,9 +957,10 @@ public class AddContentController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("langId", 1);
-			Languages[] Languages =  Constant.getRestTemplate().postForObject(Constant.url + "/getLanguageList", map, Languages[].class);
+			Languages[] Languages = Constant.getRestTemplate().postForObject(Constant.url + "/getLanguageList", map,
+					Languages[].class);
 			List<Languages> list = new ArrayList<Languages>(Arrays.asList(Languages));
-			  
+
 			System.out.println(list);
 
 		} catch (Exception e) {

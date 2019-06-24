@@ -1,6 +1,7 @@
 package com.ats.rusaadmin.controller;
 
 import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,7 +102,6 @@ public class MasterController {
 	@RequestMapping(value = "/insertCategory", method = RequestMethod.POST)
 	public String insertCategory(HttpServletRequest request, HttpServletResponse response) {
 
-		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
@@ -110,6 +110,15 @@ public class MasterController {
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+
+			Boolean ret = false;
+
+			if (FormValidation.Validaton(request.getParameter("sectionId"), "") == true
+					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+					|| FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
+
+				ret = true;
+			}
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -122,17 +131,28 @@ public class MasterController {
 
 				for (int i = 0; i < languagesList.size(); i++) {
 
+					if (FormValidation.Validaton(
+							request.getParameter("catName" + languagesList.get(i).getLanguagesId()), "") == true) {
+
+						ret = true;
+						break;
+					}
+
 					CategoryDescription categoryDescription = new CategoryDescription();
 					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
 					categoryDescription
-							.setCatName(request.getParameter("catName" + languagesList.get(i).getLanguagesId()));
+							.setCatName(request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 					categoryDescription
-							.setCatDesc(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()));
+							.setCatDesc(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
 
-						editcat.setCatName(request.getParameter("catName" + languagesList.get(i).getLanguagesId()));
-						editcat.setCatDesc(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()));
+						editcat.setCatName(request.getParameter("catName" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
+						editcat.setCatDesc(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						System.out.println(text);
@@ -141,24 +161,37 @@ public class MasterController {
 					categoryDescriptionList.add(categoryDescription);
 				}
 				editcat.setCategoryDescriptionList(categoryDescriptionList);
-				// editcat.setAddedByUserId(UserDetail.getUserId());
 			} else {
+
 				editcat.setCatId(Integer.parseInt(catId));
 				editcat.setCatEditDate(sf.format(date));
 				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
 				for (int i = 0; i < editcat.getCategoryDescriptionList().size(); i++) {
 
+					if (FormValidation.Validaton(
+							request.getParameter(
+									"catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()),
+							"") == true) {
+
+						ret = true;
+						break;
+					}
+
 					editcat.getCategoryDescriptionList().get(i).setCatName(request
-							.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+							.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " "));
 					editcat.getCategoryDescriptionList().get(i).setCatDesc(request
-							.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+							.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " "));
 
 					if (editcat.getCategoryDescriptionList().get(i).getLanguageId() == 1) {
 
 						editcat.setCatName(request
-								.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+								.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
 						editcat.setCatDesc(request
-								.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+								.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						System.out.println(text);
@@ -166,24 +199,24 @@ public class MasterController {
 					}
 
 				}
-				// editcat.setEditByUserId(UserDetail.getUserId());
 			}
 
 			editcat.setSectionId(sectionId);
 			editcat.setCatSortNo(seqNo);
 			editcat.setIsActive(isActive);
 			editcat.setDelStatus(1);
-			System.out.println("category" + editcat);
+			// System.out.println("category" + editcat);
+			if (ret == false) {
+				Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
+						Category.class);
 
-			Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
-					Category.class);
+				// System.out.println("res " + res);
 
-			System.out.println("res " + res);
-
-			if (editcat.getCatId() == 0) {
-				session.setAttribute("successMsg", "Infomation added successfully!");
-			} else {
-				session.setAttribute("successMsg", "Infomation updated successfully!");
+				if (res.getCatId() != 0) {
+					session.setAttribute("successMsg", "Infomation added successfully!");
+				} else {
+					session.setAttribute("successMsg", "Failed to Add Information!");
+				}
 			}
 
 		} catch (Exception e) {
@@ -328,6 +361,16 @@ public class MasterController {
 			int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
+			Boolean ret = false;
+
+			if (FormValidation.Validaton(request.getParameter("categoryId"), "") == true
+					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+					|| FormValidation.Validaton(request.getParameter("categoryId"), "") == true
+					|| FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
+
+				ret = true;
+			}
+
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -339,17 +382,28 @@ public class MasterController {
 
 				for (int i = 0; i < languagesList.size(); i++) {
 
+					if (FormValidation.Validaton(
+							request.getParameter("subCatName" + languagesList.get(i).getLanguagesId()), "") == true) {
+
+						ret = true;
+						break;
+					}
+
 					CategoryDescription categoryDescription = new CategoryDescription();
 					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
 					categoryDescription
-							.setCatName(request.getParameter("subCatName" + languagesList.get(i).getLanguagesId()));
+							.setCatName(request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
 					categoryDescription
-							.setCatDesc(request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId()));
+							.setCatDesc(request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
 
-						editcat.setCatName(request.getParameter("subCatName" + languagesList.get(i).getLanguagesId()));
-						editcat.setCatDesc(request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId()));
+						editcat.setCatName(request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
+						editcat.setCatDesc(request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						System.out.println(text);
@@ -360,22 +414,37 @@ public class MasterController {
 				// editcat.setAddedByUserId(UserDetail.getUserId());
 				editcat.setCategoryDescriptionList(categoryDescriptionList);
 			} else {
+
 				editcat.setCatId(Integer.parseInt(catId));
 				editcat.setCatEditDate(sf.format(date));
 				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
 				for (int i = 0; i < editcat.getCategoryDescriptionList().size(); i++) {
 
+					if (FormValidation.Validaton(
+							request.getParameter(
+									"subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()),
+							"") == true) {
+
+						ret = true;
+						break;
+					}
 					editcat.getCategoryDescriptionList().get(i).setCatName(request
-							.getParameter("subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+							.getParameter("subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " "));
 					editcat.getCategoryDescriptionList().get(i).setCatDesc(request
-							.getParameter("subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+							.getParameter("subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " "));
 
 					if (editcat.getCategoryDescriptionList().get(i).getLanguageId() == 1) {
 
-						editcat.setCatName(request.getParameter(
-								"subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
-						editcat.setCatDesc(request.getParameter(
-								"subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId()));
+						editcat.setCatName(request
+								.getParameter(
+										"subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
+						editcat.setCatDesc(request
+								.getParameter(
+										"subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						System.out.println(text);
@@ -398,10 +467,10 @@ public class MasterController {
 
 			System.out.println("res " + res);
 
-			if (editcat.getCatId() == 0) {
+			if (res.getCatId() != 0) {
 				session.setAttribute("successMsg", "Infomation added successfully!");
 			} else {
-				session.setAttribute("successMsg", "Infomation updated successfully!");
+				session.setAttribute("successMsg", "Failed to add Infomation !");
 			}
 
 		} catch (Exception e) {
@@ -574,15 +643,9 @@ public class MasterController {
 
 			Boolean ret = false;
 
-			if (FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
-
-				ret = true;
-			}
-			if (FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
-
-				ret = true;
-			}
-			if (FormValidation.Validaton(request.getParameter("type"), "") == true) {
+			if (FormValidation.Validaton(request.getParameter("seqNo"), "") == true
+					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+					|| FormValidation.Validaton(request.getParameter("type"), "") == true) {
 
 				ret = true;
 			}
@@ -641,19 +704,13 @@ public class MasterController {
 						break;
 					}
 
-					try {
+					sectionDescriptionList.get(i).setSectionName(
+							request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+					sectionDescriptionList.get(i).setSectionDesc(
+							request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 
-						sectionDescriptionList.get(i)
-								.setSectionName(request
-										.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId())
-										.trim().replaceAll("[ ]{2,}", " "));
-						sectionDescriptionList.get(i)
-								.setSectionDesc(request
-										.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId())
-										.trim().replaceAll("[ ]{2,}", " "));
-					} catch (Exception e) {
-
-					}
 					if (sectionDescriptionList.get(i).getLanguageId() == 1) {
 
 						editSection.setSectionName(
@@ -679,19 +736,14 @@ public class MasterController {
 			if (ret == false) {
 				Section res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSection", editSection,
 						Section.class);
-				System.out.println("res save is " + res.toString());
 				session = request.getSession();
-				if (editSection.getSectionId() == 0) {
+				if (res.getSectionId() != 0) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
 				} else {
 					session.setAttribute("successMsg", "Failed to add Infomation !");
 					session.setAttribute("errorMsg", "true");
 				}
-			} else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
-				session.setAttribute("errorMsg", "true");
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
