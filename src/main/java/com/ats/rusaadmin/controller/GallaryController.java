@@ -380,6 +380,8 @@ public class GallaryController {
 				pageId = Integer.parseInt(request.getParameter("pageId"));
 				catId = Integer.parseInt(request.getParameter("catId"));
 
+				System.out.println("data is *******" + fileName + id + moduleId + pageId + catId + id);
+
 			} catch (Exception e) {
 				flag = 1;
 			}
@@ -419,15 +421,24 @@ public class GallaryController {
 	@RequestMapping(value = "/updateTitleName/{id}/{title}/{sortNo}", method = RequestMethod.GET)
 	public String updateTitleName(@PathVariable("id") int id, @PathVariable("title") String title,
 			@PathVariable("sortNo") int sortNo, HttpServletRequest request, HttpServletResponse response) {
-
+		HttpSession session = request.getSession();
+		User UserDetail = (User) session.getAttribute("UserDetail");
 		try {
 			System.out.println(id + "" + title);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryDetailsId", id);
 			map.add("title", title);
 			map.add("sortNo", sortNo);
-			System.out.println(map);
+			// System.out.println(map);
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/updateTitleName", map, Info.class);
+			if (info.isError() == false) {
+
+				session.setAttribute("successMsg", "Infomation Updated  Successfully!");
+
+			} else {
+				session.setAttribute("successMsg", "Error While Updating Infomation!");
+
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -456,8 +467,8 @@ public class GallaryController {
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 			String moduleId = request.getParameter("moduleId");
 			int catId = Integer.parseInt(request.getParameter("catId"));
-			//System.out.println(pageId);
-			
+			// System.out.println(pageId);
+
 			Boolean ret = false;
 
 			if (FormValidation.Validaton(request.getParameter("pageId"), "") == true
@@ -466,7 +477,6 @@ public class GallaryController {
 
 				ret = true;
 			}
-
 
 			try {
 				upload.saveUploadedImge(file.get(0), Constant.gallryImageURL, imageName, Constant.values, 1, 184, 134,
@@ -485,39 +495,36 @@ public class GallaryController {
 				gallaryDetail.setIsActive(1);
 				gallaryDetail.setDelStatus(1);
 
-				
-				if(ret==false) {
-				GallaryDetail res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetails",
-						gallaryDetail, GallaryDetail.class);
+				if (ret == false) {
+					GallaryDetail res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetails",
+							gallaryDetail, GallaryDetail.class);
 
-				if (res != null) {
-					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-					map.add("moduleId", moduleId);
-					map.add("pageId", pageId);
-					PagesModule pagesModule = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/findPageModuleByModuleIdAndPageId", map, PagesModule.class);
+					if (res != null) {
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						map.add("moduleId", moduleId);
+						map.add("pageId", pageId);
+						PagesModule pagesModule = Constant.getRestTemplate().postForObject(
+								Constant.url + "/findPageModuleByModuleIdAndPageId", map, PagesModule.class);
 
-					if (pagesModule.getId() == 0) {
-						pagesModule.setModuleId(Integer.parseInt(moduleId));
-						pagesModule.setPageId(pageId);
-						pagesModule.setPrimaryKeyId(pageId);
-						PagesModule pagesModuleres = Constant.getRestTemplate()
-								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						if (pagesModule.getId() == 0) {
+							pagesModule.setModuleId(Integer.parseInt(moduleId));
+							pagesModule.setPageId(pageId);
+							pagesModule.setPrimaryKeyId(pageId);
+							PagesModule pagesModuleres = Constant.getRestTemplate()
+									.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						}
+
+						if (res.getGalleryDetailsId() != 0) {
+							session.setAttribute("successMsg", "Infomation added successfully!");
+							session.setAttribute("errorMsg", "false");
+
+						} else {
+							session.setAttribute("successMsg", "Failed to Add Information!");
+							session.setAttribute("errorMsg", "true");
+
+						}
 					}
-					
-
-					if (res.getGalleryDetailsId() != 0) {
-						session.setAttribute("successMsg", "Infomation added successfully!");
-						session.setAttribute("errorMsg", "false");
-
-					} else {
-						session.setAttribute("successMsg", "Failed to Add Information!");
-						session.setAttribute("errorMsg", "true");
-
-					}
-				}
-				}
-				else {
+				} else {
 					session.setAttribute("successMsg", "Invalid Information!");
 					session.setAttribute("errorMsg", "true");
 

@@ -252,6 +252,7 @@ function clearSessionAttribute() {
 
 				<div class="modal-footer pt-3">
 					<input type="hidden" id="conid" name="conid">
+					
 					<button type="button" class="btn btn btn-primary"
 						data-dismiss="modal">No</button>
 					<button type="button" class="btn btn btn-primary"
