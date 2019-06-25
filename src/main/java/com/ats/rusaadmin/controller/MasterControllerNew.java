@@ -652,6 +652,7 @@ public class MasterControllerNew {
 			model.addObject("categoryList",categoryList);
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
+			editupload = new DocumentUpload();
 			//model.addObject("isEdit", 0);
 			
 		} catch (Exception e) {
