@@ -88,7 +88,7 @@
                      		<div class="col-xs-12">
                                 	  
                                <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_maintenance">Site Maintenance Status: <span class="text-danger">*</span> </label>
+                                <label class="control-label col-sm-2" for="config_maintenance">Site Maintenance Status: </label>
                                 <div class="col-sm-10">
                                     <select name="status" id="status" class="form-control">
                                   	  <c:choose>
@@ -107,10 +107,10 @@
                             
                            
                               <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_site_maintenance_message">Message:  <span class="text-danger">*</span> </label>
+                                <label class="control-label col-sm-2" for="config_site_maintenance_message">Message:  </label>
                                 <div class="col-sm-10">
                                 <input id="message" class="form-control"
-								placeholder="Message"  style="text-align: left;" name="message" type="text" value="${editsiteMain.message}" required>
+								placeholder="Message"  style="text-align: left;" name="message" type="text" value="${editsiteMain.message}"  >
                                 </div>
                               </div>
                                

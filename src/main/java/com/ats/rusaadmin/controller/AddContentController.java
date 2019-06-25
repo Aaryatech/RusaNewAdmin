@@ -873,33 +873,21 @@ public class AddContentController {
 			String externalUrl = request.getParameter("externalUrl");
 			String newWindow = request.getParameter("newWindow");
 
-			Boolean ret = false;
+			page.setExternalUrl(externalUrl.trim().replaceAll("[ ]{2,}", " "));
+			page.setExternalUrlTarget(newWindow.trim().replaceAll("[ ]{2,}", " "));
 
-			if (FormValidation.Validaton(request.getParameter("externalUrl"), "") == true
-					|| FormValidation.Validaton(request.getParameter("newWindow"), "") == true) {
+			// System.out.println("page " + page);
+			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
-				ret = true;
-			}
+			if (res != null) {
 
-			if (ret == false) {
-				page.setExternalUrl(externalUrl.trim().replaceAll("[ ]{2,}", " "));
-				page.setExternalUrlTarget(newWindow.trim().replaceAll("[ ]{2,}", " "));
-
-				// System.out.println("page " + page);
-				Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
-
-				if (res != null) {
-
-					session.setAttribute("successMsg", "Infomation Updated successfully!");
-					session.setAttribute("errorMsg", false);
-				} else {
-					session.setAttribute("successMsg", "Failed to Insert Information! ");
-					session.setAttribute("errorMsg", true);
-				}
+				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("errorMsg", false);
 			} else {
-				session.setAttribute("successMsg", "Invalid Information!");
+				session.setAttribute("successMsg", "Failed to Insert Information! ");
 				session.setAttribute("errorMsg", true);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -937,36 +925,22 @@ public class AddContentController {
 			String metaDesc = request.getParameter("metaDesc");
 			String metaKeyword = request.getParameter("metaKeyword");
 
-			Boolean ret = false;
+			page.setPageMetaTitle(metaTitle.trim().replaceAll("[ ]{2,}", " "));
+			page.setPageMetaDescription(metaDesc.trim().replaceAll("[ ]{2,}", " "));
+			page.setPageMetaKeyword(metaKeyword.trim().replaceAll("[ ]{2,}", " "));
 
-			if (FormValidation.Validaton(request.getParameter("metaTitle"), "") == true
-					|| FormValidation.Validaton(request.getParameter("metaDesc"), "") == true
-					|| FormValidation.Validaton(request.getParameter("metaKeyword"), "") == true) {
+			System.out.println("page " + page);
+			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
-				ret = true;
-			}
+			if (res != null) {
 
-			if (ret == false) {
-
-				page.setPageMetaTitle(metaTitle.trim().replaceAll("[ ]{2,}", " "));
-				page.setPageMetaDescription(metaDesc.trim().replaceAll("[ ]{2,}", " "));
-				page.setPageMetaKeyword(metaKeyword.trim().replaceAll("[ ]{2,}", " "));
-
-				System.out.println("page " + page);
-				Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
-
-				if (res != null) {
-
-					session.setAttribute("successMsg", "Infomation updated successfully!");
-					session.setAttribute("errorMsg", false);
-				} else {
-					session.setAttribute("successMsg", "Failrd to Insert Information!");
-					session.setAttribute("errorMsg", true);
-				}
+				session.setAttribute("successMsg", "Infomation updated successfully!");
+				session.setAttribute("errorMsg", false);
 			} else {
-				session.setAttribute("successMsg", "Invalid Information!");
+				session.setAttribute("successMsg", "Failrd to Insert Information!");
 				session.setAttribute("errorMsg", true);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

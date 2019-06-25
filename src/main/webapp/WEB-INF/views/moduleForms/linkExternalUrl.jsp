@@ -123,7 +123,7 @@
                         <hr>
                              	 
                                 <div class="form-group">
-                                <label class="control-label col-sm-2" for="page_order">External URL :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="page_order">External URL :</label>
                                 <div class="col-sm-10">
                                   <input type="text" class="form-control" id="externalUrl" name="externalUrl"  onchange="trim(this)" placeholder="External URL" value="${page.externalUrl}"  >
                                 </div>
@@ -132,9 +132,9 @@
                             	  
                                  
                                <div class="form-group">
-                                <label class="control-label col-sm-2" for="status">In New Window  :<span class="text-danger">*</span></label>
+                                <label class="control-label col-sm-2" for="status">In New Window  :</label>
                                 <div class="col-sm-10">
-                                <select id="newWindow" name="newWindow" class="form-control" required >
+                                <select id="newWindow" name="newWindow" class="form-control"   >
                                 <c:choose>
                                 	<c:when test="${page.externalUrlTarget==0}">
                                 			<option value="1" >Yes</option>

@@ -130,7 +130,7 @@ public class MasterControllerNew {
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
 					|| FormValidation.Validaton(request.getParameter("userPass"), "") == true
 					|| FormValidation.Validaton(request.getParameter("userName"), "") == true
-					|| FormValidation.Validaton( request.getParameter("userEmail"), "email") == true) {
+					|| FormValidation.Validaton(request.getParameter("userEmail"), "email") == true) {
 
 				ret = true;
 			}
@@ -142,100 +142,100 @@ public class MasterControllerNew {
 			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-		//	System.out.println(sf.format(date));
-			
-			if(ret==false) {
-			if (userId.equalsIgnoreCase(null) || userId.equalsIgnoreCase("")) {
+			// System.out.println(sf.format(date));
 
-				if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
+			if (ret == false) {
+				if (userId.equalsIgnoreCase(null) || userId.equalsIgnoreCase("")) {
 
-					user.setFileName("");
+					if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
 
-				} else {
-					docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-					user.setFileName(docFile);
-					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL, docFile,
-								Constant.values, 0, 0, 0, 0, 0);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				}
-				user.setUserId(0);
-				user.setCreatedDate(sf.format(date));
-				user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
-				user.setFirstname(firstName.trim().replaceAll("[ ]{2,}", " "));
-				user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
-				user.setRoles(roles);
-				user.setDelStatus(1);
-				user.setSortNo(0);
-				// user.setCreatedDate(sf.format(date));
-				user.setIsActive(isActive);
-				user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
-				user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
-				user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
-				user.setAddedByUserId(UserDetail.getUserId());
-				// editbanner.setAddedByUserId(UserDetail.getUserId());
+						user.setFileName("");
 
-			} else {
-
-				if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
-					try {
-						System.out.println("File");
-						if (removePhoto == 1) {
-							System.out.println("Remove :" + removePhoto);
-							user.setFileName("");
+					} else {
+						docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
+						user.setFileName(docFile);
+						try {
+							Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL, docFile,
+									Constant.values, 0, 0, 0, 0, 0);
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
 						}
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
 					}
+					user.setUserId(0);
+					user.setCreatedDate(sf.format(date));
+					user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
+					user.setFirstname(firstName.trim().replaceAll("[ ]{2,}", " "));
+					user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
+					user.setRoles(roles);
+					user.setDelStatus(1);
+					user.setSortNo(0);
+					// user.setCreatedDate(sf.format(date));
+					user.setIsActive(isActive);
+					user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
+					user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
+					user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
+					user.setAddedByUserId(UserDetail.getUserId());
+					// editbanner.setAddedByUserId(UserDetail.getUserId());
+
 				} else {
 
-					docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-					user.setFileName(docFile);
+					if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
+						try {
+							System.out.println("File");
+							if (removePhoto == 1) {
+								System.out.println("Remove :" + removePhoto);
+								user.setFileName("");
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					} else {
 
-					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL, docFile,
-								Constant.values, 0, 0, 0, 0, 0);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+						docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
+						user.setFileName(docFile);
+
+						try {
+							Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL, docFile,
+									Constant.values, 0, 0, 0, 0, 0);
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+
 					}
+					user.setUserId(Integer.parseInt(userId));
+					// user.setCreatedDate(sf.format(date));
+					user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
+					user.setFirstname(firstName.trim().replaceAll("[ ]{2,}", " "));
+					user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
+					user.setRoles(roles);
+					user.setDelStatus(1);
+					user.setSortNo(0);
+					user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
+					user.setIsActive(isActive);
+					user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
+					// user.setUserPass(pass);
+					user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
+					user.setModifiedDate(yy.format(date));
+					user.setEditByUserId(UserDetail.getUserId());
 
 				}
-				user.setUserId(Integer.parseInt(userId));
-				// user.setCreatedDate(sf.format(date));
-				user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
-				user.setFirstname(firstName.trim().replaceAll("[ ]{2,}", " "));
-				user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
-				user.setRoles(roles);
-				user.setDelStatus(1);
-				user.setSortNo(0);
-				user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
-				user.setIsActive(isActive);
-				user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
-				// user.setUserPass(pass);
-				user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
-				user.setModifiedDate(yy.format(date));
-				user.setEditByUserId(UserDetail.getUserId());
 
-			}
+				User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
 
-			User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
+				// System.out.println("res " + res);
 
-			// System.out.println("res " + res);
+				if (user.getUserId() != 0) {
+					session.setAttribute("successMsg", "User Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
 
-			if (user.getUserId() !=0) {
- 				session.setAttribute("successMsg", "User Infomation added successfully!");
- 				session.setAttribute("errorMsg", "false");
+					session.setAttribute("successMsg", "Failed To Add User Information !");
+					session.setAttribute("errorMsg", "true");
+				}
 			} else {
-				
-				session.setAttribute("successMsg", "Failed To Add User Information !");
-				session.setAttribute("errorMsg", "true");
-			}
-			}else {
 				session.setAttribute("successMsg", "Invalid Information!");
 				session.setAttribute("errorMsg", "true");
 			}
@@ -252,19 +252,35 @@ public class MasterControllerNew {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+			HttpSession session = request.getSession();
 			HttpSession session1 = request.getSession();
 			User UserDetail = (User) session1.getAttribute("UserDetail");
 			String userId = request.getParameter("userId");
 			String pass = request.getParameter("userPass");
+			Boolean ret = false;
+			if (FormValidation.Validaton(request.getParameter("userId"), "") == true
+					|| FormValidation.Validaton(request.getParameter("userPass"), "") == true) {
 
-			user.setUserId(Integer.parseInt(userId));
-			user.setUserPass(pass);
+				ret = true;
+			}
+			if (ret == false) {
+				user.setUserId(Integer.parseInt(userId));
+				user.setUserPass(pass);
 
-			User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
-			System.out.println("Id: " + userId);
+				User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
+				// System.out.println("Id: " + userId);
+				if (res.getUserId() != 0) {
+					session.setAttribute("successMsg", "User Infomation updated successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
+					session.setAttribute("successMsg", "Failed Update Information!");
+					session.setAttribute("errorMsg", "true");
+				}
 
-			HttpSession session = request.getSession();
-			session.setAttribute("successMsg", "User Infomation updated successfully!");
+			} else {
+				session.setAttribute("successMsg", "Failed Update Information!");
+				session.setAttribute("errorMsg", "true");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -379,7 +395,13 @@ public class MasterControllerNew {
 			String linkName = request.getParameter("linkName");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			// int pageId = Integer.parseInt(request.getParameter("pageId"));
+			Boolean ret = false;
 
+			if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
+					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
+
+				ret = true;
+			}
 			VpsImageUpload upload = new VpsImageUpload();
 			String docFile = null;
 
@@ -389,6 +411,8 @@ public class MasterControllerNew {
 
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
+			
+			if(ret==false) {
 			if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
 				docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
@@ -421,23 +445,31 @@ public class MasterControllerNew {
 				// editbanner.setEditByUserId(UserDetail.getUserId());
 			}
 
-			editbanner.setLinkName(linkName);
-			editbanner.setSliderName(sliderName);
-			editbanner.setUrlLink(urlLink);
+			editbanner.setLinkName(linkName.trim().replaceAll("[ ]{2,}", " "));
+			editbanner.setSliderName(sliderName.trim().replaceAll("[ ]{2,}", " "));
+			editbanner.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
 			editbanner.setIsActive(isActive);
 			editbanner.setDelStatus(1);
 			editbanner.setText1(text1);
 			editbanner.setText2(text2);
 
-			System.out.println("editbanner" + editbanner);
+			//System.out.println("editbanner" + editbanner);
 
 			BannerImages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveBannerImages", editbanner,
 					BannerImages.class);
 
-			if (editbanner.getId() == 0) {
+			if (res.getId() != 0) {
 				session.setAttribute("successMsg", "Infomation added successfully!");
+				session.setAttribute("errorMsg", "false");
 			} else {
-				session.setAttribute("successMsg", "Infomation updated successfully!");
+				session.setAttribute("successMsg", "Failed To Add Infomation!");
+				session.setAttribute("errorMsg", "true");
+			}
+			}
+			else {
+				session.setAttribute("successMsg", "Invalid Infomation!");
+				session.setAttribute("errorMsg", "true");
+				
 			}
 
 		} catch (Exception e) {

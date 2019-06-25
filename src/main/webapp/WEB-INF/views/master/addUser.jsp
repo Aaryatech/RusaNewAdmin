@@ -293,7 +293,7 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="userPass" class="form-control"
+												<input id="userPass" class="form-control" onchange="trim(this)"
 													placeholder="Password" value="${editUser.userPass}"
 													style="text-align: left;" name="userPass" type="text"
 													required>

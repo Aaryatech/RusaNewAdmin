@@ -102,7 +102,7 @@
 															</label>
 															<div class="col-sm-10">
 																<input id="siteName${languagesList.languagesId}"
-																	class="form-control" placeholder="Meta Site Name"
+																	class="form-control" placeholder="Meta Site Name" onchange="trim(this)"
 																	value="${metaList.siteTitle}" style="text-align: left;"
 																	name="siteName${languagesList.languagesId}" type="text"
 																	required>
@@ -116,7 +116,7 @@
 																class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input id="metaDescription${languagesList.languagesId}"
+																<input id="metaDescription${languagesList.languagesId}" onchange="trim(this)"
 																	class="form-control" placeholder="Meta Description"
 																	value="${metaList.metaDescription}"
 																	style="text-align: left;"
@@ -132,7 +132,7 @@
 															</label>
 															<div class="col-sm-10">
 																<input id="metaKeywords${languagesList.languagesId}"
-																	class="form-control" placeholder="Meta Keyword"
+																	class="form-control" placeholder="Meta Keyword" onchange="trim(this)"
 																	value="${metaList.metaKeywords}"
 																	style="text-align: left;"
 																	name="metaKeywords${languagesList.languagesId}"
@@ -147,7 +147,7 @@
 															</label>
 															<div class="col-sm-10">
 																<input id="metaAuthor${languagesList.languagesId}"
-																	class="form-control" placeholder="Meta Author"
+																	class="form-control" placeholder="Meta Author" onchange="trim(this)"
 																	value="${metaList.metaAuthor}"
 																	style="text-align: left;"
 																	name="metaAuthor${languagesList.languagesId}"
@@ -234,6 +234,15 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	
+  <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script>
             function clearSessionAttribute() {
             	 

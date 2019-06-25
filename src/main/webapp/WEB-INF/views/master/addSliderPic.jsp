@@ -139,7 +139,7 @@
                                  <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Banner Name : <span class="text-danger">*</span> </label>
 				                                <div class="col-sm-10"> 
-												<input id="sliderName" class="form-control"
+												<input id="sliderName" class="form-control" onchange="trim(this)"
 								placeholder="Slider Name" value="${editbanner.sliderName}"  style="text-align: left;" name="sliderName" type="text" required >
 				                                </div>
 				                              </div>
@@ -147,7 +147,7 @@
                         <div class="form-group">
 				                                <label class="control-label col-sm-2" for="config_mail_protocol">Text 1 :  </label>
 				                                <div class="col-sm-10"> 
-												<input id="text1" class="form-control"
+												<input id="text1" class="form-control" onchange="trim(this)"
 								placeholder="Text 1" value="${editbanner.text1}"  style="text-align: left;" name="text1" type="text"  >
 				                                </div>
 				                              </div>
@@ -157,7 +157,7 @@
 				                                <label class="control-label col-sm-2" for="config_smtp_host">Text 2:</label>
 				                                <div class="col-sm-10">
 				                                
-				                                <input id="text2" class="form-control"
+				                                <input id="text2" class="form-control" onchange="trim(this)"
 								placeholder="Text 2" value="${editbanner.text2}"  style="text-align: left;" name="text2" type="text"  >
 				                                 
 				                                </div>
@@ -166,7 +166,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL/Link :  </label>
                                 <div class="col-sm-10"> 
-                                  <input id="urlLink" class="form-control"
+                                  <input id="urlLink" class="form-control" onchange="trim(this)"
 								placeholder="URL/Link " value="${editbanner.urlLink}"  style="text-align: left;" name="urlLink" type="text"  >
                                 </div>
                               </div>
@@ -174,7 +174,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Link Name :  </label>
                                 <div class="col-sm-10"> 
-                                  <input id="linkName" class="form-control"
+                                  <input id="linkName" class="form-control" onchange="trim(this)"
 								placeholder="Link Name " value="${editbanner.linkName}"  style="text-align: left;" name="linkName" type="text"  >
                                 </div>
                               </div>
@@ -231,7 +231,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+    <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
 
               jQuery(document).ready(function($) {

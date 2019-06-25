@@ -36,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
+import com.ats.rusaadmin.common.FormValidation;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.ContactUs;
@@ -82,11 +83,13 @@ public class NewController {
 		try {
 			editMetaData = new MetaData();
 
-			Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList", Languages[].class);
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 			model.addObject("languagesList", languagesList);
 
-			MetaData[] editMet =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllMetaDataList", MetaData[].class);
+			MetaData[] editMet = Constant.getRestTemplate().getForObject(Constant.url + "/getAllMetaDataList",
+					MetaData[].class);
 			editMeta = new ArrayList<MetaData>(Arrays.asList(editMet));
 
 			model.addObject("editMetaData", editMeta);
@@ -129,8 +132,8 @@ public class NewController {
 	 * ModelAndView model = new ModelAndView("master/sectionList"); try {
 	 * 
 	 * 
-	 * Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList",
-	 * Section[].class); List<Section> sectionList = new
+	 * Section[] section = Constant.getRestTemplate().getForObject(Constant.url +
+	 * "/getAllSectionList", Section[].class); List<Section> sectionList = new
 	 * ArrayList<Section>(Arrays.asList(section)); model.addObject("sectionList",
 	 * sectionList);
 	 * 
@@ -147,33 +150,60 @@ public class NewController {
 		try {
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
-
+			Boolean ret = false;
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
 
 			for (int i = 0; i < editMeta.size(); i++) {
+				if (FormValidation.Validaton(request.getParameter("siteName" + languagesList.get(i).getLanguagesId()),
+						"") == true
+						|| FormValidation.Validaton(
+								request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId()),
+								"") == true
+						|| FormValidation.Validaton(
+								request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId()), "") == true
+						|| FormValidation.Validaton(
+								request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId()),
+								"") == true) {
 
-				editMeta.get(i).setSiteTitle(request.getParameter("siteName" + languagesList.get(i).getLanguagesId()));
+					ret = true;
+					break;
+				}
+
+				editMeta.get(i).setSiteTitle(request.getParameter("siteName" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
 				editMeta.get(i).setMetaDescription(
-						request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId()));
+						request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				editMeta.get(i).setMetaAuthor(request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
 				editMeta.get(i)
-						.setMetaAuthor(request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId()));
-				editMeta.get(i)
-						.setMetaKeywords(request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId()));
+						.setMetaKeywords(request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " "));
 
 			}
 			// editSection.setAddedByUserId(UserDetail.getUserId());
-			System.out.println("siteTitle" + editMeta);
+			// System.out.println("siteTitle" + editMeta);
 
-			List<MetaData> res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveMetaData", editMeta, List.class);
+			if (ret == false) {
+				List<MetaData> res = Constant.getRestTemplate().postForObject(Constant.url + "/saveMetaData", editMeta,
+						List.class);
 
-			System.out.println("res " + res);
-			session = request.getSession();
-			if (editMetaData.getId() == 0) {
-				session.setAttribute("successMsg", "Infomation added successfully!");
+				// System.out.println("res " + res);
+				session = request.getSession();
+				if (editMetaData.getId() == 0) {
+					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+
+				} else {
+					session.setAttribute("successMsg", "Failed To Add Infomation!");
+					session.setAttribute("errorMsg", "false");
+
+				}
 			} else {
-				session.setAttribute("successMsg", "Infomation updated successfully!");
+				session.setAttribute("successMsg", "Invalid Infomation!");
+				session.setAttribute("errorMsg", "true");
 			}
 
 		} catch (Exception e) {
@@ -193,14 +223,14 @@ public class NewController {
 	 * MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,
 	 * Object>(); map.add("sectionId", sectionId);
 	 * 
-	 * editSection =  Constant.getRestTemplate().postForObject(Constant.url + "/getSectionBySectionId",
-	 * map, Section.class);
+	 * editSection = Constant.getRestTemplate().postForObject(Constant.url +
+	 * "/getSectionBySectionId", map, Section.class);
 	 * 
 	 * 
 	 * System.out.println(editSection);
 	 * 
-	 * Languages[] languages =  Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
-	 * Languages[].class); languagesList = new
+	 * Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url
+	 * + "/getLanguageList", Languages[].class); languagesList = new
 	 * ArrayList<Languages>(Arrays.asList(languages));
 	 * model.addObject("languagesList", languagesList); model.addObject("isEdit",
 	 * 1);
@@ -312,7 +342,8 @@ public class NewController {
 
 			System.out.println("editImageLink" + editImageLink);
 
-			ImageLink res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveImageLink", editImageLink, ImageLink.class);
+			ImageLink res = Constant.getRestTemplate().postForObject(Constant.url + "/saveImageLink", editImageLink,
+					ImageLink.class);
 
 			if (editImageLink.getId() == 0) {
 				session.setAttribute("successMsg", "Infomation added successfully!");
@@ -335,7 +366,7 @@ public class NewController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteImagesLink", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteImagesLink", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -354,7 +385,8 @@ public class NewController {
 		ModelAndView model = new ModelAndView("master/imagesLinkList");
 		try {
 
-			ImageLink[] imagesLink =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllImageLinkList", ImageLink[].class);
+			ImageLink[] imagesLink = Constant.getRestTemplate().getForObject(Constant.url + "/getAllImageLinkList",
+					ImageLink[].class);
 			List<ImageLink> imagesLinkList = new ArrayList<ImageLink>(Arrays.asList(imagesLink));
 
 			for (int i = 0; i < imagesLinkList.size(); i++) {
@@ -379,7 +411,8 @@ public class NewController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			editImageLink =  Constant.getRestTemplate().postForObject(Constant.url + "/getImageLinksById", map, ImageLink.class);
+			editImageLink = Constant.getRestTemplate().postForObject(Constant.url + "/getImageLinksById", map,
+					ImageLink.class);
 			model.addObject("editImageLink", editImageLink);
 			model.addObject("isEdit", 1);
 			model.addObject("url", Constant.getBannerImageURL);
@@ -407,7 +440,8 @@ public class NewController {
 				contactUs.setRemark(remark);
 
 			}
-			ContactUs res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveContactUs", contactUs, ContactUs.class);
+			ContactUs res = Constant.getRestTemplate().postForObject(Constant.url + "/saveContactUs", contactUs,
+					ContactUs.class);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -425,7 +459,8 @@ public class NewController {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			ContactUs[] ContactUs =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllContactList", ContactUs[].class);
+			ContactUs[] ContactUs = Constant.getRestTemplate().getForObject(Constant.url + "/getAllContactList",
+					ContactUs[].class);
 			contactList = new ArrayList<ContactUs>(Arrays.asList(ContactUs));
 			model.addObject("contactList", contactList);
 
@@ -640,10 +675,11 @@ public class NewController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 
-			contactUs =  Constant.getRestTemplate().postForObject(Constant.url + "/getContactById", map, ContactUs.class);
+			contactUs = Constant.getRestTemplate().postForObject(Constant.url + "/getContactById", map,
+					ContactUs.class);
 			/*
-			 * ContactUs[] contact =  Constant.getRestTemplate().getForObject(Constant.url + "/getContactById",
-			 * ContactUs[].class); List<ContactUs> editcontact = new
+			 * ContactUs[] contact = Constant.getRestTemplate().getForObject(Constant.url +
+			 * "/getContactById", ContactUs[].class); List<ContactUs> editcontact = new
 			 * ArrayList<ContactUs>(Arrays.asList(contact));
 			 */
 
@@ -667,7 +703,7 @@ public class NewController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			// map.add("delStatus", 0);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteContact", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteContact", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -697,7 +733,8 @@ public class NewController {
 			}
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleContact", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleContact", map,
+					Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -720,7 +757,8 @@ public class NewController {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 0);
-			ContactUs[] ContactUs =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllContactListDeleted", ContactUs[].class);
+			ContactUs[] ContactUs = Constant.getRestTemplate().getForObject(Constant.url + "/getAllContactListDeleted",
+					ContactUs[].class);
 			contactList = new ArrayList<ContactUs>(Arrays.asList(ContactUs));
 			model.addObject("contactList", contactList);
 
@@ -740,7 +778,7 @@ public class NewController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			// map.add("delStatus", 0);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/retriveContact", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/retriveContact", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -775,8 +813,8 @@ public class NewController {
 				socialChannel.setSortNo(Integer.parseInt(sortNo));
 
 			}
-			SocialChannels res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveSocialChannel", socialChannel,
-					SocialChannels.class);
+			SocialChannels res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSocialChannel",
+					socialChannel, SocialChannels.class);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -792,7 +830,8 @@ public class NewController {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			List<SocialChannels> socialList =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSocialList", List.class);
+			List<SocialChannels> socialList = Constant.getRestTemplate()
+					.getForObject(Constant.url + "/getAllSocialList", List.class);
 			// List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
 			model.addObject("channelList", socialList);
 
@@ -812,10 +851,11 @@ public class NewController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 
-			socialChannel =  Constant.getRestTemplate().postForObject(Constant.url + "/getSocialChannelById", map, SocialChannels.class);
+			socialChannel = Constant.getRestTemplate().postForObject(Constant.url + "/getSocialChannelById", map,
+					SocialChannels.class);
 			/*
-			 * ContactUs[] contact =  Constant.getRestTemplate().getForObject(Constant.url + "/getContactById",
-			 * ContactUs[].class); List<ContactUs> editcontact = new
+			 * ContactUs[] contact = Constant.getRestTemplate().getForObject(Constant.url +
+			 * "/getContactById", ContactUs[].class); List<ContactUs> editcontact = new
 			 * ArrayList<ContactUs>(Arrays.asList(contact));
 			 */
 
@@ -839,7 +879,7 @@ public class NewController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			// map.add("delStatus", 0);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteSocialChannel", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteSocialChannel", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -861,7 +901,8 @@ public class NewController {
 		ModelAndView model = new ModelAndView("master/siteMaintenances");
 		try {
 
-			editSite =  Constant.getRestTemplate().getForObject(Constant.url + "/getMaintananceRecord", Maintainance.class);
+			editSite = Constant.getRestTemplate().getForObject(Constant.url + "/getMaintananceRecord",
+					Maintainance.class);
 			model.addObject("editsiteMain", editSite);
 
 		} catch (Exception e) {
@@ -886,7 +927,8 @@ public class NewController {
 			editSite.setEditDate(sf.format(date));
 			editSite.setMessage(message);
 
-			Maintainance res =  Constant.getRestTemplate().postForObject(Constant.url + "/saveSiteMaintenance", editSite, Maintainance.class);
+			Maintainance res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSiteMaintenance", editSite,
+					Maintainance.class);
 
 			if (res.getId() == 0) {
 				session.setAttribute("successMsg", "Error !");
@@ -908,18 +950,21 @@ public class NewController {
 			/*
 			 * MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,
 			 * Object>(); map.add("delStatus", 1); List<SocialChannels> socialList =
-			 *  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSocialList", List.class);
-			 * //List<User> userList = new ArrayList<User>(Arrays.asList(getUser));
-			 * model.addObject("channelList", socialList);
+			 * Constant.getRestTemplate().getForObject(Constant.url + "/getAllSocialList",
+			 * List.class); //List<User> userList = new
+			 * ArrayList<User>(Arrays.asList(getUser)); model.addObject("channelList",
+			 * socialList);
 			 */
 
-			Section[] section =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList", Section[].class);
+			Section[] section = Constant.getRestTemplate().getForObject(Constant.url + "/getAllSectionList",
+					Section[].class);
 			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
 			model.addObject("sectionList", sectionList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
-			GetCategory[] getCategory =  Constant.getRestTemplate().postForObject(Constant.url + "/getAllCatList", map, GetCategory[].class);
+			GetCategory[] getCategory = Constant.getRestTemplate().postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
 			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(getCategory));
 			model.addObject("categoryList", categoryList);
 
@@ -929,29 +974,29 @@ public class NewController {
 
 		return model;
 	}
-	
-	
-	//*********************Multiple Delete****************************************
-	 
+
+	// *********************Multiple Delete****************************************
+
 	@RequestMapping(value = "/multipleCMSDelete", method = RequestMethod.GET)
 	public String multipleCMSDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleCMSContentList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleCMSContentList", map,
+					Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -966,27 +1011,27 @@ public class NewController {
 
 		return "redirect:/cmsList";
 	}
-	
-	
+
 	@RequestMapping(value = "/multipleFAQDelete", method = RequestMethod.GET)
 	public String multipleFAQDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleFAQList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleFAQList", map,
+					Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1002,28 +1047,26 @@ public class NewController {
 		return "redirect:/faqList";
 	}
 
-	
-	
-
 	@RequestMapping(value = "/multipleGalleryImageDelete", method = RequestMethod.GET)
 	public String multipleGalleryImageDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleGalleryImageVideoList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleGalleryImageVideoList",
+					map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1039,27 +1082,26 @@ public class NewController {
 		return "redirect:/uploadedImageList";
 	}
 
-	
-
 	@RequestMapping(value = "/multipleVideoDelete", method = RequestMethod.GET)
 	public String multipleVideoDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleGalleryImageVideoList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleGalleryImageVideoList",
+					map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1074,26 +1116,27 @@ public class NewController {
 
 		return "redirect:/VedioFormList";
 	}
-	
+
 	@RequestMapping(value = "/multipleTestimonialDelete", method = RequestMethod.GET)
 	public String multipleTestimonialDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
+			Info res = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1108,27 +1151,27 @@ public class NewController {
 
 		return "redirect:/testImonialList";
 	}
-	
 
 	@RequestMapping(value = "/multipleSuccessStoryDelete", method = RequestMethod.GET)
 	public String multipleSuccessStoryDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
+			Info res = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1143,26 +1186,27 @@ public class NewController {
 
 		return "redirect:/successStoryList";
 	}
-	
+
 	@RequestMapping(value = "/multipleTeamListDelete", method = RequestMethod.GET)
 	public String multipleTeamListDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
+			Info res = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1177,26 +1221,27 @@ public class NewController {
 
 		return "redirect:/teamList";
 	}
-	
+
 	@RequestMapping(value = "/multipleDocumentListDelete", method = RequestMethod.GET)
 	public String multipleDocumentListDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleDocumentList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleDocumentList", map,
+					Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1211,26 +1256,27 @@ public class NewController {
 
 		return "redirect:/documentUploadList";
 	}
-	
+
 	@RequestMapping(value = "/multipleNewsListDelete", method = RequestMethod.GET)
 	public String multipleNewsListDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleNewsBlogEventsList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleNewsBlogEventsList", map,
+					Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1245,26 +1291,27 @@ public class NewController {
 
 		return "redirect:/NewsBlogList";
 	}
-	
+
 	@RequestMapping(value = "/multipleEventListDelete", method = RequestMethod.GET)
 	public String multipleEventListDelete(HttpServletRequest request, HttpServletResponse response) {
 
- 		try {
+		try {
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
-			
+
 			System.err.println("in mul del ");
 
 			for (int i = 0; i < ids.length; i++) {
 				id = id + "," + ids[i];
-				
+
 			}
-			System.err.println("in mul del "+id);
+			System.err.println("in mul del " + id);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
-			Info res =  Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleNewsBlogEventsList", map, Info.class);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleNewsBlogEventsList", map,
+					Info.class);
 			System.out.println(res);
 
 			HttpSession session = request.getSession();
@@ -1279,6 +1326,5 @@ public class NewController {
 
 		return "redirect:/EventFormList";
 	}
-
 
 }
