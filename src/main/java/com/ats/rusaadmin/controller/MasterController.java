@@ -194,7 +194,7 @@ public class MasterController {
 								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						System.out.println(text);
+						//System.out.println(text);
 						editcat.setSlugName(text);
 					}
 
@@ -214,11 +214,17 @@ public class MasterController {
 
 				if (res.getCatId() != 0) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+
 				} else {
 					session.setAttribute("successMsg", "Failed to Add Information!");
+					session.setAttribute("errorMsg", "true");
+
 				}
 			} else {
-				session.setAttribute("successMsg", "Failed to Add Information!");
+				session.setAttribute("successMsg", "Invalid Information!");
+				session.setAttribute("errorMsg", "true");
+
 			}
 
 		} catch (Exception e) {
@@ -449,7 +455,7 @@ public class MasterController {
 								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						System.out.println(text);
+						//System.out.println(text);
 						editcat.setSlugName(text);
 					}
 
@@ -471,11 +477,17 @@ public class MasterController {
 
 				if (res.getCatId() != 0) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+
 				} else {
 					session.setAttribute("successMsg", "Failed to add Infomation !");
+					session.setAttribute("errorMsg", "true");
+
 				}
 			} else {
 				session.setAttribute("successMsg", "invalid Infomation !");
+				session.setAttribute("errorMsg", "true");
+
 			}
 
 		} catch (Exception e) {

@@ -100,7 +100,7 @@
 										action="${pageContext.request.contextPath}/submtEditEventForm"
 										method="post" enctype="multipart/form-data"
 										name="form_sample_2" id="form_sample_2"
-										onsubmit="return confirm('Do you really want to submit the form?');">
+									>
 
 
 										<ul class="nav nav-tabs">
@@ -139,7 +139,7 @@
 																	Location :<span class="text-danger">*</span>
 																</label>
 																<div class="col-sm-10">
-																	<input type="text" class="form-control" id="event_loc"
+																	<input type="text" class="form-control" id="event_loc" onchange="trim(this)"
 																		name="event_loc" placeholder="Event Location"
 																		value="${editNewsBlog.eventLocation}" required>
 																</div>
@@ -153,7 +153,7 @@
 																</label>
 																<div class="col-sm-10">
 																	<input type="text" class="form-control datepicker"
-																		id="from_date" name="from_date"
+																		id="from_date" name="from_date" onchange="trim(this)"
 																		placeholder="Event Date" value="${eventDate}" required>
 																</div>
 															</div>
@@ -165,7 +165,7 @@
 																</label>
 																<div class="col-sm-10">
 																	<input type="text" class="form-control" id="per_name"
-																		name="per_name" placeholder="Person Name"
+																		name="per_name" placeholder="Person Name" onchange="trim(this)"
 																		value="${editNewsBlog.eventContactPerson}" required>
 																</div>
 															</div>
@@ -177,7 +177,7 @@
 																</label>
 																<div class="col-sm-10">
 																	<input type="text" class="form-control" id="event_no"
-																		pattern="[7-9]{1}[0-9]{9}" maxlength="10"
+																		pattern="[7-9]{1}[0-9]{9}" maxlength="10" onchange="trim(this)"
 																		name="event_no" placeholder="Event Contact No"
 																		value="${editNewsBlog.eventContactNumber}" required>
 																</div>
@@ -190,7 +190,7 @@
 																	Title :<span class="text-danger">*</span>
 																</label>
 																<div class="col-sm-10">
-																	<input type="text" class="form-control" id="page_name"
+																	<input type="text" class="form-control" id="page_name" onchange="trim(this)"
 																		name="page_name" placeholder="Page/Menu Title"
 																		value="${page.pageName}" readonly>
 																</div>
@@ -240,7 +240,7 @@
 																			<div class="col-sm-10">
 																				<input type="text" class="form-control"
 																					id="meta_title1${languagesList.languagesId}"
-																					name="meta_title1${languagesList.languagesId}"
+																					name="meta_title1${languagesList.languagesId}" onchange="trim(this)"
 																					placeholder="Meta Title"
 																					value="${detailList.pageMetaTitle}">
 
@@ -252,7 +252,7 @@
 																			<div class="col-sm-10">
 																				<textarea class="form-control"
 																					style="width: 100%; height: 50px; font-size: 14px; line-height: 23px; padding: 15px;"
-																					name="meta_description1${languagesList.languagesId}"
+																					name="meta_description1${languagesList.languagesId}"  onchange="trim(this)"
 																					id="meta_description1${languagesList.languagesId}"> 
                                      ${detailList.pageMetaDescription}</textarea>
 																			</div>
@@ -261,7 +261,7 @@
 																			<label class="control-label col-sm-2"
 																				for="meta_keyword1">KeyWord :</label>
 																			<div class="col-sm-10">
-																				<input type="text" class="form-control"
+																				<input type="text" class="form-control" onchange="trim(this)"
 																					id="meta_keyword1${languagesList.languagesId}"
 																					name="meta_keyword1${languagesList.languagesId}"
 																					placeholder="Meta Keywords"
@@ -290,7 +290,7 @@
 																	Order :<span class="text-danger">*</span>
 																</label>
 																<div class="col-sm-10">
-																	<input type="text" class="form-control" id="page_order"
+																	<input type="text" class="form-control" id="page_order" onchange="trim(this)"
 																		name="page_order" placeholder="Sort Order"
 																		value="${editNewsBlog.pageOrder}" required>
 																</div>

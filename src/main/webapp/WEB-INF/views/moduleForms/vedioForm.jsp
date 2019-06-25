@@ -123,7 +123,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
+                                  <input type="text" class="form-control" id="page_name" onchange="trim(this)" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
                                 </div>
                               </div>
                       </div>
@@ -154,7 +154,7 @@
                                 <label class="control-label col-sm-2" for="status">Title  :<span class="text-danger">*</span></label>
                               
 									 <div class="col-sm-10">
-									<input id="titleName" class="form-control" placeholder="Vedio Title" value="${editGalleryDetail.title}"  style="text-align: left;" name="titleName" type="text" required>
+									<input id="titleName" class="form-control" placeholder="Vedio Title" onchange="trim(this)" value="${editGalleryDetail.title}"  style="text-align: left;" name="titleName" type="text" required>
 								 </div>
                               </div>
                               <!--  <div class="form-group">
@@ -176,7 +176,7 @@
                                      <div class="form-group" id="newpost1" >
                                 	<label class="control-label col-sm-2" for="status">Video Code :</label>
                                  	 <div class="col-sm-10"  >
-                             		 	<textarea rows="4" cols="100" id="vedioCode" name="vedioCode"  >${editGalleryDetail.fileName}</textarea>
+                             		 	<textarea rows="4" cols="100" id="vedioCode"  onchange="trim(this)" name="vedioCode"  >${editGalleryDetail.fileName}</textarea>
                                     </div>
                                      </div>
                                      
@@ -233,6 +233,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+     <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
     <script type="text/javascript">
    	 function showhide(value) 
          {  

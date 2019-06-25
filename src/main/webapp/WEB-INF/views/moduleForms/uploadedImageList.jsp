@@ -75,42 +75,43 @@
 										</div>
 									</div>
 								</c:if>
-<br>
-									<form
-										action="${pageContext.request.contextPath}/multipleGalleryImageDelete"
-										method="get" id="multipleDelete">
-								<div class="col-xs-12">
+								<br>
+								<form
+									action="${pageContext.request.contextPath}/multipleGalleryImageDelete"
+									method="get" id="multipleDelete">
+									<div class="col-xs-12">
 
 
-									<table id="example-1"
-										class="table table-striped dt-responsive display">
-										<thead>
-											<tr>
-												<th width="5%">Sr No</th>
-												<th width="5%">Delete</th>
-												<th>Title</th>
-												<th>Image</th>
-												<th  width="10%">Sort No</th>
-												<th width="10%">Action</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<c:forEach items="${gallaryDetailList}"
-												var="gallaryDetailList" varStatus="count">
+										<table id="example-1"
+											class="table table-striped dt-responsive display">
+											<thead>
 												<tr>
-													<td>${count.index+1}</td>
-													<td style="text-align: center;"><input
-																type="checkbox" class="chk" name="ids"
-																id="contact${gallaryDetailList.galleryDetailsId}" value="${gallaryDetailList.galleryDetailsId}" /></td>
-													<td><input value="${gallaryDetailList.title}"
-														class="col-md-10" type="text"
-														id="title${gallaryDetailList.galleryDetailsId}"></td>
+													<th width="5%">Sr No</th>
+													<th width="5%">Delete</th>
+													<th>Title</th>
+													<th>Image</th>
+													<th width="10%">Sort No</th>
+													<th width="10%">Action</th>
+												</tr>
+											</thead>
 
-													<td><img
-														src="${imageUrl}thumbnail${gallaryDetailList.fileName}"
-														style="width: 150px; height: auto"></td>
-													<%-- <c:choose>
+											<tbody>
+												<c:forEach items="${gallaryDetailList}"
+													var="gallaryDetailList" varStatus="count">
+													<tr>
+														<td>${count.index+1}</td>
+														<td style="text-align: center;"><input
+															type="checkbox" class="chk" name="ids"
+															id="contact${gallaryDetailList.galleryDetailsId}"
+															value="${gallaryDetailList.galleryDetailsId}" /></td>
+														<td><input value="${gallaryDetailList.title}"
+															class="col-md-10" type="text"
+															id="title${gallaryDetailList.galleryDetailsId}"></td>
+
+														<td><img
+															src="${imageUrl}thumbnail${gallaryDetailList.fileName}"
+															style="width: 150px; height: auto"></td>
+														<%-- <c:choose>
 														<c:when test="${gallaryDetailList.isActive==1}">
 															<td>Active</td>
 														</c:when>
@@ -118,35 +119,36 @@
 															<td>Inactive</td>
 														</c:otherwise>
 													</c:choose> --%>
-													<td><input value="${gallaryDetailList.sortNo}"
-														class="alloNo" type="text"
-														id="sortNo${gallaryDetailList.galleryDetailsId}" style="text-align: right;"></td>
-													<td><a
-														href="javascript:updateTitleName(${gallaryDetailList.galleryDetailsId});"><span
-															class="glyphicon glyphicon-edit"
-															data-animate=" animated fadeIn " rel="tooltip"></span></a> <a
-														href="${pageContext.request.contextPath}/deleteImage?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}&id=${gallaryDetailList.galleryDetailsId}
+														<td><input value="${gallaryDetailList.sortNo}"
+															class="alloNo" type="text"
+															id="sortNo${gallaryDetailList.galleryDetailsId}"
+															style="text-align: right;"></td>
+														<td><a
+															href="javascript:updateTitleName(${gallaryDetailList.galleryDetailsId});"><span
+																class="glyphicon glyphicon-edit"
+																data-animate=" animated fadeIn " rel="tooltip"></span></a> <a
+															href="${pageContext.request.contextPath}/deleteImage?pageId=${pageId}&moduleId=${moduleId}&catId=${catId}&id=${gallaryDetailList.galleryDetailsId}
 														&file=${gallaryDetailList.fileName}"
-														onClick="return confirm('Are you sure want to delete this record');"
-														rel="tooltip" data-color-class="danger"
-														data-animate=" animated fadeIn " data-toggle="tooltip"
-														data-original-title="Delete  record"><span
-															class="glyphicon glyphicon-remove"></span></a></td>
-												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
+															onClick="return confirm('Are you sure want to delete this record');"
+															rel="tooltip" data-color-class="danger"
+															data-animate=" animated fadeIn " data-toggle="tooltip"
+															data-original-title="Delete  record"><span
+																class="glyphicon glyphicon-remove"></span></a></td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
 
 
 
 
-								</div>
-								<span class="validation-invalid-label" id="error_table1"
-											style="display: none;">Please select one record.</span>
-										<div class="form-group" style="text-align: center;">
-											<button type="submit" class="btn btn-primary" id="submtbtn">Multiple
-												Delete</button>
-										</div>
+									</div>
+									<span class="validation-invalid-label" id="error_table1"
+										style="display: none;">Please select one record.</span>
+									<div class="form-group" style="text-align: center;">
+										<button type="submit" class="btn btn-primary" id="submtbtn">Multiple
+											Delete</button>
+									</div>
 								</form>
 							</div>
 						</div>
@@ -178,16 +180,17 @@
 			var title = $("#title" + id).val();
 			var sortNo = $("#sortNo" + id).val();
 			//alert(sortNo);
-			if(sortNo==""){
-				sortNo=0;
+			if (sortNo == "") {
+				sortNo = 0;
 			}
 			//alert(title); 
-			location.href = 'updateTitleName/' + id + "/" + title +"/"+ sortNo;
+			location.href = 'updateTitleName/' + id + "/" + title + "/"
+					+ sortNo;
 
 		}
 	</script>
-	
-	
+
+
 	<script>
 		function clearSessionAttribute() {
 
@@ -200,50 +203,64 @@
 			});
 
 		}
-		
-		$('.alloNo').on('input', function() {
-			 this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
-			});
+
+		$('.alloNo').on(
+				'input',
+				function() {
+					this.value = this.value.replace(/[^0-9]/g, '').replace(
+							/(\..*)\./g, '$1');
+				});
 	</script>
-	
-	<script>
-	$(document).ready(function($) {
 
-		$("#multipleDelete").submit(function(e) {
-			var isError = false;
-			var errMsg = "";
+	<script type="text/javascript">
+		$(document).ready(function($) {
 
-			var checkedVals = $('.chk:checkbox:checked').map(function() {
-				return this.value;
-			}).get();
-			checkedVals = checkedVals.join(',');
+			$("#multipleDelete").submit(function(e) {
+				var isError = false;
+				var errMsg = "";
 
-			if (checkedVals == '') {
-				$("#error_table1").show();
-				return false;
-			}
+				var checkedVals = $('.chk:checkbox:checked').map(function() {
+					return this.value;
+				}).get();
+				checkedVals = checkedVals.join(',');
 
-			if (!isError) {
-
-				var x = true;
-				if (x == true) {
-
-					$('#modal_scrollable').modal('show');
+				if (checkedVals == '') {
+					$("#error_table1").show();
+					return false;
 				}
-				//end ajax send this to php page
-			}
-			return false;
+
+				if (!isError) {
+
+					var x = true;
+					if (x == true) {
+
+						$('#modal_scrollable').modal('show');
+					}
+					//end ajax send this to php page
+				}
+				return false;
+			});
 		});
-	});
 		function submitForm() {
-			 $('#modal_scrollable').modal('hide'); 
+			$('#modal_scrollable').modal('hide');
 			document.getElementById("multipleDelete").submit();
-			 
+
 		}
-		 
-		 
+		function singleDelete(id) {
+
+			$('#modal_scrollable_single').modal('show');
+			document.getElementById("conid").value = id;
+		}
+		function submitFormSingle() {
+			$('#modal_scrollable_single').modal('hide');
+			var id = document.getElementById("conid").value;
+			location.href = "${pageContext.request.contextPath}/deleteTestImonial/"
+					+ id;
+			//document.getElementById("multipleDelete").submit();
+
+		}
 	</script>
-	
+
 	<div id="modal_scrollable" class="modal fade" data-backdrop="false"
 		tabindex="-1">
 		<div class="modal-dialog modal-dialog-scrollable">
@@ -266,7 +283,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div id="modal_scrollable_single" class="modal fade"
 		data-backdrop="false" tabindex="-1">
 		<div class="modal-dialog modal-dialog-scrollable">
@@ -291,6 +307,5 @@
 			</div>
 		</div>
 	</div>
-	
 </body>
 </html>

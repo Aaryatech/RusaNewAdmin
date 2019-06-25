@@ -114,7 +114,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
+                                  <input type="text" class="form-control" id="page_name" name="page_name"  onchange="trim(this)" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
                                 </div>
                               </div>
                         </div>
@@ -125,7 +125,7 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_order">External URL :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="externalUrl" name="externalUrl" placeholder="External URL" value="${page.externalUrl}"  >
+                                  <input type="text" class="form-control" id="externalUrl" name="externalUrl"  onchange="trim(this)" placeholder="External URL" value="${page.externalUrl}"  >
                                 </div>
                               </div>
                                   
@@ -191,7 +191,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+    <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
             jQuery(document).ready(function($) {
             

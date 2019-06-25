@@ -158,7 +158,7 @@
 																Location :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control" id="event_loc"
+																<input type="text" class="form-control" id="event_loc" onchange="trim(this)"
 																	name="event_loc" placeholder="Event Location">
 															</div>
 														</div>
@@ -169,7 +169,7 @@
 																Date :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control datepicker"
+																<input type="text" class="form-control datepicker" onchange="trim(this)"
 																	id="from_date" name="from_date"
 																	placeholder="Event Date" required>
 															</div>
@@ -181,7 +181,7 @@
 																Name :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control" id="per_name"
+																<input type="text" class="form-control" id="per_name" onchange="trim(this)"
 																	name="per_name" placeholder="Person Name" required>
 															</div>
 														</div>
@@ -192,7 +192,7 @@
 																No. :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control" id="event_no"
+																<input type="text" class="form-control" id="event_no" onchange="trim(this)"
 																	pattern="[7-9]{1}[0-9]{9}" maxlength="10"
 																	name="event_no" placeholder="Event Contact No" required>
 															</div>
@@ -211,7 +211,7 @@
 																<div class="col-sm-10">
 																	<input type="text" class="form-control"
 																		id="heading1${languagesList.languagesId}"
-																		name="heading1${languagesList.languagesId}"
+																		name="heading1${languagesList.languagesId}" onchange="trim(this)"
 																		placeholder="Heading" value="" required>
 																</div>
 															</div>
@@ -232,7 +232,7 @@
 																<label class="control-label col-sm-2" for="meta_title1">Meta
 																	Title :</label>
 																<div class="col-sm-10">
-																	<input type="text" class="form-control"
+																	<input type="text" class="form-control" onchange="trim(this)"
 																		id="meta_title1${languagesList.languagesId}"
 																		name="meta_title1${languagesList.languagesId}"
 																		placeholder="Meta Title" value="">
@@ -243,7 +243,7 @@
 																<label class="control-label col-sm-2"
 																	for="meta_description1">Meta Description :</label>
 																<div class="col-sm-10">
-																	<textarea class="form-control"
+																	<textarea class="form-control" onchange="trim(this)"
 																		style="width: 100%; height: 50px; font-size: 14px; line-height: 23px; padding: 15px;"
 																		name="meta_description1${languagesList.languagesId}"
 																		id="meta_description1${languagesList.languagesId}"></textarea>
@@ -253,7 +253,7 @@
 																<label class="control-label col-sm-2"
 																	for="meta_keyword1">KeyWord :</label>
 																<div class="col-sm-10">
-																	<input type="text" class="form-control"
+																	<input type="text" class="form-control" onchange="trim(this)"
 																		id="meta_keyword1${languagesList.languagesId}"
 																		name="meta_keyword1${languagesList.languagesId}"
 																		placeholder="Meta Keywords" value="">
@@ -278,7 +278,7 @@
 																Order :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="number" class="form-control"
+																<input type="number" class="form-control" onchange="trim(this)"
 																	id="page_order" name="page_order"
 																	placeholder="Sort Order" value="" required>
 															</div>
@@ -547,6 +547,15 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	
+	 <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 <script type="text/javascript">
 function showForm(temp) {
 //alert("doc::"+temp);

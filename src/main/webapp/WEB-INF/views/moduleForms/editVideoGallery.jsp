@@ -175,8 +175,8 @@
 														<div class="col-sm-10">
 															<input id="titleName" class="form-control"
 																placeholder="Vedio Title"
-																value="${editGalleryDetail.title}"
-																style="text-align: left;" name="titleName" type="text"
+																value="${editGalleryDetail.title}" 
+																style="text-align: left;" name="titleName" type="text" onchange="trim(this)"
 																required>
 														</div>
 													</div>
@@ -207,7 +207,7 @@
 														<label class="control-label col-sm-2" for="status">Video
 															Code :</label>
 														<div class="col-sm-10">
-															<textarea rows="4" cols="100" id="vedioCode"
+															<textarea rows="4" cols="100" id="vedioCode" onchange="trim(this)"
 																name="vedioCode">${editGalleryDetail.fileName}</textarea>
 														</div>
 													</div>
@@ -270,6 +270,15 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	
+	   <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script type="text/javascript">
 		function showhide(value) {
 

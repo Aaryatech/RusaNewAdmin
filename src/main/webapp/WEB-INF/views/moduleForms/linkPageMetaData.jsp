@@ -114,7 +114,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">Page/Menu Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
+                                  <input type="text" class="form-control" id="page_name" name="page_name"  onchange="trim(this)" placeholder="Page/Menu Title" value="${page.pageName}"  readonly>
                                 </div>
                               </div>
                         </div>
@@ -132,14 +132,14 @@
                                   <div class="form-group">
                                 <label class="control-label col-sm-2" for="metaDesc">Meta Desc :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="metaDesc" name="metaDesc" placeholder="Meta Desc" value="${page.pageMetaDescription}"  >
+                                  <input type="text" class="form-control" id="metaDesc" name="metaDesc"  onchange="trim(this)"  placeholder="Meta Desc" value="${page.pageMetaDescription}"  >
                                 </div>
                               </div>
                               
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="metaKeyword">Meta Keyword :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="metaKeyword" name="metaKeyword" placeholder="Meta Keyword" value="${page.pageMetaKeyword}"  >
+                                  <input type="text" class="form-control" id="metaKeyword" name="metaKeyword"  onchange="trim(this)" placeholder="Meta Keyword" value="${page.pageMetaKeyword}"  >
                                 <span class="help-block">comma separated</span>
                                 </div>
                               </div>
@@ -185,7 +185,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   
+    <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
             jQuery(document).ready(function($) {
             

@@ -672,13 +672,13 @@ public class MasterControllerNew {
 			 
 			 	String docId = request.getParameter("docId");
 			 	String catId = request.getParameter("cateId");
-			 	System.out.println("category: "+catId);
+			 	//System.out.println("category: "+catId);
 		        String docName = request.getParameter("docName");
 				int sortNo = Integer.parseInt(request.getParameter("sortNo"));
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
 				int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 				int pageId = Integer.parseInt(request.getParameter("pageId")); 
-				System.out.println("Id: "+isEdit);
+				//System.out.println("Id: "+isEdit);
 				VpsImageUpload upload = new VpsImageUpload();
 				String pdfName = null;
 				
@@ -706,7 +706,7 @@ public class MasterControllerNew {
 				
 				if(ret==false) {
 			    if(docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
-			    	System.out.println("id null");
+			    	//System.out.println("id null");
 					
 			    	pdfName =  dateTimeInGMT.format(date)+"_"+pagePdf.get(0).getOriginalFilename();
 							editupload.setFileName(pdfName);
@@ -770,14 +770,14 @@ public class MasterControllerNew {
 					pagesModule.setPrimaryKeyId(res.getDocId());
 					pagesModule.setModuleId(7);
 					PagesModule pagesModuleres =  Constant.getRestTemplate().postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					System.out.println("res " + res);  
+					//System.out.println("res " + res);  
 				}
 				if(res!=null) {
 					
 					session.setAttribute("successMsg","Infomation added successfully!");
 					session.setAttribute("errorMsg","false");
 				}else {
-					session.setAttribute("successMsg","Infomation added successfully!");
+					session.setAttribute("successMsg","Failed To  Add Infomation!");
 					session.setAttribute("errorMsg","false");
 				}
 				}

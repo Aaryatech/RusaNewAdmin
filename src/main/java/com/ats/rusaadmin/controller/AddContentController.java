@@ -436,21 +436,25 @@ public class AddContentController {
 						// TODO: handle exception
 						e.printStackTrace();
 					}
-
 				}
-
 				editCMSPages.setPageOrder(seqNo);
 				editCMSPages.setIsActive(isActive);
 				editCMSPages.setEditDate(sf.format(date));
-				editCMSPages.setFeaturedImageAlignment(aligment);
+				editCMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 
 				CMSPages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail",
 						editCMSPages, CMSPages.class);
 
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
-				session.setAttribute("errorMsg", "false");
+				if (res.getCmsPageId() != 0) {
+					session.setAttribute("successMsg", "Infomation Updated successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
+					session.setAttribute("successMsg", "Error while updating Content!");
+					session.setAttribute("errorMsg", "true");
+				}
+
 			} else {
-				session.setAttribute("successMsg", "Error while updating Content!");
+				session.setAttribute("successMsg", "Invalid Information!");
 				session.setAttribute("errorMsg", "true");
 			}
 		} catch (Exception e) {
@@ -611,23 +615,23 @@ public class AddContentController {
 			FreqAskQue freqAskQue = new FreqAskQue();
 
 			List<FreqAskQueDescription> freqAskQueDescriptionList = new ArrayList<FreqAskQueDescription>();
-			
 
-				for (int i = 0; i < languagesList.size(); i++) {
-					if(FormValidation.Validaton(request.getParameter("question" + languagesList.get(i).getLanguagesId()), "") == true) {
-						ret=true;
-						break;
-					}
-
-					FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
-					freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					freqAskQueDescription
-							.setFaqQue(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-					freqAskQueDescription
-							.setFaqAns(request.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-					freqAskQueDescriptionList.add(freqAskQueDescription);
+			for (int i = 0; i < languagesList.size(); i++) {
+				if (FormValidation.Validaton(request.getParameter("question" + languagesList.get(i).getLanguagesId()),
+						"") == true) {
+					ret = true;
+					break;
 				}
-				if (ret == false) {
+
+				FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
+				freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+				freqAskQueDescription.setFaqQue(request.getParameter("question" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				freqAskQueDescription.setFaqAns(request.getParameter("ans" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				freqAskQueDescriptionList.add(freqAskQueDescription);
+			}
+			if (ret == false) {
 				freqAskQue.setAddedByUserId(UserDetail.getUserId());
 
 				freqAskQue.setPageId(pageId);
@@ -638,7 +642,7 @@ public class AddContentController {
 
 				freqAskQue.setDescriptionList(freqAskQueDescriptionList);
 
-				System.out.println("freqAskQue " + freqAskQue);
+				// System.out.println("freqAskQue " + freqAskQue);
 				FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
 						freqAskQue, FreqAskQue.class);
 
@@ -651,7 +655,7 @@ public class AddContentController {
 					pagesModule.setModuleId(2);
 					PagesModule pagesModuleres = Constant.getRestTemplate()
 							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					System.out.println("res " + res);
+					// System.out.println("res " + res);
 
 					session.setAttribute("successMsg", "Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
@@ -790,42 +794,46 @@ public class AddContentController {
 
 				ret = true;
 			}
-			
+
 			for (int i = 0; i < editFreqAskQue.getDescriptionList().size(); i++) {
 
-				if (FormValidation.Validaton(request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()), "") == true) {
-					ret=true;
+				if (FormValidation.Validaton(
+						request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()),
+						"") == true) {
+					ret = true;
 					break;
 				}
-				
-				editFreqAskQue.getDescriptionList().get(i).setFaqQue(
-						request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
+
+				editFreqAskQue.getDescriptionList().get(i)
+						.setFaqQue(request
+								.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
 				editFreqAskQue.getDescriptionList().get(i).setFaqAns(
-						request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " "));
+						request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim()
+								.replaceAll("[ ]{2,}", " "));
 
 			}
-			if(ret==false) {
-			editFreqAskQue.setEditByUserId(UserDetail.getUserId());
+			if (ret == false) {
+				editFreqAskQue.setEditByUserId(UserDetail.getUserId());
 
-			editFreqAskQue.setFaqSortNo(seqNo);
-			editFreqAskQue.setIsActive(isActive);
-			editFreqAskQue.setDelStatus(1);
-			editFreqAskQue.setEditDate(sf.format(date));
+				editFreqAskQue.setFaqSortNo(seqNo);
+				editFreqAskQue.setIsActive(isActive);
+				editFreqAskQue.setDelStatus(1);
+				editFreqAskQue.setEditDate(sf.format(date));
 
-			System.out.println("editFreqAskQue " + editFreqAskQue);
-			FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
-					editFreqAskQue, FreqAskQue.class);
+				System.out.println("editFreqAskQue " + editFreqAskQue);
+				FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
+						editFreqAskQue, FreqAskQue.class);
 
-			if (res != null) {
+				if (res != null) {
 
-				session.setAttribute("successMsg", "Infomation added successfully!");
-				session.setAttribute("errorMsg", "false");
-			}else {
-				session.setAttribute("successMsg", "Failed to add Infomation !");
-				session.setAttribute("errorMsg", "true");
-			}
- 			}
-			else {
+					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
+					session.setAttribute("successMsg", "Failed to add Infomation !");
+					session.setAttribute("errorMsg", "true");
+				}
+			} else {
 				session.setAttribute("successMsg", "Invalid Infomation !");
 				session.setAttribute("errorMsg", "true");
 			}
@@ -865,21 +873,33 @@ public class AddContentController {
 			String externalUrl = request.getParameter("externalUrl");
 			String newWindow = request.getParameter("newWindow");
 
-			page.setExternalUrl(externalUrl);
-			page.setExternalUrlTarget(newWindow);
+			Boolean ret = false;
 
-			System.out.println("page " + page);
-			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+			if (FormValidation.Validaton(request.getParameter("externalUrl"), "") == true
+					|| FormValidation.Validaton(request.getParameter("newWindow"), "") == true) {
 
-			if (res != null) {
-
-				session.setAttribute("successMsg", "Infomation updated successfully!");
-				session.setAttribute("errorMsg", false);
-			} else {
-				session.setAttribute("successMsg", "Error While Updating");
-				session.setAttribute("errorMsg", true);
+				ret = true;
 			}
 
+			if (ret == false) {
+				page.setExternalUrl(externalUrl.trim().replaceAll("[ ]{2,}", " "));
+				page.setExternalUrlTarget(newWindow.trim().replaceAll("[ ]{2,}", " "));
+
+				// System.out.println("page " + page);
+				Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+
+				if (res != null) {
+
+					session.setAttribute("successMsg", "Infomation Updated successfully!");
+					session.setAttribute("errorMsg", false);
+				} else {
+					session.setAttribute("successMsg", "Failed to Insert Information! ");
+					session.setAttribute("errorMsg", true);
+				}
+			} else {
+				session.setAttribute("successMsg", "Invalid Information!");
+				session.setAttribute("errorMsg", true);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -917,22 +937,36 @@ public class AddContentController {
 			String metaDesc = request.getParameter("metaDesc");
 			String metaKeyword = request.getParameter("metaKeyword");
 
-			page.setPageMetaTitle(metaTitle);
-			page.setPageMetaDescription(metaDesc);
-			page.setPageMetaKeyword(metaKeyword);
+			Boolean ret = false;
 
-			System.out.println("page " + page);
-			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+			if (FormValidation.Validaton(request.getParameter("metaTitle"), "") == true
+					|| FormValidation.Validaton(request.getParameter("metaDesc"), "") == true
+					|| FormValidation.Validaton(request.getParameter("metaKeyword"), "") == true) {
 
-			if (res != null) {
-
-				session.setAttribute("successMsg", "Infomation updated successfully!");
-				session.setAttribute("errorMsg", false);
-			} else {
-				session.setAttribute("successMsg", "Error While Updating");
-				session.setAttribute("errorMsg", true);
+				ret = true;
 			}
 
+			if (ret == false) {
+
+				page.setPageMetaTitle(metaTitle.trim().replaceAll("[ ]{2,}", " "));
+				page.setPageMetaDescription(metaDesc.trim().replaceAll("[ ]{2,}", " "));
+				page.setPageMetaKeyword(metaKeyword.trim().replaceAll("[ ]{2,}", " "));
+
+				System.out.println("page " + page);
+				Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+
+				if (res != null) {
+
+					session.setAttribute("successMsg", "Infomation updated successfully!");
+					session.setAttribute("errorMsg", false);
+				} else {
+					session.setAttribute("successMsg", "Failrd to Insert Information!");
+					session.setAttribute("errorMsg", true);
+				}
+			} else {
+				session.setAttribute("successMsg", "Invalid Information!");
+				session.setAttribute("errorMsg", true);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
