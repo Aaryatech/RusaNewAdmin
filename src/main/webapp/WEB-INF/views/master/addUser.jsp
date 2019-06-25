@@ -122,7 +122,7 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="firstname" class="form-control"
+												<input id="firstname" class="form-control"  onchange="trim(this)"
 													placeholder="First Name" value="${editUser.firstname}"
 													style="text-align: left;" name="firstname" type="text"
 													required>
@@ -133,7 +133,7 @@
 											<label class="control-label col-sm-2"
 												for="config_mail_protocol">Middle Name : </label>
 											<div class="col-sm-10">
-												<input id="middlename" class="form-control"
+												<input id="middlename" class="form-control"  onchange="trim(this)"
 													placeholder="Middle Name" value="${editUser.middlename}"
 													style="text-align: left;" name="middlename" type="text">
 											</div>
@@ -145,7 +145,7 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="lastname" class="form-control"
+												<input id="lastname" class="form-control"  onchange="trim(this)"
 													placeholder="Last Name" value="${editUser.lastname}"
 													style="text-align: left;" name="lastname" type="text"
 													required>
@@ -158,7 +158,7 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="userEmail" class="form-control"
+												<input id="userEmail" class="form-control"  onchange="trim(this)"
 													placeholder="Email" value="${editUser.userEmail}"
 													style="text-align: left;" name="userEmail" type="email"
 													required>
@@ -258,7 +258,7 @@
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
-														<input id="userName" class="form-control"
+														<input id="userName" class="form-control"  onchange="trim(this)"
 															placeholder="User Name" value="${editUser.userName}"
 															style="text-align: left;" name="userName" type="text"
 															onKeyDown="if(event.keyCode === 32) return false;"
@@ -277,7 +277,7 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="userName" class="form-control"
-															placeholder="User Name" value="${editUser.userName}"
+															placeholder="User Name" value="${editUser.userName}"  onchange="trim(this)"
 															style="text-align: left;" name="userName" type="text"
 															onKeyDown="if(event.keyCode === 32) return false;"
 															required>
@@ -321,7 +321,14 @@
 		</section>
 	</div>
 
-
+  <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script type="text/javascript">
 		function RestrictSpace() {
 			if (event.keyCode == 32) {

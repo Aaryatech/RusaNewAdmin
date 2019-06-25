@@ -42,43 +42,43 @@ import com.ats.rusaadmin.model.User;
  */
 @Controller
 public class HomeController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(HttpServletRequest request, HttpServletResponse res,Locale locale, Model model) {
+	public String home(HttpServletRequest request, HttpServletResponse res, Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		
+
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
+
 		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
+
+		model.addAttribute("serverTime", formattedDate);
 		try {
-		 
-        InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
-        String hostName = addr.getHostName(); 
-         String userAgent = request.getHeader("User-Agent"); 
-         System.out.println("userAgent :" + userAgent);
-         System.out.println("hostName" + hostName);
-		}catch(Exception e) {
+
+			InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
+			String hostName = addr.getHostName();
+			String userAgent = request.getHeader("User-Agent");
+			System.out.println("userAgent :" + userAgent);
+			System.out.println("hostName" + hostName);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "login";
 	}
-	
+
 	@RequestMapping("/loginProcess")
-	public String helloWorld(HttpServletRequest request, HttpServletResponse res,Model model) throws IOException {
+	public String helloWorld(HttpServletRequest request, HttpServletResponse res, Model model) throws IOException {
 
 		String name = request.getParameter("username");
 		String password = request.getParameter("password");
 
 		String mav = new String();
-		 
+
 		res.setContentType("text/html");
 		HttpSession session = request.getSession();
 		try {
@@ -86,43 +86,40 @@ public class HomeController {
 
 			if (name.equalsIgnoreCase("") || password.equalsIgnoreCase("") || name == null || password == null) {
 
-				mav =  "login";
+				mav = "login";
 				model.addAttribute("msg", "Invalid login");
 			} else {
- 
+
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				map.add("userName", name);
 				map.add("password", password);
-				LoginResponse loginResponse = Constant.getRestTemplate().postForObject(Constant.url + "/loginResponse", map,
-						LoginResponse.class);
-				
-				 
-				if (loginResponse.isError()==false) {
-					 
-					
-					mav =  "redirect:/dashboard" ;
-					 
-						session.setAttribute("UserDetail", loginResponse.getUser());
-						session.setAttribute("imageProfileUrl", Constant.getUserProfileURL);
-						session.setAttribute("siteAdminUrl", Constant.siteAdminUrl);
-						InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
-				        String hostName = addr.getHostName(); 
-				        String userAgent = request.getHeader("User-Agent"); 
-				         
-				        Date date = new Date();
-				        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-				        LoginLogs saveLoginLogs = new LoginLogs();
-				        saveLoginLogs.setIpAddress(hostName);
-				        saveLoginLogs.setUserAgent(userAgent);
-				        saveLoginLogs.setCreatedDate(sf.format(date));
-				        saveLoginLogs.setUserId(loginResponse.getUser().getUserId());
-				        
-				        LoginLogs resp = Constant.getRestTemplate().postForObject(Constant.url + "/saveLoginLogs", saveLoginLogs, LoginLogs.class);
-						
-				        System.out.println(resp);
+				LoginResponse loginResponse = Constant.getRestTemplate().postForObject(Constant.url + "/loginResponse",
+						map, LoginResponse.class);
 
-				 
-					
+				if (loginResponse.isError() == false) {
+
+					mav = "redirect:/dashboard";
+
+					session.setAttribute("UserDetail", loginResponse.getUser());
+					session.setAttribute("imageProfileUrl", Constant.getUserProfileURL);
+					session.setAttribute("siteAdminUrl", Constant.siteAdminUrl);
+					InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
+					String hostName = addr.getHostName();
+					String userAgent = request.getHeader("User-Agent");
+
+					Date date = new Date();
+					SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+					LoginLogs saveLoginLogs = new LoginLogs();
+					saveLoginLogs.setIpAddress(hostName);
+					saveLoginLogs.setUserAgent(userAgent);
+					saveLoginLogs.setCreatedDate(sf.format(date));
+					saveLoginLogs.setUserId(loginResponse.getUser().getUserId());
+
+					LoginLogs resp = Constant.getRestTemplate().postForObject(Constant.url + "/saveLoginLogs",
+							saveLoginLogs, LoginLogs.class);
+
+					System.out.println(resp);
+
 				} else {
 
 					mav = "login";
@@ -130,7 +127,6 @@ public class HomeController {
 					model.addAttribute("msg", "Invalid login");
 				}
 
-				
 			}
 		} catch (Exception e) {
 			System.out.println("HomeController Login API Excep:  " + e.getMessage());
@@ -141,30 +137,32 @@ public class HomeController {
 		return mav;
 
 	}
-	
-	
+
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("welcome"); 
+		ModelAndView model = new ModelAndView("welcome");
 		try {
-			 
-			DashboardCount resp = Constant.getRestTemplate().getForObject(Constant.url + "/dashboardCount", DashboardCount.class);
+
+			DashboardCount resp = Constant.getRestTemplate().getForObject(Constant.url + "/dashboardCount",
+					DashboardCount.class);
 			model.addObject("count", resp);
-			
-			/*String aks = "             akshay  kasar      ";
-			
-			aks = aks.trim().replaceAll("[ ]{2,}", " ");
-			
-			System.out.println(aks);*/
-			
+
+			/*
+			 * String aks = "             akshay  kasar      ";
+			 * 
+			 * aks = aks.trim().replaceAll("[ ]{2,}", " ");
+			 * 
+			 * System.out.println(aks);
+			 */
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	 
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		System.out.println("User Logout");
@@ -172,13 +170,14 @@ public class HomeController {
 		session.invalidate();
 		return "redirect:/";
 	}
+
 	@ExceptionHandler(LoginFailException.class)
 	public String redirectToLogin() {
 		System.out.println("HomeController Login Fail Excep:");
 
 		return "login";
 	}
-	
+
 	@RequestMapping(value = "/sessionTimeOut", method = RequestMethod.GET)
 	public String sessionTimeOut(HttpSession session) {
 		System.out.println("User Logout");
@@ -186,60 +185,56 @@ public class HomeController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
+
 	@RequestMapping(value = "/sampleForm", method = RequestMethod.GET)
 	public ModelAndView addCategory(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("sample/sampleForm");
 		try {
-			 
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/sampleTableList", method = RequestMethod.GET)
 	public ModelAndView sampleTableList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("sample/sampleTableList");
 		try {
-			 
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/langConvert", method = RequestMethod.GET)
 	public ModelAndView langConvert(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("sample/langConvert");
 		try {
-			 
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/setSubModId", method = RequestMethod.GET)
-	public @ResponseBody void setSubModId(HttpServletRequest request,
-		HttpServletResponse response) {
-		int subModId=Integer.parseInt(request.getParameter("subModId"));
-		int modId=Integer.parseInt(request.getParameter("modId"));
-		 System.out.println("subModId " + subModId);
-		System.out.println("modId " + modId); 
+	public @ResponseBody void setSubModId(HttpServletRequest request, HttpServletResponse response) {
+		int subModId = Integer.parseInt(request.getParameter("subModId"));
+		int modId = Integer.parseInt(request.getParameter("modId"));
+		System.out.println("subModId " + subModId);
+		System.out.println("modId " + modId);
 		HttpSession session = request.getSession();
 		session.setAttribute("sessionModuleId", modId);
-		session.setAttribute("sessionSubModuleId",subModId);
-		 session.removeAttribute( "exportExcelList" );
+		session.setAttribute("sessionSubModuleId", subModId);
+		session.removeAttribute("exportExcelList");
 	}
-	
+
 }
