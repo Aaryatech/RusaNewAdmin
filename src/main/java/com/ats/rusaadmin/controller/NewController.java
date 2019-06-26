@@ -292,13 +292,25 @@ public class NewController {
 			VpsImageUpload upload = new VpsImageUpload();
 			String docFile = null;
 
+			Boolean ret = false;
+
+			if (FormValidation.Validaton(request.getParameter("title_name"), "") == true
+					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
+
+				ret = true;
+			}
+
 			Date date = new Date(); // your date
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
+			if(ret==false) {
 			if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
+				
+				
 
 				docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
 				// editImageLink.setSliderImage("re"+docFile);
@@ -316,11 +328,11 @@ public class NewController {
 			} else {
 
 				if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
-					editImageLink.setSliderImage(imageName);
+					editImageLink.setSliderImage(imageName.trim().replaceAll("[ ]{2,}", " "));
 				} else {
 					docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
 					// editImageLink.setSliderImage("re"+docFile);
-					editImageLink.setSliderImage(docFile);
+					editImageLink.setSliderImage(docFile.trim().replaceAll("[ ]{2,}", " "));
 					try {
 						Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL, docFile,
 								Constant.values, 0, 140, 60, 0, 0);
@@ -334,23 +346,30 @@ public class NewController {
 				// editbanner.setEditByUserId(UserDetail.getUserId());
 			}
 
-			editImageLink.setUrlLink(urlLink);
-			editImageLink.setTitleName(titleName);
+			editImageLink.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
+			editImageLink.setTitleName(titleName.trim().replaceAll("[ ]{2,}", " "));
 			editImageLink.setDelStatus(1);
 			// editImageLink.setIsActive(1);
 			editImageLink.setSortOrder(sortOrder);
 
-			System.out.println("editImageLink" + editImageLink);
+			//System.out.println("editImageLink" + editImageLink);
 
 			ImageLink res = Constant.getRestTemplate().postForObject(Constant.url + "/saveImageLink", editImageLink,
 					ImageLink.class);
 
-			if (editImageLink.getId() == 0) {
+			if (res.getId() != 0) {
 				session.setAttribute("successMsg", "Infomation added successfully!");
+				session.setAttribute("errorMsg", "false");
 			} else {
-				session.setAttribute("successMsg", "Infomation updated successfully!");
+				session.setAttribute("successMsg", "Failed to Add Infomation !");
+				session.setAttribute("errorMsg", "true");
 			}
-
+			}
+			else {
+				session.setAttribute("successMsg", "Invalid Infomation!");
+				session.setAttribute("errorMsg", "true");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -96,7 +96,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Title :  <span class="text-danger">*</span></label>
                                 <div class="col-sm-10"> 
-                                  <input id="title_name" class="form-control"
+                                  <input id="title_name" class="form-control"  onchange="trim(this)"
 								placeholder="Title" value="${editImageLink.titleName}"  style="text-align: left;" name="title_name" type="text" required>
                                 </div>
                               </div>
@@ -179,7 +179,7 @@
                              <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL Link : </label>
                                 <div class="col-sm-10"> 
-                                  <input id="urlLink" class="form-control"
+                                  <input id="urlLink" class="form-control"  onchange="trim(this)"
 								placeholder="URL Link" value="${editImageLink.urlLink}"  style="text-align: left;" name="urlLink" type="text">
                                 </div>
                               </div>
@@ -187,7 +187,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort Order : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
-                                  <input id="sortNo" class="form-control"
+                                  <input id="sortNo" class="form-control"  onchange="trim(this)"
 								placeholder="Sequence No" value="${editImageLink.sortOrder}"  style="text-align: left;" name="sortNo" type="number" required>
                                 </div>
                               </div>
@@ -245,6 +245,15 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+   	
+  <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
    <script type="text/javascript">
 
               jQuery(document).ready(function($) {
