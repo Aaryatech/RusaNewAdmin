@@ -192,7 +192,7 @@ public class NewController {
 
 				// System.out.println("res " + res);
 				session = request.getSession();
-				if (editMetaData.getId() == 0) {
+				if (res.isEmpty() == false) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
 

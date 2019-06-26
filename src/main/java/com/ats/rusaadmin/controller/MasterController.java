@@ -194,7 +194,7 @@ public class MasterController {
 								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						//System.out.println(text);
+						// System.out.println(text);
 						editcat.setSlugName(text);
 					}
 
@@ -455,7 +455,7 @@ public class MasterController {
 								.trim().replaceAll("[ ]{2,}", " "));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						//System.out.println(text);
+						// System.out.println(text);
 						editcat.setSlugName(text);
 					}
 
@@ -468,7 +468,7 @@ public class MasterController {
 			editcat.setCatSortNo(seqNo);
 			editcat.setIsActive(isActive);
 			editcat.setDelStatus(1);
-			System.out.println("category" + editcat);
+			// System.out.println("category" + editcat);
 			if (ret == false) {
 				Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
 						Category.class);
@@ -761,8 +761,7 @@ public class MasterController {
 					session.setAttribute("successMsg", "Failed to add Infomation !");
 					session.setAttribute("errorMsg", "true");
 				}
-			}
-			else {
+			} else {
 				session.setAttribute("successMsg", "Invalid Infomation !");
 				session.setAttribute("errorMsg", "true");
 			}

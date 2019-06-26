@@ -429,7 +429,7 @@ public class ContentModuleController {
 			}
 			String items = sb.toString();
 			items = items.substring(0, items.length() - 1);
-			System.out.println("items :" + items);
+			//System.out.println("items :" + items);
 			Boolean ret = false;
 
 			if (FormValidation.Validaton(request.getParameter("url_name"), "") == true
@@ -596,7 +596,7 @@ public class ContentModuleController {
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 
-			System.out.println("onHomePage :" + onHomePage);
+			//System.out.println("onHomePage :" + onHomePage);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < itemShow.length; i++) {
 				sb = sb.append(itemShow[i] + ",");
@@ -666,7 +666,7 @@ public class ContentModuleController {
 
 			if (ret == false) {
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					System.out.println("in image null");
+					//System.out.println("in image null");
 					try {
 
 						if (remove == 1) {
@@ -751,7 +751,7 @@ public class ContentModuleController {
 				editNewsBlog.setEditDate(sf.format(date));
 				editNewsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 
-				System.out.println("editNewsBlog" + editNewsBlog);
+				//System.out.println("editNewsBlog" + editNewsBlog);
 				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
 						editNewsBlog, NewsBlog.class);
 				if (res != null) {
@@ -1300,7 +1300,7 @@ public class ContentModuleController {
 				editNewsBlog.setEditDate(sf.format(date));
 				editNewsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 
-				System.out.println("editNewsBlog" + editNewsBlog);
+			//	System.out.println("editNewsBlog" + editNewsBlog);
 				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
 						editNewsBlog, NewsBlog.class);
 

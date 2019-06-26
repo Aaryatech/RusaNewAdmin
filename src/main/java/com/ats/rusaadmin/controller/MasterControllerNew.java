@@ -182,9 +182,9 @@ public class MasterControllerNew {
 
 					if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
 						try {
-							System.out.println("File");
+							//System.out.println("File");
 							if (removePhoto == 1) {
-								System.out.println("Remove :" + removePhoto);
+								//System.out.println("Remove :" + removePhoto);
 								user.setFileName("");
 							}
 						} catch (Exception e) {
@@ -265,7 +265,7 @@ public class MasterControllerNew {
 			}
 			if (ret == false) {
 				user.setUserId(Integer.parseInt(userId));
-				user.setUserPass(pass);
+				user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
 
 				User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
 				// System.out.println("Id: " + userId);
@@ -587,9 +587,9 @@ public class MasterControllerNew {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
 
-			System.out.println(" mainLogo.get(0).getOriginalFilename() " + mainLogo.get(0).getOriginalFilename());
-			System.out.println(" Logo2.get(0).getOriginalFilename()) " + Logo2.get(0).getOriginalFilename());
-			System.out.println("Logo3.get(0).getOriginalFilename()  " + Logo3.get(0).getOriginalFilename());
+			//System.out.println(" mainLogo.get(0).getOriginalFilename() " + mainLogo.get(0).getOriginalFilename());
+			//System.out.println(" Logo2.get(0).getOriginalFilename()) " + Logo2.get(0).getOriginalFilename());
+			//System.out.println("Logo3.get(0).getOriginalFilename()  " + Logo3.get(0).getOriginalFilename());
 
 			Info info = new Info();
 
@@ -821,7 +821,7 @@ public class MasterControllerNew {
 							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 					// System.out.println("res " + res);
 				}
-				if (res != null) {
+				if (res.getDocId() !=0) {
 
 					session.setAttribute("successMsg", "Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
