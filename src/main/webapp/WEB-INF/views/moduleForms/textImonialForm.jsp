@@ -427,7 +427,7 @@
 														</label>
 														<div class="col-sm-10">
 															<input type="number" class="form-control" id="sortNo"
-																name="sortNo" placeholder="Sort Order"
+																name="sortNo" placeholder="Sort Order" onchange="trim(this)"
 																value="${editTestImonial.sortNo}" required>
 														</div>
 													</div>

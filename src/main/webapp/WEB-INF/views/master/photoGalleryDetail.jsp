@@ -93,7 +93,7 @@ input[type="file"] {
 
 									<div class="col-md-2">Image Description*</div>
 									<div class="col-md-10">
-										<input id="imgDesc" class="form-control"
+										<input id="imgDesc" class="form-control" onchange="trim(this)"
 								placeholder="Image Description"  style="text-align: left;" name="imgDesc" type="text" required>
 								 
 								  
@@ -352,6 +352,14 @@ input[type="file"] {
 		});
 	 
 	</script>
+	 <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 
 </body>
 </html>

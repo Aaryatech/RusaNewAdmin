@@ -68,7 +68,7 @@
 									<div class="col-md-2">Gallery Title*</div>
 									<div class="col-md-3">
 										<input id="titleName" class="form-control"
-								placeholder="Gallery Title" value="${editGalleryheader.galleryTitle}"  style="text-align: left;" name="titleName" type="text" required>
+								placeholder="Gallery Title" value="${editGalleryheader.galleryTitle}"  onchange="trim(this)"  style="text-align: left;" name="titleName" type="text" required>
 								 
 								  
 									</div>
@@ -118,7 +118,7 @@
 									
 									<div class="col-md-2">Sequence No*</div>
 									<div class="col-md-3">
-										<input id="seqNo" class="form-control"
+										<input id="seqNo" class="form-control"  onchange="trim(this)"
 								placeholder="Sequence No" value="${editGalleryheader.gallerySortNo}"  style="text-align: left;" name="seqNo" type="number" required>
 								  
 									</div>
@@ -316,6 +316,14 @@
 	}
 		 
 	</script>
-
+	
+  <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 </body>
 </html>

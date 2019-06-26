@@ -604,6 +604,14 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	 <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 <script type="text/javascript">
 function showForm(temp) {
 //alert("doc::"+temp);

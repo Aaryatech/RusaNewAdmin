@@ -81,7 +81,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Title : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
-                                  <input id="contactName" class="form-control"
+                                  <input id="contactName" class="form-control" onchange="trim(this)"
 								placeholder="Channel Title" value="${editChannel.title}"  style="text-align: left;" name="title" type="text" readonly  required>
                                 </div>
                               </div>
@@ -92,7 +92,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">URL Links : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
-                                  <input id="firstname" class="form-control"
+                                  <input id="firstname" class="form-control" onchange="trim(this)"
 								placeholder="URL Links" value="${editChannel.urllinks}"  style="text-align: left;" name="urlLink" type="text"  required>
                                 </div>
                               </div>
@@ -100,7 +100,7 @@
                      		    <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10"> 
-                                  <input id="seqNo" class="form-control"
+                                  <input id="seqNo" class="form-control" onchange="trim(this)"
 								placeholder="Sort No" value="${editChannel.sortNo}"  style="text-align: left;" name="seqNo" type="number" required>
                                 </div>
                               </div>
@@ -149,6 +149,14 @@
 <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
    <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+    <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
        <script type="text/javascript">
             jQuery(document).ready(function($) {
                 $(document).on('click', '#close-preview1', function(){ 

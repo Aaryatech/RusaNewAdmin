@@ -122,7 +122,7 @@
 																Title :<span class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control" id="page_name"
+																<input type="text" class="form-control" id="page_name" onchange="trim(this)"
 																	name="page_name" placeholder="Page/Menu Title"
 																	value="${page.pageName}" readonly>
 															</div>
@@ -145,7 +145,7 @@
 																			:<span class="text-danger">*</span>
 																		</label>
 																		<div class="col-sm-10">
-																			<input type="text" class="form-control"
+																			<input type="text" class="form-control" onchange="trim(this)"
 																				id="heading1${detailList.languageId}"
 																				name="heading1${detailList.languageId}"
 																				placeholder="Heading" value="${detailList.heading}"
@@ -442,7 +442,14 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-
+  <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script type="text/javascript">
 		jQuery(document).ready(
 				function($) {

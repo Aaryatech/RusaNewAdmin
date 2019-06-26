@@ -109,7 +109,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="config_site_maintenance_message">Message:  </label>
                                 <div class="col-sm-10">
-                                <input id="message" class="form-control"
+                                <input id="message" class="form-control" onchange="trim(this)"
 								placeholder="Message"  style="text-align: left;" name="message" type="text" value="${editsiteMain.message}"  >
                                 </div>
                               </div>
@@ -156,6 +156,14 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	<script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script>
             function clearSessionAttribute() {
             	 

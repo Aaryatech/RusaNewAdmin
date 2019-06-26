@@ -125,7 +125,7 @@
                                 <div class="form-group">
                                 <label class="control-label col-sm-2" for="metaTitle">Meta Title :</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="metaTitle" name="metaTitle" placeholder="Meta Title" value="${page.pageMetaTitle}"  >
+                                  <input type="text" class="form-control" id="metaTitle" name="metaTitle" onchange="trim(this)" placeholder="Meta Title" value="${page.pageMetaTitle}"  >
                                 </div>
                               </div>
                                   

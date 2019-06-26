@@ -139,7 +139,7 @@
                     		 <div class="form-group">
                                 <label class="control-label col-sm-2" for="page_name">News Source URL :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL" required>
+                                  <input type="text" class="form-control" id="url_name" name="url_name" placeholder="News Source URL"  onchange="trim(this)" required>
                                 </div>
                               </div>
                         </div>
@@ -152,7 +152,7 @@
                          <div class="form-group">
                                 <label class="control-label col-sm-2" for="heading1">Heading :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" required>
+                                  <input type="text" class="form-control" id="heading1${languagesList.languagesId}" name="heading1${languagesList.languagesId}" placeholder="Heading" value="" onchange="trim(this)" required>
                                 </div>
                             </div>
                             
@@ -166,7 +166,7 @@
                               <div class="form-group">
                                 <label class="control-label col-sm-2" for="meta_title1">Meta Title :<span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title" value="" required>
+                                       <input type="text" class="form-control" id="meta_title1${languagesList.languagesId}" name="meta_title1${languagesList.languagesId}" placeholder="Meta Title"  onchange="trim(this)" value="" required>
                                 
                                 </div>
                               </div> 

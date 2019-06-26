@@ -95,7 +95,7 @@
 													</label>
 													<div class="col-sm-10">
 														<input id="contactName" class="form-control"
-															placeholder="Contact Name"
+															placeholder="Contact Name" onchange="trim(this)"
 															value="${editcontact.contactName}"
 															style="text-align: left;" name="name" type="text"
 															readonly required>
@@ -109,7 +109,7 @@
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
-														<input id="firstname" class="form-control"
+														<input id="firstname" class="form-control" onchange="trim(this)"
 															placeholder="First Name" value="${editcontact.mobileNo}"
 															style="text-align: left;" name="firstname" type="text"
 															readonly required>
@@ -122,7 +122,7 @@
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
-														<input id="middlename" class="form-control"
+														<input id="middlename" class="form-control" onchange="trim(this)"
 															placeholder="Message" value="${editcontact.message}"
 															style="text-align: left;" name="message" type="text"
 															readonly required>
@@ -136,7 +136,7 @@
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
-														<input id="userEmail" class="form-control"
+														<input id="userEmail" class="form-control" onchange="trim(this)"
 															placeholder="Email" value="${editcontact.emailId}"
 															style="text-align: left;" name="userEmail" type="email"
 															readonly required>
@@ -149,7 +149,7 @@
 														class="text-danger">*</span>
 													</label>
 													<div class="col-sm-10">
-														<input id="remark" class="form-control"
+														<input id="remark" class="form-control" onchange="trim(this)"
 															placeholder="remark" value="${editcontact.remark}"
 															style="text-align: left;" name="remark" type="text"
 															onkeyup="trim(this)" required autocomplete="off">
@@ -201,7 +201,14 @@
 	</div>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-
+ <script>
+			function trim(el) {
+				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+				replace(/\n +/, "\n"); // Removes spaces after newlines
+				return;
+			}
+			</script>
 	<script type="text/javascript">
 		function RestrictSpace() {
 			if (event.keyCode == 32) {
