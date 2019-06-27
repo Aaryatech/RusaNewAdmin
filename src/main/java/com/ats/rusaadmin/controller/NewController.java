@@ -114,7 +114,7 @@ public class NewController {
 
 				}
 			}
-			System.out.println(editMeta);
+		//	System.out.println(editMeta);
 			model.addObject("editMeta", editMeta);
 
 		} catch (Exception e) {
@@ -386,7 +386,7 @@ public class NewController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteImagesLink", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 			HttpSession session = request.getSession();
 			session.setAttribute("successMsg", "Infomation deleted successfully!");
@@ -451,7 +451,7 @@ public class NewController {
 			String remark = request.getParameter("remark");
 
 			String id = request.getParameter("id");
-			System.out.println("remark: " + remark);
+			//System.out.println("remark: " + remark);
 			if (id != null) {
 
 				contactUs.setId(Integer.parseInt(id));
@@ -638,7 +638,7 @@ public class NewController {
 
 				int totalPages = writer.getPageNumber();
 
-				System.out.println("Page no " + totalPages);
+				//System.out.println("Page no " + totalPages);
 
 				document.close();
 
@@ -663,7 +663,7 @@ public class NewController {
 					try {
 						FileCopyUtils.copy(inputStream, response.getOutputStream());
 					} catch (IOException e) {
-						System.out.println("Excep in Opening a Pdf File");
+						//System.out.println("Excep in Opening a Pdf File");
 						e.printStackTrace();
 					}
 				}

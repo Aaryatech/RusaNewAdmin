@@ -473,7 +473,7 @@ public class MasterController {
 				Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
 						Category.class);
 
-				System.out.println("res " + res);
+				//System.out.println("res " + res);
 
 				if (res.getCatId() != 0) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
@@ -539,7 +539,7 @@ public class MasterController {
 					editcat.getCategoryDescriptionList().add(categoryDescription);
 				}
 			}
-			System.out.println(editcat);
+			//System.out.println(editcat);
 			model.addObject("editSubCat", editcat);
 
 			model.addObject("isEdit", 1);
@@ -557,7 +557,7 @@ public class MasterController {
 
 		List<GetCategory> categoryList = new ArrayList<GetCategory>();
 		try {
-			System.out.println("in method");
+			//System.out.println("in method");
 
 			String sectionId = request.getParameter("sectionId");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -585,7 +585,7 @@ public class MasterController {
 			map.add("catIdList", catId);
 			map.add("delStatus", 0);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 			HttpSession session = request.getSession();
 			session.setAttribute("successMsg", "Infomation deleted successfully!");
@@ -785,7 +785,7 @@ public class MasterController {
 			editSection = Constant.getRestTemplate().postForObject(Constant.url + "/getSectionBySectionId", map,
 					Section.class);
 
-			System.out.println(editSection);
+			//System.out.println(editSection);
 
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
@@ -907,7 +907,7 @@ public class MasterController {
 					Galleryheader.class);
 			model.addObject("editGalleryheader", editGalleryheader);
 
-			System.out.println(editGalleryheader);
+			//System.out.println(editGalleryheader);
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
@@ -989,12 +989,12 @@ public class MasterController {
 			editGalleryheader.setDelStatus(1);
 			editGalleryheader.setUserId(1);
 
-			System.out.println("sub category" + editSubCategory);
+			//System.out.println("sub category" + editSubCategory);
 
 			Galleryheader res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryHeader",
 					editGalleryheader, Galleryheader.class);
 
-			System.out.println("res " + res);
+			//System.out.println("res " + res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1013,7 +1013,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryHeaderId);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1036,7 +1036,7 @@ public class MasterController {
 					Galleryheader.class);
 			model.addObject("editGalleryheader", editGalleryheader);
 			model.addObject("url", Constant.gallryImageURL);
-			System.out.println(editGalleryheader);
+			//System.out.println(editGalleryheader);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1095,7 +1095,7 @@ public class MasterController {
 			GalleryDetail[] res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetail",
 					detailList, GalleryDetail[].class);
 
-			System.out.println(editGalleryheader);
+			//System.out.println(editGalleryheader);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1114,7 +1114,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryDetailId);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();

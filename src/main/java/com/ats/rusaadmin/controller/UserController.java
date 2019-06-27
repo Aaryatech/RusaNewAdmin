@@ -335,7 +335,7 @@ public class UserController {
 
 				int totalPages = writer.getPageNumber();
 
-				System.out.println("Page no " + totalPages);
+			//	System.out.println("Page no " + totalPages);
 
 				document.close();
 
@@ -388,12 +388,12 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView("userActivationForm");
 		try {
-			System.out.println("id" + regId);
+			//System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
 			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserDetailbyRegId", map,
 					RegistrationUserDetail.class);
-			System.out.println("User: " + editUser.toString());
+			//System.out.println("User: " + editUser.toString());
 
 			model.addObject("editUser", editUser);
 			model.addObject("isEdit", 1);
@@ -443,10 +443,10 @@ public class UserController {
 
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
-					System.out.println("btnsendmail");
+					//System.out.println("btnsendmail");
 					if (userPass.equals("0")) {
 						String password = Commons.getAlphaNumericString(5);
-						System.out.println("Password: " + password);
+						//System.out.println("Password: " + password);
 						editUser.setUserPassword(password);
 						editUser.setEmailVerified(1);
 						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
@@ -543,17 +543,17 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView("approveForm");
 		try {
-			System.out.println("id" + userId);
+			//System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
 			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
 					RegistrationUserDetail.class);
-			System.out.println("User: " + editUser.toString());
+			//System.out.println("User: " + editUser.toString());
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", eventRegId);
 			editEvent = Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1,
 					EventRegistration.class);
-			System.out.println("User: " + editEvent.toString());
+			//System.out.println("User: " + editEvent.toString());
 
 			model.addObject("editUser", editUser);
 			model.addObject("newsblogsId", newsblogsId);
@@ -582,7 +582,7 @@ public class UserController {
 			int status = Integer.parseInt(request.getParameter("status"));
 			int regId = Integer.parseInt(request.getParameter("regId"));
 
-			System.out.println("newsblogsId : " + newsblogsId);
+			//System.out.println("newsblogsId : " + newsblogsId);
 			String email = request.getParameter("userEmail");
 
 			Date date = new Date();
@@ -598,7 +598,7 @@ public class UserController {
 			map1.add("langId", 1);
 			NewsDetails eventList = Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId",
 					map1, NewsDetails.class);
-			System.out.println("List :" + eventList.toString());
+			//System.out.println("List :" + eventList.toString());
 			if (status == 1) {
 				approval = "Approved";
 				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove, approval,
@@ -647,7 +647,7 @@ public class UserController {
 			newsId = Integer.parseInt(request.getParameter("newsId"));
 			int status = Integer.parseInt(request.getParameter("status"));
 
-			System.out.println("id" + userId);
+			//System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
 			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
@@ -974,7 +974,7 @@ public class UserController {
 
 				int totalPages = writer.getPageNumber();
 
-				System.out.println("Page no " + totalPages);
+			//	System.out.println("Page no " + totalPages);
 
 				document.close();
 
@@ -1246,7 +1246,7 @@ public class UserController {
 
 				int totalPages = writer.getPageNumber();
 
-				System.out.println("Page no " + totalPages);
+				///System.out.println("Page no " + totalPages);
 
 				document.close();
 

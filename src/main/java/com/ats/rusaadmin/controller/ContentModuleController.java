@@ -190,7 +190,7 @@ public class ContentModuleController {
 					pagesModule.setModuleId(moduleId);
 					PagesModule pagesModuleres = Constant.getRestTemplate()
 							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					System.out.println("res " + res);
+					//System.out.println("res " + res);
 				}
 				if (res != null) {
 
@@ -540,7 +540,7 @@ public class ContentModuleController {
 				newsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 				newsBlog.setDetailList(newsBlogDescriptionList);
 
-				System.out.println("newsBlog" + newsBlog);
+				//System.out.println("newsBlog" + newsBlog);
 				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
 						newsBlog, NewsBlog.class);
 
@@ -553,7 +553,7 @@ public class ContentModuleController {
 					pagesModule.setModuleId(9);
 					PagesModule pagesModuleres = Constant.getRestTemplate()
 							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					System.out.println("pagesModuleres " + pagesModuleres);
+					//System.out.println("pagesModuleres " + pagesModuleres);
 				}
 				if (res != null) {
 
@@ -682,7 +682,7 @@ public class ContentModuleController {
 								System.out.println(
 										"doesn't exists  " + Constant.gallryImageURL + editNewsBlog.getFeaturedImage());
 
-							System.out.println("Remove :" + remove);
+						//	System.out.println("Remove :" + remove);
 							editNewsBlog.setFeaturedImage("");
 						}
 					} catch (Exception e) {
@@ -719,7 +719,7 @@ public class ContentModuleController {
 								System.out
 										.println("doesn't exists  " + Constant.cmsPdf + editNewsBlog.getDownloadPdf());
 
-							System.out.println("Remove :" + removePdf);
+							//System.out.println("Remove :" + removePdf);
 							editNewsBlog.setDownloadPdf("");
 						}
 					} catch (Exception e) {
@@ -802,13 +802,13 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/editNewsContent");
 		try {
-			System.out.println("id" + newsblogsId);
+			//System.out.println("id" + newsblogsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 
 			editNewsBlog = Constant.getRestTemplate().postForObject(Constant.url + "/getNewsPagebyId", map,
 					NewsBlog.class);
-			System.out.println("Page ID: " + editNewsBlog.getPageId());
+			//System.out.println("Page ID: " + editNewsBlog.getPageId());
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
@@ -868,8 +868,8 @@ public class ContentModuleController {
 			model.addObject("nonSelectedSection", nonSelectedSection);
 			model.addObject("selectedSection", selectedSection);
 			// ------------------------------------------------------------------------------------------------------
-			System.err.println("nonSelectedSection" + nonSelectedSection.toString());
-			System.err.println("selectedSection" + selectedSection.toString());
+		///	System.err.println("nonSelectedSection" + nonSelectedSection.toString());
+			//System.err.println("selectedSection" + selectedSection.toString());
 
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
@@ -1199,7 +1199,7 @@ public class ContentModuleController {
 
 			if (ret == false) {
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					System.out.println("in image null");
+					//System.out.println("in image null");
 					try {
 
 						if (remove == 1) {
@@ -1353,13 +1353,13 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/editEventContent");
 		try {
-			System.out.println("id" + newsblogsId);
+			//System.out.println("id" + newsblogsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 
 			editNewsBlog = Constant.getRestTemplate().postForObject(Constant.url + "/getNewsPagebyId", map,
 					NewsBlog.class);
-			System.out.println("Page ID: " + editNewsBlog.getPageId());
+			//System.out.println("Page ID: " + editNewsBlog.getPageId());
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
@@ -1451,7 +1451,7 @@ public class ContentModuleController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
 			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
-			System.out.println("Page List: " + page.toString());
+			//System.out.println("Page List: " + page.toString());
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
 			map = new LinkedMultiValueMap<String, Object>();
@@ -1459,7 +1459,7 @@ public class ContentModuleController {
 			GallaryCategory[] category = Constant.getRestTemplate()
 					.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
-			System.out.println("" + categoryList.toString());
+			//System.out.println("" + categoryList.toString());
 			model.addObject("categoryList", categoryList);
 
 		} catch (Exception e) {
@@ -1650,23 +1650,23 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/editVideoGallery");
 		try {
-			System.out.println("id" + galleryDetailsId);
+			//System.out.println("id" + galleryDetailsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryDetailsId", galleryDetailsId);
 
 			editGalleryDetail = Constant.getRestTemplate().postForObject(Constant.url + "/getListByGalleryId", map,
 					GallaryDetail.class);
-			System.out.println("Page ID: " + editNewsBlog.getPageId());
+		//	System.out.println("Page ID: " + editNewsBlog.getPageId());
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", editGalleryDetail.getPageId());
 			Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 
-			System.out.println("List : " + editNewsBlog.toString());
+			//System.out.println("List : " + editNewsBlog.toString());
 			GallaryCategory[] category = Constant.getRestTemplate()
 					.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
-			System.out.println("" + categoryList.toString());
+			//System.out.println("" + categoryList.toString());
 			// editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
 			model.addObject("editGalleryDetail", editGalleryDetail);
 			model.addObject("page", page);
@@ -1712,7 +1712,7 @@ public class ContentModuleController {
 			map.add("galleryDetailsId", galleryDetailsId);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map,
 					Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();

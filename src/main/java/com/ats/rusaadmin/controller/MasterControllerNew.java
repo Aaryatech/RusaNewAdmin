@@ -312,7 +312,7 @@ public class MasterControllerNew {
 				return "redirect:/userList";
 			}
 
-			System.out.println(user);
+			//System.out.println(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -347,7 +347,7 @@ public class MasterControllerNew {
 			map.add("userId", userId);
 			// map.add("delStatus", 0);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteUser", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 			HttpSession session = request.getSession();
 			if (userId == 1) {
@@ -488,7 +488,7 @@ public class MasterControllerNew {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteBanner", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 			HttpSession session = request.getSession();
 			session.setAttribute("successMsg", "Infomation deleted successfully!");
@@ -667,7 +667,7 @@ public class MasterControllerNew {
 						logo.setLogo3(imageName);
 					}
 
-					System.out.println("logo" + logo);
+					//System.out.println("logo" + logo);
 
 					Logo res = Constant.getRestTemplate().postForObject(Constant.url + "/saveLogo", logo, Logo.class);
 				}
@@ -697,7 +697,7 @@ public class MasterControllerNew {
 			GallaryCategory[] category = Constant.getRestTemplate()
 					.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
-			System.out.println("" + categoryList.toString());
+			///System.out.println("" + categoryList.toString());
 			model.addObject("categoryList", categoryList);
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
@@ -904,7 +904,7 @@ public class MasterControllerNew {
 			map.add("docId", docId);
 			// map.add("delStatus", 0);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteDocument", map, Info.class);
-			System.out.println(res);
+			//System.out.println(res);
 
 			HttpSession session = request.getSession();
 			if (res == null) {

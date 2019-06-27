@@ -380,7 +380,7 @@ public class GallaryController {
 				pageId = Integer.parseInt(request.getParameter("pageId"));
 				catId = Integer.parseInt(request.getParameter("catId"));
 
-				System.out.println("data is *******" + fileName + id + moduleId + pageId + catId + id);
+				//System.out.println("data is *******" + fileName + id + moduleId + pageId + catId + id);
 
 			} catch (Exception e) {
 				flag = 1;
@@ -390,7 +390,7 @@ public class GallaryController {
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map,
 					Info.class);
 
-			System.out.println(" fileName" + fileName);
+		//	System.out.println(" fileName" + fileName);
 			File files = new File(Constant.gallryImageURL + fileName);
 			// File files = new
 			// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download

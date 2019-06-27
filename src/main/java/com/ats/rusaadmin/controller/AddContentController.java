@@ -99,7 +99,7 @@ public class AddContentController {
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			pageId = Integer.parseInt(request.getParameter("pageId"));
 
-			System.out.println(pageId);
+			//System.out.println(pageId);
 			if (moduleId == 1) {
 
 				url = "redirect:/cmsForm";
@@ -972,7 +972,7 @@ public class AddContentController {
 					list.add(contentImages);
 				}
 			}
-			System.out.println(list);
+			//System.out.println(list);
 			ObjectMapper mapper = new ObjectMapper();
 			jsonString = mapper.writeValueAsString(list);
 
@@ -995,7 +995,7 @@ public class AddContentController {
 					Languages[].class);
 			List<Languages> list = new ArrayList<Languages>(Arrays.asList(Languages));
 
-			System.out.println(list);
+			//System.out.println(list);
 
 		} catch (Exception e) {
 			e.printStackTrace();
