@@ -113,6 +113,7 @@
 										<thead>
 											<tr>
 												<th width="5%">Sr No</th>
+												<th width="2%">Delete</th>
 												<th>Image</th>
 												<th>name</th>
 												<th width="10%">Action</th>
@@ -125,6 +126,9 @@
 											<c:forEach items="${list}" var="list" varStatus="count">
 												<tr>
 													<td>${count.index+1}</td>
+													<td style="text-align: center;"><input
+																type="checkbox" class="chk" name="ids"
+																id="contact${contactList.id}" value="${contactList.id}" /></td>
 													<td><c:choose>
 															<c:when
 																test="${list.size!='jpeg' and list.size!='jpg' and list.size!='png' and list.size!='gif'}">

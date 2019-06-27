@@ -114,12 +114,16 @@
 
 									</div> 
 									<br>
+									<form
+										action="${pageContext.request.contextPath}/multipleUserRegDelete"
+										method="get" id="multipleDelete">
 									<div class="table-responsive">
 										<table id="example-1"
 											class="table table-striped dt-responsive display">
 											<thead>
 												<tr>
 													<th width="5%">Sr No</th>
+													<th width="2%">Delete</th>
 													<th>User Name</th>
 													<th>AISHE Code</th>
 													<th>User Registration Type</th>
@@ -138,6 +142,9 @@
 													varStatus="count">
 													<tr>
 														<td>${count.index+1}</td>
+														<td style="text-align: center;"><input
+																type="checkbox" class="chk" name="ids"
+																id="contact${userList.regId}" value="${userList.regId}" /></td>
 														<td>${userList.name}</td>
 														<td>${userList.aisheCode}</td>
 														<c:if test="${userList.userType=='1'}">
@@ -196,6 +203,13 @@
 											</tbody>
 										</table>
 									</div>
+									<span class="validation-invalid-label" id="error_table1"
+											style="display: none;">Please select one record.</span>
+										<div class="form-group" style="text-align: center;">
+											<button type="submit" class="btn btn-primary" id="submtbtn">Multiple
+												Delete</button>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -246,6 +260,53 @@
 
 		}
 	</script>
+	<script>
+	$(document).ready(function($) {
+
+		$("#multipleDelete").submit(function(e) {
+			var isError = false;
+			var errMsg = "";
+
+			var checkedVals = $('.chk:checkbox:checked').map(function() {
+				return this.value;
+			}).get();
+			checkedVals = checkedVals.join(',');
+
+			if (checkedVals == '') {
+				$("#error_table1").show();
+				return false;
+			}
+
+			if (!isError) {
+
+				var x = true;
+				if (x == true) {
+
+					$('#modal_scrollable').modal('show');
+				}
+				//end ajax send this to php page
+			}
+			return false;
+		});
+	});
+		function submitForm() {
+			 $('#modal_scrollable').modal('hide'); 
+			document.getElementById("multipleDelete").submit();
+			 
+		}
+		function singleDelete(id) {
+			 
+			$('#modal_scrollable_single').modal('show');
+			document.getElementById("conid").value = id;
+		}
+		function submitFormSingle() {
+			 $('#modal_scrollable_single').modal('hide'); 
+			 var id = document.getElementById("conid").value;
+			 location.href = "${pageContext.request.contextPath}/deleteContact/"+id;
+			//document.getElementById("multipleDelete").submit();
+			 
+		}
+	</script>
 	<script type="text/javascript">
 		function tableToExcel(table, name, filename) {
 			let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
@@ -270,5 +331,52 @@
 			link.click();
 		}
 	</script>
+	<div id="modal_scrollable" class="modal fade" data-backdrop="false"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary"
+						onclick="submitForm()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal_scrollable_single" class="modal fade"
+		data-backdrop="false" tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+					<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn btn btn-primary"
+						data-dismiss="modal">No</button>
+					<button type="button" class="btn btn btn-primary"
+						onclick="submitFormSingle()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

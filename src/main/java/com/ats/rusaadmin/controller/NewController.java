@@ -768,6 +768,39 @@ public class NewController {
 
 		return "redirect:/ContactList";
 	}
+	
+	
+	@RequestMapping(value = "/multipleUserRegDelete", method = RequestMethod.GET)
+	public String multipleUserRegDelete(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			String[] ids = request.getParameterValues("ids");
+			String id = "0";
+
+			for (int i = 0; i < ids.length; i++) {
+				id = id + "," + ids[i];
+			}
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", id);
+			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleUserReg", map,
+					Info.class);
+			System.out.println(res);
+
+			HttpSession session = request.getSession();
+			if (res.isError() == true) {
+				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+			} else {
+				session.setAttribute("successMsg", "Infomation deleted successfully!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/activeUserList";
+	}
+
 
 	@RequestMapping(value = "/deletedContactList", method = RequestMethod.GET)
 	public ModelAndView deletedContactList(HttpServletRequest request, HttpServletResponse response) {

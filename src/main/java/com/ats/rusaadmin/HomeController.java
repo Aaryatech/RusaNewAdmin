@@ -82,7 +82,7 @@ public class HomeController {
 		res.setContentType("text/html");
 		HttpSession session = request.getSession();
 		try {
-			System.out.println("Login Process " + name);
+			//System.out.println("Login Process " + name);
 
 			if (name.equalsIgnoreCase("") || password.equalsIgnoreCase("") || name == null || password == null) {
 
