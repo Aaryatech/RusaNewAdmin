@@ -735,8 +735,7 @@ public class UserController {
 
 			String toDate = dateFormat.format(new Date());
 
-			model.addObject("fromDate", fromDate);
-			model.addObject("toDate", toDate);
+			
 
 			String fromDate1 = request.getParameter("from_date");
 			String toDate1 = request.getParameter("to_date");
@@ -758,6 +757,18 @@ public class UserController {
 			for (int i = 0; i < userList.size(); i++) {
 				userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
 
+			}
+			if (fromDate1 ==null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+				
+			//System.out.println("refresh");
+				model.addObject("fromDate", fromDate);
+				model.addObject("toDate", toDate);
+
+			}
+			else   {
+				//System.out.println("submit");
+				model.addObject("fromDate", fromDate1);
+				model.addObject("toDate", toDate1);
 			}
 
 			model.addObject("userList", userList);
