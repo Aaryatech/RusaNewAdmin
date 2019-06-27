@@ -76,10 +76,7 @@
 
 									</form>
 									<br>
-										<div >
-										<a href="${pageContext.request.contextPath}/uploadOtherMedia"><button
-										type="button" style="margin-left:850px" class="btn btn-success">Refresh</button></a>
-										</div>
+									 
 								</div>
 							</div>
 						</div>
@@ -104,63 +101,67 @@
 						<div class="content-body">
 							<div class="row">
 
-
-								<div class="col-xs-12">
-
-
-									<table id="example-1"
-										class="table table-striped dt-responsive display">
-										<thead>
-											<tr>
-												<th width="5%">Sr No</th>
-												<th width="2%">Delete</th>
-												<th>Image</th>
-												<th>name</th>
-												<th width="10%">Action</th>
-											</tr>
-										</thead>
+								<form
+									action="${pageContext.request.contextPath}/multipleUploadMediaDelete"
+									method="get" id="multipleDelete">
+									<div class="col-xs-12">
 
 
-
-										<tbody>
-											<c:forEach items="${list}" var="list" varStatus="count">
+										<table id="example-1"
+											class="table table-striped dt-responsive display">
+											<thead>
 												<tr>
-													<td>${count.index+1}</td>
-													<td style="text-align: center;"><input
-																type="checkbox" class="chk" name="ids"
-																id="contact${contactList.id}" value="${contactList.id}" /></td>
-													<td><c:choose>
-															<c:when
-																test="${list.size!='jpeg' and list.size!='jpg' and list.size!='png' and list.size!='gif'}">
-																<a
-																	href="${list.thumb}" target="_blank">
-																	<i class="fa fa-file" style="font-size: 45px" ></i></a>
-															</c:when>
-															<c:otherwise>
-																<img src="${list.thumb}"
-																	style="width: 150px; height: 120px">
-															</c:otherwise>
-														</c:choose></td>
-
-													<td><input value="${list.thumb}" class="col-md-10"
-														type="text" id="${count.index+1}">
-														<!-- <a href="javascript:void(0);" class="btna" data-clipboard-action="copy" data-clipboard-target="#${count.index+1}">Copy URL</a> --></td>
-													<td><a
-														href="${pageContext.request.contextPath}/deleteOtherMediaFile/${list.image}/${list.size}"
-														onClick="return confirm('Are you sure want to delete this record');"
-														rel="tooltip" data-color-class="danger"
-														data-animate=" animated fadeIn " data-toggle="tooltip"
-														data-original-title="Delete  record"><span
-															class="glyphicon glyphicon-remove"></span></a></td>
+													<th width="5%">Sr No</th>
+													<th width="2%">Delete</th>
+													<th>Image</th>
+													<th>name</th>
+													<th width="10%">Action</th>
 												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
+											</thead>
 
 
 
+											<tbody>
+												<c:forEach items="${list}" var="list" varStatus="count">
+													<tr>
+														<td>${count.index+1}</td>
+														<td style="text-align: center;"><input
+															type="checkbox" class="chk" name="ids"
+															id="contact${list.image}" value="${list.image}" /></td>
+														<td><c:choose>
+																<c:when
+																	test="${list.size!='jpeg' and list.size!='jpg' and list.size!='png' and list.size!='gif'}">
+																	<a href="${list.thumb}" target="_blank"> <i
+																		class="fa fa-file" style="font-size: 45px"></i></a>
+																</c:when>
+																<c:otherwise>
+																	<img src="${list.thumb}"
+																		style="width: 150px; height: 120px">
+																</c:otherwise>
+															</c:choose></td>
 
-								</div>
+														<td><input value="${list.thumb}" class="col-md-10"
+															type="text" id="${count.index+1}"> <!-- <a href="javascript:void(0);" class="btna" data-clipboard-action="copy" data-clipboard-target="#${count.index+1}">Copy URL</a> --></td>
+														<td><a
+															href="${pageContext.request.contextPath}/deleteOtherMediaFile/${list.image}/${list.size}"
+															onClick="return confirm('Are you sure want to delete this record');"
+															rel="tooltip" data-color-class="danger"
+															data-animate=" animated fadeIn " data-toggle="tooltip"
+															data-original-title="Delete  record"><span
+																class="glyphicon glyphicon-remove"></span></a></td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+
+									</div>
+									<span class="validation-invalid-label" id="error_table1"
+										style="display: none;">Please select one record.</span>
+									<div class="form-group" style="text-align: center;">
+										<button type="submit" class="btn btn-primary" id="submtbtn">Multiple
+											Delete</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</section>
@@ -179,7 +180,100 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+<script>
+	$(document).ready(function($) {
 
+		$("#multipleDelete").submit(function(e) {
+			var isError = false;
+			var errMsg = "";
 
+			var checkedVals = $('.chk:checkbox:checked').map(function() {
+				return this.value;
+			}).get();
+			checkedVals = checkedVals.join(',');
+
+			if (checkedVals == '') {
+				$("#error_table1").show();
+				return false;
+			}
+
+			if (!isError) {
+
+				var x = true;
+				if (x == true) {
+
+					$('#modal_scrollable').modal('show');
+				}
+				//end ajax send this to php page
+			}
+			return false;
+		});
+	});
+		function submitForm() {
+			 $('#modal_scrollable').modal('hide'); 
+			document.getElementById("multipleDelete").submit();
+			 
+		}
+		function singleDelete(id) {
+			 
+			$('#modal_scrollable_single').modal('show');
+			document.getElementById("conid").value = id;
+		}
+		function submitFormSingle() {
+			 $('#modal_scrollable_single').modal('hide'); 
+			 var id = document.getElementById("conid").value;
+			 location.href = "${pageContext.request.contextPath}/deleteContact/"+id;
+			//document.getElementById("multipleDelete").submit();
+			 
+		}
+	</script>
+ 
+	<div id="modal_scrollable" class="modal fade" data-backdrop="false"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary"
+						onclick="submitForm()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal_scrollable_single" class="modal fade"
+		data-backdrop="false" tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header pb-3">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body py-0">
+					<h5>Do your want to delete record?</h5>
+
+				</div>
+
+				<div class="modal-footer pt-3">
+					<input type="hidden" id="conid" name="conid">
+					<button type="button" class="btn btn btn-primary"
+						data-dismiss="modal">No</button>
+					<button type="button" class="btn btn btn-primary"
+						onclick="submitFormSingle()">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

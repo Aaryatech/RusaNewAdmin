@@ -103,8 +103,37 @@
 									</div>
 								</c:if>
 
-								<div class="col-xs-12">
+								<form
+									action="${pageContext.request.contextPath}/getAllEventList"
+									id="submitInsertLeave" method="GET">
+									<div class="col-xs-12">
+										<label class="control-label col-sm-2" for="page_name">From
+											Date :<span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-3">
+											<input type="text" class="form-control datepicker"
+												id="from_date" name="from_date" value="${fromDate}" required>
+										</div>
 
+
+										<label class="control-label col-sm-2" for="page_name">
+											To Date :<span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-3">
+											<input type="text" class="form-control datepicker"
+												id="to_date" name="to_date" value="${toDate}" required>
+										</div>
+
+										<div class="col-sm-2">
+											<button type="submit" class="btn btn-primary">Submit</button>
+										</div>
+									</div>
+								</form>
+								<br>
+
+
+								<div class="col-xs-12">
+									<br> <br>
 									<div style="text-align: right;">
 										<input type="button" class="btn btn-primary"
 											onclick="tableToExcel('example-1', 'name', 'eventlist.xls')"
@@ -115,6 +144,10 @@
 
 									</div>
 									<br>
+
+
+
+
 									<div class="table-responsive">
 										<table id="example-1"
 											class="table table-striped dt-responsive display">

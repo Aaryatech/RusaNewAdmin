@@ -587,10 +587,10 @@ public class GallaryController {
 
 		try {
 
-			File files = new File(Constant.otherDocURL + file);
 			// File files = new
 			// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
 			// (1).jpeg");
+			File files = new File(Constant.otherDocURL + file);
 
 			if (files.delete()) {
 				System.out.println(" File deleted  " + Constant.otherDocURL + file);
@@ -604,6 +604,33 @@ public class GallaryController {
 
 	}
 
+	
+	@RequestMapping(value = "/multipleUploadMediaDelete", method = RequestMethod.GET)
+	public String multipleUploadMediaDelete(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			String[] images = request.getParameterValues("ids");
+			//System.out.println("images list****"+images.toString());
+ 
+			for (int i = 0; i < images.length; i++) {
+				File files = new File(Constant.otherDocURL + images[i]);
+
+				if (files.delete()) {
+					System.out.println(" File deleted  " + Constant.otherDocURL + images[i]);
+				} else
+					System.out.println("doesn't exists  " + Constant.otherDocURL + images[i]);
+			}
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/uploadOtherMedia";
+	}
+	
+	
 	@RequestMapping(value = "/uploadOtherMediaProccess", method = RequestMethod.POST)
 	public void uploadOtherMediaProccess(@RequestParam("file") List<MultipartFile> file, HttpServletRequest request,
 			HttpServletResponse response) {

@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -74,15 +75,16 @@ public class UserController {
 	// Mapping-----------------------------------------------------------//\
 
 	List<Registration> getUser = new ArrayList<Registration>();
-	
+
 	@RequestMapping(value = "/activeUserList", method = RequestMethod.GET)
 	public ModelAndView activeUserList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("activateUser");
-		
+
 		try {
-			 
-			Registration[] userList =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", Registration[].class);
+
+			Registration[] userList = Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList",
+					Registration[].class);
 			getUser = new ArrayList<Registration>(Arrays.asList(userList));
 			model.addObject("regList", getUser);
 
@@ -92,29 +94,33 @@ public class UserController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/userUploadedFile/{regId}", method = RequestMethod.GET)
-	public ModelAndView userUploadedFile(@PathVariable("regId") int regId, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView userUploadedFile(@PathVariable("regId") int regId, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("userUploadedFile");
 		try {
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
-			UploadDocument[] uploadDocument =  Constant.getRestTemplate().postForObject(Constant.url + "/getDocumentByRegId",map, UploadDocument[].class);
+			UploadDocument[] uploadDocument = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/getDocumentByRegId", map, UploadDocument[].class);
 			List<UploadDocument> uploadDocumentList = new ArrayList<UploadDocument>(Arrays.asList(uploadDocument));
-			
-			for(int i=0;i<uploadDocumentList.size() ; i++) {
-				
-				long bytes = uploadDocumentList.get(i).getDocSize(); 
-				 String size = new String();
-				  
-				  int unit = true ? 1000 : 1024; if (bytes < unit) size = bytes + " B"; int exp
-				  = (int) (Math.log(bytes) / Math.log(unit)); String pre = (true ? "kMGTPE" :
-				  "KMGTPE").charAt(exp-1) + (true ? "" : "i"); size = String.format("%.1f %sB",
-				  bytes / Math.pow(unit, exp), pre);
-				  uploadDocumentList.get(i).setExtraVarchar1(size);
+
+			for (int i = 0; i < uploadDocumentList.size(); i++) {
+
+				long bytes = uploadDocumentList.get(i).getDocSize();
+				String size = new String();
+
+				int unit = true ? 1000 : 1024;
+				if (bytes < unit)
+					size = bytes + " B";
+				int exp = (int) (Math.log(bytes) / Math.log(unit));
+				String pre = (true ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (true ? "" : "i");
+				size = String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+				uploadDocumentList.get(i).setExtraVarchar1(size);
 			}
-			
+
 			model.addObject("uploadDocumentList", uploadDocumentList);
 			model.addObject("frontDocUrl", Constant.getUserDocURL);
 
@@ -124,20 +130,20 @@ public class UserController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/activeUserListPdf", method = RequestMethod.GET)
 	public void activeUserListPdf(HttpServletRequest request, HttpServletResponse response) {
 
-	 
 		try {
 
 			Document document = new Document(PageSize.A4.rotate(), 10f, 10f, 10f, 0f);
 			// 50, 45, 50, 60
 			document.setMargins(Constant.marginLeft, Constant.marginRight, Constant.marginTop, Constant.marginBottom);
 			document.setMarginMirroring(false);
-			/*document.left(100f);
-			document.top(150f);*/
-			
+			/*
+			 * document.left(100f); document.top(150f);
+			 */
+
 			String FILE_PATH = Constant.REPORT_SAVE;
 			File file = new File(FILE_PATH);
 
@@ -155,8 +161,7 @@ public class UserController {
 			String title = "                 ";
 
 			DateFormat DF2 = new SimpleDateFormat("dd-MM-yyyy");
-			 
-			 
+
 			ItextPageEvent event = new ItextPageEvent(header, title, "", "Event List");
 
 			writer.setPageEvent(event);
@@ -167,7 +172,7 @@ public class UserController {
 
 			try {
 				table.setWidthPercentage(100);
-				table.setWidths(new float[] { 2.0f, 6.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f});
+				table.setWidths(new float[] { 2.0f, 6.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f });
 
 				Font headFontData = Constant.headFontData;// new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL,
 															// BaseColor.BLACK);
@@ -201,44 +206,41 @@ public class UserController {
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Mobile No", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
- 
 
 				hcell = new PdfPCell(new Phrase("Reg via", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("SMS Verified status", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Email Verified status", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Status", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				 
 
 				int index = 0;
 
 				for (int i = 0; i < getUser.size(); i++) {
 					// System.err.println("I " + i);
-				 
 
 					index++;
 					PdfPCell cell;
@@ -250,20 +252,20 @@ public class UserController {
 
 					cell = new PdfPCell(new Phrase("" + getUser.get(i).getName(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
-					cell.setPadding(5); 
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setPadding(5);
 					table.addCell(cell);
-					
-					if(getUser.get(i).getUserType()==2) {
+
+					if (getUser.get(i).getUserType() == 2) {
 						cell = new PdfPCell(new Phrase("" + "Institute", headFontData));
-					}else if(getUser.get(i).getUserType()==3){
+					} else if (getUser.get(i).getUserType() == 3) {
 						cell = new PdfPCell(new Phrase("" + "University", headFontData));
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "Individual", headFontData));
-					} 
+					}
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPadding(5); 
+					cell.setPadding(5);
 					table.addCell(cell);
 
 					cell = new PdfPCell(new Phrase("" + getUser.get(i).getEmails(), headFontData));
@@ -271,51 +273,50 @@ public class UserController {
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
+
 					cell = new PdfPCell(new Phrase("" + getUser.get(i).getMobileNumber(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
+
 					cell = new PdfPCell(new Phrase("" + getUser.get(i).getRegisterVia(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
- 
-					if(getUser.get(i).getSmsVerified()==1) {
+
+					if (getUser.get(i).getSmsVerified() == 1) {
 						cell = new PdfPCell(new Phrase("" + "Verified", headFontData));
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "Not Verified", headFontData));
-					}  
+					}
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
-					if(getUser.get(i).getEmailVerified()==1) {
+
+					if (getUser.get(i).getEmailVerified() == 1) {
 						cell = new PdfPCell(new Phrase("" + "Verified", headFontData));
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "Not Verified", headFontData));
-					}  
+					}
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
-					if(getUser.get(i).getIsActive()==0) {
-						cell = new PdfPCell(new Phrase("" + "New User", headFontData)); 
-					}else if(getUser.get(i).getIsActive()==1){
-						cell = new PdfPCell(new Phrase("" + "Activate", headFontData)); 
-					}else{
-						cell = new PdfPCell(new Phrase("" + "Deactivate", headFontData)); 
+
+					if (getUser.get(i).getIsActive() == 0) {
+						cell = new PdfPCell(new Phrase("" + "New User", headFontData));
+					} else if (getUser.get(i).getIsActive() == 1) {
+						cell = new PdfPCell(new Phrase("" + "Activate", headFontData));
+					} else {
+						cell = new PdfPCell(new Phrase("" + "Deactivate", headFontData));
 					}
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE); 
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setPadding(5);
 					table.addCell(cell);
-					 
 
 				}
 
@@ -327,7 +328,7 @@ public class UserController {
 				name.setAlignment(Element.ALIGN_CENTER);
 				document.add(name);
 				document.add(new Paragraph("\n"));
-				 
+
 				DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 				document.add(new Paragraph("\n"));
 				document.add(table);
@@ -337,7 +338,7 @@ public class UserController {
 				System.out.println("Page no " + totalPages);
 
 				document.close();
-				 
+
 				if (file != null) {
 
 					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
@@ -390,7 +391,8 @@ public class UserController {
 			System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
-			editUser =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserDetailbyRegId", map, RegistrationUserDetail.class);
+			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserDetailbyRegId", map,
+					RegistrationUserDetail.class);
 			System.out.println("User: " + editUser.toString());
 
 			model.addObject("editUser", editUser);
@@ -416,9 +418,9 @@ public class UserController {
 			int regId = Integer.parseInt(request.getParameter("regId"));
 			String alternateEmail = request.getParameter("email");
 			String name = request.getParameter("name");
-			 
+
 			int type = Integer.parseInt(request.getParameter("type"));
-			//String email = request.getParameter("userEmail");
+			// String email = request.getParameter("userEmail");
 			String phone = request.getParameter("phone");
 			String aishe = request.getParameter("aishe");
 			String collegeN = request.getParameter("collegeN");
@@ -438,7 +440,6 @@ public class UserController {
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
- 
 
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
@@ -448,8 +449,8 @@ public class UserController {
 						System.out.println("Password: " + password);
 						editUser.setUserPassword(password);
 						editUser.setEmailVerified(1);
-						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
-								password);
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
+								editUser.getEmails(), password);
 						session.setAttribute("successMsg", "Infomation Updated successfully!");
 						session.setAttribute("errorMsg", "false");
 						RestTemplate restTemplate = new RestTemplate();
@@ -467,16 +468,18 @@ public class UserController {
 								String.class);
 					} else {
 						editUser.setEmailVerified(1);
-						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
-								userPass);
-						List<Registration> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", List.class);
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
+								editUser.getEmails(), userPass);
+						List<Registration> getUser = Constant.getRestTemplate()
+								.getForObject(Constant.url + "/getAllRegUserList", List.class);
 						session.setAttribute("regList", getUser);
 						session.setAttribute("successMsg", "Password Alredy Updated !");
 						session.setAttribute("errorMsg", "false");
 					}
 				} else {
 					editUser.setEmailVerified(0);
-					List<Registration> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", List.class);
+					List<Registration> getUser = Constant.getRestTemplate()
+							.getForObject(Constant.url + "/getAllRegUserList", List.class);
 					session.setAttribute("regList", getUser);
 
 					session.setAttribute("successMsg", "Please varify your mobile number !");
@@ -485,7 +488,7 @@ public class UserController {
 
 			}
 			if (btnsubmit != null) {
-				 
+
 				if (emailVerified == 0) {
 					editUser.setEmailVerified(0);
 				} else {
@@ -495,12 +498,13 @@ public class UserController {
 				editUser.setIsActive(status);
 
 			}
-			 
-			editUser.setEditDate(sf.format(date));
-			Registration regResponse =  Constant.getRestTemplate().postForObject(Constant.url + "/saveRegistration", editUser,
-					Registration.class);
 
-			List<Registration> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList", List.class);
+			editUser.setEditDate(sf.format(date));
+			Registration regResponse = Constant.getRestTemplate().postForObject(Constant.url + "/saveRegistration",
+					editUser, Registration.class);
+
+			List<Registration> getUser = Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList",
+					List.class);
 			session.setAttribute("regList", getUser);
 			session.setAttribute("successMsg", "Infomation Updated successfully!");
 			session.setAttribute("errorMsg", "false");
@@ -520,7 +524,8 @@ public class UserController {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			// map.add("delStatus", 1);
-			List<EventDetails> getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getUserInfoByUserId", List.class);
+			List<EventDetails> getUser = Constant.getRestTemplate().getForObject(Constant.url + "/getUserInfoByUserId",
+					List.class);
 			// List<Registration> userList = new
 			// ArrayList<Registration>(Arrays.asList(getUser));
 			model.addObject("regList", getUser);
@@ -541,11 +546,13 @@ public class UserController {
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
+			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
+					RegistrationUserDetail.class);
 			System.out.println("User: " + editUser.toString());
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", eventRegId);
-			editEvent =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
+			editEvent = Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1,
+					EventRegistration.class);
 			System.out.println("User: " + editEvent.toString());
 
 			model.addObject("editUser", editUser);
@@ -583,12 +590,14 @@ public class UserController {
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
-			Registration user =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map, Registration.class);
+			Registration user = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
+					Registration.class);
 
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("newsblogsId", newsblogsId);
 			map1.add("langId", 1);
-			NewsDetails eventList =  Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
+			NewsDetails eventList = Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId",
+					map1, NewsDetails.class);
 			System.out.println("List :" + eventList.toString());
 			if (status == 1) {
 				approval = "Approved";
@@ -606,8 +615,8 @@ public class UserController {
 			editEvent.setApprovalDate(sf.format(date));
 			editEvent.setApproveBy(UserDetail.getUserId());
 
-			EventRegistration regResponse =  Constant.getRestTemplate().postForObject(Constant.url + "/saveEventRegister", editEvent,
-					EventRegistration.class);
+			EventRegistration regResponse = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/saveEventRegister", editEvent, EventRegistration.class);
 			MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
 			map3.add("newsblogsId", newsblogsId);
 
@@ -641,11 +650,13 @@ public class UserController {
 			System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
-			editUser =  Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map, RegistrationUserDetail.class);
+			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
+					RegistrationUserDetail.class);
 
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", regId);
-			editEvent =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1, EventRegistration.class);
+			editEvent = Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1,
+					EventRegistration.class);
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -653,7 +664,8 @@ public class UserController {
 			map = new LinkedMultiValueMap<String, Object>();
 			map1.add("newsblogsId", newsId);
 			map1.add("langId", 1);
-			NewsDetails eventList =  Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId", map1, NewsDetails.class);
+			NewsDetails eventList = Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId",
+					map1, NewsDetails.class);
 			System.out.println("List :" + eventList.toString());
 			if (status == 1) {
 				approval = "Approved";
@@ -692,8 +704,8 @@ public class UserController {
 			editEvent.setApprovalDate(sf.format(date));
 			editEvent.setApproveBy(UserDetail.getUserId());
 
-			EventRegistration regResponse =  Constant.getRestTemplate().postForObject(Constant.url + "/saveEventRegister", editEvent,
-					EventRegistration.class);
+			EventRegistration regResponse = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/saveEventRegister", editEvent, EventRegistration.class);
 
 			session.setAttribute("successMsg", "Infomation Updated successfully!");
 			session.setAttribute("errorMsg", "false");
@@ -712,9 +724,36 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView("allEventList");
 		try {
+			Calendar date = Calendar.getInstance();
+			date.set(Calendar.DAY_OF_MONTH, 1);
 
-			EventCountDetails[] getUser =  Constant.getRestTemplate().getForObject(Constant.url + "/getAllEventList",
-					EventCountDetails[].class);
+			Date firstDate = date.getTime();
+
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY");
+
+			String fromDate = dateFormat.format(firstDate);
+
+			String toDate = dateFormat.format(new Date());
+
+			model.addObject("fromDate", fromDate);
+			model.addObject("toDate", toDate);
+
+			String fromDate1 = request.getParameter("from_date");
+			String toDate1 = request.getParameter("to_date");
+			// System.out.println("from Date***"+fromDate1);
+			// System.out.println("to Date***"+toDate1);
+			if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+
+				fromDate1 = fromDate;
+				toDate1 = toDate;
+
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate1));
+			map.add("toDate", DateConvertor.convertToYMD(toDate1));
+			EventCountDetails[] getUser = Constant.getRestTemplate().postForObject(Constant.url + "/getAllEventList",
+					map, EventCountDetails[].class);
 			userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
 			for (int i = 0; i < userList.size(); i++) {
 				userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
@@ -722,7 +761,8 @@ public class UserController {
 			}
 
 			model.addObject("userList", userList);
-			//System.out.println("userList :" + userList);
+			// System.out.println("userList :" + userList);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -733,16 +773,16 @@ public class UserController {
 	@RequestMapping(value = "/showEventListPdf", method = RequestMethod.GET)
 	public void showEventListPdf(HttpServletRequest request, HttpServletResponse response) {
 
-	 
 		try {
 
 			Document document = new Document(PageSize.A4.rotate(), 10f, 10f, 10f, 0f);
 			// 50, 45, 50, 60
 			document.setMargins(Constant.marginLeft, Constant.marginRight, Constant.marginTop, Constant.marginBottom);
 			document.setMarginMirroring(false);
-			/*document.left(100f);
-			document.top(150f);*/
-			
+			/*
+			 * document.left(100f); document.top(150f);
+			 */
+
 			String FILE_PATH = Constant.REPORT_SAVE;
 			File file = new File(FILE_PATH);
 
@@ -760,8 +800,7 @@ public class UserController {
 			String title = "                 ";
 
 			DateFormat DF2 = new SimpleDateFormat("dd-MM-yyyy");
-			 
-			 
+
 			ItextPageEvent event = new ItextPageEvent(header, title, "", "Event List");
 
 			writer.setPageEvent(event);
@@ -818,19 +857,19 @@ public class UserController {
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Document Required", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Applied User", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Approve User", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
@@ -841,7 +880,6 @@ public class UserController {
 
 				for (int i = 0; i < userList.size(); i++) {
 					// System.err.println("I " + i);
-				 
 
 					index++;
 					PdfPCell cell;
@@ -853,7 +891,7 @@ public class UserController {
 
 					cell = new PdfPCell(new Phrase("" + userList.get(i).getHeading(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					// cell.setPaddingLeft(10);
 
@@ -882,26 +920,26 @@ public class UserController {
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
+
 					String yesNo = new String();
-					
-					if(userList.get(i).getExInt2()==1) {
-						yesNo="Required";
-					}else {
-						yesNo="Not Required";
+
+					if (userList.get(i).getExInt2() == 1) {
+						yesNo = "Required";
+					} else {
+						yesNo = "Not Required";
 					}
 					cell = new PdfPCell(new Phrase("" + yesNo, headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
+
 					cell = new PdfPCell(new Phrase("" + userList.get(i).getApplied(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
+
 					cell = new PdfPCell(new Phrase("" + userList.get(i).getApproved(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -918,7 +956,7 @@ public class UserController {
 				name.setAlignment(Element.ALIGN_CENTER);
 				document.add(name);
 				document.add(new Paragraph("\n"));
-				 
+
 				DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 				document.add(new Paragraph("\n"));
 				document.add(table);
@@ -928,7 +966,7 @@ public class UserController {
 				System.out.println("Page no " + totalPages);
 
 				document.close();
-				 
+
 				if (file != null) {
 
 					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
@@ -973,7 +1011,7 @@ public class UserController {
 	}
 
 	List<EventDetail> eventDetailList = new ArrayList<>();
-	
+
 	@RequestMapping(value = "/detailEventList/{newsblogsId}", method = RequestMethod.GET)
 	public ModelAndView detailEventList(@PathVariable("newsblogsId") int newsblogsId, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -984,11 +1022,11 @@ public class UserController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			// map.add("regId", regId);
 			map.add("newsblogsId", newsblogsId);
-			EventDetail[] eventDetail =  Constant.getRestTemplate().postForObject(Constant.url + "/getUserInfoByNewsblogsId", map,
-					EventDetail[].class);
-			
+			EventDetail[] eventDetail = Constant.getRestTemplate()
+					.postForObject(Constant.url + "/getUserInfoByNewsblogsId", map, EventDetail[].class);
+
 			eventDetailList = new ArrayList<>(Arrays.asList(eventDetail));
-			//System.out.println("User: " + editUser.toString());
+			// System.out.println("User: " + editUser.toString());
 
 			model.addObject("editUser", eventDetailList);
 			model.addObject("newsblogsId", newsblogsId);
@@ -1002,20 +1040,20 @@ public class UserController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/showEventDetailListPdf", method = RequestMethod.GET)
 	public void showEventDetailListPdf(HttpServletRequest request, HttpServletResponse response) {
 
-	 
 		try {
 
 			Document document = new Document(PageSize.A4.rotate(), 10f, 10f, 10f, 0f);
 			// 50, 45, 50, 60
 			document.setMargins(Constant.marginLeft, Constant.marginRight, Constant.marginTop, Constant.marginBottom);
 			document.setMarginMirroring(false);
-			/*document.left(100f);
-			document.top(150f);*/
-			
+			/*
+			 * document.left(100f); document.top(150f);
+			 */
+
 			String FILE_PATH = Constant.REPORT_SAVE;
 			File file = new File(FILE_PATH);
 
@@ -1033,8 +1071,7 @@ public class UserController {
 			String title = "                 ";
 
 			DateFormat DF2 = new SimpleDateFormat("dd-MM-yyyy");
-			 
-			 
+
 			ItextPageEvent event = new ItextPageEvent(header, title, "", "Event List");
 
 			writer.setPageEvent(event);
@@ -1045,7 +1082,7 @@ public class UserController {
 
 			try {
 				table.setWidthPercentage(100);
-				table.setWidths(new float[] { 2.0f, 6.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f});
+				table.setWidths(new float[] { 2.0f, 6.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f, 3.0f });
 
 				Font headFontData = Constant.headFontData;// new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL,
 															// BaseColor.BLACK);
@@ -1091,25 +1128,23 @@ public class UserController {
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Approve Date", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				
+
 				hcell = new PdfPCell(new Phrase("Feedback", tableHeaderFont));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				hcell.setBackgroundColor(Constant.baseColorTableHeader);
 				hcell.setPadding(5);
 				table.addCell(hcell);
-				 
 
 				int index = 0;
 
 				for (int i = 0; i < eventDetailList.size(); i++) {
 					// System.err.println("I " + i);
-				 
 
 					index++;
 					PdfPCell cell;
@@ -1121,20 +1156,20 @@ public class UserController {
 
 					cell = new PdfPCell(new Phrase("" + eventDetailList.get(i).getName(), headFontData));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT); 
-					cell.setPadding(5); 
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setPadding(5);
 					table.addCell(cell);
-					
-					if(eventDetailList.get(i).getUserType()==2) {
+
+					if (eventDetailList.get(i).getUserType() == 2) {
 						cell = new PdfPCell(new Phrase("" + "Institute", headFontData));
-					}else if(eventDetailList.get(i).getUserType()==3){
+					} else if (eventDetailList.get(i).getUserType() == 3) {
 						cell = new PdfPCell(new Phrase("" + "University", headFontData));
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "Individual", headFontData));
-					} 
+					}
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPadding(5); 
+					cell.setPadding(5);
 					table.addCell(cell);
 
 					cell = new PdfPCell(new Phrase("" + eventDetailList.get(i).getMobileNumber(), headFontData));
@@ -1149,39 +1184,39 @@ public class UserController {
 					cell.setPadding(5);
 					table.addCell(cell);
 
-					if(eventDetailList.get(i).getStatusApproval()==0) {
+					if (eventDetailList.get(i).getStatusApproval() == 0) {
 						cell = new PdfPCell(new Phrase("" + "Apply", headFontData));
-					}else if(eventDetailList.get(i).getStatusApproval()==1){
+					} else if (eventDetailList.get(i).getStatusApproval() == 1) {
 						cell = new PdfPCell(new Phrase("" + "Approve", headFontData));
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "Not Approve", headFontData));
-					}  
+					}
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
-					if(eventDetailList.get(i).getApprovalDate()!="" && eventDetailList.get(i).getApprovalDate()!=null) {
+
+					if (eventDetailList.get(i).getApprovalDate() != ""
+							&& eventDetailList.get(i).getApprovalDate() != null) {
 						cell = new PdfPCell(new Phrase("" + eventDetailList.get(i).getApprovalDate(), headFontData));
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "-", headFontData));
-					} 
+					}
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setPadding(5);
 					table.addCell(cell);
-					
-					if(eventDetailList.get(i).getExVar1()!="" && eventDetailList.get(i).getExVar1()!=null) {
+
+					if (eventDetailList.get(i).getExVar1() != "" && eventDetailList.get(i).getExVar1() != null) {
 						cell = new PdfPCell(new Phrase("" + eventDetailList.get(i).getExVar1(), headFontData));
 						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					}else {
+					} else {
 						cell = new PdfPCell(new Phrase("" + "-", headFontData));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					}
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE); 
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setPadding(5);
 					table.addCell(cell);
-					 
 
 				}
 
@@ -1193,7 +1228,7 @@ public class UserController {
 				name.setAlignment(Element.ALIGN_CENTER);
 				document.add(name);
 				document.add(new Paragraph("\n"));
-				 
+
 				DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 				document.add(new Paragraph("\n"));
 				document.add(table);
@@ -1203,7 +1238,7 @@ public class UserController {
 				System.out.println("Page no " + totalPages);
 
 				document.close();
-				 
+
 				if (file != null) {
 
 					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
