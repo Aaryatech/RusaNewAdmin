@@ -3,226 +3,295 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-  
- 
+
+
 <!DOCTYPE html>
 <html class=" ">
-    <head>
-      
-        <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-        <!-- CORE CSS TEMPLATE - END -->
+<head>
 
-    </head>
-    <!-- END HEAD -->
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<!-- CORE CSS TEMPLATE - END -->
 
-    <!-- BEGIN BODY -->
-    <body class=" "><!-- START TOPBAR -->
-<jsp:include page="/WEB-INF/views/include/topbar.jsp"></jsp:include>
-<!-- END TOPBAR -->
-<!-- START CONTAINER -->
-<div class="page-container row-fluid container-fluid">
+</head>
+<!-- END HEAD -->
 
-    <!-- SIDEBAR - START -->
+<!-- BEGIN BODY -->
+<body class=" ">
+	<!-- START TOPBAR -->
+	<jsp:include page="/WEB-INF/views/include/topbar.jsp"></jsp:include>
+	<!-- END TOPBAR -->
+	<!-- START CONTAINER -->
+	<div class="page-container row-fluid container-fluid">
 
-<jsp:include page="/WEB-INF/views/include/left.jsp"></jsp:include>
-<!--  SIDEBAR - END -->
-    <!-- START CONTENT -->
-<section id="main-content" class=" ">
-     <section class="wrapper main-wrapper row" style="">
+		<!-- SIDEBAR - START -->
 
-    <div class="col-xs-12">
-        <div class="page-title">
+		<jsp:include page="/WEB-INF/views/include/left.jsp"></jsp:include>
+		<!--  SIDEBAR - END -->
+		<!-- START CONTENT -->
+		<section id="main-content" class=" ">
+			<section class="wrapper main-wrapper row" style="">
 
-            <div class="pull-left">
-                <!-- PAGE HEADING TAG - START --><h1 class="title">Add Menu</h1><!-- PAGE HEADING TAG - END -->                            </div>
-			 
-                                
-        </div>
-    </div>
-    <div class="clearfix"></div>
-    <!-- MAIN CONTENT AREA STARTS -->
- 
-	<div class="col-lg-12">
-    	                                                            
-    </div>
-	
-    <div class="col-lg-12">
-        <section class="box ">
-       
-                <header class="panel_header">
-                    <h2 class="title pull-left"><c:choose><c:when test="${isEdit==1}">Edit Menu</c:when><c:otherwise>Add Menu</c:otherwise></c:choose></h2>
-                   
-                    <div class="actions panel_actions pull-right">
-                	      <a href="${pageContext.request.contextPath}/categoryList"><button type="button" class="btn btn-info"><< Back</button></a>
-                	       <a class="box_toggle fa fa-chevron-down"></a>
-                </div>
-                     
-                </header>
-                
-                   <form class="form-horizontal" id="addSupplier" action="${pageContext.request.contextPath}/insertCategory" 
-                    method="post">
-                   
-                <div class="content-body"> 
-                    <div class="row">
-                    
-                    <c:forEach items="${languagesList}" var="languagesList" >
-                     <h5 class="title pull-left">${languagesList.name}</h5>
-                     <c:set var="find" value="0"></c:set>
-                     <c:choose>
-                     	<c:when test="${isEdit==1}">
-                     	 
-                     		<c:forEach items="${editCategory.categoryDescriptionList}" var="categoryDescriptionList" >
-                     		 
-                     		 
-                     			<c:choose>
-                     				<c:when test="${categoryDescriptionList.languageId==languagesList.languagesId}">
-                     					<c:set var="find" value="1"></c:set>
-                     					<div class="col-xs-12">
-                                	  
-				                               <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu Name : <span class="text-danger">*</span> </label>
-				                                <div class="col-sm-10"> 
-												<input id="catName${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
-								placeholder="Menu Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
-				                                </div>
-				                              </div>
-				                            
-				                           
-				                              <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Menu Description:</label>
-				                                <div class="col-sm-10">
-				                                
-				                                <input id="catDesc${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
-								placeholder="Menu Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
-				                                 
-				                                </div>
-				                              </div>
-				                               
-				                        </div>
-                     				</c:when>
-                     			</c:choose>
-                     			 
-                     		</c:forEach> 
-                     	</c:when>
-                     	<c:otherwise>
-                     		  <div class="col-xs-12">
-                                	  
-				                               <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_mail_protocol">Menu Name : <span class="text-danger">*</span> </label>
-				                                <div class="col-sm-10"> 
-												<input id="catName${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
-								placeholder="Menu Name" value="${categoryDescriptionList.catName}"  style="text-align: left;" name="catName${languagesList.languagesId}" type="text" required>
-				                                </div>
-				                              </div>
-				                            
-				                           
-				                              <div class="form-group">
-				                                <label class="control-label col-sm-2" for="config_smtp_host">Menu Description:</label>
-				                                <div class="col-sm-10">
-				                                
-				                                <input id="catDesc${languagesList.languagesId}" class="form-control"  onchange="trim(this)"
-								placeholder="Menu Description" value="${categoryDescriptionList.catDesc}"  style="text-align: left;" name="catDesc${languagesList.languagesId}" type="text"  >
-				                                 
-				                                </div>
-				                              </div>
-				                               
-				                        </div>
-                     	</c:otherwise>
-                     </c:choose>
-                        
-                        </c:forEach>
-                        
-                        <div class="col-xs-12"> 
-                        <input id="catId" value="${editCategory.catId}" name="catId" type="hidden"  >
-                        
-                        <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Select Section : <span class="text-danger">*</span> </label>
-                                <div class="col-sm-10">
-                                   
-                                 <select class="form-control"   name="sectionId"  id="sectionId"  required>
-                                    <option value="" >Select</option>
-                                    <c:forEach items="${sectionList}" var="sectionList" >
-                                    <c:choose>
-                                    	<c:when test="${sectionList.sectionId==editCategory.sectionId}">
-                                    	<option value="${sectionList.sectionId}" selected>${sectionList.sectionName}</option>
-                                    	</c:when>
-                                    	<c:otherwise>
-                                    	<option value="${sectionList.sectionId}">${sectionList.sectionName}</option>
-                                    	</c:otherwise>
-                                    </c:choose>
-                                    
-                                    </c:forEach>
-                                    </select>
-                                </div>
-                              </div>
-                              
-                         <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Sort No : <span class="text-danger">*</span> </label>
-                                <div class="col-sm-10"> 
-                                  <input id="seqNo" class="form-control"  onchange="trim(this)"
-								placeholder="Sequence No" value="${editCategory.catSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
-                                </div>
-                              </div>
-                            
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="config_mail_protocol">Is Active : <span class="text-danger">*</span> </label>
-                                <div class="col-sm-10">
-                                   
-                                  <select name="isActive" id="isActive" class="form-control">
-                                    <c:choose>
-                                  		<c:when test="${editCategory.isActive==0}">
-                                  			<option value="1" >YES</option>
-                                   			<option value="0" selected>NO</option>
-                                  		</c:when>
-                                  		<c:otherwise>
-                                  			<option value="1" >YES</option>
-                                    		<option value="0">NO</option>
-                                  		</c:otherwise>
-                                  	</c:choose>
-                                    </select>
-                                </div>
-                              </div>
-                               
-                              <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                  <button type="submit" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-default">Reset</button> 
-                                  
-                                </div>
-                              </div>
-                            
-                        </div>
-                    </div> 
-                </div>
-                
-              
-                </form>
-        </section>
-        
-    </div> 
+				<div class="col-xs-12">
+					<div class="page-title">
+
+						<div class="pull-left">
+							<!-- PAGE HEADING TAG - START -->
+							<h1 class="title">Add Menu</h1>
+							<!-- PAGE HEADING TAG - END -->
+						</div>
 
 
- 
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<!-- MAIN CONTENT AREA STARTS -->
+
+				<div class="col-lg-12"></div>
+
+				<div class="col-lg-12">
+					<section class="box ">
+
+						<header class="panel_header">
+							<h2 class="title pull-left">
+								<c:choose>
+									<c:when test="${isEdit==1}">Edit Menu</c:when>
+									<c:otherwise>Add Menu</c:otherwise>
+								</c:choose>
+							</h2>
+
+							<div class="actions panel_actions pull-right">
+								<a href="${pageContext.request.contextPath}/categoryList"><button
+										type="button" class="btn btn-info"><< Back</button></a> <a
+									class="box_toggle fa fa-chevron-down"></a>
+							</div>
+
+						</header>
+
+						<form class="form-horizontal" id="addSupplier"
+							action="${pageContext.request.contextPath}/insertCategory"
+							method="post">
+
+							<div class="content-body">
+								<div class="row">
+
+									<c:forEach items="${languagesList}" var="languagesList">
+										<h5 class="title pull-left">${languagesList.name}</h5>
+										<c:set var="find" value="0"></c:set>
+										<c:choose>
+											<c:when test="${isEdit==1}">
+
+												<c:forEach items="${editCategory.categoryDescriptionList}"
+													var="categoryDescriptionList">
 
 
-<!-- MAIN CONTENT AREA ENDS -->
-    </section>
-    </section>
-    <!-- END CONTENT -->
-     
+													<c:choose>
+														<c:when
+															test="${categoryDescriptionList.languageId==languagesList.languagesId}">
+															<c:set var="find" value="1"></c:set>
+															<div class="col-xs-12">
+
+																<div class="form-group">
+																	<label class="control-label col-sm-2"
+																		for="config_mail_protocol">Menu Name : <span
+																		class="text-danger">*</span>
+																	</label>
+																	<div class="col-sm-10">
+																		<input id="catName${languagesList.languagesId}"
+																			class="form-control" onchange="trim(this)"
+																			placeholder="Menu Name"
+																			value="${categoryDescriptionList.catName}"
+																			style="text-align: left;"
+																			name="catName${languagesList.languagesId}"
+																			type="text" required>
+																	</div>
+																</div>
 
 
-     </div>
-    <!-- END CONTAINER -->
-<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
+																<div class="form-group">
+																	<label class="control-label col-sm-2"
+																		for="config_smtp_host">Menu Description:</label>
+																	<div class="col-sm-10">
 
-   <jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-   <script>
-			function trim(el) {
-				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
-				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
-				replace(/\n +/, "\n"); // Removes spaces after newlines
-				return;
-			}
-			</script>
+																		<input id="catDesc${languagesList.languagesId}"
+																			class="form-control" onchange="trim(this)"
+																			placeholder="Menu Description"
+																			value="${categoryDescriptionList.catDesc}"
+																			style="text-align: left;"
+																			name="catDesc${languagesList.languagesId}"
+																			type="text">
+
+																	</div>
+																</div>
+
+															</div>
+														</c:when>
+													</c:choose>
+
+												</c:forEach>
+											</c:when>
+											<c:otherwise>
+												<div class="col-xs-12">
+
+													<div class="form-group">
+														<label class="control-label col-sm-2"
+															for="config_mail_protocol">Menu Name : <span
+															class="text-danger">*</span>
+														</label>
+														<div class="col-sm-10">
+															<input id="catName${languagesList.languagesId}"
+																class="form-control" onchange="trim(this)"
+																placeholder="Menu Name"
+																value="${categoryDescriptionList.catName}"
+																style="text-align: left;"
+																name="catName${languagesList.languagesId}" type="text"
+																required>
+														</div>
+													</div>
+
+
+													<div class="form-group">
+														<label class="control-label col-sm-2"
+															for="config_smtp_host">Menu Description:</label>
+														<div class="col-sm-10">
+
+															<input id="catDesc${languagesList.languagesId}"
+																class="form-control" onchange="trim(this)"
+																placeholder="Menu Description"
+																value="${categoryDescriptionList.catDesc}"
+																style="text-align: left;"
+																name="catDesc${languagesList.languagesId}" type="text">
+
+														</div>
+													</div>
+
+												</div>
+											</c:otherwise>
+										</c:choose>
+
+									</c:forEach>
+
+									<div class="col-xs-12">
+										<input id="catId" value="${editCategory.catId}" name="catId"
+											type="hidden">
+
+										<div class="form-group">
+											<label class="control-label col-sm-2"
+												for="config_mail_protocol">Select Section : <span
+												class="text-danger">*</span>
+											</label>
+											<div class="col-sm-10">
+
+												<select class="form-control" name="sectionId" id="sectionId"
+													required>
+													<option value="">Select</option>
+													<c:forEach items="${sectionList}" var="sectionList">
+														<c:choose>
+															<c:when
+																test="${sectionList.sectionId==editCategory.sectionId}">
+																<option value="${sectionList.sectionId}" selected>${sectionList.sectionName}</option>
+															</c:when>
+															<c:otherwise>
+																<option value="${sectionList.sectionId}">${sectionList.sectionName}</option>
+															</c:otherwise>
+														</c:choose>
+
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-sm-2"
+												for="config_mail_protocol">Sort No : <span
+												class="text-danger">*</span>
+											</label>
+											<div class="col-sm-10">
+												<input id="seqNo" class="form-control" onchange="trim(this)"
+													placeholder="Sequence No" value="${editCategory.catSortNo}"
+													style="text-align: left;" name="seqNo" type="number"
+													required>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-sm-2"
+												for="config_mail_protocol">Is Active : <span
+												class="text-danger">*</span>
+											</label>
+											<div class="col-sm-10">
+
+												<select name="isActive" id="isActive" class="form-control">
+													<c:choose>
+														<c:when test="${editCategory.isActive==0}">
+															<option value="1">YES</option>
+															<option value="0" selected>NO</option>
+														</c:when>
+														<c:otherwise>
+															<option value="1">YES</option>
+															<option value="0">NO</option>
+														</c:otherwise>
+													</c:choose>
+												</select>
+											</div>
+										</div>
+
+
+										<c:if test="${isEdit==1}">
+											<div class="form-group">
+												<label class="control-label col-sm-2"
+													for="config_mail_protocol">SlugName : <span
+													class="text-danger">*</span>
+												</label>
+												<div class="col-sm-10">
+													<input id="seqNo" class="form-control"
+														placeholder="Sequence No" value="${editCategory.slugName}"
+														name="SlugName" type="text" readonly>
+												</div>
+											</div>
+										</c:if>
+
+
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button type="submit" class="btn btn-primary">Submit</button>
+												<button type="reset" class="btn btn-default">Reset</button>
+
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+
+						</form>
+					</section>
+
+				</div>
+
+
+
+
+
+				<!-- MAIN CONTENT AREA ENDS -->
+			</section>
+		</section>
+		<!-- END CONTENT -->
+
+
+
+	</div>
+	<!-- END CONTAINER -->
+	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
+
+	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+	<script>
+		function trim(el) {
+			el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+			replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+			replace(/\n +/, "\n"); // Removes spaces after newlines
+			return;
+		}
+	</script>
 </body>
 </html>
