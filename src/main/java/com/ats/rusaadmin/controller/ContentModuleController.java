@@ -1286,7 +1286,7 @@ public class ContentModuleController {
 				editNewsBlog.setEventContactPerson(personName.trim().replaceAll("[ ]{2,}", " "));
 				editNewsBlog.setEventDateFrom(DateConvertor.convertToYMD(eventDate));
 				editNewsBlog.setEventLocation(location.trim().replaceAll("[ ]{2,}", " "));
-				editNewsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
+				//editNewsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
 				editNewsBlog.setExInt1(11);
 				editNewsBlog.setExInt2(doc);
 				if (doc == 1) {
