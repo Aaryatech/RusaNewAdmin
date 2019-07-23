@@ -30,11 +30,13 @@ import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
 import com.ats.rusaadmin.common.VpsImageUpload;
+import com.ats.rusaadmin.model.BannerDetail;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.Category;
 import com.ats.rusaadmin.model.CategoryDescription;
 import com.ats.rusaadmin.model.DocumentUpload;
 import com.ats.rusaadmin.model.GallaryCategory;
+import com.ats.rusaadmin.model.GallaryCategoryDescriptioin;
 import com.ats.rusaadmin.model.GalleryDetail;
 import com.ats.rusaadmin.model.Galleryheader;
 import com.ats.rusaadmin.model.GetCategory;
@@ -182,9 +184,9 @@ public class MasterControllerNew {
 
 					if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
 						try {
-							//System.out.println("File");
+							// System.out.println("File");
 							if (removePhoto == 1) {
-								//System.out.println("Remove :" + removePhoto);
+								// System.out.println("Remove :" + removePhoto);
 								user.setFileName("");
 							}
 						} catch (Exception e) {
@@ -312,7 +314,7 @@ public class MasterControllerNew {
 				return "redirect:/userList";
 			}
 
-			//System.out.println(user);
+			// System.out.println(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -347,7 +349,7 @@ public class MasterControllerNew {
 			map.add("userId", userId);
 			// map.add("delStatus", 0);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteUser", map, Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 			HttpSession session = request.getSession();
 			if (userId == 1) {
@@ -369,6 +371,10 @@ public class MasterControllerNew {
 		try {
 
 			editbanner = new BannerImages();
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
+			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -388,20 +394,16 @@ public class MasterControllerNew {
 
 			String id = request.getParameter("id");
 			String imageName = request.getParameter("imageName");
-			String sliderName = request.getParameter("sliderName");
-			String text1 = request.getParameter("text1");
-			String text2 = request.getParameter("text2");
 			String urlLink = request.getParameter("urlLink");
-			String linkName = request.getParameter("linkName");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			// int pageId = Integer.parseInt(request.getParameter("pageId"));
 			Boolean ret = false;
 
-			if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
+			/*if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
 
 				ret = true;
-			}
+			}*/
 			VpsImageUpload upload = new VpsImageUpload();
 			String docFile = null;
 
@@ -411,26 +413,10 @@ public class MasterControllerNew {
 
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
-			
-			if(ret==false) {
-			if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
-				docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-				editbanner.setSliderImage(docFile);
-				try {
-					Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL, docFile,
-							Constant.values, 0, 0, 0, 0, 0);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-				editbanner.setAddDate(sf.format(date));
-				// editbanner.setAddedByUserId(UserDetail.getUserId());
-			} else {
+			if (ret == false) {
+				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
-				if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
-					editbanner.setSliderImage(imageName);
-				} else {
 					docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
 					editbanner.setSliderImage(docFile);
 					try {
@@ -440,36 +426,103 @@ public class MasterControllerNew {
 						// TODO: handle exception
 						e.printStackTrace();
 					}
+					editbanner.setAddDate(sf.format(date));
+					// editbanner.setAddedByUserId(UserDetail.getUserId());
+				} else {
+
+					if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
+						editbanner.setSliderImage(imageName);
+					} else {
+						docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
+						editbanner.setSliderImage(docFile);
+						try {
+							Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL, docFile,
+									Constant.values, 0, 0, 0, 0, 0);
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					}
+					editbanner.setEditDate(sf.format(date));
+					// editbanner.setEditByUserId(UserDetail.getUserId());
 				}
-				editbanner.setEditDate(sf.format(date));
-				// editbanner.setEditByUserId(UserDetail.getUserId());
-			}
 
-			editbanner.setLinkName(linkName.trim().replaceAll("[ ]{2,}", " "));
-			editbanner.setSliderName(sliderName.trim().replaceAll("[ ]{2,}", " "));
-			editbanner.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
-			editbanner.setIsActive(isActive);
-			editbanner.setDelStatus(1);
-			editbanner.setText1(text1);
-			editbanner.setText2(text2);
+				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
-			//System.out.println("editbanner" + editbanner);
+					for (int i = 0; i < languagesList.size(); i++) {
 
-			BannerImages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveBannerImages", editbanner,
-					BannerImages.class);
+						BannerDetail BannerDetail = new BannerDetail();
+						BannerDetail
+								.setLinkName(request.getParameter("linkName" + languagesList.get(i).getLanguagesId()));
+						BannerDetail.setSliderName(
+								request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+						BannerDetail.setText1(request.getParameter("text1" + languagesList.get(i).getLanguagesId()));
+						BannerDetail.setText2(request.getParameter("text2" + languagesList.get(i).getLanguagesId()));
+						BannerDetail.setSortOrder(languagesList.get(i).getLanguagesId());
+						BannerDetail.setIsActive(1);
+						BannerDetail.setDelStatus(1);
+						editbanner.getDetillist().add(BannerDetail);
 
-			if (res.getId() != 0) {
-				session.setAttribute("successMsg", "Infomation added successfully!");
-				session.setAttribute("errorMsg", "false");
+						if (languagesList.get(i).getLanguagesId() == 1) {
+							editbanner.setLinkName(
+									request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
+							editbanner.setSliderName(
+									request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+							editbanner.setText1(
+									request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
+							editbanner.setText2(
+									request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
+						}
+
+					}
+
+				} else {
+
+					for (int i = 0; i < editbanner.getDetillist().size(); i++) {
+
+						editbanner.getDetillist().get(i).setLinkName(
+								request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
+						editbanner.getDetillist().get(i).setSliderName(
+								request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+						editbanner.getDetillist().get(i).setText1(
+								request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
+						editbanner.getDetillist().get(i).setText2(
+								request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
+
+						if (languagesList.get(i).getLanguagesId() == 1) {
+							editbanner.setLinkName(
+									request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
+							editbanner.setSliderName(
+									request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+							editbanner.setText1(
+									request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
+							editbanner.setText2(
+									request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
+						}
+
+					}
+				}
+
+				editbanner.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
+				editbanner.setIsActive(isActive);
+				editbanner.setDelStatus(1);
+
+				// System.out.println("editbanner" + editbanner);
+
+				BannerImages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveBannerImages",
+						editbanner, BannerImages.class);
+
+				if (res.getId() != 0) {
+					session.setAttribute("successMsg", "Infomation added successfully!");
+					session.setAttribute("errorMsg", "false");
+				} else {
+					session.setAttribute("successMsg", "Failed To Add Infomation!");
+					session.setAttribute("errorMsg", "true");
+				}
 			} else {
-				session.setAttribute("successMsg", "Failed To Add Infomation!");
-				session.setAttribute("errorMsg", "true");
-			}
-			}
-			else {
 				session.setAttribute("successMsg", "Invalid Infomation!");
 				session.setAttribute("errorMsg", "true");
-				
+
 			}
 
 		} catch (Exception e) {
@@ -488,7 +541,7 @@ public class MasterControllerNew {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteBanner", map, Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 			HttpSession session = request.getSession();
 			session.setAttribute("successMsg", "Infomation deleted successfully!");
@@ -535,6 +588,33 @@ public class MasterControllerNew {
 			map.add("id", id);
 			editbanner = Constant.getRestTemplate().postForObject(Constant.url + "/getSliderImagesById", map,
 					BannerImages.class);
+
+			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+					Languages[].class);
+			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+			model.addObject("languagesList", languagesList);
+
+			for (int i = 0; i < languagesList.size(); i++) {
+
+				int flag = 0;
+
+				for (int j = 0; j < editbanner.getDetillist().size(); j++) {
+
+					if (languagesList.get(i).getLanguagesId() == editbanner.getDetillist().get(j).getSortOrder()) {
+						flag = 1;
+						break;
+					}
+				}
+
+				if (flag == 0) {
+					BannerDetail bannerDetail = new BannerDetail();
+					bannerDetail.setSortOrder(languagesList.get(i).getLanguagesId());
+					editbanner.getDetillist().add(bannerDetail);
+				}
+			}
+			
+			System.out.println(editbanner.getDetillist());
+
 			model.addObject("editbanner", editbanner);
 			model.addObject("isEdit", 1);
 			model.addObject("url", Constant.getBannerImageURL);
@@ -587,9 +667,12 @@ public class MasterControllerNew {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
 
-			//System.out.println(" mainLogo.get(0).getOriginalFilename() " + mainLogo.get(0).getOriginalFilename());
-			//System.out.println(" Logo2.get(0).getOriginalFilename()) " + Logo2.get(0).getOriginalFilename());
-			//System.out.println("Logo3.get(0).getOriginalFilename()  " + Logo3.get(0).getOriginalFilename());
+			// System.out.println(" mainLogo.get(0).getOriginalFilename() " +
+			// mainLogo.get(0).getOriginalFilename());
+			// System.out.println(" Logo2.get(0).getOriginalFilename()) " +
+			// Logo2.get(0).getOriginalFilename());
+			// System.out.println("Logo3.get(0).getOriginalFilename() " +
+			// Logo3.get(0).getOriginalFilename());
 
 			Info info = new Info();
 
@@ -667,7 +750,7 @@ public class MasterControllerNew {
 						logo.setLogo3(imageName);
 					}
 
-					//System.out.println("logo" + logo);
+					// System.out.println("logo" + logo);
 
 					Logo res = Constant.getRestTemplate().postForObject(Constant.url + "/saveLogo", logo, Logo.class);
 				}
@@ -697,7 +780,7 @@ public class MasterControllerNew {
 			GallaryCategory[] category = Constant.getRestTemplate()
 					.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
-			///System.out.println("" + categoryList.toString());
+			/// System.out.println("" + categoryList.toString());
 			model.addObject("categoryList", categoryList);
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
@@ -821,7 +904,7 @@ public class MasterControllerNew {
 							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
 					// System.out.println("res " + res);
 				}
-				if (res.getDocId() !=0) {
+				if (res.getDocId() != 0) {
 
 					session.setAttribute("successMsg", "Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
@@ -904,7 +987,7 @@ public class MasterControllerNew {
 			map.add("docId", docId);
 			// map.add("delStatus", 0);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteDocument", map, Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 			HttpSession session = request.getSession();
 			if (res == null) {

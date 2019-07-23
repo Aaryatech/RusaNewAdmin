@@ -1,5 +1,8 @@
 package com.ats.rusaadmin.model;
 
+import java.util.List;
+ 
+
 public class BannerImages {
 
 	
@@ -43,6 +46,8 @@ public class BannerImages {
 	
 	
 	private int delStatus;
+	
+	List<BannerDetail> detillist;
 
 
 	public int getId() {
@@ -205,22 +210,26 @@ public class BannerImages {
 	}
 
 
+	public List<BannerDetail> getDetillist() {
+		return detillist;
+	}
+
+
+	public void setDetillist(List<BannerDetail> detillist) {
+		this.detillist = detillist;
+	}
+
+
 	@Override
 	public String toString() {
 		return "BannerImages [id=" + id + ", cateId=" + cateId + ", sliderName=" + sliderName + ", urlLink=" + urlLink
 				+ ", linkName=" + linkName + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3
 				+ ", sliderImage=" + sliderImage + ", sortOrder=" + sortOrder + ", addDate=" + addDate + ", editDate="
 				+ editDate + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId + ", isActive="
-				+ isActive + ", delStatus=" + delStatus + ", getId()=" + getId() + ", getCateId()=" + getCateId()
-				+ ", getSliderName()=" + getSliderName() + ", getUrlLink()=" + getUrlLink() + ", getLinkName()="
-				+ getLinkName() + ", getText1()=" + getText1() + ", getText2()=" + getText2() + ", getText3()="
-				+ getText3() + ", getSliderImage()=" + getSliderImage() + ", getSortOrder()=" + getSortOrder()
-				+ ", getAddDate()=" + getAddDate() + ", getEditDate()=" + getEditDate() + ", getAddedByUserId()="
-				+ getAddedByUserId() + ", getEditByUserId()=" + getEditByUserId() + ", getIsActive()=" + getIsActive()
-				+ ", getDelStatus()=" + getDelStatus() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-				+ ", toString()=" + super.toString() + "]";
+				+ isActive + ", delStatus=" + delStatus + ", detillist=" + detillist + "]";
 	}
 
+ 
 
 	
 }
