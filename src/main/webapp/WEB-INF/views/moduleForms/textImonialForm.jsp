@@ -66,11 +66,7 @@
 						<div class="pull-left">
 							<!-- PAGE HEADING TAG - START -->
 							<h1 class="title">
-								<c:choose>
-									<c:when test="${isEdit==1}">Edit</c:when>
-									<c:otherwise> Add</c:otherwise>
-								</c:choose>
-								Content for
+								Add Content for Content for
 								<c:choose>
 									<c:when test="${moduleId==8}">Success Story</c:when>
 									<c:when test="${moduleId==13}">Team</c:when>
@@ -96,11 +92,9 @@
 
 						<header class="panel_header">
 							<h2 class="title pull-left">
-								<c:choose>
-									<c:when test="${isEdit==1}">Edit</c:when>
-									<c:otherwise> Add</c:otherwise>
-								</c:choose>
-								Content for
+
+								Add Content for
+
 								<c:choose>
 									<c:when test="${moduleId==8}">Success Story</c:when>
 									<c:when test="${moduleId==13}">Team</c:when>
@@ -120,7 +114,7 @@
 							<div class="row">
 								<div class="col-md-12">
 									<form class="form-horizontal"
-										action="${pageContext.request.contextPath}/insertImonialForm"
+										action="${pageContext.request.contextPath}/insertTestimonialForm"
 										method="post" enctype="multipart/form-data"
 										name="form_sample_2" id="form_sample_2">
 
@@ -132,23 +126,10 @@
 										</ul>
 
 
-										<c:choose>
-											<c:when test="${isEdit==0}">
-												<input type="hidden" name="pageId" value="${page.pageId}">
-												<input type="hidden" name="moduleId" value="${moduleId}">
-												<input type="hidden" name="id" value="0">
-
-											</c:when>
-											<c:otherwise>
-												<input type="hidden" name="id" value="${editTestImonial.id}">
-												<input type="hidden" name="pageId"
-													value="${editTestImonial.pageId}">
-												<input type="hidden" name="moduleId"
-													value="${editTestImonial.sectionId}">
-											</c:otherwise>
-										</c:choose>
-
-										<input type="hidden" name="isEdit" value="${isEdit}">
+										<input type="hidden" name="pageId" value="${page.pageId}">
+										<input type="hidden" name="moduleId" value="${moduleId}">
+										<input type="hidden" name="id" value="0"> <input
+											type="hidden" name="isEdit" value="${isEdit}">
 
 
 										<div class="tab-content">
@@ -162,8 +143,8 @@
 														</label>
 														<div class="col-sm-10">
 															<input type="text" class="form-control" id="form_name"
-																name="form_name" onchange="trim(this)"  placeholder="  Name"
-																value="${editTestImonial.fromName}" required>
+																name="form_name" onchange="trim(this)"
+																placeholder="  Name" required>
 														</div>
 													</div>
 												</div>
@@ -227,196 +208,173 @@
 														</div>
 													</div>
 												</div>
-
-
-												<div class="col-xs-12">
-													<div class="form-group">
-														<label class="control-label col-sm-2" for="page_name">Designation
-															:</label>
-														<div class="col-sm-10">
-															<input type="text" class="form-control" id="designation"
-																name="designation" placeholder="Designation" onchange="trim(this)"
-																value="${editTestImonial.designation}">
-														</div>
-													</div>
-												</div>
-												<div class="col-xs-12">
-													<div class="form-group">
-														<label class="control-label col-sm-2" for="page_name">Location
-															:</label>
-														<div class="col-sm-10">
-															<input type="text" class="form-control" id="location" onchange="trim(this)"
-																name="location" placeholder="Location"
-																value="${editTestImonial.location}">
-														</div>
-													</div>
-												</div>
-
 												<c:choose>
-													<c:when test="${moduleId==8}">
+												<c:when test="${moduleId==8}">
 
-														<input type="hidden" name="formType" value="1">
+															<input type="hidden"
+																name="formType" value="1">
+																</c:when>
+																</c:choose>
+												<c:choose>
+												<c:when test="${moduleId==13}">
 
-														<div class="col-xs-12" id="msg1">
-															<div class="form-group">
-																<label class="control-label col-sm-2"
-																	for="page_description1">Message : </label>
+															<input type="hidden"
+																name="formType" value="1">
+															 
+														</c:when>
+														<c:otherwise>
+															<div class="form-group" onchange="showExtraField()">
+																<label class="control-label col-sm-2" for="page_order">Type
+																	:<span class="text-danger">*</span>
+																</label>
 																<div class="col-sm-10">
-
-																	<textarea
-																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																		name="message"  onchange="trim(this)" id="message">
-															
-															 ${editTestImonial.message}
+																	<div class="form-check-inline">
+																		<label class="form-check-label"> 
+																				
+																					<input type="radio" class="form-check-input"
+																						name="formType"
+																						id="formType"
+																						value="1"
+																						onclick="check(this.value)"
+																						checked>
+																		Text
 																
-															</textarea>
+																		</label>
+																	</div>
+																	<div class="form-check-inline">
+																		<label class="form-check-label">  
+																				 
+																					<input type="radio" class="form-check-input"
+																						name="formType"
+																						id="formType"
+																						
+																						value="2"
+																						onclick="check(this.value)">Video
+																		 
+																		</label>
+																	</div>
 																</div>
 															</div>
-														</div>
-
-														<div class="col-xs-12" id="video1" style="display: none">
-															<div class="form-group">
-																<label class="control-label col-sm-2"
-																	for="page_description1">Video : </label>
-																<div class="col-sm-10">
-
-																	<textarea
-																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																		name="video" id="video">	
 															
-																    ${editTestImonial.message}
-																  															
-															</textarea>
-																</div>
-															</div>
-														</div>
-
-													</c:when>
-													<c:when test="${moduleId==13}">
-
-														<input type="hidden" name="formType" value="1">
-														<input type="hidden" name="message">
-														<input type="hidden" name="video1">
-
-													</c:when>
-													<c:otherwise>
-														<div class="form-group" onchange="showExtraField()">
-															<label class="control-label col-sm-2" for="page_order">Type
-																:<span class="text-danger">*</span>
-															</label>
+															
+														</c:otherwise>
+</c:choose>
+												<c:forEach items="${languagesList}" var="languagesList">
+													<h5 class="title pull-left">${languagesList.name}</h5>
+													<div class="col-xs-12">
+														<div class="form-group">
+															<label class="control-label col-sm-2" for="page_name">Designation
+																:</label>
 															<div class="col-sm-10">
-																<div class="form-check-inline">
-																	<label class="form-check-label"> <c:choose>
-																			<c:when test="${editTestImonial.exInt1==1}">
-																				<input type="radio" class="form-check-input"
-																					name="formType" value="1"
-																					onclick="check(this.value)" checked>
-																		Text
-																	</c:when>
-																			<c:when test="${isEdit==0}">
-																				<input type="radio" class="form-check-input"
-																					name="formType" value="1"
-																					onclick="check(this.value)" checked>
-																		Text
-																	</c:when>
-																			<c:otherwise>
-																				<input type="radio" class="form-check-input"
-																					name="formType" value="1"
-																					onclick="check(this.value)">
-																		Text 
-																	</c:otherwise>
-																		</c:choose>
-
-
-																	</label>
-																</div>
-																<div class="form-check-inline">
-																	<label class="form-check-label"> <c:choose>
-																			<c:when test="${editTestImonial.exInt1==2}">
-																				<input type="radio" class="form-check-input"
-																					name="formType" id="formType" value="2"
-																					onclick="check(this.value)" checked>
-																		Video
-																		</c:when>
-																			<c:otherwise>
-																				<input type="radio" class="form-check-input"
-																					name="formType" id="formType" value="2"
-																					onclick="check(this.value)">
-																		Video
-																	</c:otherwise>
-																		</c:choose>
-																	</label>
-																</div>
+																<input type="text" class="form-control"
+																	id="designation${languagesList.languagesId}"
+																	name="designation${languagesList.languagesId}"
+																	placeholder="Designation" onchange="trim(this)">
 															</div>
 														</div>
-														<div class="col-xs-12" id="msg1">
-															<div class="form-group">
-																<label class="control-label col-sm-2"
-																	for="page_description1">Message : </label>
-																<div class="col-sm-10">
+													</div>
+													<div class="col-xs-12">
+														<div class="form-group">
+															<label class="control-label col-sm-2" for="page_name">Location
+																:</label>
+															<div class="col-sm-10">
+																<input type="text" class="form-control"
+																	id="location${languagesList.languagesId}"
+																	onchange="trim(this)"
+																	name="location${languagesList.languagesId}"
+																	placeholder="Location">
+															</div>
+														</div>
+													</div>
 
-																	<%-- <textarea class="form-control"
-																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																		name="message" id="message">
+													<c:choose>
+														<c:when test="${moduleId==8}">
+
+															 
+
+															<div class="col-xs-12" id="msg1">
+																<div class="form-group">
+																	<label class="control-label col-sm-2"
+																		for="page_description1">Message : </label>
+																	<div class="col-sm-10">
+
+																		<textarea
+																			style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																			name="message${languagesList.languagesId}"
+																			onchange="trim(this)"
+																			id="message${languagesList.languagesId}">
 															
-															 ${editTestImonial.message}
+															
 																
-															</textarea> --%>
-
-																	<c:choose>
-																		<c:when test="${editTestImonial.exInt1==2}">
-
-																			<textarea rows="3" cols="3" class="form-control"
-																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																				name="message" id="message"></textarea>
-																		</c:when>
-																		<c:otherwise>
-																			<textarea rows="3" cols="3" class="form-control"
-																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																				name="message" id="message">${editTestImonial.message}</textarea>
-																		</c:otherwise>
-																	</c:choose>
-
-
+															</textarea>
+																	</div>
 																</div>
 															</div>
-														</div>
 
-														<div class="col-xs-12" id="video1" style="display: none">
-															<div class="form-group">
-																<label class="control-label col-sm-2"
-																	for="page_description1">Video : </label>
-																<div class="col-sm-10">
+															<div class="col-xs-12" id="video1" style="display: none">
+																<div class="form-group">
+																	<label class="control-label col-sm-2"
+																		for="page_description1">Video : </label>
+																	<div class="col-sm-10">
 
-																	<%-- <textarea class="form-control"
-																		style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																		name="video" id="video">	
+																		<textarea
+																			style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																			name="video${languagesList.languagesId}"
+																			id="video${languagesList.languagesId}">	
 															
-																    ${editTestImonial.message}
+																    
 																  															
-															</textarea> --%>
-
-																	<c:choose>
-																		<c:when test="${editTestImonial.exInt1==2}">
-
-																			<textarea rows="3" cols="3" class="form-control"
-																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																				name="video" id="video">${editTestImonial.message}</textarea>
-																		</c:when>
-																		<c:otherwise>
-																			<textarea rows="3" cols="3" class="form-control"
-																				style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																				name="video" id="video"></textarea>
-																		</c:otherwise>
-																	</c:choose>
-
-
-
+															</textarea>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</c:otherwise>
-												</c:choose>
+
+														</c:when>
+														<c:when test="${moduleId==13}">
+
+															
+															<input type="hidden"
+																name="message${languagesList.languagesId}">
+															<input type="hidden"
+																name="video1${languagesList.languagesId}">
+
+														</c:when>
+														<c:otherwise>
+															 
+															<div class="col-xs-12" id="msg1">
+																<div class="form-group">
+																	<label class="control-label col-sm-2"
+																		for="page_description1">Message : </label>
+																	<div class="col-sm-10">
+  
+																				<textarea rows="3" cols="3" class="form-control"
+																					style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																					name="message${languagesList.languagesId}"
+																					id="message${languagesList.languagesId}"> </textarea>
+																			 
+																	</div>
+																</div>
+															</div>
+
+															<div class="col-xs-12" id="video1" style="display: none">
+																<div class="form-group">
+																	<label class="control-label col-sm-2"
+																		for="page_description1">Video : </label>
+																	<div class="col-sm-10">
+
+																		<textarea rows="3" cols="3" class="form-control"
+																			style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																			name="video${languagesList.languagesId}"
+																			id="video${languagesList.languagesId}"></textarea>
+
+
+																	</div>
+																</div>
+															</div>
+														</c:otherwise>
+													</c:choose>
+
+												</c:forEach>
 
 												<div class="col-xs-12">
 													<hr>
@@ -427,8 +385,8 @@
 														</label>
 														<div class="col-sm-10">
 															<input type="number" class="form-control" id="sortNo"
-																name="sortNo" placeholder="Sort Order" onchange="trim(this)"
-																value="${editTestImonial.sortNo}" required>
+																name="sortNo" placeholder="Sort Order"
+																onchange="trim(this)" required>
 														</div>
 													</div>
 
@@ -440,32 +398,23 @@
 														<div class="col-sm-10">
 															<select id="status" name="status" class="form-control"
 																required>
-
-																<c:choose>
-																	<c:when test="${editTestImonial.isActive==0}">
-																		<option value="1">Active</option>
-																		<option value="0" selected>Inactive</option>
-																	</c:when>
-																	<c:otherwise>
-																		<option value="1" selected>Active</option>
-																		<option value="0">Inactive</option>
-																	</c:otherwise>
-																</c:choose>
-
+																<option value="1">Active</option>
+																<option value="0" selected>Inactive</option>
 
 
 															</select>
 														</div>
 													</div>
-													<div class="form-group">
-														<div class="col-sm-offset-2 col-sm-10">
-															<button type="submit" class="btn btn-primary">Submit</button>
-															<button type="reset" class="btn btn-default">Reset</button>
-														</div>
-													</div>
-
-
 												</div>
+												<div class="form-group">
+													<div class="col-sm-offset-2 col-sm-10">
+														<button type="submit" class="btn btn-primary">Submit</button>
+														<button type="reset" class="btn btn-default">Reset</button>
+													</div>
+												</div>
+
+
+
 
 												<div class="clearfix"></div>
 
@@ -506,7 +455,7 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
- <script>
+	<script>
 			function trim(el) {
 				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
 				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 

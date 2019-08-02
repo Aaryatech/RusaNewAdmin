@@ -1,5 +1,8 @@
 package com.ats.rusaadmin.model;
 
+import java.util.List;
+
+ 
 public class TestImonial {
 
 	private int id;
@@ -41,6 +44,9 @@ public class TestImonial {
 	private String exVar1;
 
 	private String exVar2;
+	
+	List<TestimonialDetail> detailList;
+
 
 	public int getId() {
 		return id;
@@ -201,6 +207,16 @@ public class TestImonial {
 	public void setExVar2(String exVar2) {
 		this.exVar2 = exVar2;
 	}
+	
+	
+
+	public List<TestimonialDetail> getDetailList() {
+		return detailList;
+	}
+
+	public void setDetailList(List<TestimonialDetail> detailList) {
+		this.detailList = detailList;
+	}
 
 	@Override
 	public String toString() {
@@ -209,18 +225,10 @@ public class TestImonial {
 				+ message + ", imageName=" + imageName + ", sortNo=" + sortNo + ", addDate=" + addDate + ", editDate="
 				+ editDate + ", addedByUserId=" + addedByUserId + ", editByUserId=" + editByUserId + ", isActive="
 				+ isActive + ", delStatus=" + delStatus + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1="
-				+ exVar1 + ", exVar2=" + exVar2 + ", getId()=" + getId() + ", getCate_type()=" + getCate_type()
-				+ ", getPageId()=" + getPageId() + ", getSectionId()=" + getSectionId() + ", getFromName()="
-				+ getFromName() + ", getDesignation()=" + getDesignation() + ", getLocation()=" + getLocation()
-				+ ", getMessage()=" + getMessage() + ", getImageName()=" + getImageName() + ", getSortNo()="
-				+ getSortNo() + ", getAddDate()=" + getAddDate() + ", getEditDate()=" + getEditDate()
-				+ ", getAddedByUserId()=" + getAddedByUserId() + ", getEditByUserId()=" + getEditByUserId()
-				+ ", getIsActive()=" + getIsActive() + ", getDelStatus()=" + getDelStatus() + ", getExInt1()="
-				+ getExInt1() + ", getExInt2()=" + getExInt2() + ", getExVar1()=" + getExVar1() + ", getExVar2()="
-				+ getExVar2() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+				+ exVar1 + ", exVar2=" + exVar2 + ", detailList=" + detailList + "]";
 	}
 
+	 
 	
 	
 	
