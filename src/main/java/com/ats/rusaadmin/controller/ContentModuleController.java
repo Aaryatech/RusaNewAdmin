@@ -95,7 +95,7 @@ public class ContentModuleController {
 //1 time
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			String formName = request.getParameter("form_name");
+			//String formName = request.getParameter("form_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int id = Integer.parseInt(request.getParameter("id"));
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
@@ -104,12 +104,12 @@ public class ContentModuleController {
 
 			//
 			boolean ret = false;
-			if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true
+			/*if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true
 					|| FormValidation.Validaton(request.getParameter("status"), "") == true
 					|| FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
 
 				ret = true;
-			}
+			}*/
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
  			Date date = new Date();
@@ -120,31 +120,30 @@ public class ContentModuleController {
 			for (int i = 0; i < languagesList.size(); i++) {
 
 				int lanId=languagesList.get(i).getLanguagesId();
+				String formName = request.getParameter("form_name"+languagesList.get(i).getLanguagesId());
 				
 				if(lanId==1) {
 					editTestImonial.setDesignation(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
 							.trim().replaceAll("[ ]{2,}", " "));
 					editTestImonial.setLocation(request.getParameter("location" + languagesList.get(i).getLanguagesId())
 							.trim().replaceAll("[ ]{2,}", " "));
- 					 
+					editTestImonial.setFromName(formName);
 					if (formType== 1) {
 						editTestImonial
 								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
 										.replaceAll("[ ]{2,}", " "));
 					} else {
 						editTestImonial
-								.setMessage(request.getParameter("video" + languagesList.get(i).getLanguagesId()));
+								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
 					}
 				}
 				TestimonialDetail newsBlogDescription = new TestimonialDetail();
+				
 				newsBlogDescription.setLangId(languagesList.get(i).getLanguagesId());
 				newsBlogDescription
 						.setDesignation(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
 								.trim().replaceAll("[ ]{2,}", " "));
-				//System.out.println("desn ***"+request.getParameter("designation" + languagesList.get(i).getLanguagesId()));
-				//System.out.println("location ***"+request.getParameter("location" + languagesList.get(i).getLanguagesId()));
-				//System.out.println("formType ***"+request.getParameter("formType" + languagesList.get(i).getLanguagesId()));
-
+				newsBlogDescription.setFromName(formName);
 				newsBlogDescription.setLocation(request.getParameter("location" + languagesList.get(i).getLanguagesId())
 						.trim().replaceAll("[ ]{2,}", " "));
 
@@ -156,7 +155,7 @@ public class ContentModuleController {
 									.replaceAll("[ ]{2,}", " "));
 				} else {
 					newsBlogDescription
-							.setMessage(request.getParameter("video" + languagesList.get(i).getLanguagesId()));
+							.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
 				}
 				
 				newsBlogDescription.setAddDate(sf.format(date));
@@ -228,7 +227,7 @@ public class ContentModuleController {
 				editTestImonial.setDelStatus(1);
 				editTestImonial.setAddDate(sf.format(date));
 				editTestImonial.setSortNo(sortNo);
-				editTestImonial.setFromName(formName);
+				//editTestImonial.setFromName(formName);
 				editTestImonial.setDetailList(newsBlogDescriptionList);
 				editTestImonial.setExInt1(formType);
 
@@ -371,7 +370,7 @@ public class ContentModuleController {
 //1 time
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			String formName = request.getParameter("form_name");
+			//String formName = request.getParameter("form_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int id = Integer.parseInt(request.getParameter("id"));
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
@@ -380,12 +379,12 @@ public class ContentModuleController {
 
 			//
 			boolean ret = false;
-			if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true
+			/*if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true
 					|| FormValidation.Validaton(request.getParameter("status"), "") == true
 					|| FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
 
 				ret = true;
-			}
+			}*/
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
  			Date date = new Date();
@@ -396,19 +395,22 @@ public class ContentModuleController {
 			for (int i = 0; i < editTestImonial.getDetailList().size(); i++) {
 				
 				int lanId=editTestImonial.getDetailList().get(i).getLangId();
+				String formName = request.getParameter("form_name"+languagesList.get(i).getLanguagesId());
+				
 				if(lanId==1) {
 					editTestImonial.setDesignation(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
 							.trim().replaceAll("[ ]{2,}", " "));
 					editTestImonial.setLocation(request.getParameter("location" + languagesList.get(i).getLanguagesId())
 							.trim().replaceAll("[ ]{2,}", " "));
- 					 
+					editTestImonial.setFromName(formName);
+					
 					if (formType== 1) {
 						editTestImonial
 								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
 										.replaceAll("[ ]{2,}", " "));
 					} else {
 						editTestImonial
-								.setMessage(request.getParameter("video" + languagesList.get(i).getLanguagesId()));
+								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
 					}
 				}
 
@@ -424,13 +426,13 @@ public class ContentModuleController {
 
 				editTestImonial.getDetailList().get(i).setExInt1(formType);
 
-				if (Integer.parseInt(request.getParameter("formType" + editTestImonial.getDetailList().get(i).getLangId())) == 1) {
+				if (Integer.parseInt(request.getParameter("formType")) == 1) {
 					editTestImonial.getDetailList().get(i)
 							.setMessage(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()).trim()
 									.replaceAll("[ ]{2,}", " "));
 				} else {
 					editTestImonial.getDetailList().get(i)
-							.setMessage(request.getParameter("video" + editTestImonial.getDetailList().get(i).getLangId()));
+							.setMessage(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()));
 				}
 				
 				editTestImonial.getDetailList().get(i).setAddDate(sf.format(date));
@@ -501,7 +503,7 @@ public class ContentModuleController {
 				editTestImonial.setDelStatus(1);
 				editTestImonial.setAddDate(sf.format(date));
 				editTestImonial.setSortNo(sortNo);
-				editTestImonial.setFromName(formName);
+				//editTestImonial.setFromName(formName);
 				editTestImonial.setDetailList(newsBlogDescriptionList);
 				editTestImonial.setExInt1(formType);
 

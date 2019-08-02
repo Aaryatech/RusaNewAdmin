@@ -136,18 +136,7 @@
 											<div class="tab-pane fade in active" id="home">
 
 
-												<div class="col-xs-12">
-													<div class="form-group">
-														<label class="control-label col-sm-2" for="page_name">
-															Parson Name :<span class="text-danger">*</span>
-														</label>
-														<div class="col-sm-10">
-															<input type="text" class="form-control" id="form_name"
-																name="form_name" onchange="trim(this)"
-																placeholder="  Name" required>
-														</div>
-													</div>
-												</div>
+
 												<div class="col-xs-12">
 													<c:if test="${not empty editTestImonial.imageName}">
 														<div class="form-group">
@@ -209,61 +198,63 @@
 													</div>
 												</div>
 												<c:choose>
-												<c:when test="${moduleId==8}">
+													<c:when test="${moduleId==8}">
 
-															<input type="hidden"
-																name="formType" value="1">
-																</c:when>
-																</c:choose>
-												<c:choose>
-												<c:when test="${moduleId==13}">
+														<input type="hidden" name="formType" value="1">
+													</c:when>
+												 
+													<c:when test="${moduleId==13}">
 
-															<input type="hidden"
-																name="formType" value="1">
-															 
-														</c:when>
-														<c:otherwise>
-															<div class="form-group" onchange="showExtraField()">
-																<label class="control-label col-sm-2" for="page_order">Type
-																	:<span class="text-danger">*</span>
-																</label>
-																<div class="col-sm-10">
-																	<div class="form-check-inline">
-																		<label class="form-check-label"> 
-																				
-																					<input type="radio" class="form-check-input"
-																						name="formType"
-																						id="formType"
-																						value="1"
-																						onclick="check(this.value)"
-																						checked>
-																		Text
-																
-																		</label>
-																	</div>
-																	<div class="form-check-inline">
-																		<label class="form-check-label">  
-																				 
-																					<input type="radio" class="form-check-input"
-																						name="formType"
-																						id="formType"
-																						
-																						value="2"
-																						onclick="check(this.value)">Video
-																		 
-																		</label>
-																	</div>
+														<input type="hidden" name="formType" value="1">
+
+													</c:when>
+													<c:otherwise>
+														<div class="form-group" onchange="showExtraField()">
+															<label class="control-label col-sm-2" for="page_order">Type
+																:<span class="text-danger">*</span>
+															</label>
+															<div class="col-sm-10">
+																<div class="form-check-inline">
+																	<label class="form-check-label"> <input
+																		type="radio" class="form-check-input" name="formType"
+																		id="formType" value="1"
+																		checked> Text
+
+																	</label>
+																</div>
+																<div class="form-check-inline">
+																	<label class="form-check-label"> <input
+																		type="radio" class="form-check-input" name="formType"
+																		id="formType" value="2" >Video
+
+																	</label>
 																</div>
 															</div>
-															
-															
-														</c:otherwise>
-</c:choose>
+														</div>
+
+
+													</c:otherwise>
+												</c:choose>
 												<c:forEach items="${languagesList}" var="languagesList">
 													<h5 class="title pull-left">${languagesList.name}</h5>
+
 													<div class="col-xs-12">
 														<div class="form-group">
-															<label class="control-label col-sm-2" for="page_name">Designation
+															<label class="control-label col-sm-2" for="page_name${languagesList.languagesId}">
+																Person Name :<span class="text-danger">*</span>
+															</label>
+															<div class="col-sm-10">
+																<input type="text" class="form-control"
+																	id="form_name${languagesList.languagesId}"
+																	name="form_name${languagesList.languagesId}"
+																	onchange="trim(this)" placeholder="  Name" required>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-xs-12">
+														<div class="form-group">
+															<label class="control-label col-sm-2" for="designation${languagesList.languagesId}">Designation
 																:</label>
 															<div class="col-sm-10">
 																<input type="text" class="form-control"
@@ -275,7 +266,7 @@
 													</div>
 													<div class="col-xs-12">
 														<div class="form-group">
-															<label class="control-label col-sm-2" for="page_name">Location
+															<label class="control-label col-sm-2" for="location${languagesList.languagesId}">Location
 																:</label>
 															<div class="col-sm-10">
 																<input type="text" class="form-control"
@@ -290,7 +281,7 @@
 													<c:choose>
 														<c:when test="${moduleId==8}">
 
-															 
+
 
 															<div class="col-xs-12" id="msg1">
 																<div class="form-group">
@@ -310,29 +301,12 @@
 																	</div>
 																</div>
 															</div>
-
-															<div class="col-xs-12" id="video1" style="display: none">
-																<div class="form-group">
-																	<label class="control-label col-sm-2"
-																		for="page_description1">Video : </label>
-																	<div class="col-sm-10">
-
-																		<textarea
-																			style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																			name="video${languagesList.languagesId}"
-																			id="video${languagesList.languagesId}">	
-															
-																    
-																  															
-															</textarea>
-																	</div>
-																</div>
-															</div>
+ 
 
 														</c:when>
 														<c:when test="${moduleId==13}">
 
-															
+
 															<input type="hidden"
 																name="message${languagesList.languagesId}">
 															<input type="hidden"
@@ -340,23 +314,23 @@
 
 														</c:when>
 														<c:otherwise>
-															 
+
 															<div class="col-xs-12" id="msg1">
 																<div class="form-group">
 																	<label class="control-label col-sm-2"
-																		for="page_description1">Message : </label>
+																		for="page_description1">Message/Video Link : </label>
 																	<div class="col-sm-10">
-  
-																				<textarea rows="3" cols="3" class="form-control"
-																					style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
-																					name="message${languagesList.languagesId}"
-																					id="message${languagesList.languagesId}"> </textarea>
-																			 
+
+																		<textarea rows="3" cols="3" class="form-control"
+																			style="width: 100%; height: 150px; font-size: 14px; line-height: 23px; padding: 15px;"
+																			name="message${languagesList.languagesId}"
+																			id="message${languagesList.languagesId}"> </textarea>
+
 																	</div>
 																</div>
 															</div>
 
-															<div class="col-xs-12" id="video1" style="display: none">
+															<%-- <div class="col-xs-12" id="video1" style="display: none">
 																<div class="form-group">
 																	<label class="control-label col-sm-2"
 																		for="page_description1">Video : </label>
@@ -370,7 +344,7 @@
 
 																	</div>
 																</div>
-															</div>
+															</div> --%>
 														</c:otherwise>
 													</c:choose>
 

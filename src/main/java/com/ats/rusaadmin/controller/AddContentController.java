@@ -968,7 +968,7 @@ public class AddContentController {
 					contentImages.setThumb(Constant.getOtherDocURL + listOfFiles[i].getName());
 					contentImages.setSize(String.valueOf(listOfFiles[i].length()));
 					contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
-					contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
+					//contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
 					list.add(contentImages);
 				}
 			}

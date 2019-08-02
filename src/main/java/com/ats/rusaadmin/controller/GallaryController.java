@@ -559,7 +559,7 @@ public class GallaryController {
 					contentImages.setThumb(Constant.getOtherDocURL + listOfFiles[i].getName());
 
 					contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
-					contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
+					//contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
 
 					DiskFileItem fileItem = new DiskFileItem(listOfFiles[i].getName(), contentImages.getType(), false,
 							listOfFiles[i].getName(), (int) listOfFiles[i].length(), listOfFiles[i].getParentFile());
