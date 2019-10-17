@@ -406,7 +406,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/activateUser", method = RequestMethod.POST)
-	public String activateUser(HttpServletRequest request, HttpServletResponse response, ModelAndView model) {
+	public String activateUser(HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
 		try {
@@ -455,7 +455,7 @@ public class UserController {
 						session.setAttribute("errorMsg", "false");
 						RestTemplate restTemplate = new RestTemplate();
 						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
+/*
 						map.add("senderID", "RUSAMH");
 						map.add("user", "spdrusamah@gmail.com:Cyber@mva");
 						map.add("receipientno", editUser.getMobileNumber());
@@ -465,7 +465,19 @@ public class UserController {
 						map.add("state", "4");
 
 						String res = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
-								String.class);
+								String.class);*/
+						
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("username", "rusamah-wb");
+						map.add("password", "Rus@@123456");
+						map.add("senderid", "MHRUSA");
+						map.add("mobileno", editUser.getMobileNumber());
+						map.add("content", "Your Username " + editUser.getEmails() + "\n Password " + password
+								+ "\n don't share with any one."); 
+						map.add("smsservicetype", "singlemsg"); 
+						String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
+								map, String.class);
+						
 					} else {
 						editUser.setEmailVerified(1);
 						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
@@ -673,7 +685,7 @@ public class UserController {
 						mailsubjectApprove, approval, editUser.getName(), eventList.getHeading(),
 						eventList.getEventLocation(), eventList.getEventDateFrom());
 				RestTemplate restTemplate = new RestTemplate();
-				map = new LinkedMultiValueMap<String, Object>();
+				/*map = new LinkedMultiValueMap<String, Object>();
 
 				map.add("senderID", "RUSAMH");
 				map.add("user", "spdrusamah@gmail.com:Cyber@mva");
@@ -683,14 +695,22 @@ public class UserController {
 						+ "	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n"
 						+ "Date and Time:" + eventList.getEventDateFrom() + " \n" + "Venue:"
 						+ eventList.getEventLocation());
-				map.add("state", "4");
-
-				// String response =
-				// restTemplate.postForObject("http://control.bestsms.co.in/api/sendhttp.php",
-				// map, String.class);
-
+				map.add("state", "4"); 
 				String respons = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
-						String.class);
+						String.class);*/
+				
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("username", "rusamah-wb");
+				map.add("password", "Rus@@123456");
+				map.add("senderid", "MHRUSA");
+				map.add("mobileno", editUser.getMobileNumber().trim());
+				map.add("content", "Dear " + editUser.getName() + ", \n"
+						+ "	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n"
+						+ "Date and Time:" + eventList.getEventDateFrom() + " \n" + "Venue:"
+						+ eventList.getEventLocation()); 
+				map.add("smsservicetype", "singlemsg"); 
+				String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
+						map, String.class);
 
 			}
 			/*

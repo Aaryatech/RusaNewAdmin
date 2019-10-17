@@ -236,5 +236,27 @@ public class HomeController {
 		session.setAttribute("sessionSubModuleId", subModId);
 		session.removeAttribute("exportExcelList");
 	}
+	
+	@RequestMapping(value = "/smsgatway", method = RequestMethod.GET)
+	public   String smsgatway(HttpServletRequest request, HttpServletResponse response) {
+		
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("username", "rusamah-wb");
+			map.add("password", "Rus@@123456");
+			map.add("senderid", "MHRUSA");
+			map.add("mobileno", "7588519473");
+			map.add("content", "hello java testing");
+			map.add("smsservicetype", "singlemsg"); 
+			String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
+					map, String.class);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		 
+		return "success";
+	}
 
 }

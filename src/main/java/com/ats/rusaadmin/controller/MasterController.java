@@ -1,7 +1,8 @@
 package com.ats.rusaadmin.controller;
 
 import java.io.IOException;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,6 +78,63 @@ public class MasterController {
 		}
 
 		return model;
+	}
+
+	@RequestMapping(value = "/sendSms", method = RequestMethod.GET)
+	public @ResponseBody String sendSms(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			System.out.println("start");
+			String genratedhashKey = hashGenerator("rusamah-wb", "MHRUSA", "HIII",
+					"5f838260-4d10-4c4b-bf88-3350fbf26799");
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("username", "rusamah-wb");
+			map.add("password", "Rus@@123456");
+			map.add("senderid", "MHRUSA");
+			map.add("mobileno", "7588519473");
+			map.add("content", "HIII");
+			map.add("key", "5f838260-4d10-4c4b-bf88-3350fbf26799");
+			map.add("smsservicetype", "unicodeotpmsg");
+			map.add("hashValue", genratedhashKey);
+			 //
+			// http://msdgweb.mgov.gov.in/esms/sendsmsrequest?username=rusamah-wb&password=Rus@@123456&senderid=MHRUSA&smsservicetype=singlemsg&mobileno=9422945125&content=hello
+
+			String responses = restTemplate.postForObject("http://msdgweb.mgov.gov.in/esms/sendsmsrequest", map,
+					String.class);
+
+			System.out.println("end" + responses);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "success";
+	}
+
+	protected String hashGenerator(String userName, String senderId, String content, String secureKey) {
+		// TODO Auto-generated method stub
+		StringBuffer finalString = new StringBuffer();
+		finalString.append(userName.trim()).append(senderId.trim()).append(content.trim()).append(secureKey.trim());
+		String hashGen = finalString.toString();
+		StringBuffer sb = null;
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-512");
+			md.update(hashGen.getBytes());
+			byte byteData[] = md.digest();
+			// convert the byte to hex format method 1
+			sb = new StringBuffer();
+			for (int i = 0; i < byteData.length; i++) {
+				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 
 	@RequestMapping(value = "/categoryList", method = RequestMethod.GET)
@@ -473,7 +531,7 @@ public class MasterController {
 				Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
 						Category.class);
 
-				//System.out.println("res " + res);
+				// System.out.println("res " + res);
 
 				if (res.getCatId() != 0) {
 					session.setAttribute("successMsg", "Infomation added successfully!");
@@ -539,7 +597,7 @@ public class MasterController {
 					editcat.getCategoryDescriptionList().add(categoryDescription);
 				}
 			}
-			//System.out.println(editcat);
+			// System.out.println(editcat);
 			model.addObject("editSubCat", editcat);
 
 			model.addObject("isEdit", 1);
@@ -557,7 +615,7 @@ public class MasterController {
 
 		List<GetCategory> categoryList = new ArrayList<GetCategory>();
 		try {
-			//System.out.println("in method");
+			// System.out.println("in method");
 
 			String sectionId = request.getParameter("sectionId");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -585,7 +643,7 @@ public class MasterController {
 			map.add("catIdList", catId);
 			map.add("delStatus", 0);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 			HttpSession session = request.getSession();
 			session.setAttribute("successMsg", "Infomation deleted successfully!");
@@ -785,7 +843,7 @@ public class MasterController {
 			editSection = Constant.getRestTemplate().postForObject(Constant.url + "/getSectionBySectionId", map,
 					Section.class);
 
-			//System.out.println(editSection);
+			// System.out.println(editSection);
 
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
@@ -907,7 +965,7 @@ public class MasterController {
 					Galleryheader.class);
 			model.addObject("editGalleryheader", editGalleryheader);
 
-			//System.out.println(editGalleryheader);
+			// System.out.println(editGalleryheader);
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 1);
@@ -989,12 +1047,12 @@ public class MasterController {
 			editGalleryheader.setDelStatus(1);
 			editGalleryheader.setUserId(1);
 
-			//System.out.println("sub category" + editSubCategory);
+			// System.out.println("sub category" + editSubCategory);
 
 			Galleryheader res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryHeader",
 					editGalleryheader, Galleryheader.class);
 
-			//System.out.println("res " + res);
+			// System.out.println("res " + res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1013,7 +1071,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryHeaderId);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1036,7 +1094,7 @@ public class MasterController {
 					Galleryheader.class);
 			model.addObject("editGalleryheader", editGalleryheader);
 			model.addObject("url", Constant.gallryImageURL);
-			//System.out.println(editGalleryheader);
+			// System.out.println(editGalleryheader);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1095,7 +1153,7 @@ public class MasterController {
 			GalleryDetail[] res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetail",
 					detailList, GalleryDetail[].class);
 
-			//System.out.println(editGalleryheader);
+			// System.out.println(editGalleryheader);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1114,7 +1172,7 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryHeadId", galleryDetailId);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
