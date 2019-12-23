@@ -11,7 +11,7 @@ public class Constant {
 
 //	public static final String url = "http://ats.aaryatechindia.in:15063/rusawebapi/";
 	//public static final String url = "http://localhost:8094/";
-	public static final String url="http://132.148.143.124:8080/RusaWebapi/";
+	public static final String url="http://115.124.111.54:8080/RusaWebapi/";
 	// Local path------------------------
 
 	/*
@@ -74,32 +74,32 @@ public class Constant {
 	public static final String siteAdminUrl = "http://ats.aaryatechindia.in:15063/ats/";*/
 	
 	public static final int gallryImage = 1;
-	public static final String lgogImageURL = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/logo/";
-	public static final String bannerImageURL = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/banenr/";
-	public static final String uploadDocURL = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/pdf/";
-	public static final String gallryImageURL = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/gallery/";
-	public static final String otherDocURL = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/other/";
-	public static final String cmsPdf = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/pdf/";
-	public static final String userProfileURL = "/opt/apache-tomcat-8.5.39/webapps/mediarusa/userprofile/";
+	public static final String lgogImageURL = "/opt/tomcat/webapps/mediarusa/logo/";
+	public static final String bannerImageURL = "/opt/tomcat/webapps/mediarusa/banenr/";
+	public static final String uploadDocURL = "/opt/tomcat/webapps/mediarusa/pdf/";
+	public static final String gallryImageURL = "/opt/tomcat/webapps/mediarusa/gallery/";
+	public static final String otherDocURL = "/opt/tomcat/webapps/mediarusa/other/";
+	public static final String cmsPdf = "/opt/tomcat/webapps/mediarusa/pdf/";
+	public static final String userProfileURL = "/opt/tomcat/webapps/mediarusa/userprofile/";
 	public static String[] values = { "jpg", "jpeg", "gif", "png" };
 	public static String[] DocValues = { "txt", "doc", "pdf", "xls", ".ppt", ".pptx" };
 	public static String[] DocImgValues = { "txt", "doc", "pdf", "xls", "jpg", "jpeg", "gif", "png" };
 	public static int mod = 0;
 	public static int subMod = 0;
 	public static final String logoName = "Russa-Logo";
-	public static final String getLgogImageURL = "http://198.12.156.31:8080/mediarusa/logo/";
-	public static final String getBannerImageURL = "http://198.12.156.31:8080/mediarusa/banenr/";
-	public static final String getUploadDocURL = "http://198.12.156.31:8080/mediarusa/pdf/";
-	public static final String getGallryImageURL = "http://198.12.156.31:8080/mediarusa/gallery/";
-	public static final String getCmsPdf = "http://198.12.156.31:8080/mediarusa/pdf/";
-	public static final String getOtherDocURL = "http://198.12.156.31:8080/mediarusa/other/";
-	public static final String getUserProfileURL = "http://198.12.156.31:8080/mediarusa/userprofile/";
-	public static final String siteAdminUrl = "http://198.12.156.31:8080/RusaAdmin/";
+	public static final String getLgogImageURL = "http://115.124.111.54:8080/mediarusa/logo/";
+	public static final String getBannerImageURL = "http://115.124.111.54:8080/mediarusa/banenr/";
+	public static final String getUploadDocURL = "http://115.124.111.54:8080/mediarusa/pdf/";
+	public static final String getGallryImageURL = "http://115.124.111.54:8080/mediarusa/gallery/";
+	public static final String getCmsPdf = "http://115.124.111.54:8080/mediarusa/pdf/";
+	public static final String getOtherDocURL = "http://115.124.111.54:8080/mediarusa/other/";
+	public static final String getUserProfileURL = "http://115.124.111.54:8080/mediarusa/userprofile/";
+	public static final String siteAdminUrl = "http://115.124.111.54:8080/RusaAdmin/";
 
 	// public static final String getUserDocURL =
 	// "http://192.168.2.17:8080/media/userdocument/";
 	//public static final String getUserDocURL = "http://ats.aaryatechindia.in:15063/media/userdocument/";
-	public static final String getUserDocURL = "http://198.12.156.31:8080/mediarusa/userdocument/";
+	public static final String getUserDocURL = "http://115.124.111.54:8080/mediarusa/userdocument/";
 	public static Font headFontData = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
 	public static Font tableHeaderFont = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 	public static final BaseColor tableHeaderFontBaseColor = BaseColor.WHITE;
@@ -113,7 +113,7 @@ public class Constant {
 	public static float marginBottom = 50;
 	//public static final String REPORT_SAVE = "/home/tomcataaryatechi/ats.aaryatechindia.in/tomcat-8.0.18/webapps/ats/rusa_report2019.pdf";
 	//public static final String REPORT_SAVE = "/home/lenovo/Documents/rusa_report2019.pdf";
-	public static final String REPORT_SAVE = "/opt/apache-tomcat-8.5.39/webapps/RusaAdmin/rusa_report2019.pdf";
+	public static final String REPORT_SAVE = "/opt/tomcat/webapps/RusaAdmin/rusa_report2019.pdf";
 	
 	
 	public static RestTemplate rest = new RestTemplate();
