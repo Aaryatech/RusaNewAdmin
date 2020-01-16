@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
@@ -106,17 +108,21 @@ public class MasterControllerNew {
 		HttpSession session = request.getSession();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+			XssEscapeUtils escape = new XssEscapeUtils();
+			
 			HttpSession session1 = request.getSession();
 			User UserDetail = (User) session1.getAttribute("UserDetail");
-
+			
+			String firstName = escape.jsoupParse(request.getParameter("firstname"));
+			
 			String userId = request.getParameter("userId");
-			String userName = request.getParameter("userName");
+			String userName = escape.jsoupParse(request.getParameter("userName"));
 			String roles = request.getParameter("roles");
-			String firstName = request.getParameter("firstname");
-			String middleName = request.getParameter("middlename");
-			String lastName = request.getParameter("lastname");
-			String email = request.getParameter("userEmail");
-			String pass = request.getParameter("userPass");
+		
+			String middleName = escape.jsoupParse(request.getParameter("middlename"));
+			String lastName = escape.jsoupParse(request.getParameter("lastname"));
+			String email = escape.jsoupParse(request.getParameter("userEmail"));
+			String pass = escape.jsoupParse(request.getParameter("userPass"));
 
 			int removePhoto = Integer.parseInt(request.getParameter("remove"));
 
@@ -127,16 +133,16 @@ public class MasterControllerNew {
 
 			Boolean ret = false;
 
-			if (FormValidation.Validaton(request.getParameter("firstname"), "") == true
-					|| FormValidation.Validaton(request.getParameter("lastname"), "") == true
+			if (FormValidation.Validaton(firstName, "") == true
+					|| FormValidation.Validaton(lastName, "") == true
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("userPass"), "") == true
-					|| FormValidation.Validaton(request.getParameter("userName"), "") == true
-					|| FormValidation.Validaton(request.getParameter("userEmail"), "email") == true) {
+					|| FormValidation.Validaton(pass, "") == true
+					|| FormValidation.Validaton(userName, "") == true
+					|| FormValidation.Validaton(email, "email") == true) {
 
 				ret = true;
 			}
-
+		//	System.out.println("userNameaa  :: "+userName);
 			String docFile = null;
 			VpsImageUpload upload = new VpsImageUpload();
 			Date date = new Date();
@@ -164,10 +170,15 @@ public class MasterControllerNew {
 							e.printStackTrace();
 						}
 					}
+					
 					user.setUserId(0);
+					
+					user.setFirstname(firstName);
+					
 					user.setCreatedDate(sf.format(date));
+					//user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
 					user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
-					user.setFirstname(firstName.trim().replaceAll("[ ]{2,}", " "));
+					
 					user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
 					user.setRoles(roles);
 					user.setDelStatus(1);
@@ -209,7 +220,7 @@ public class MasterControllerNew {
 					}
 					user.setUserId(Integer.parseInt(userId));
 					// user.setCreatedDate(sf.format(date));
-					user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
+					user.setUserName(userName);
 					user.setFirstname(firstName.trim().replaceAll("[ ]{2,}", " "));
 					user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
 					user.setRoles(roles);
@@ -218,7 +229,6 @@ public class MasterControllerNew {
 					user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
 					user.setIsActive(isActive);
 					user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
-					// user.setUserPass(pass);
 					user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
 					user.setModifiedDate(yy.format(date));
 					user.setEditByUserId(UserDetail.getUserId());
@@ -227,18 +237,18 @@ public class MasterControllerNew {
 
 				User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
 
-				// System.out.println("res " + res);
+				System.out.println("res " + res);
 
-				if (user.getUserId() != 0) {
+				if (res!=null) {
 					session.setAttribute("successMsg", "User Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
 				} else {
 
-					session.setAttribute("successMsg", "Failed To Add User Information !");
+					session.setAttribute("failMsg", "Failed To Add User Information !");
 					session.setAttribute("errorMsg", "true");
 				}
 			} else {
-				session.setAttribute("successMsg", "Invalid Information!");
+				session.setAttribute("failMsg", "Invalid Information!");
 				session.setAttribute("errorMsg", "true");
 			}
 
