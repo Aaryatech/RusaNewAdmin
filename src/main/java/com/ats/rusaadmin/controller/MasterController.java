@@ -170,6 +170,8 @@ public class MasterController {
 			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
+			String catName = null;
+			String catDesc = null;
 			Boolean ret = false;
 
 			if (FormValidation.Validaton(request.getParameter("sectionId"), "") == true
@@ -189,9 +191,11 @@ public class MasterController {
 				editcat.setCatAddDate(sf.format(date));
 
 				for (int i = 0; i < languagesList.size(); i++) {
-
-					if (FormValidation.Validaton(
-							request.getParameter("catName" + languagesList.get(i).getLanguagesId()), "") == true) {
+					
+					catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " ");
+					catDesc = request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " ");
+					
+					if (FormValidation.Validaton(catName, "") == true || FormValidation.Validaton(catName, "") == true) {
 
 						ret = true;
 						break;
@@ -199,19 +203,18 @@ public class MasterController {
 
 					CategoryDescription categoryDescription = new CategoryDescription();
 					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					categoryDescription
-							.setCatName(request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
-									.replaceAll("[ ]{2,}", " "));
-					categoryDescription
-							.setCatDesc(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()).trim()
-									.replaceAll("[ ]{2,}", " "));
+					categoryDescription.setCatName(XssEscapeUtils.jsoupParse(catName));
+					categoryDescription.setCatDesc(XssEscapeUtils.jsoupParse(catDesc));
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
+						
+						catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " ");
+						catDesc = request.getParameter("catDesc" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " ");
 
-						editcat.setCatName(request.getParameter("catName" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
-						editcat.setCatDesc(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
+						editcat.setCatName(XssEscapeUtils.jsoupParse(catName));
+						editcat.setCatDesc(XssEscapeUtils.jsoupParse(catDesc));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						System.out.println(text);
@@ -225,32 +228,32 @@ public class MasterController {
 				editcat.setCatId(Integer.parseInt(catId));
 				editcat.setCatEditDate(sf.format(date));
 				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
+				
 				for (int i = 0; i < editcat.getCategoryDescriptionList().size(); i++) {
-
-					if (FormValidation.Validaton(
-							request.getParameter(
-									"catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()),
-							"") == true) {
+					catName = request.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					catDesc = request.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					if (FormValidation.Validaton(catName,"") == true || FormValidation.Validaton(catDesc,"") == true) {
 
 						ret = true;
 						break;
 					}
 
-					editcat.getCategoryDescriptionList().get(i).setCatName(request
-							.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " "));
-					editcat.getCategoryDescriptionList().get(i).setCatDesc(request
-							.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " "));
+					editcat.getCategoryDescriptionList().get(i).setCatName(XssEscapeUtils.jsoupParse(catName));
+					editcat.getCategoryDescriptionList().get(i).setCatDesc(XssEscapeUtils.jsoupParse(catDesc));
 
 					if (editcat.getCategoryDescriptionList().get(i).getLanguageId() == 1) {
 
-						editcat.setCatName(request
+						catName = request
 								.getParameter("catName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-						editcat.setCatDesc(request
+								.trim().replaceAll("[ ]{2,}", " ");
+						catDesc = request
 								.getParameter("catDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
+								.trim().replaceAll("[ ]{2,}", " ");
+						
+						editcat.setCatName(catName);
+						editcat.setCatDesc(catDesc);
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						// System.out.println(text);
@@ -427,7 +430,10 @@ public class MasterController {
 			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
 			int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
-
+			
+			String subCatName = null;
+			String subCatDesc = null;
+			
 			Boolean ret = false;
 
 			if (FormValidation.Validaton(request.getParameter("categoryId"), "") == true
@@ -449,8 +455,11 @@ public class MasterController {
 
 				for (int i = 0; i < languagesList.size(); i++) {
 
-					if (FormValidation.Validaton(
-							request.getParameter("subCatName" + languagesList.get(i).getLanguagesId()), "") == true) {
+					subCatName = request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					subCatDesc = request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					if (FormValidation.Validaton(subCatName, "") == true|| FormValidation.Validaton(subCatDesc, "") == true) {
 
 						ret = true;
 						break;
@@ -458,19 +467,18 @@ public class MasterController {
 
 					CategoryDescription categoryDescription = new CategoryDescription();
 					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					categoryDescription
-							.setCatName(request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
-									.trim().replaceAll("[ ]{2,}", " "));
-					categoryDescription
-							.setCatDesc(request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
-									.trim().replaceAll("[ ]{2,}", " "));
+					categoryDescription.setCatName(XssEscapeUtils.jsoupParse(subCatName));
+					categoryDescription.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
+						
+						subCatName = request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " ");
+						subCatDesc = request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " ");
 
-						editcat.setCatName(request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
-						editcat.setCatDesc(request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
+						editcat.setCatName(XssEscapeUtils.jsoupParse(subCatName));
+						editcat.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						System.out.println(text);
@@ -486,32 +494,33 @@ public class MasterController {
 				editcat.setCatEditDate(sf.format(date));
 				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
 				for (int i = 0; i < editcat.getCategoryDescriptionList().size(); i++) {
-
-					if (FormValidation.Validaton(
-							request.getParameter(
-									"subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId()),
-							"") == true) {
+					
+					subCatName = request
+							.getParameter("subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					subCatDesc = request
+							.getParameter("subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					
+					if (FormValidation.Validaton(subCatName,"") == true || FormValidation.Validaton(subCatDesc,"") == true) {
 
 						ret = true;
 						break;
 					}
-					editcat.getCategoryDescriptionList().get(i).setCatName(request
-							.getParameter("subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " "));
-					editcat.getCategoryDescriptionList().get(i).setCatDesc(request
-							.getParameter("subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " "));
+					editcat.getCategoryDescriptionList().get(i).setCatName(XssEscapeUtils.jsoupParse(subCatName));
+					editcat.getCategoryDescriptionList().get(i).setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
 
 					if (editcat.getCategoryDescriptionList().get(i).getLanguageId() == 1) {
-
-						editcat.setCatName(request
-								.getParameter(
+						
+						subCatName = request.getParameter(
 										"subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-						editcat.setCatDesc(request
+								.trim().replaceAll("[ ]{2,}", " ");
+						subCatDesc = request
 								.getParameter(
 										"subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
+								.trim().replaceAll("[ ]{2,}", " ");
+						editcat.setCatName(XssEscapeUtils.jsoupParse(subCatName));
+						editcat.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
 						String text = editcat.getCatName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						// System.out.println(text);

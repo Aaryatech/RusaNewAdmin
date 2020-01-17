@@ -205,9 +205,18 @@ public class AddContentController {
 			VpsImageUpload upload = new VpsImageUpload();
 
 			for (int i = 0; i < languagesList.size(); i++) {
-
-				if (FormValidation.Validaton(request.getParameter("heading1" + languagesList.get(i).getLanguagesId()),
-						"") == true) {
+				
+				String head1 = request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim()
+				.replaceAll("[ ]{2,}", " ");
+				
+				String head2 = request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
+						.replaceAll("[ ]{2,}", " ");
+				
+				String pageDesc = request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " ");
+				
+				if (FormValidation.Validaton(head1,"") == true || FormValidation.Validaton(head2,"") == true
+						|| FormValidation.Validaton(pageDesc,"") == true) {
 
 					ret = true;
 					break;
@@ -215,15 +224,11 @@ public class AddContentController {
 
 				CMSPageDescription cMSPageDescription = new CMSPageDescription();
 				cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				cMSPageDescription.setHeading(XssEscapeUtils
-						.jsoupParse(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())).trim()
-						.replaceAll("[ ]{2,}", " "));
-				cMSPageDescription.setSmallheading(XssEscapeUtils
-						.jsoupParse(request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " ")));
-				cMSPageDescription
-						.setPageDesc(request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
+				
+				cMSPageDescription.setHeading(XssEscapeUtils.jsoupParse(head1));
+				cMSPageDescription.setSmallheading(XssEscapeUtils.jsoupParse(head2));
+				cMSPageDescription.setPageDesc(XssEscapeUtils.jsoupParseClean(pageDesc));
+				
 				cMSPageDescription.setDateTransaction(sf.format(date));
 				cMSPageDescriptionList.add(cMSPageDescription);
 
