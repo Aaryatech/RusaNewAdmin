@@ -50,7 +50,7 @@ import com.ats.rusaadmin.model.Registration;
 import com.ats.rusaadmin.model.RegistrationUserDetail;
 import com.ats.rusaadmin.model.UploadDocument;
 import com.ats.rusaadmin.model.User;
-import com.ats.rusaadmin.util.ItextPageEvent; 
+import com.ats.rusaadmin.util.ItextPageEvent;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -115,13 +115,18 @@ public class UserController {
 				long bytes = uploadDocumentList.get(i).getDocSize();
 				String size = new String();
 
-				int unit = true ? 1000 : 1024;
-				if (bytes < unit)
-					size = bytes + " B";
-				int exp = (int) (Math.log(bytes) / Math.log(unit));
-				String pre = (true ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (true ? "" : "i");
-				size = String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-				uploadDocumentList.get(i).setExtraVarchar1(size);
+				try {
+					int unit = true ? 1000 : 1024;
+					if (bytes < unit)
+						size = bytes + " B";
+					int exp = (int) (Math.log(bytes) / Math.log(unit));
+					String pre = (true ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (true ? "" : "i");
+					size = String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+					uploadDocumentList.get(i).setExtraVarchar1(size);
+				} catch (Exception e) {
+					uploadDocumentList.get(i).setExtraVarchar1("1kB");
+				}
+
 			}
 
 			model.addObject("uploadDocumentList", uploadDocumentList);
@@ -338,7 +343,7 @@ public class UserController {
 
 				int totalPages = writer.getPageNumber();
 
-			//	System.out.println("Page no " + totalPages);
+				// System.out.println("Page no " + totalPages);
 
 				document.close();
 
@@ -391,12 +396,12 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView("userActivationForm");
 		try {
-			//System.out.println("id" + regId);
+			// System.out.println("id" + regId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", regId);
 			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserDetailbyRegId", map,
 					RegistrationUserDetail.class);
-			//System.out.println("User: " + editUser.toString());
+			// System.out.println("User: " + editUser.toString());
 
 			model.addObject("editUser", editUser);
 			model.addObject("isEdit", 1);
@@ -446,54 +451,61 @@ public class UserController {
 
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
-					 
-					/*if (userPass.equals("0")) {*/
-						//String password = Commons.getAlphaNumericString(5);
-						//System.out.println("Password: " + password);
-						
-						RandomString randomString = new RandomString();
-						String password = randomString.nextString();
-						MessageDigest md = MessageDigest.getInstance("MD5");
-						byte[] messageDigest = md.digest(password.getBytes());
-						BigInteger number = new BigInteger(1, messageDigest);
-						String hashtext = number.toString(16);
-						
-						editUser.setUserPassword(hashtext);
-						editUser.setEmailVerified(1);
-						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
-								editUser.getEmails(), password);
-						/*session.setAttribute("successMsg", "Infomation Updated successfully!");
-						session.setAttribute("errorMsg", "false");*/
-					 
-						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
- 
-						
-						map = new LinkedMultiValueMap<String, Object>();
-						map.add("username", "rusamah-wb");
-						map.add("password", "Rus@@123456");
-						map.add("senderid", "MHRUSA");
-						map.add("mobileno", editUser.getMobileNumber());
-						map.add("content", "Your Username " + editUser.getEmails() + "\n Password " + password
-								+ "\n don't share with any one."); 
-						map.add("smsservicetype", "singlemsg"); 
-						String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
-								map, String.class);
-						
-					/*} else {*/
-						/*editUser.setEmailVerified(1);
-						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
-								editUser.getEmails(), password);*/
-						/*List<Registration> getUser = Constant.getRestTemplate()
-								.getForObject(Constant.url + "/getAllRegUserList", List.class);
-						session.setAttribute("regList", getUser);*/
-						session.setAttribute("successMsg", "Password Send Successfully");
-						session.setAttribute("errorMsg", "false");
-					//}
+
+					/* if (userPass.equals("0")) { */
+					// String password = Commons.getAlphaNumericString(5);
+					// System.out.println("Password: " + password);
+
+					RandomString randomString = new RandomString();
+					String password = randomString.nextString();
+					MessageDigest md = MessageDigest.getInstance("MD5");
+					byte[] messageDigest = md.digest(password.getBytes());
+					BigInteger number = new BigInteger(1, messageDigest);
+					String hashtext = number.toString(16);
+
+					editUser.setUserPassword(hashtext);
+					editUser.setEmailVerified(1);
+					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
+							editUser.getEmails(), password);
+					/*
+					 * session.setAttribute("successMsg", "Infomation Updated successfully!");
+					 * session.setAttribute("errorMsg", "false");
+					 */
+
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+					map = new LinkedMultiValueMap<String, Object>();
+					map.add("username", "rusamah-wb");
+					map.add("password", "Rus@@123456");
+					map.add("senderid", "MHRUSA");
+					map.add("mobileno", editUser.getMobileNumber());
+					map.add("content", "Your Username " + editUser.getEmails() + "\n Password " + password
+							+ "\n don't share with any one.");
+					map.add("smsservicetype", "singlemsg");
+					String sms = Constant.getRestTemplate()
+							.postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest", map, String.class);
+
+					/* } else { */
+					/*
+					 * editUser.setEmailVerified(1); info1 = EmailUtility.sendEmail(senderEmail,
+					 * senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
+					 * password);
+					 */
+					/*
+					 * List<Registration> getUser = Constant.getRestTemplate()
+					 * .getForObject(Constant.url + "/getAllRegUserList", List.class);
+					 * session.setAttribute("regList", getUser);
+					 */
+					session.setAttribute("successMsg", "Password Send Successfully");
+					session.setAttribute("errorMsg", "false");
+					// }
 				} else {
 					editUser.setEmailVerified(0);
-					/*List<Registration> getUser = Constant.getRestTemplate()
-							.getForObject(Constant.url + "/getAllRegUserList", List.class);
-					session.setAttribute("regList", getUser);*/
+					/*
+					 * List<Registration> getUser = Constant.getRestTemplate()
+					 * .getForObject(Constant.url + "/getAllRegUserList", List.class);
+					 * session.setAttribute("regList", getUser);
+					 */
 
 					session.setAttribute("successMsg", "Please varify your mobile number !");
 					session.setAttribute("errorMsg", "true");
@@ -520,7 +532,6 @@ public class UserController {
 			List<Registration> getUser = Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList",
 					List.class);
 			session.setAttribute("regList", getUser);
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -556,17 +567,17 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView("approveForm");
 		try {
-			//System.out.println("id" + userId);
+			// System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
 			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
 					RegistrationUserDetail.class);
-			//System.out.println("User: " + editUser.toString());
+			// System.out.println("User: " + editUser.toString());
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("eventRegId", eventRegId);
 			editEvent = Constant.getRestTemplate().postForObject(Constant.url + "/getUserEventByEventRegId", map1,
 					EventRegistration.class);
-			//System.out.println("User: " + editEvent.toString());
+			// System.out.println("User: " + editEvent.toString());
 
 			model.addObject("editUser", editUser);
 			model.addObject("newsblogsId", newsblogsId);
@@ -595,7 +606,7 @@ public class UserController {
 			int status = Integer.parseInt(request.getParameter("status"));
 			int regId = Integer.parseInt(request.getParameter("regId"));
 
-			//System.out.println("newsblogsId : " + newsblogsId);
+			// System.out.println("newsblogsId : " + newsblogsId);
 			String email = request.getParameter("userEmail");
 
 			Date date = new Date();
@@ -611,7 +622,7 @@ public class UserController {
 			map1.add("langId", 1);
 			NewsDetails eventList = Constant.getRestTemplate().postForObject(Constant.url + "/getEventListByNewsId",
 					map1, NewsDetails.class);
-			//System.out.println("List :" + eventList.toString());
+			// System.out.println("List :" + eventList.toString());
 			if (status == 1) {
 				approval = "Approved";
 				info1 = EmailUtility.sendApprovalEmail(senderEmail, senderPassword, email, mailsubjectApprove, approval,
@@ -660,7 +671,7 @@ public class UserController {
 			newsId = Integer.parseInt(request.getParameter("newsId"));
 			int status = Integer.parseInt(request.getParameter("status"));
 
-			//System.out.println("id" + userId);
+			// System.out.println("id" + userId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("regId", userId);
 			editUser = Constant.getRestTemplate().postForObject(Constant.url + "/getRegUserbyRegId", map,
@@ -686,20 +697,20 @@ public class UserController {
 						mailsubjectApprove, approval, editUser.getName(), eventList.getHeading(),
 						eventList.getEventLocation(), eventList.getEventDateFrom());
 				RestTemplate restTemplate = new RestTemplate();
-				/*map = new LinkedMultiValueMap<String, Object>();
+				/*
+				 * map = new LinkedMultiValueMap<String, Object>();
+				 * 
+				 * map.add("senderID", "RUSAMH"); map.add("user",
+				 * "spdrusamah@gmail.com:Cyber@mva"); map.add("receipientno",
+				 * editUser.getMobileNumber().trim()); map.add("dcs", "0"); map.add("msgtxt",
+				 * "Dear " + editUser.getName() + ", \n" +
+				 * "	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n"
+				 * + "Date and Time:" + eventList.getEventDateFrom() + " \n" + "Venue:" +
+				 * eventList.getEventLocation()); map.add("state", "4"); String respons =
+				 * restTemplate.postForObject(
+				 * "http://api.mVaayoo.com/mvaayooapi/MessageCompose", map, String.class);
+				 */
 
-				map.add("senderID", "RUSAMH");
-				map.add("user", "spdrusamah@gmail.com:Cyber@mva");
-				map.add("receipientno", editUser.getMobileNumber().trim());
-				map.add("dcs", "0");
-				map.add("msgtxt", "Dear " + editUser.getName() + ", \n"
-						+ "	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n"
-						+ "Date and Time:" + eventList.getEventDateFrom() + " \n" + "Venue:"
-						+ eventList.getEventLocation());
-				map.add("state", "4"); 
-				String respons = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
-						String.class);*/
-				
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("username", "rusamah-wb");
 				map.add("password", "Rus@@123456");
@@ -708,8 +719,8 @@ public class UserController {
 				map.add("content", "Dear " + editUser.getName() + ", \n"
 						+ "	I am pleased to invite you to the attend RUSA portal to track state's plans of higher education  at RUSA on the below mentioned Date and Venue. Please carry ID proof along with you.\n"
 						+ "Date and Time:" + eventList.getEventDateFrom() + " \n" + "Venue:"
-						+ eventList.getEventLocation()); 
-				map.add("smsservicetype", "singlemsg"); 
+						+ eventList.getEventLocation());
+				map.add("smsservicetype", "singlemsg");
 				String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
 						map, String.class);
 
@@ -756,8 +767,6 @@ public class UserController {
 
 			String toDate = dateFormat.format(new Date());
 
-			
-
 			String fromDate1 = request.getParameter("from_date");
 			String toDate1 = request.getParameter("to_date");
 			// System.out.println("from Date***"+fromDate1);
@@ -779,15 +788,14 @@ public class UserController {
 				userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
 
 			}
-			if (fromDate1 ==null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
-				
-			//System.out.println("refresh");
+			if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+
+				// System.out.println("refresh");
 				model.addObject("fromDate", fromDate);
 				model.addObject("toDate", toDate);
 
-			}
-			else   {
-				//System.out.println("submit");
+			} else {
+				// System.out.println("submit");
 				model.addObject("fromDate", fromDate1);
 				model.addObject("toDate", toDate1);
 			}
@@ -995,7 +1003,7 @@ public class UserController {
 
 				int totalPages = writer.getPageNumber();
 
-			//	System.out.println("Page no " + totalPages);
+				// System.out.println("Page no " + totalPages);
 
 				document.close();
 
@@ -1267,7 +1275,7 @@ public class UserController {
 
 				int totalPages = writer.getPageNumber();
 
-				///System.out.println("Page no " + totalPages);
+				/// System.out.println("Page no " + totalPages);
 
 				document.close();
 

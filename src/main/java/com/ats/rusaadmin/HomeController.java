@@ -2,7 +2,9 @@ package com.ats.rusaadmin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.InetAddress;
+import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,8 +65,8 @@ public class HomeController {
 			InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
 			String hostName = addr.getHostName();
 			String userAgent = request.getHeader("User-Agent");
-			System.out.println("userAgent :" + userAgent);
-			System.out.println("hostName" + hostName);
+			/*System.out.println("userAgent :" + userAgent);
+			System.out.println("hostName" + hostName);*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,9 +92,14 @@ public class HomeController {
 				model.addAttribute("msg", "Invalid login");
 			} else {
 
+				MessageDigest md = MessageDigest.getInstance("MD5");
+				byte[] messageDigest = md.digest(password.getBytes());
+				BigInteger number = new BigInteger(1, messageDigest);
+				String hashtext = number.toString(16);
+				
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				map.add("userName", name);
-				map.add("password", password);
+				map.add("password", hashtext);
 				LoginResponse loginResponse = Constant.getRestTemplate().postForObject(Constant.url + "/loginResponse",
 						map, LoginResponse.class);
 
