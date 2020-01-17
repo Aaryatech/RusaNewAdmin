@@ -1,9 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<noscript>
+	<META HTTP-EQUIV="Refresh"
+		CONTENT="0;URL=${pageContext.request.contextPath}/javaScriptWarning">
+</noscript>
 <body>
 	<c:url var="setSubModId" value="/setSubModId" />
-	<c:url var="clearUserSessionAttribute" value="/clearUserSessionAttribute" />
+	<c:url var="clearUserSessionAttribute"
+		value="/clearUserSessionAttribute" />
 	<div class="page-sidebar pagescroll">
 		<!-- MAIN MENU - START -->
 		<div class="page-sidebar-wrapper" id="main-menu-wrapper">
@@ -61,7 +67,7 @@
 					</c:choose>
 
 				</a>
-				
+
 				<ul class="sub-menu">
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==101}">
@@ -287,12 +293,14 @@
 
 								<a class="active"
 									href="${pageContext.request.contextPath}/galleryCategoryList"
-									onclick="selectSubMod(4,404)"> <span class="title"> Category List</span>
+									onclick="selectSubMod(4,404)"> <span class="title">
+										Category List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath}/galleryCategoryList"
-									onclick="selectSubMod(4,404)"> <span class="title"> Category List</span>
+									onclick="selectSubMod(4,404)"> <span class="title">
+										Category List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>
@@ -325,27 +333,28 @@
 								</a>
 							</c:otherwise>
 						</c:choose></li>
-						<li><c:choose>
+					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==407}">
 								<a class="active"
 									href="${pageContext.request.contextPath}/uploadedImageList"
-									onclick="selectSubMod(4,407)"> <span class="title">Gallery Image
-										List</span>
+									onclick="selectSubMod(4,407)"> <span class="title">Gallery
+										Image List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath}/uploadedImageList"
-									onclick="selectSubMod(4,407)"> <span class="title">Gallery Image
-										List</span>
+									onclick="selectSubMod(4,407)"> <span class="title">Gallery
+										Image List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>
-						
-						<li><c:choose>
+
+					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==409}">
 								<a class="active"
 									href="${pageContext.request.contextPath}/VedioFormList"
-									onclick="selectSubMod(4,409)"> <span class="title">Video List</span>
+									onclick="selectSubMod(4,409)"> <span class="title">Video
+										List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
@@ -355,7 +364,7 @@
 								</a>
 							</c:otherwise>
 						</c:choose></li>
-						
+
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==403}">
 								<a class="active"
@@ -371,24 +380,24 @@
 								</a>
 							</c:otherwise>
 						</c:choose></li>
-						
+
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==410}">
 								<a class="active"
 									href="${pageContext.request.contextPath}/successStoryList"
-									onclick="selectSubMod(4,410)"> <span class="title">Success Story
-										List</span>
+									onclick="selectSubMod(4,410)"> <span class="title">Success
+										Story List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath}/successStoryList"
-									onclick="selectSubMod(4,410)"> <span class="title">Success Story
-										List</span>
+									onclick="selectSubMod(4,410)"> <span class="title">Success
+										Story List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>
-						
-						<li><c:choose>
+
+					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==408}">
 								<a class="active"
 									href="${pageContext.request.contextPath}/teamList"
@@ -429,31 +438,33 @@
 
 								<a class="active"
 									href="${pageContext.request.contextPath}/NewsBlogList"
-									onclick="selectSubMod(4,406)"> <span class="title">News List</span>
+									onclick="selectSubMod(4,406)"> <span class="title">News
+										List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
 								<a class=" "
 									href="${pageContext.request.contextPath}/NewsBlogList"
-									onclick="selectSubMod(4,406)"> <span class="title">News List</span>
+									onclick="selectSubMod(4,406)"> <span class="title">News
+										List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>
-						
+
 					<li><c:choose>
 							<c:when test="${sessionScope.sessionSubModuleId==411}">
 
 								<a class="active"
 									href="${pageContext.request.contextPath}/EventFormList"
 									onclick="selectSubMod(4,411)"> <span class="title">Event
-										  List</span>
+										List</span>
 								</a>
 							</c:when>
 							<c:otherwise>
 								<a class=" "
 									href="${pageContext.request.contextPath}/EventFormList"
 									onclick="selectSubMod(4,411)"> <span class="title">Event
-										  List</span>
+										List</span>
 								</a>
 							</c:otherwise>
 						</c:choose></li>
@@ -471,8 +482,8 @@
 					</c:otherwise>
 				</c:choose>
 				<a href="${pageContext.request.contextPath}/uploadOtherMedia"
-					onclick="selectSubMod(5,0)"> <i class="fa fa-cloud-upload"></i> <span
-					class="title">Upload Media/Files</span>
+					onclick="selectSubMod(5,0)"> <i class="fa fa-cloud-upload"></i>
+					<span class="title">Upload Media/Files</span>
 				</a>
 				</li>
 
@@ -491,8 +502,8 @@
 					class="title">Contact List</span>
 				</a>
 				</li>
-						
-					<c:choose>
+
+				<c:choose>
 					<c:when test="${sessionScope.sessionModuleId==7}">
 						<li class="open">
 					</c:when>
@@ -505,8 +516,8 @@
 					class="title">User Registration List</span>
 				</a>
 				</li>
-				
-				 <c:choose>
+
+				<c:choose>
 					<c:when test="${sessionScope.sessionModuleId==8}">
 						<li class="open">
 					</c:when>
@@ -518,9 +529,9 @@
 					onclick="selectSubMod(8,0)"> <i class="fa fa-envelope"></i> <span
 					class="title">Event Applied List</span>
 				</a>
-				</li> 
-				
-					
+				</li>
+
+
 
 				<li><a href="${pageContext.request.contextPath}/logout"> <i
 						class="fa fa-lock"></i> <span class="title">Logout</span>
@@ -536,20 +547,17 @@
 					modId : modId,
 					ajax : 'true'
 				});
-				
+
 				clearUserSessionAttribute();
 			}
 			function clearUserSessionAttribute() {
-				 
-				 
 
 				$.getJSON('${clearUserSessionAttribute}', {
-			  
+
 					ajax : 'true',
 
-				}, function(data) { 
-					 
-				
+				}, function(data) {
+
 				});
 
 			}

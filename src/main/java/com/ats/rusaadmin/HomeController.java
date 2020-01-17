@@ -65,8 +65,10 @@ public class HomeController {
 			InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
 			String hostName = addr.getHostName();
 			String userAgent = request.getHeader("User-Agent");
-			/*System.out.println("userAgent :" + userAgent);
-			System.out.println("hostName" + hostName);*/
+			/*
+			 * System.out.println("userAgent :" + userAgent); System.out.println("hostName"
+			 * + hostName);
+			 */
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,7 +86,7 @@ public class HomeController {
 		res.setContentType("text/html");
 		HttpSession session = request.getSession();
 		try {
-			//System.out.println("Login Process " + name);
+			// System.out.println("Login Process " + name);
 
 			if (name.equalsIgnoreCase("") || password.equalsIgnoreCase("") || name == null || password == null) {
 
@@ -96,7 +98,7 @@ public class HomeController {
 				byte[] messageDigest = md.digest(password.getBytes());
 				BigInteger number = new BigInteger(1, messageDigest);
 				String hashtext = number.toString(16);
-				
+
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				map.add("userName", name);
 				map.add("password", hashtext);
@@ -243,27 +245,40 @@ public class HomeController {
 		session.setAttribute("sessionSubModuleId", subModId);
 		session.removeAttribute("exportExcelList");
 	}
-	
+
 	@RequestMapping(value = "/smsgatway", method = RequestMethod.GET)
-	public   String smsgatway(HttpServletRequest request, HttpServletResponse response) {
-		
+	public String smsgatway(HttpServletRequest request, HttpServletResponse response) {
+
 		try {
-			
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("username", "rusamah-wb");
 			map.add("password", "Rus@@123456");
 			map.add("senderid", "MHRUSA");
 			map.add("mobileno", "7588519473");
 			map.add("content", "hello java testing");
-			map.add("smsservicetype", "singlemsg"); 
+			map.add("smsservicetype", "singlemsg");
 			String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
 					map, String.class);
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 
+
 		return "success";
+	}
+
+	@RequestMapping(value = "/javaScriptWarning", method = RequestMethod.GET)
+	public String javaScriptWarning(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+		String ret = "javaScriptWarning";
+		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return ret;
 	}
 
 }
