@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.URLConnection;
+import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.EmailUtility;
+import com.ats.rusaadmin.common.RandomString;
 import com.ats.rusaadmin.model.EventCountDetails;
 import com.ats.rusaadmin.model.EventDetail;
 import com.ats.rusaadmin.model.EventDetails;
@@ -47,7 +50,7 @@ import com.ats.rusaadmin.model.Registration;
 import com.ats.rusaadmin.model.RegistrationUserDetail;
 import com.ats.rusaadmin.model.UploadDocument;
 import com.ats.rusaadmin.model.User;
-import com.ats.rusaadmin.util.ItextPageEvent;
+import com.ats.rusaadmin.util.ItextPageEvent; 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -443,29 +446,27 @@ public class UserController {
 
 			if (btnsendmail != null) {
 				if (smsVerified == 1) {
-					//System.out.println("btnsendmail");
-					if (userPass.equals("0")) {
-						String password = Commons.getAlphaNumericString(5);
+					 
+					/*if (userPass.equals("0")) {*/
+						//String password = Commons.getAlphaNumericString(5);
 						//System.out.println("Password: " + password);
-						editUser.setUserPassword(password);
+						
+						RandomString randomString = new RandomString();
+						String password = randomString.nextString();
+						MessageDigest md = MessageDigest.getInstance("MD5");
+						byte[] messageDigest = md.digest(password.getBytes());
+						BigInteger number = new BigInteger(1, messageDigest);
+						String hashtext = number.toString(16);
+						
+						editUser.setUserPassword(hashtext);
 						editUser.setEmailVerified(1);
 						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
 								editUser.getEmails(), password);
-						session.setAttribute("successMsg", "Infomation Updated successfully!");
-						session.setAttribute("errorMsg", "false");
-						RestTemplate restTemplate = new RestTemplate();
+						/*session.setAttribute("successMsg", "Infomation Updated successfully!");
+						session.setAttribute("errorMsg", "false");*/
+					 
 						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-/*
-						map.add("senderID", "RUSAMH");
-						map.add("user", "spdrusamah@gmail.com:Cyber@mva");
-						map.add("receipientno", editUser.getMobileNumber());
-						map.add("dcs", "0");
-						map.add("msgtxt", "Your Username " + editUser.getEmails() + "\n Password " + password
-								+ "\n don't share with any one.");
-						map.add("state", "4");
-
-						String res = restTemplate.postForObject("http://api.mVaayoo.com/mvaayooapi/MessageCompose", map,
-								String.class);*/
+ 
 						
 						map = new LinkedMultiValueMap<String, Object>();
 						map.add("username", "rusamah-wb");
@@ -478,21 +479,21 @@ public class UserController {
 						String sms = Constant.getRestTemplate().postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest",
 								map, String.class);
 						
-					} else {
-						editUser.setEmailVerified(1);
+					/*} else {*/
+						/*editUser.setEmailVerified(1);
 						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
-								editUser.getEmails(), userPass);
-						List<Registration> getUser = Constant.getRestTemplate()
+								editUser.getEmails(), password);*/
+						/*List<Registration> getUser = Constant.getRestTemplate()
 								.getForObject(Constant.url + "/getAllRegUserList", List.class);
-						session.setAttribute("regList", getUser);
-						session.setAttribute("successMsg", "Password Alredy Updated !");
+						session.setAttribute("regList", getUser);*/
+						session.setAttribute("successMsg", "Password Send Successfully");
 						session.setAttribute("errorMsg", "false");
-					}
+					//}
 				} else {
 					editUser.setEmailVerified(0);
-					List<Registration> getUser = Constant.getRestTemplate()
+					/*List<Registration> getUser = Constant.getRestTemplate()
 							.getForObject(Constant.url + "/getAllRegUserList", List.class);
-					session.setAttribute("regList", getUser);
+					session.setAttribute("regList", getUser);*/
 
 					session.setAttribute("successMsg", "Please varify your mobile number !");
 					session.setAttribute("errorMsg", "true");
@@ -508,7 +509,8 @@ public class UserController {
 				}
 
 				editUser.setIsActive(status);
-
+				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("errorMsg", "false");
 			}
 
 			editUser.setEditDate(sf.format(date));
@@ -518,8 +520,7 @@ public class UserController {
 			List<Registration> getUser = Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList",
 					List.class);
 			session.setAttribute("regList", getUser);
-			session.setAttribute("successMsg", "Infomation Updated successfully!");
-			session.setAttribute("errorMsg", "false");
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
