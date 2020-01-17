@@ -17,12 +17,13 @@ import org.jsoup.safety.Whitelist;
 public class XssEscapeUtils {
 	// a) in all input type text and textarea withoput ckeditor or any html editor
 	// in both project
-	public String jsoupParse(String str) {
+	public static String jsoupParse(String str) {
+		str = str.replaceAll("\\<.*?\\>", "");
 		return Jsoup.parse(str).text();
 	}
 
 	// b) in all textarea with ckeditor or any html editor in both project
-	public String jsoupParseClean(String str) {
+	public static String jsoupParseClean(String str) {
 		return Jsoup.clean(str, Whitelist.relaxed());
 	}
 

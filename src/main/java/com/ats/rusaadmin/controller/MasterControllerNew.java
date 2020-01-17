@@ -108,21 +108,20 @@ public class MasterControllerNew {
 		HttpSession session = request.getSession();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
-			XssEscapeUtils escape = new XssEscapeUtils();
-			
+						
 			HttpSession session1 = request.getSession();
 			User UserDetail = (User) session1.getAttribute("UserDetail");
 			
-			String firstName = escape.jsoupParse(request.getParameter("firstname"));
+			String firstName = XssEscapeUtils.jsoupParse(request.getParameter("firstname"));
 			
 			String userId = request.getParameter("userId");
-			String userName = escape.jsoupParse(request.getParameter("userName"));
+			String userName = XssEscapeUtils.jsoupParse(request.getParameter("userName"));
 			String roles = request.getParameter("roles");
 		
-			String middleName = escape.jsoupParse(request.getParameter("middlename"));
-			String lastName = escape.jsoupParse(request.getParameter("lastname"));
-			String email = escape.jsoupParse(request.getParameter("userEmail"));
-			String pass = escape.jsoupParse(request.getParameter("userPass"));
+			String middleName = XssEscapeUtils.jsoupParse(request.getParameter("middlename"));
+			String lastName = XssEscapeUtils.jsoupParse(request.getParameter("lastname"));
+			String email = XssEscapeUtils.jsoupParse(request.getParameter("userEmail"));
+			String pass = XssEscapeUtils.jsoupParse(request.getParameter("userPass"));
 
 			int removePhoto = Integer.parseInt(request.getParameter("remove"));
 

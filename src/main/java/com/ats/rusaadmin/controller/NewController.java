@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
@@ -156,31 +157,25 @@ public class NewController {
 			List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
 
 			for (int i = 0; i < editMeta.size(); i++) {
-				if (FormValidation.Validaton(request.getParameter("siteName" + languagesList.get(i).getLanguagesId()),
-						"") == true
-						|| FormValidation.Validaton(
-								request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId()),
-								"") == true
-						|| FormValidation.Validaton(
-								request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId()), "") == true
-						|| FormValidation.Validaton(
-								request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId()),
-								"") == true) {
+				
+				String siteTitle = request.getParameter("siteName" + languagesList.get(i).getLanguagesId()); 
+				String metaDesc = request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId());
+				String metaAuthor = request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId());
+				String metaKeyWord = request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId());
+				
+				if (FormValidation.Validaton(siteTitle,"") == true
+						|| FormValidation.Validaton(metaDesc,"") == true
+						|| FormValidation.Validaton(metaAuthor, "") == true
+						|| FormValidation.Validaton(metaKeyWord,"") == true) {
 
 					ret = true;
 					break;
 				}
 
-				editMeta.get(i).setSiteTitle(request.getParameter("siteName" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				editMeta.get(i).setMetaDescription(
-						request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				editMeta.get(i).setMetaAuthor(request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				editMeta.get(i)
-						.setMetaKeywords(request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
+				editMeta.get(i).setSiteTitle(XssEscapeUtils.jsoupParse(siteTitle.trim().replaceAll("[ ]{2,}", " ")));
+				editMeta.get(i).setMetaDescription(XssEscapeUtils.jsoupParse(metaDesc.trim().replaceAll("[ ]{2,}", " ")));
+				editMeta.get(i).setMetaAuthor(XssEscapeUtils.jsoupParse(metaAuthor.trim().replaceAll("[ ]{2,}", " ")));
+				editMeta.get(i).setMetaKeywords(XssEscapeUtils.jsoupParse(metaKeyWord.trim().replaceAll("[ ]{2,}", " ")));
 
 			}
 			// editSection.setAddedByUserId(UserDetail.getUserId());
@@ -971,7 +966,7 @@ public class NewController {
 			HttpSession session = request.getSession();
 
 			String status = request.getParameter("status");
-			String message = request.getParameter("message");
+			String message = XssEscapeUtils.jsoupParse(request.getParameter("message"));
 			Date date = new Date(); // your date
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			editSite.setMaintenanceStatus(Integer.parseInt(status));

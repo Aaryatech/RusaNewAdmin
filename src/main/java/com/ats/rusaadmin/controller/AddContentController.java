@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
@@ -99,7 +100,7 @@ public class AddContentController {
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			pageId = Integer.parseInt(request.getParameter("pageId"));
 
-			//System.out.println(pageId);
+			// System.out.println(pageId);
 			if (moduleId == 1) {
 
 				url = "redirect:/cmsForm";
@@ -214,11 +215,12 @@ public class AddContentController {
 
 				CMSPageDescription cMSPageDescription = new CMSPageDescription();
 				cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				cMSPageDescription.setHeading(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				cMSPageDescription
-						.setSmallheading(request.getParameter("smallheading" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
+				cMSPageDescription.setHeading(XssEscapeUtils
+						.jsoupParse(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())).trim()
+						.replaceAll("[ ]{2,}", " "));
+				cMSPageDescription.setSmallheading(XssEscapeUtils
+						.jsoupParse(request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " ")));
 				cMSPageDescription
 						.setPageDesc(request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
 								.trim().replaceAll("[ ]{2,}", " "));
@@ -617,18 +619,20 @@ public class AddContentController {
 			List<FreqAskQueDescription> freqAskQueDescriptionList = new ArrayList<FreqAskQueDescription>();
 
 			for (int i = 0; i < languagesList.size(); i++) {
-				if (FormValidation.Validaton(request.getParameter("question" + languagesList.get(i).getLanguagesId()),
-						"") == true) {
+				String resFaq = XssEscapeUtils
+						.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()));
+				String resAns = XssEscapeUtils
+						.jsoupParseClean(request.getParameter("ans" + languagesList.get(i).getLanguagesId()));
+				
+				if (FormValidation.Validaton(resFaq, "") == true || FormValidation.Validaton(resAns, "") == true) {
 					ret = true;
 					break;
 				}
-
+			 
 				FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
 				freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				freqAskQueDescription.setFaqQue(request.getParameter("question" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				freqAskQueDescription.setFaqAns(request.getParameter("ans" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
+				freqAskQueDescription.setFaqQue(resFaq.trim().replaceAll("[ ]{2,}", " "));
+				freqAskQueDescription.setFaqAns(resAns);
 				freqAskQueDescriptionList.add(freqAskQueDescription);
 			}
 			if (ret == false) {
@@ -968,11 +972,11 @@ public class AddContentController {
 					contentImages.setThumb(Constant.getOtherDocURL + listOfFiles[i].getName());
 					contentImages.setSize(String.valueOf(listOfFiles[i].length()));
 					contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
-					//contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
+					// contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
 					list.add(contentImages);
 				}
 			}
-			//System.out.println(list);
+			// System.out.println(list);
 			ObjectMapper mapper = new ObjectMapper();
 			jsonString = mapper.writeValueAsString(list);
 
@@ -995,7 +999,7 @@ public class AddContentController {
 					Languages[].class);
 			List<Languages> list = new ArrayList<Languages>(Arrays.asList(Languages));
 
-			//System.out.println(list);
+			// System.out.println(list);
 
 		} catch (Exception e) {
 			e.printStackTrace();
