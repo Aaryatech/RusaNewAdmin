@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
@@ -716,6 +717,9 @@ public class MasterController {
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			int type = Integer.parseInt(request.getParameter("type"));
 
+			String secName = null;
+			String secDesc = null;
+			
 			Boolean ret = false;
 
 			if (FormValidation.Validaton(request.getParameter("seqNo"), "") == true
@@ -732,8 +736,10 @@ public class MasterController {
 				editSection.setSectionAddDate(sf.format(date));
 				for (int i = 0; i < languagesList.size(); i++) {
 
-					if (FormValidation.Validaton(
-							request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()), "") == true) {
+					secName = request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " ");
+					secDesc = request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " ");
+					
+					if (FormValidation.Validaton(secName, "") == true || FormValidation.Validaton(secDesc, "") == true) {
 
 						ret = true;
 						break;
@@ -741,21 +747,18 @@ public class MasterController {
 
 					SectionDescription sectionDescription = new SectionDescription();
 					sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					sectionDescription
-							.setSectionName(request.getParameter("sectionName" + languagesList.get(i).getLanguagesId())
-									.trim().replaceAll("[ ]{2,}", " "));
-					sectionDescription
-							.setSectionDesc(request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId())
-									.trim().replaceAll("[ ]{2,}", " "));
+					
+					sectionDescription.setSectionName(XssEscapeUtils.jsoupParse(secName));
+					sectionDescription.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
 
-						editSection.setSectionName(
-								request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim()
-										.replaceAll("[ ]{2,}", " "));
-						editSection.setSectionDesc(
-								request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim()
-										.replaceAll("[ ]{2,}", " "));
+						secName = request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " ");
+						secDesc = request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " ");
+						
+						editSection.setSectionName(XssEscapeUtils.jsoupParse(secName));
+						editSection.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
+						
 						String text = editSection.getSectionName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						editSection.setSectionSlugname(text);
@@ -770,30 +773,26 @@ public class MasterController {
 				sectionDescriptionList = editSection.getSectionDescriptionList();
 
 				for (int i = 0; i < sectionDescriptionList.size(); i++) {
-
-					if (FormValidation.Validaton(
-							request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()),
-							"") == true) {
+					
+					secName = request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " ");
+					secDesc = request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " ");
+					
+					if (FormValidation.Validaton(secName,"") == true || FormValidation.Validaton(secDesc,"") == true ) {
 
 						ret = true;
 						break;
 					}
 
-					sectionDescriptionList.get(i).setSectionName(
-							request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim()
-									.replaceAll("[ ]{2,}", " "));
-					sectionDescriptionList.get(i).setSectionDesc(
-							request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim()
-									.replaceAll("[ ]{2,}", " "));
+					sectionDescriptionList.get(i).setSectionName(XssEscapeUtils.jsoupParse(secName));					
+					sectionDescriptionList.get(i).setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
 
 					if (sectionDescriptionList.get(i).getLanguageId() == 1) {
 
-						editSection.setSectionName(
-								request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId())
-										.trim().replaceAll("[ ]{2,}", " "));
-						editSection.setSectionDesc(
-								request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId())
-										.trim().replaceAll("[ ]{2,}", " "));
+						secName = request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " ");
+						secDesc = request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim().replaceAll("[ ]{2,}", " ");
+						
+						editSection.setSectionName(XssEscapeUtils.jsoupParse(secName));
+						editSection.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
 						String text = editSection.getSectionName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						editSection.setSectionSlugname(text);

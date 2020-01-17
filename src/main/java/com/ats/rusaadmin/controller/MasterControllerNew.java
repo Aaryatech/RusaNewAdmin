@@ -422,6 +422,11 @@ public class MasterControllerNew {
 
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
+			
+			String sliderName = null;
+			String linkName = null;
+			String text1 = null;
+			String text2 = null;
 
 			if (ret == false) {
 				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
@@ -459,28 +464,34 @@ public class MasterControllerNew {
 				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
 					for (int i = 0; i < languagesList.size(); i++) {
+						
+						sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+						linkName = request.getParameter("linkName" + languagesList.get(i).getLanguagesId());
+						text1 = request.getParameter("text1" + languagesList.get(i).getLanguagesId());
+						text2 = request.getParameter("text2" + languagesList.get(i).getLanguagesId());
 
 						BannerDetail BannerDetail = new BannerDetail();
-						BannerDetail
-								.setLinkName(request.getParameter("linkName" + languagesList.get(i).getLanguagesId()));
-						BannerDetail.setSliderName(
-								request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
-						BannerDetail.setText1(request.getParameter("text1" + languagesList.get(i).getLanguagesId()));
-						BannerDetail.setText2(request.getParameter("text2" + languagesList.get(i).getLanguagesId()));
+						BannerDetail.setLinkName(XssEscapeUtils.jsoupParse(linkName));
+						BannerDetail.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+						BannerDetail.setText1(XssEscapeUtils.jsoupParse(text1));
+						BannerDetail.setText2(XssEscapeUtils.jsoupParse(text2));
+						
 						BannerDetail.setSortOrder(languagesList.get(i).getLanguagesId());
 						BannerDetail.setIsActive(1);
 						BannerDetail.setDelStatus(1);
 						editbanner.getDetillist().add(BannerDetail);
 
 						if (languagesList.get(i).getLanguagesId() == 1) {
-							editbanner.setLinkName(
-									request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
-							editbanner.setSliderName(
-									request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
-							editbanner.setText1(
-									request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
-							editbanner.setText2(
-									request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
+							
+							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+							linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+							text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
+							text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+							
+							editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
+							editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+							editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
+							editbanner.setText2(XssEscapeUtils.jsoupParse(text2));
 						}
 
 					}
@@ -488,25 +499,28 @@ public class MasterControllerNew {
 				} else {
 
 					for (int i = 0; i < editbanner.getDetillist().size(); i++) {
+						
+						sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+						linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+						text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
+						text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
 
-						editbanner.getDetillist().get(i).setLinkName(
-								request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
-						editbanner.getDetillist().get(i).setSliderName(
-								request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
-						editbanner.getDetillist().get(i).setText1(
-								request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
-						editbanner.getDetillist().get(i).setText2(
-								request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
+						editbanner.getDetillist().get(i).setLinkName(XssEscapeUtils.jsoupParse(linkName));
+						editbanner.getDetillist().get(i).setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+						editbanner.getDetillist().get(i).setText1(XssEscapeUtils.jsoupParse(text1));
+						editbanner.getDetillist().get(i).setText2(XssEscapeUtils.jsoupParse(text2));
 
 						if (languagesList.get(i).getLanguagesId() == 1) {
-							editbanner.setLinkName(
-									request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
-							editbanner.setSliderName(
-									request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
-							editbanner.setText1(
-									request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
-							editbanner.setText2(
-									request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
+							
+							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+							linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+							text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
+							text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+							
+							editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
+							editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+							editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
+							editbanner.setText2(XssEscapeUtils.jsoupParse(text2));
 						}
 
 					}
