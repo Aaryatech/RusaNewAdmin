@@ -624,7 +624,7 @@ public class AddContentController {
 				String resAns = XssEscapeUtils
 						.jsoupParseClean(request.getParameter("ans" + languagesList.get(i).getLanguagesId()));
 				
-				if (FormValidation.Validaton(resFaq, "") == true || FormValidation.Validaton(resAns, "") == true) {
+				if (FormValidation.Validaton(resFaq, "") == true) {
 					ret = true;
 					break;
 				}
