@@ -625,19 +625,19 @@ public class AddContentController {
 
 			for (int i = 0; i < languagesList.size(); i++) {
 				String resFaq = XssEscapeUtils
-						.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()));
+						.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
 				String resAns = XssEscapeUtils
-						.jsoupParseClean(request.getParameter("ans" + languagesList.get(i).getLanguagesId()));
+						.jsoupParseClean(request.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
 				
-				if (FormValidation.Validaton(resFaq, "") == true) {
+				if (FormValidation.Validaton(resFaq, "") == true || FormValidation.Validaton(resAns, "") == true) {
 					ret = true;
 					break;
 				}
 			 
 				FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
 				freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				freqAskQueDescription.setFaqQue(resFaq.trim().replaceAll("[ ]{2,}", " "));
-				freqAskQueDescription.setFaqAns(resAns);
+				freqAskQueDescription.setFaqQue(XssEscapeUtils.jsoupParse(resFaq));
+				freqAskQueDescription.setFaqAns(XssEscapeUtils.jsoupParseClean(resAns));
 				freqAskQueDescriptionList.add(freqAskQueDescription);
 			}
 			if (ret == false) {

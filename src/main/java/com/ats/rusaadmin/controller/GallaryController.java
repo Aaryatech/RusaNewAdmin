@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
@@ -92,7 +93,7 @@ public class GallaryController {
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-
+			String catName = null;
 			List<GallaryCategoryDescriptioin> gallaryCategoryDescriptioinList = new ArrayList<GallaryCategoryDescriptioin>();
 
 			if (catId == "" || catId == null) {
@@ -100,9 +101,9 @@ public class GallaryController {
 				editGallaryCategory.setAddDate(sf.format(date));
 
 				for (int i = 0; i < languagesList.size(); i++) {
-
-					if (FormValidation.Validaton(
-							request.getParameter("catName" + languagesList.get(i).getLanguagesId()), "") == true) {
+					catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
+							.replaceAll("[ ]{2,}", " ");
+					if (FormValidation.Validaton(catName, "") == true) {
 
 						ret = true;
 						break;
@@ -110,15 +111,12 @@ public class GallaryController {
 
 					GallaryCategoryDescriptioin gallaryCategoryDescriptioin = new GallaryCategoryDescriptioin();
 					gallaryCategoryDescriptioin.setLanguageId(languagesList.get(i).getLanguagesId());
-					gallaryCategoryDescriptioin
-							.setCateName(request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
-									.replaceAll("[ ]{2,}", " "));
+					gallaryCategoryDescriptioin.setCateName(XssEscapeUtils.jsoupParse(catName));
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
-
-						editGallaryCategory
-								.setCateName(request.getParameter("catName" + languagesList.get(i).getLanguagesId())
-										.trim().replaceAll("[ ]{2,}", " "));
+						catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId())
+								.trim().replaceAll("[ ]{2,}", " ");
+						editGallaryCategory.setCateName(catName);
 
 						String text = editGallaryCategory.getCateName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
@@ -137,28 +135,21 @@ public class GallaryController {
 				editGallaryCategory.setAddDate(DateConvertor.convertToYMD(editGallaryCategory.getAddDate()));
 
 				for (int i = 0; i < editGallaryCategory.getGallaryCategoryDescriptioinList().size(); i++) {
-
-					if (FormValidation.Validaton(
-							request.getParameter("catName"
-									+ editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId()),
-							"") == true) {
-
+					catName = request.getParameter("catName"
+							+ editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " ");
+					if (FormValidation.Validaton(catName,"") == true) {
 						ret = true;
 						break;
 					}
 
-					editGallaryCategory.getGallaryCategoryDescriptioinList().get(i)
-							.setCateName(request.getParameter("catName"
-									+ editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
-									.trim().replaceAll("[ ]{2,}", " "));
+					editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).setCateName(XssEscapeUtils.jsoupParse(catName));
 
 					if (editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId() == 1) {
-
+						catName = request.getParameter("catName" + editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " ");
 						editGallaryCategory
-								.setCateName(request
-										.getParameter("catName" + editGallaryCategory
-												.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
-										.trim().replaceAll("[ ]{2,}", " "));
+								.setCateName(XssEscapeUtils.jsoupParse(catName));
 						String text = editGallaryCategory.getCateName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						// System.out.println(text);
