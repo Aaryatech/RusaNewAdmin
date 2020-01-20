@@ -1964,7 +1964,7 @@ public class ContentModuleController {
 
 			String catId = request.getParameter("cateId");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			String titleName = request.getParameter("titleName");
+			String titleName = XssEscapeUtils.jsoupParse(request.getParameter("titleName").trim().replaceAll("[ ]{2,}", " "));
 			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
 			// int
 			// galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
@@ -1975,7 +1975,7 @@ public class ContentModuleController {
 
 			if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("titleName"), "") == true) {
+					|| FormValidation.Validaton(titleName, "") == true) {
 
 				ret = true;
 			}
@@ -1989,13 +1989,13 @@ public class ContentModuleController {
 				String vedioUrl = request.getParameter("vedioUrl");
 				editGalleryDetail.setFileName(vedioUrl.trim().replaceAll("[ ]{2,}", " "));
 			} else {
-				String vedioCode = request.getParameter("vedioCode");
-				editGalleryDetail.setFileName(vedioCode.trim().replaceAll("[ ]{2,}", " "));
+				String vedioCode = XssEscapeUtils.jsoupParse(request.getParameter("vedioCode").trim().replaceAll("[ ]{2,}", " "));
+				editGalleryDetail.setFileName(vedioCode);
 			}
 			editGalleryDetail.setPageId(pageId);
 			editGalleryDetail.setTypeVideoImage("4");
 
-			editGalleryDetail.setTitle(titleName.trim().replaceAll("[ ]{2,}", " "));
+			editGalleryDetail.setTitle(titleName);
 			editGalleryDetail.setGalleryCatId(Integer.parseInt(catId));
 			editGalleryDetail.setIsActive(isActive);
 			editGalleryDetail.setDelStatus(1);

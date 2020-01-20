@@ -346,28 +346,29 @@ public class AddContentController {
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
 			VpsImageUpload upload = new VpsImageUpload();
+			
+			String heading = null;
+			String smallHeading = null;
+			String content = null;
 
 			for (int i = 0; i < editCMSPages.getDetailList().size(); i++) {
-
-				if (FormValidation.Validaton(
-						request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()),
-						"") == true) {
+				heading = XssEscapeUtils.jsoupParse(request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				
+				smallHeading = XssEscapeUtils.jsoupParse(request.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				
+				content = XssEscapeUtils.jsoupParseClean(request.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				if (FormValidation.Validaton(heading,"") == true) {
 
 					ret = true;
 					break;
 				}
 
-				editCMSPages.getDetailList().get(i).setHeading(
-						request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				editCMSPages.getDetailList().get(i)
-						.setSmallheading(request
-								.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				editCMSPages.getDetailList().get(i)
-						.setPageDesc(request
-								.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
+				editCMSPages.getDetailList().get(i).setHeading(heading);
+				editCMSPages.getDetailList().get(i).setSmallheading(smallHeading);
+				editCMSPages.getDetailList().get(i).setPageDesc(content);
 				editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
 			}
 
@@ -819,22 +820,20 @@ public class AddContentController {
 				ret = true;
 			}
 
+			
 			for (int i = 0; i < editFreqAskQue.getDescriptionList().size(); i++) {
 
-				if (FormValidation.Validaton(
-						request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()),
-						"") == true) {
+				String question = XssEscapeUtils.jsoupParse(request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				String answer = XssEscapeUtils.jsoupParseClean(request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim()
+						.replaceAll("[ ]{2,}", " "));
+				if (FormValidation.Validaton(question,	"") == true) {
 					ret = true;
 					break;
 				}
 
-				editFreqAskQue.getDescriptionList().get(i)
-						.setFaqQue(request
-								.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				editFreqAskQue.getDescriptionList().get(i).setFaqAns(
-						request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim()
-								.replaceAll("[ ]{2,}", " "));
+				editFreqAskQue.getDescriptionList().get(i).setFaqQue(question);
+				editFreqAskQue.getDescriptionList().get(i).setFaqAns(answer);
 
 			}
 			if (ret == false) {
