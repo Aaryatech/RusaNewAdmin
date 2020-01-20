@@ -205,18 +205,18 @@ public class AddContentController {
 			VpsImageUpload upload = new VpsImageUpload();
 
 			for (int i = 0; i < languagesList.size(); i++) {
-				
+
 				String head1 = request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim()
-				.replaceAll("[ ]{2,}", " ");
-				
+						.replaceAll("[ ]{2,}", " ");
+
 				String head2 = request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
 						.replaceAll("[ ]{2,}", " ");
-				
+
 				String pageDesc = request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
 						.trim().replaceAll("[ ]{2,}", " ");
-				
-				if (FormValidation.Validaton(head1,"") == true || FormValidation.Validaton(head2,"") == true
-						|| FormValidation.Validaton(pageDesc,"") == true) {
+
+				if (FormValidation.Validaton(head1, "") == true || FormValidation.Validaton(head2, "") == true
+						|| FormValidation.Validaton(pageDesc, "") == true) {
 
 					ret = true;
 					break;
@@ -224,11 +224,11 @@ public class AddContentController {
 
 				CMSPageDescription cMSPageDescription = new CMSPageDescription();
 				cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				
+
 				cMSPageDescription.setHeading(XssEscapeUtils.jsoupParse(head1));
 				cMSPageDescription.setSmallheading(XssEscapeUtils.jsoupParse(head2));
 				cMSPageDescription.setPageDesc(XssEscapeUtils.jsoupParseClean(pageDesc));
-				
+
 				cMSPageDescription.setDateTransaction(sf.format(date));
 				cMSPageDescriptionList.add(cMSPageDescription);
 
@@ -243,9 +243,12 @@ public class AddContentController {
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						cMSPages.setFeaturedImage(imageName);
+
+						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+						if (info.isError() == false) {
+							cMSPages.setFeaturedImage(imageName);
+						}
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -261,8 +264,13 @@ public class AddContentController {
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						cMSPages.setDownloadPdf(pdfName);
+						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+								pdfName);
+
+						if (info.isError() == false) {
+							cMSPages.setDownloadPdf(pdfName);
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -398,9 +406,11 @@ public class AddContentController {
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						editCMSPages.setFeaturedImage(imageName);
+						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+						if (info.isError() == false) {
+							editCMSPages.setFeaturedImage(imageName);
+						}
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -437,8 +447,12 @@ public class AddContentController {
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						editCMSPages.setDownloadPdf(pdfName);
+						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+								pdfName);
+						if (info.isError() == false) {
+							editCMSPages.setDownloadPdf(pdfName);
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -625,15 +639,16 @@ public class AddContentController {
 
 			for (int i = 0; i < languagesList.size(); i++) {
 				String resFaq = XssEscapeUtils
-						.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-				String resAns = XssEscapeUtils
-						.jsoupParseClean(request.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-				
+						.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				String resAns = XssEscapeUtils.jsoupParseClean(request
+						.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
+
 				if (FormValidation.Validaton(resFaq, "") == true || FormValidation.Validaton(resAns, "") == true) {
 					ret = true;
 					break;
 				}
-			 
+
 				FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
 				freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
 				freqAskQueDescription.setFaqQue(XssEscapeUtils.jsoupParse(resFaq));
