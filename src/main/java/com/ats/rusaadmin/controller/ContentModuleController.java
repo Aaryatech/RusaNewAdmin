@@ -57,7 +57,6 @@ public class ContentModuleController {
 	List<NewsBlog> newsBlogList = new ArrayList<NewsBlog>();
 	GallaryDetail editGalleryDetail = new GallaryDetail();
 
-
 	@RequestMapping(value = "textimonialForm/{pageId}/{moduleId}", method = RequestMethod.GET)
 	public ModelAndView textimonialForm(@PathVariable int pageId, @PathVariable int moduleId,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -68,7 +67,7 @@ public class ContentModuleController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
 			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
-		
+
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
 			model.addObject("moduleId", moduleId);
@@ -96,7 +95,7 @@ public class ContentModuleController {
 //1 time
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			//String formName = request.getParameter("form_name");
+			// String formName = request.getParameter("form_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int id = Integer.parseInt(request.getParameter("id"));
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
@@ -105,75 +104,82 @@ public class ContentModuleController {
 
 			//
 			boolean ret = false;
-			/*if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true
-					|| FormValidation.Validaton(request.getParameter("status"), "") == true
-					|| FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
-
-				ret = true;
-			}*/
+			/*
+			 * if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true ||
+			 * FormValidation.Validaton(request.getParameter("status"), "") == true ||
+			 * FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
+			 * 
+			 * ret = true; }
+			 */
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
- 			Date date = new Date();
+			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			List<TestimonialDetail> newsBlogDescriptionList = new ArrayList<TestimonialDetail>();
-			
+
 			String formName = null;
 			String designation = null;
 			String location = null;
 			String message = null;
 			for (int i = 0; i < languagesList.size(); i++) {
 
-				int lanId=languagesList.get(i).getLanguagesId();
-				formName = XssEscapeUtils.jsoupParse(request.getParameter("form_name"+languagesList.get(i).getLanguagesId()));
-				designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				location = XssEscapeUtils.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				
-				
-				
-				if(lanId==1) {
+				int lanId = languagesList.get(i).getLanguagesId();
+				formName = XssEscapeUtils
+						.jsoupParse(request.getParameter("form_name" + languagesList.get(i).getLanguagesId()));
+				designation = XssEscapeUtils
+						.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				location = XssEscapeUtils
+						.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+
+				if (lanId == 1) {
 					editTestImonial.setDesignation(designation);
 					editTestImonial.setLocation(location);
 					editTestImonial.setFromName(formName);
-					if (formType== 1) {
-						message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
+					if (formType == 1) {
+						message = XssEscapeUtils
+								.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId())
+										.trim().replaceAll("[ ]{2,}", " "));
 						editTestImonial.setMessage(message);
 					} else {
-						message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+						message = XssEscapeUtils.jsoupParseClean(
+								request.getParameter("message" + languagesList.get(i).getLanguagesId()));
 						editTestImonial.setMessage(message);
 					}
 				}
-				
+
 				TestimonialDetail newsBlogDescription = new TestimonialDetail();
-				
-				designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				location = XssEscapeUtils.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				
+
+				designation = XssEscapeUtils
+						.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				location = XssEscapeUtils
+						.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+
 				newsBlogDescription.setLangId(languagesList.get(i).getLanguagesId());
 				newsBlogDescription.setDesignation(designation);
 				newsBlogDescription.setFromName(formName);
 				newsBlogDescription.setLocation(location);
-				 
 
-				if (formType== 1) {
-					message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
-							.replaceAll("[ ]{2,}", " "));
+				if (formType == 1) {
+					message = XssEscapeUtils
+							.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
 					newsBlogDescription.setMessage(message);
 				} else {
-					message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+					message = XssEscapeUtils
+							.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
 					newsBlogDescription.setMessage(message);
 				}
-				
+
 				newsBlogDescription.setAddDate(sf.format(date));
 				newsBlogDescription.setAddedByUserId(UserDetail.getUserId());
 				newsBlogDescription.setDelStatus(1);
- 				newsBlogDescription.setExInt2(1);
- 				newsBlogDescription.setExInt1(formType);
+				newsBlogDescription.setExInt2(1);
+				newsBlogDescription.setExInt1(formType);
 				newsBlogDescription.setExVar1("NA");
 				newsBlogDescription.setExVar2("NA");
 				newsBlogDescription.setFromName(formName);
@@ -182,7 +188,7 @@ public class ContentModuleController {
 				newsBlogDescriptionList.add(newsBlogDescription);
 			}
 
-		//System.out.println("detail lis==="+newsBlogDescriptionList.toString());
+			// System.out.println("detail lis==="+newsBlogDescriptionList.toString());
 
 			VpsImageUpload upload = new VpsImageUpload();
 			if (ret == false) {
@@ -238,14 +244,13 @@ public class ContentModuleController {
 				editTestImonial.setDelStatus(1);
 				editTestImonial.setAddDate(sf.format(date));
 				editTestImonial.setSortNo(sortNo);
-				//editTestImonial.setFromName(formName);
+				// editTestImonial.setFromName(formName);
 				editTestImonial.setDetailList(newsBlogDescriptionList);
 				editTestImonial.setExInt1(formType);
 
-			//	System.out.println("textImonial" + editTestImonial);
-				TestImonial res = Constant.getRestTemplate().postForObject(Constant.url + "/saveTestinomialsHeaderAndDetail",
-						editTestImonial, TestImonial.class);		
- 
+				// System.out.println("textImonial" + editTestImonial);
+				TestImonial res = Constant.getRestTemplate().postForObject(
+						Constant.url + "/saveTestinomialsHeaderAndDetail", editTestImonial, TestImonial.class);
 
 				if (res != null && isEdit == 0) {
 
@@ -280,18 +285,19 @@ public class ContentModuleController {
 		return "redirect:/sectionTreeList";
 
 	}
+
 	@RequestMapping(value = "/editTestImonial/{id}", method = RequestMethod.GET)
 	public ModelAndView editTestImonial1(@PathVariable("id") int id, HttpServletRequest request,
 			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("moduleForms/editTestinomial");
 		try {
-			//System.out.println("id" + newsblogsId);
+			// System.out.println("id" + newsblogsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
- 			editTestImonial = Constant.getRestTemplate().postForObject(Constant.url + "/getTestinomialHeadDetById", map,
+			editTestImonial = Constant.getRestTemplate().postForObject(Constant.url + "/getTestinomialHeadDetById", map,
 					TestImonial.class);
-			//System.out.println("Page ID: " + editNewsBlog.getPageId());
+			// System.out.println("Page ID: " + editNewsBlog.getPageId());
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
@@ -354,8 +360,8 @@ public class ContentModuleController {
 			model.addObject("isEdit", 1);
 			model.addObject("moduleId", editTestImonial.getSectionId());
 			// ------------------------------------------------------------------------------------------------------
-		///	System.err.println("nonSelectedSection" + nonSelectedSection.toString());
-			//System.err.println("selectedSection" + selectedSection.toString());
+			/// System.err.println("nonSelectedSection" + nonSelectedSection.toString());
+			// System.err.println("selectedSection" + selectedSection.toString());
 
 			model.addObject("languagesList", languagesList);
 			model.addObject("editTestImonial", editTestImonial);
@@ -368,12 +374,11 @@ public class ContentModuleController {
 		}
 
 		return model;
-	} 
-	
+	}
 
 	@RequestMapping(value = "/insertTestimonialEditForm", method = RequestMethod.POST)
-	public String insertTestimonialEditForm(@RequestParam("images") List<MultipartFile> images, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String insertTestimonialEditForm(@RequestParam("images") List<MultipartFile> images,
+			HttpServletRequest request, HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		HttpSession session = request.getSession();
@@ -381,13 +386,13 @@ public class ContentModuleController {
 //1 time
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			//String formName = request.getParameter("form_name");
+			// String formName = request.getParameter("form_name");
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int id = Integer.parseInt(request.getParameter("id"));
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 			int formType = Integer.parseInt(request.getParameter("formType"));
-			
+
 			String formName = null;
 			String designation = null;
 			String location = null;
@@ -395,64 +400,73 @@ public class ContentModuleController {
 
 			//
 			boolean ret = false;
-			/*if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true
-					|| FormValidation.Validaton(request.getParameter("status"), "") == true
-					|| FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
-
-				ret = true;
-			}*/
+			/*
+			 * if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true ||
+			 * FormValidation.Validaton(request.getParameter("status"), "") == true ||
+			 * FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
+			 * 
+			 * ret = true; }
+			 */
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
- 			Date date = new Date();
+			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			List<TestimonialDetail> newsBlogDescriptionList = new ArrayList<TestimonialDetail>();
 
 			for (int i = 0; i < editTestImonial.getDetailList().size(); i++) {
-				
-				int lanId=editTestImonial.getDetailList().get(i).getLangId();
-				formName = XssEscapeUtils.jsoupParse(request.getParameter("form_name"+languagesList.get(i).getLanguagesId()));
-				
-				if(lanId==1) {
-					designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
-							.trim().replaceAll("[ ]{2,}", " "));
-					location =  XssEscapeUtils.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId())
-							.trim().replaceAll("[ ]{2,}", " "));
+
+				int lanId = editTestImonial.getDetailList().get(i).getLangId();
+				formName = XssEscapeUtils
+						.jsoupParse(request.getParameter("form_name" + languagesList.get(i).getLanguagesId()));
+
+				if (lanId == 1) {
+					designation = XssEscapeUtils
+							.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
+					location = XssEscapeUtils
+							.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 					editTestImonial.setDesignation(designation);
 					editTestImonial.setLocation(location);
 					editTestImonial.setFromName(formName);
-					
-					if (formType== 1) {
-						message = XssEscapeUtils.jsoupParse(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
+
+					if (formType == 1) {
+						message = XssEscapeUtils
+								.jsoupParse(request.getParameter("message" + languagesList.get(i).getLanguagesId())
+										.trim().replaceAll("[ ]{2,}", " "));
 						editTestImonial.setMessage(message);
 					} else {
-						message = XssEscapeUtils.jsoupParse(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+						message = XssEscapeUtils
+								.jsoupParse(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
 						editTestImonial.setMessage(message);
 					}
 				}
 
-				designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + editTestImonial.getDetailList().get(i).getLangId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				location = XssEscapeUtils.jsoupParse(request.getParameter("location" + editTestImonial.getDetailList().get(i).getLangId())
-						.trim().replaceAll("[ ]{2,}", " "));
+				designation = XssEscapeUtils.jsoupParse(
+						request.getParameter("designation" + editTestImonial.getDetailList().get(i).getLangId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				location = XssEscapeUtils.jsoupParse(
+						request.getParameter("location" + editTestImonial.getDetailList().get(i).getLangId()).trim()
+								.replaceAll("[ ]{2,}", " "));
 				editTestImonial.getDetailList().get(i).setLangId(editTestImonial.getDetailList().get(i).getLangId());
 				editTestImonial.getDetailList().get(i).setDesignation(designation);
-				 
 
 				editTestImonial.getDetailList().get(i).setLocation(location);
 
 				editTestImonial.getDetailList().get(i).setExInt1(formType);
 
 				if (Integer.parseInt(request.getParameter("formType")) == 1) {
-					message = XssEscapeUtils.jsoupParse(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()).trim()
-							.replaceAll("[ ]{2,}", " "));
+					message = XssEscapeUtils.jsoupParse(
+							request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 					editTestImonial.getDetailList().get(i).setMessage(message);
 				} else {
-					message = XssEscapeUtils.jsoupParse(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()));
+					message = XssEscapeUtils.jsoupParse(
+							request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()));
 					editTestImonial.getDetailList().get(i).setMessage(message);
 				}
-				
+
 				editTestImonial.getDetailList().get(i).setAddDate(sf.format(date));
 				editTestImonial.getDetailList().get(i).setAddedByUserId(UserDetail.getUserId());
 				editTestImonial.getDetailList().get(i).setDelStatus(1);
@@ -465,7 +479,7 @@ public class ContentModuleController {
 				newsBlogDescriptionList.add(editTestImonial.getDetailList().get(i));
 			}
 
-		//System.out.println("detail lis==="+newsBlogDescriptionList.toString());
+			// System.out.println("detail lis==="+newsBlogDescriptionList.toString());
 
 			VpsImageUpload upload = new VpsImageUpload();
 			if (ret == false) {
@@ -521,14 +535,13 @@ public class ContentModuleController {
 				editTestImonial.setDelStatus(1);
 				editTestImonial.setAddDate(sf.format(date));
 				editTestImonial.setSortNo(sortNo);
-				//editTestImonial.setFromName(formName);
+				// editTestImonial.setFromName(formName);
 				editTestImonial.setDetailList(newsBlogDescriptionList);
 				editTestImonial.setExInt1(formType);
 
-			//	System.out.println("textImonial" + editTestImonial);
-				TestImonial res = Constant.getRestTemplate().postForObject(Constant.url + "/saveTestinomialsHeaderAndDetail",
-						editTestImonial, TestImonial.class);		
- 
+				// System.out.println("textImonial" + editTestImonial);
+				TestImonial res = Constant.getRestTemplate().postForObject(
+						Constant.url + "/saveTestinomialsHeaderAndDetail", editTestImonial, TestImonial.class);
 
 				if (res != null && isEdit == 0) {
 
@@ -564,7 +577,6 @@ public class ContentModuleController {
 
 	}
 
-	 
 	@RequestMapping(value = "/editTestImonial1/{id}", method = RequestMethod.GET)
 	public ModelAndView editTestImonial(@PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -779,7 +791,7 @@ public class ContentModuleController {
 			}
 			String items = sb.toString();
 			items = items.substring(0, items.length() - 1);
-			//System.out.println("items :" + items);
+			// System.out.println("items :" + items);
 			Boolean ret = false;
 
 			if (FormValidation.Validaton(request.getParameter("url_name"), "") == true
@@ -849,9 +861,12 @@ public class ContentModuleController {
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						newsBlog.setFeaturedImage(imageName);
+						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+						if (info.isError() == false) {
+							newsBlog.setFeaturedImage(imageName);
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -867,8 +882,12 @@ public class ContentModuleController {
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						newsBlog.setDownloadPdf(pdfName);
+						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+								pdfName);
+						if (info.isError() == false) {
+							newsBlog.setDownloadPdf(pdfName);
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -890,7 +909,7 @@ public class ContentModuleController {
 				newsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 				newsBlog.setDetailList(newsBlogDescriptionList);
 
-				//System.out.println("newsBlog" + newsBlog);
+				// System.out.println("newsBlog" + newsBlog);
 				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
 						newsBlog, NewsBlog.class);
 
@@ -903,7 +922,7 @@ public class ContentModuleController {
 					pagesModule.setModuleId(9);
 					PagesModule pagesModuleres = Constant.getRestTemplate()
 							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					//System.out.println("pagesModuleres " + pagesModuleres);
+					// System.out.println("pagesModuleres " + pagesModuleres);
 				}
 				if (res != null) {
 
@@ -946,7 +965,7 @@ public class ContentModuleController {
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 
-			//System.out.println("onHomePage :" + onHomePage);
+			// System.out.println("onHomePage :" + onHomePage);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < itemShow.length; i++) {
 				sb = sb.append(itemShow[i] + ",");
@@ -992,7 +1011,7 @@ public class ContentModuleController {
 					ret = true;
 					break;
 				}
-				
+
 				editNewsBlog.getDetailList().get(i).setHeading(
 						request.getParameter("heading1" + editNewsBlog.getDetailList().get(i).getLanguageId()).trim()
 								.replaceAll("[ ]{2,}", " "));
@@ -1017,7 +1036,7 @@ public class ContentModuleController {
 
 			if (ret == false) {
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					//System.out.println("in image null");
+					// System.out.println("in image null");
 					try {
 
 						if (remove == 1) {
@@ -1033,7 +1052,7 @@ public class ContentModuleController {
 								System.out.println(
 										"doesn't exists  " + Constant.gallryImageURL + editNewsBlog.getFeaturedImage());
 
-						//	System.out.println("Remove :" + remove);
+							// System.out.println("Remove :" + remove);
 							editNewsBlog.setFeaturedImage("");
 						}
 					} catch (Exception e) {
@@ -1046,9 +1065,12 @@ public class ContentModuleController {
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						editNewsBlog.setFeaturedImage(imageName);
+						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+						if (info.isError() == false) {
+							editNewsBlog.setFeaturedImage(imageName);
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -1070,7 +1092,7 @@ public class ContentModuleController {
 								System.out
 										.println("doesn't exists  " + Constant.cmsPdf + editNewsBlog.getDownloadPdf());
 
-							//System.out.println("Remove :" + removePdf);
+							// System.out.println("Remove :" + removePdf);
 							editNewsBlog.setDownloadPdf("");
 						}
 					} catch (Exception e) {
@@ -1083,8 +1105,12 @@ public class ContentModuleController {
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						editNewsBlog.setDownloadPdf(pdfName);
+						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+								pdfName);
+
+						if (info.isError() == false) {
+							editNewsBlog.setDownloadPdf(pdfName);
+						}
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -1102,7 +1128,7 @@ public class ContentModuleController {
 				editNewsBlog.setEditDate(sf.format(date));
 				editNewsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 
-				//System.out.println("editNewsBlog" + editNewsBlog);
+				// System.out.println("editNewsBlog" + editNewsBlog);
 				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
 						editNewsBlog, NewsBlog.class);
 				if (res != null) {
@@ -1153,13 +1179,13 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/editNewsContent");
 		try {
-			//System.out.println("id" + newsblogsId);
+			// System.out.println("id" + newsblogsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 
 			editNewsBlog = Constant.getRestTemplate().postForObject(Constant.url + "/getNewsPagebyId", map,
 					NewsBlog.class);
-			//System.out.println("Page ID: " + editNewsBlog.getPageId());
+			// System.out.println("Page ID: " + editNewsBlog.getPageId());
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
@@ -1219,8 +1245,8 @@ public class ContentModuleController {
 			model.addObject("nonSelectedSection", nonSelectedSection);
 			model.addObject("selectedSection", selectedSection);
 			// ------------------------------------------------------------------------------------------------------
-		///	System.err.println("nonSelectedSection" + nonSelectedSection.toString());
-			//System.err.println("selectedSection" + selectedSection.toString());
+			/// System.err.println("nonSelectedSection" + nonSelectedSection.toString());
+			// System.err.println("selectedSection" + selectedSection.toString());
 
 			model.addObject("languagesList", languagesList);
 			model.addObject("editNewsBlog", editNewsBlog);
@@ -1381,9 +1407,12 @@ public class ContentModuleController {
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 					// System.out.println("date" + imageName);
 					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						newsBlog.setFeaturedImage(imageName);
+						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+						if (info.isError() == false) {
+							newsBlog.setFeaturedImage(imageName);
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -1398,8 +1427,11 @@ public class ContentModuleController {
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						newsBlog.setDownloadPdf(pdfName);
+						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+								pdfName);
+						if (info.isError() == false) {
+							newsBlog.setDownloadPdf(pdfName);
+						}
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -1550,7 +1582,7 @@ public class ContentModuleController {
 
 			if (ret == false) {
 				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					//System.out.println("in image null");
+					// System.out.println("in image null");
 					try {
 
 						if (remove == 1) {
@@ -1579,9 +1611,11 @@ public class ContentModuleController {
 					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						editNewsBlog.setFeaturedImage(imageName);
+						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+						if (info.isError() == false) {
+							editNewsBlog.setFeaturedImage(imageName);
+						}
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -1616,8 +1650,11 @@ public class ContentModuleController {
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
 					try {
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
-						editNewsBlog.setDownloadPdf(pdfName);
+						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+								pdfName);
+						if (info.isError() == false) {
+							editNewsBlog.setDownloadPdf(pdfName);
+						}
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
@@ -1637,7 +1674,7 @@ public class ContentModuleController {
 				editNewsBlog.setEventContactPerson(personName.trim().replaceAll("[ ]{2,}", " "));
 				editNewsBlog.setEventDateFrom(DateConvertor.convertToYMD(eventDate));
 				editNewsBlog.setEventLocation(location.trim().replaceAll("[ ]{2,}", " "));
-				//editNewsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
+				// editNewsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
 				editNewsBlog.setExInt1(11);
 				editNewsBlog.setExInt2(doc);
 				if (doc == 1) {
@@ -1651,7 +1688,7 @@ public class ContentModuleController {
 				editNewsBlog.setEditDate(sf.format(date));
 				editNewsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
 
-			//	System.out.println("editNewsBlog" + editNewsBlog);
+				// System.out.println("editNewsBlog" + editNewsBlog);
 				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
 						editNewsBlog, NewsBlog.class);
 
@@ -1704,13 +1741,13 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/editEventContent");
 		try {
-			//System.out.println("id" + newsblogsId);
+			// System.out.println("id" + newsblogsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 
 			editNewsBlog = Constant.getRestTemplate().postForObject(Constant.url + "/getNewsPagebyId", map,
 					NewsBlog.class);
-			//System.out.println("Page ID: " + editNewsBlog.getPageId());
+			// System.out.println("Page ID: " + editNewsBlog.getPageId());
 			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
 					Languages[].class);
 			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
@@ -1802,7 +1839,7 @@ public class ContentModuleController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", pageId);
 			page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
-			//System.out.println("Page List: " + page.toString());
+			// System.out.println("Page List: " + page.toString());
 			model.addObject("page", page);
 			model.addObject("isEdit", 0);
 			map = new LinkedMultiValueMap<String, Object>();
@@ -1810,7 +1847,7 @@ public class ContentModuleController {
 			GallaryCategory[] category = Constant.getRestTemplate()
 					.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
-			//System.out.println("" + categoryList.toString());
+			// System.out.println("" + categoryList.toString());
 			model.addObject("categoryList", categoryList);
 
 		} catch (Exception e) {
@@ -1830,7 +1867,8 @@ public class ContentModuleController {
 
 			String catId = request.getParameter("cateId");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			String titleName = XssEscapeUtils.jsoupParse(request.getParameter("titleName").trim().replaceAll("[ ]{2,}", " "));
+			String titleName = XssEscapeUtils
+					.jsoupParse(request.getParameter("titleName").trim().replaceAll("[ ]{2,}", " "));
 			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
@@ -1854,7 +1892,8 @@ public class ContentModuleController {
 				String vedioUrl = request.getParameter("vedioUrl");
 				gallaryDetail.setFileName(vedioUrl.trim().replaceAll("[ ]{2,}", " "));
 			} else {
-				String vedioCode = XssEscapeUtils.jsoupParse(request.getParameter("vedioCode").trim().replaceAll("[ ]{2,}", " "));
+				String vedioCode = XssEscapeUtils
+						.jsoupParse(request.getParameter("vedioCode").trim().replaceAll("[ ]{2,}", " "));
 				gallaryDetail.setFileName(vedioCode);
 			}
 			gallaryDetail.setPageId(pageId);
@@ -2001,23 +2040,23 @@ public class ContentModuleController {
 
 		ModelAndView model = new ModelAndView("moduleForms/editVideoGallery");
 		try {
-			//System.out.println("id" + galleryDetailsId);
+			// System.out.println("id" + galleryDetailsId);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryDetailsId", galleryDetailsId);
 
 			editGalleryDetail = Constant.getRestTemplate().postForObject(Constant.url + "/getListByGalleryId", map,
 					GallaryDetail.class);
-		//	System.out.println("Page ID: " + editNewsBlog.getPageId());
+			// System.out.println("Page ID: " + editNewsBlog.getPageId());
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("pageId", editGalleryDetail.getPageId());
 			Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
 
-			//System.out.println("List : " + editNewsBlog.toString());
+			// System.out.println("List : " + editNewsBlog.toString());
 			GallaryCategory[] category = Constant.getRestTemplate()
 					.getForObject(Constant.url + "/getGalleryCategoryList", GallaryCategory[].class);
 			List<GallaryCategory> categoryList = new ArrayList<GallaryCategory>(Arrays.asList(category));
-			//System.out.println("" + categoryList.toString());
+			// System.out.println("" + categoryList.toString());
 			// editNewsBlog.setAddDate(DateConvertor.convertToDMY(editNewsBlog.getEventDateFrom()));
 			model.addObject("editGalleryDetail", editGalleryDetail);
 			model.addObject("page", page);
@@ -2063,7 +2102,7 @@ public class ContentModuleController {
 			map.add("galleryDetailsId", galleryDetailsId);
 			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map,
 					Info.class);
-			//System.out.println(res);
+			// System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();

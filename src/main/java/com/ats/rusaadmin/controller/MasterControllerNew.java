@@ -182,10 +182,13 @@ public class MasterControllerNew {
 
 					} else {
 						docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-						user.setFileName(docFile);
+
 						try {
 							Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL, docFile,
 									Constant.values, 0, 0, 0, 0, 0);
+							if (info.isError() == false) {
+								user.setFileName(docFile);
+							}
 						} catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
@@ -861,7 +864,8 @@ public class MasterControllerNew {
 			String docId = request.getParameter("docId");
 			String catId = request.getParameter("cateId");
 			// System.out.println("category: "+catId);
-			String docName = XssEscapeUtils.jsoupParse(request.getParameter("docName").trim().replaceAll("[ ]{2,}", " "));
+			String docName = XssEscapeUtils
+					.jsoupParse(request.getParameter("docName").trim().replaceAll("[ ]{2,}", " "));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
@@ -891,6 +895,8 @@ public class MasterControllerNew {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
 
+			Info info = new Info();
+
 			if (ret == false) {
 				if (docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
 					// System.out.println("id null");
@@ -904,7 +910,7 @@ public class MasterControllerNew {
 						fileType = pagePdf.get(0).getContentType();
 						editupload.setFileSize(fileSize);
 						editupload.setFileType(fileType);
-						upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
+						info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues, pdfName);
 
 					} catch (Exception e) {
 						// TODO: handle exception
@@ -929,7 +935,8 @@ public class MasterControllerNew {
 							fileType = pagePdf.get(0).getContentType();
 							editupload.setFileSize(fileSize);
 							editupload.setFileType(fileType);
-							upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, pdfName);
+							info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+									pdfName);
 						} catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
@@ -946,23 +953,29 @@ public class MasterControllerNew {
 				editupload.setIsActive(isActive);
 				editupload.setDelStatus(1);
 
-				DocumentUpload res = Constant.getRestTemplate().postForObject(Constant.url + "/saveDocumentFiles",
-						editupload, DocumentUpload.class);
-				if (res != null && isEdit == 0) {
+				if (info.isError() == false) {
 
-					PagesModule pagesModule = new PagesModule();
+					DocumentUpload res = Constant.getRestTemplate().postForObject(Constant.url + "/saveDocumentFiles",
+							editupload, DocumentUpload.class);
+					if (res != null && isEdit == 0) {
 
-					pagesModule.setPageId(pageId);
-					pagesModule.setPrimaryKeyId(res.getDocId());
-					pagesModule.setModuleId(7);
-					PagesModule pagesModuleres = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					// System.out.println("res " + res);
-				}
-				if (res.getDocId() != 0) {
+						PagesModule pagesModule = new PagesModule();
 
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+						pagesModule.setPageId(pageId);
+						pagesModule.setPrimaryKeyId(res.getDocId());
+						pagesModule.setModuleId(7);
+						PagesModule pagesModuleres = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						// System.out.println("res " + res);
+					}
+					if (res.getDocId() != 0) {
+
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Failed To  Add Infomation!");
+						session.setAttribute("errorMsg", "false");
+					}
 				} else {
 					session.setAttribute("successMsg", "Failed To  Add Infomation!");
 					session.setAttribute("errorMsg", "false");
