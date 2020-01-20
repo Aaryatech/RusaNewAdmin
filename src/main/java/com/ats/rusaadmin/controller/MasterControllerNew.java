@@ -1,6 +1,8 @@
 package com.ats.rusaadmin.controller;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,22 +104,40 @@ public class MasterControllerNew {
 		return model;
 	}
 
+	@RequestMapping(value = "/checkUserName", method = RequestMethod.POST)
+	public @ResponseBody Info checkUserName(HttpServletRequest request, HttpServletResponse response) {
+
+		Info Info = new Info();
+		try {
+
+			String userName = request.getParameter("userName");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("userName", userName);
+			Info = Constant.getRestTemplate().postForObject(Constant.url + "/checkUserName", map, Info.class);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return Info;
+	}
+
 	@RequestMapping(value = "/insertUser", method = RequestMethod.POST)
 	public String insertUser(@RequestParam("docfile") List<MultipartFile> docfile, HttpServletRequest request,
 			HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
-						
+
 			HttpSession session1 = request.getSession();
 			User UserDetail = (User) session1.getAttribute("UserDetail");
-			
+
 			String firstName = XssEscapeUtils.jsoupParse(request.getParameter("firstname"));
-			
+
 			String userId = request.getParameter("userId");
 			String userName = XssEscapeUtils.jsoupParse(request.getParameter("userName"));
 			String roles = request.getParameter("roles");
-		
+
 			String middleName = XssEscapeUtils.jsoupParse(request.getParameter("middlename"));
 			String lastName = XssEscapeUtils.jsoupParse(request.getParameter("lastname"));
 			String email = XssEscapeUtils.jsoupParse(request.getParameter("userEmail"));
@@ -132,16 +152,14 @@ public class MasterControllerNew {
 
 			Boolean ret = false;
 
-			if (FormValidation.Validaton(firstName, "") == true
-					|| FormValidation.Validaton(lastName, "") == true
+			if (FormValidation.Validaton(firstName, "") == true || FormValidation.Validaton(lastName, "") == true
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(pass, "") == true
-					|| FormValidation.Validaton(userName, "") == true
+					|| FormValidation.Validaton(pass, "") == true || FormValidation.Validaton(userName, "") == true
 					|| FormValidation.Validaton(email, "email") == true) {
 
 				ret = true;
 			}
-		//	System.out.println("userNameaa  :: "+userName);
+			// System.out.println("userNameaa :: "+userName);
 			String docFile = null;
 			VpsImageUpload upload = new VpsImageUpload();
 			Date date = new Date();
@@ -150,6 +168,10 @@ public class MasterControllerNew {
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
 			// System.out.println(sf.format(date));
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(pass.getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String password = number.toString(16);
 
 			if (ret == false) {
 				if (userId.equalsIgnoreCase(null) || userId.equalsIgnoreCase("")) {
@@ -169,15 +191,15 @@ public class MasterControllerNew {
 							e.printStackTrace();
 						}
 					}
-					
+
 					user.setUserId(0);
-					
+
 					user.setFirstname(firstName);
-					
+
 					user.setCreatedDate(sf.format(date));
-					//user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
+					// user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
 					user.setUserName(userName.trim().replaceAll("[ ]{2,}", " "));
-					
+
 					user.setMiddlename(middleName.trim().replaceAll("[ ]{2,}", " "));
 					user.setRoles(roles);
 					user.setDelStatus(1);
@@ -185,7 +207,7 @@ public class MasterControllerNew {
 					// user.setCreatedDate(sf.format(date));
 					user.setIsActive(isActive);
 					user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
-					user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
+					user.setUserPass(password);
 					user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
 					user.setAddedByUserId(UserDetail.getUserId());
 					// editbanner.setAddedByUserId(UserDetail.getUserId());
@@ -217,6 +239,7 @@ public class MasterControllerNew {
 						}
 
 					}
+
 					user.setUserId(Integer.parseInt(userId));
 					// user.setCreatedDate(sf.format(date));
 					user.setUserName(userName);
@@ -225,7 +248,7 @@ public class MasterControllerNew {
 					user.setRoles(roles);
 					user.setDelStatus(1);
 					user.setSortNo(0);
-					user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
+					user.setUserPass(password);
 					user.setIsActive(isActive);
 					user.setUserEmail(email.trim().replaceAll("[ ]{2,}", " "));
 					user.setLastname(lastName.trim().replaceAll("[ ]{2,}", " "));
@@ -238,7 +261,7 @@ public class MasterControllerNew {
 
 				System.out.println("res " + res);
 
-				if (res!=null) {
+				if (res != null) {
 					session.setAttribute("successMsg", "User Infomation added successfully!");
 					session.setAttribute("errorMsg", "false");
 				} else {
@@ -275,8 +298,14 @@ public class MasterControllerNew {
 				ret = true;
 			}
 			if (ret == false) {
+
+				MessageDigest md = MessageDigest.getInstance("MD5");
+				byte[] messageDigest = md.digest(pass.getBytes());
+				BigInteger number = new BigInteger(1, messageDigest);
+				String password = number.toString(16);
+
 				user.setUserId(Integer.parseInt(userId));
-				user.setUserPass(pass.trim().replaceAll("[ ]{2,}", " "));
+				user.setUserPass(password);
 
 				User res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUser", user, User.class);
 				// System.out.println("Id: " + userId);
@@ -408,11 +437,12 @@ public class MasterControllerNew {
 			// int pageId = Integer.parseInt(request.getParameter("pageId"));
 			Boolean ret = false;
 
-			/*if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
-					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
-
-				ret = true;
-			}*/
+			/*
+			 * if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
+			 * || FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
+			 * 
+			 * ret = true; }
+			 */
 			VpsImageUpload upload = new VpsImageUpload();
 			String docFile = null;
 
@@ -422,7 +452,7 @@ public class MasterControllerNew {
 
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
-			
+
 			String sliderName = null;
 			String linkName = null;
 			String text1 = null;
@@ -464,7 +494,7 @@ public class MasterControllerNew {
 				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
 					for (int i = 0; i < languagesList.size(); i++) {
-						
+
 						sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
 						linkName = request.getParameter("linkName" + languagesList.get(i).getLanguagesId());
 						text1 = request.getParameter("text1" + languagesList.get(i).getLanguagesId());
@@ -475,19 +505,20 @@ public class MasterControllerNew {
 						BannerDetail.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
 						BannerDetail.setText1(XssEscapeUtils.jsoupParse(text1));
 						BannerDetail.setText2(XssEscapeUtils.jsoupParse(text2));
-						
+
 						BannerDetail.setSortOrder(languagesList.get(i).getLanguagesId());
 						BannerDetail.setIsActive(1);
 						BannerDetail.setDelStatus(1);
 						editbanner.getDetillist().add(BannerDetail);
 
 						if (languagesList.get(i).getLanguagesId() == 1) {
-							
+
 							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-							linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+							linkName = request
+									.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
 							text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
 							text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
-							
+
 							editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
 							editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
 							editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
@@ -499,7 +530,7 @@ public class MasterControllerNew {
 				} else {
 
 					for (int i = 0; i < editbanner.getDetillist().size(); i++) {
-						
+
 						sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
 						linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
 						text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
@@ -511,12 +542,13 @@ public class MasterControllerNew {
 						editbanner.getDetillist().get(i).setText2(XssEscapeUtils.jsoupParse(text2));
 
 						if (languagesList.get(i).getLanguagesId() == 1) {
-							
+
 							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-							linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+							linkName = request
+									.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
 							text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
 							text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
-							
+
 							editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
 							editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
 							editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
@@ -635,7 +667,7 @@ public class MasterControllerNew {
 					editbanner.getDetillist().add(bannerDetail);
 				}
 			}
-			
+
 			System.out.println(editbanner.getDetillist());
 
 			model.addObject("editbanner", editbanner);

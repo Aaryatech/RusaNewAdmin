@@ -34,7 +34,7 @@
 
 						<div class="pull-left">
 							<!-- PAGE HEADING TAG - START -->
-							<h1 class="title">Admin </h1>
+							<h1 class="title">Admin</h1>
 							<!-- PAGE HEADING TAG - END -->
 						</div>
 
@@ -50,9 +50,9 @@
 					<section class="box ">
 
 						<header class="panel_header">
-							<h2 class="title pull-left">  
+							<h2 class="title pull-left">
 								<c:choose>
-								
+
 									<c:when test="${editUser.userId==null}">Add Admin</c:when>
 									<c:otherwise>Edit Admin</c:otherwise>
 								</c:choose>
@@ -118,10 +118,10 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="firstname" class="form-control"  onchange="trim(this)"
-													placeholder="First Name" value="${editUser.firstname}"
-													style="text-align: left;" name="firstname" type="text"
-													required>
+												<input id="firstname" class="form-control"
+													onchange="trim(this)" placeholder="First Name"
+													value="${editUser.firstname}" style="text-align: left;"
+													name="firstname" type="text" required>
 											</div>
 										</div>
 
@@ -129,9 +129,10 @@
 											<label class="control-label col-sm-2"
 												for="config_mail_protocol">Middle Name : </label>
 											<div class="col-sm-10">
-												<input id="middlename" class="form-control"  onchange="trim(this)"
-													placeholder="Middle Name" value="${editUser.middlename}"
-													style="text-align: left;" name="middlename" type="text">
+												<input id="middlename" class="form-control"
+													onchange="trim(this)" placeholder="Middle Name"
+													value="${editUser.middlename}" style="text-align: left;"
+													name="middlename" type="text">
 											</div>
 										</div>
 
@@ -141,10 +142,10 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="lastname" class="form-control"  onchange="trim(this)"
-													placeholder="Last Name" value="${editUser.lastname}"
-													style="text-align: left;" name="lastname" type="text"
-													required>
+												<input id="lastname" class="form-control"
+													onchange="trim(this)" placeholder="Last Name"
+													value="${editUser.lastname}" style="text-align: left;"
+													name="lastname" type="text" required>
 											</div>
 										</div>
 
@@ -154,27 +155,28 @@
 												class="text-danger">*</span>
 											</label>
 											<div class="col-sm-10">
-												<input id="userEmail" class="form-control"  onchange="trim(this)"
-													placeholder="Email" value="${editUser.userEmail}"
-													style="text-align: left;" name="userEmail" type="email"
-													required>
+												<input id="userEmail" class="form-control"
+													onchange="trim(this)" placeholder="Email"
+													value="${editUser.userEmail}" style="text-align: left;"
+													name="userEmail" type="email" required>
 											</div>
 										</div>
 
 										<c:choose>
 											<c:when test="${isEdit==1}">
-											     <c:if test="${not empty editUser.fileName}">
-												<div class="form-group">
-													<label class="col-md-2 control-label">Current
-														Profile Photo</label>
-													<div class="col-md-10">
-														<img src="${imageUrl}${editUser.fileName}"
-															style="width: 150px; height: auto">
-													 	<input type="checkbox" name="remove" value="1"> Remove <br>
-												</div>
-												</div>
-													</c:if>
-													<input type="hidden" name="remove" value="0"> 
+												<c:if test="${not empty editUser.fileName}">
+													<div class="form-group">
+														<label class="col-md-2 control-label">Current
+															Profile Photo</label>
+														<div class="col-md-10">
+															<img src="${imageUrl}${editUser.fileName}"
+																style="width: 150px; height: auto"> <input
+																type="checkbox" name="remove" value="1"> Remove
+															<br>
+														</div>
+													</div>
+												</c:if>
+												<input type="hidden" name="remove" value="0">
 											</c:when>
 
 
@@ -216,7 +218,7 @@
 														image size is 100px × 100px </span>
 												</div>
 											</div>
-										
+
 										</div>
 
 										<div class="form-group">
@@ -241,7 +243,7 @@
 												</select>
 											</div>
 										</div>
-										
+
 										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
 												<button type="submit" class="btn btn-primary">Submit</button>
@@ -249,104 +251,108 @@
 
 											</div>
 										</div>
-										<input id="userPass" class="form-control"  onchange="trim(this)"
-													placeholder="Password" value="${editUser.userPass}"	style="text-align: left;" 
-													name="userPass" type="hidden">
-														<input id="userName"  onchange="trim(this)" value="${editUser.userName}" name="userName" type="hidden">
+										<input id="userPass" class="form-control"
+											onchange="trim(this)" placeholder="Password"
+											value="${editUser.userPass}" style="text-align: left;"
+											name="userPass" type="hidden"> <input id="userName"
+											onchange="trim(this)" value="${editUser.userName}"
+											name="userName" type="hidden">
 									</div>
 								</div>
 							</div>
 
 
 						</form>
-								<form class="form-horizontal" id="addSupplier"
+						<form class="form-horizontal" id="addSupplier"
 							action="${pageContext.request.contextPath}/changePass"
 							method="post" enctype="multipart/form-data">
 
 							<div class="content-body">
 								<div class="row">
-										<div class="row">
-											<div class="col-xs-12">
-												<h3 class="title pull-left">LOGIN DETAIL</h3>
-											</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<h3 class="title pull-left">LOGIN DETAIL</h3>
 										</div>
-											<input id="userId" value="${editUser.userId}" name="userId"
-											type="hidden">
-										<c:choose>
-											<c:when test="${isEdit=='1'}">
-										
-												<div class="form-group">
-													<label class="control-label col-sm-2"
-														for="config_mail_protocol">User Name : <span
-														class="text-danger">*</span>
-													</label>
-													<div class="col-sm-10">
-														<input id="userName" class="form-control"  onchange="trim(this)"
-															placeholder="User Name" value="${editUser.userName}"
-															style="text-align: left;" name="userName" type="text"
-															onKeyDown="if(event.keyCode === 32) return false;"
-															readonly required>
-													</div>
-												</div>
-												</c:when>
-											<c:otherwise>
-												<div class="form-group">
-													<label class="control-label col-sm-2"
-														for="config_mail_protocol">User Name : <span
-														class="text-danger">*</span>
-													</label>
-													<div class="col-sm-10">
-														<input id="userName" class="form-control"  onchange="trim(this)"
-															placeholder="User Name" value="${editUser.userName}"
-															style="text-align: left;" name="userName" type="text"
-															onKeyDown="if(event.keyCode === 32) return false;"
-															required>
-													</div>
-												</div>
-
-											</c:otherwise>
-										</c:choose>
-
-										<div class="form-group">
-											<label class="control-label col-sm-2"
-												for="config_mail_protocol">Password : <span
-												class="text-danger">*</span>
-											</label>
-											<div class="col-sm-10">
-												<input id="userPass" class="form-control"  onchange="trim(this)"
-													placeholder="Password" value="${editUser.userPass}"
-													style="text-align: left;" name="userPass" type="password"
-													required>
-											</div>
-										</div>
-
-
-										<div class="form-group">
-											<div class="col-sm-offset-2 col-sm-10">
-												<button type="submit" class="btn btn-primary">Change</button>
-												<button type="reset" class="btn btn-default">Reset</button>
-
-											</div>
-										</div>
-
 									</div>
+									<input id="userId" value="${editUser.userId}" name="userId"
+										type="hidden">
+									<c:choose>
+										<c:when test="${isEdit=='1'}">
+
+											<div class="form-group">
+												<label class="control-label col-sm-2"
+													for="config_mail_protocol">User Name : <span
+													class="text-danger">*</span>
+												</label>
+												<div class="col-sm-10">
+													<input id="userName" class="form-control"
+														onchange="trim(this)" placeholder="User Name"
+														value="${editUser.userName}" style="text-align: left;"
+														name="userName" type="text"
+														onKeyDown="if(event.keyCode === 32) return false;"
+														readonly required>
+												</div>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="form-group">
+												<label class="control-label col-sm-2"
+													for="config_mail_protocol">User Name : <span
+													class="text-danger">*</span>
+												</label>
+												<div class="col-sm-10">
+													<input id="userName" class="form-control"
+														onchange="trim(this)" placeholder="User Name"
+														value="${editUser.userName}" style="text-align: left;"
+														name="userName" type="text"
+														onKeyDown="if(event.keyCode === 32) return false;"
+														required>
+												</div>
+											</div>
+
+										</c:otherwise>
+									</c:choose>
+
+									<div class="form-group">
+										<label class="control-label col-sm-2"
+											for="config_mail_protocol">Password : <span
+											class="text-danger">*</span>
+										</label>
+										<div class="col-sm-10">
+											<input id="userPass" class="form-control"
+												onchange="trim(this)" placeholder="Password"
+												style="text-align: left;" name="userPass" type="password"
+												required>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<div class="col-sm-offset-2 col-sm-10">
+											<button type="submit" class="btn btn-primary">Change</button>
+											<button type="reset" class="btn btn-default">Reset</button>
+
+										</div>
+									</div>
+
 								</div>
-							</form>
-						
+							</div>
+						</form>
+
 					</section>
 				</div>
 			</section>
 		</section>
 	</div>
 
-  <script>
-			function trim(el) {
-				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
-				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
-				replace(/\n +/, "\n"); // Removes spaces after newlines
-				return;
-			}
-			</script>
+	<script>
+		function trim(el) {
+			el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+			replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+			replace(/\n +/, "\n"); // Removes spaces after newlines
+			return;
+		}
+	</script>
 	<script type="text/javascript">
 		function RestrictSpace() {
 			if (event.keyCode == 32) {
