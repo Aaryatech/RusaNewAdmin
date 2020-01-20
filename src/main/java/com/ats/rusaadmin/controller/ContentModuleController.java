@@ -780,7 +780,7 @@ public class ContentModuleController {
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-			String urlName = request.getParameter("url_name");
+			 String urlName = XssEscapeUtils.jsoupParse(request.getParameter("url_name").trim().replaceAll("[ ]{2,}", " "));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
@@ -794,7 +794,7 @@ public class ContentModuleController {
 			// System.out.println("items :" + items);
 			Boolean ret = false;
 
-			if (FormValidation.Validaton(request.getParameter("url_name"), "") == true
+			if (FormValidation.Validaton(urlName, "") == true
 					|| FormValidation.Validaton(request.getParameter("status"), "") == true
 					|| FormValidation.Validaton(request.getParameter("page_order"), "") == true || items.length() < 0) {
 
@@ -811,6 +811,13 @@ public class ContentModuleController {
 
 			String text = page.getPageName();
 			text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+			
+			String heading1 = null;
+            String pageDescription = null;
+            String metaTitle = null;
+            String metaDescription = null;
+            String keyword = null;
+            
 			// System.out.println(text);
 
 			// CMSPages cMSPages = new CMSPages();
@@ -820,36 +827,38 @@ public class ContentModuleController {
 			VpsImageUpload upload = new VpsImageUpload();
 
 			for (int i = 0; i < languagesList.size(); i++) {
-
-				if (FormValidation.Validaton(request.getParameter("heading1" + languagesList.get(i).getLanguagesId()),
-						"") == true
-						|| FormValidation.Validaton(
-								request.getParameter("meta_title1" + languagesList.get(i).getLanguagesId()),
+				heading1 = XssEscapeUtils.jsoupParse(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())
+                        .trim().replaceAll("[ ]{2,}", " "));
+				 pageDescription = XssEscapeUtils.jsoupParseClean(
+	                        request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()).trim()
+	                                .replaceAll("[ ]{2,}", " "));
+	                metaTitle = XssEscapeUtils.jsoupParse(request.getParameter("meta_title1" + languagesList.get(i).getLanguagesId())
+	                        .trim().replaceAll("[ ]{2,}", " "));
+	                metaDescription = XssEscapeUtils.jsoupParse(
+	                        request.getParameter("meta_description1" + languagesList.get(i).getLanguagesId()).trim()
+	                        .replaceAll("[ ]{2,}", " "));
+	                keyword = XssEscapeUtils.jsoupParse(
+	                        request.getParameter("meta_keyword1" + languagesList.get(i).getLanguagesId()).trim()
+	                        .replaceAll("[ ]{2,}", " "));
+				
+				if (FormValidation.Validaton(heading1,"") == true || FormValidation.Validaton(metaTitle,
 								"") == true) {
 
 					ret = true;
 					break;
 				}
 
-				NewsBlogDescription newsBlogDescription = new NewsBlogDescription();
-				newsBlogDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				newsBlogDescription.setHeading(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				newsBlogDescription.setDescriptions(
-						request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				newsBlogDescription
-						.setPageMetaTitle(request.getParameter("meta_title1" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				newsBlogDescription.setPageMetaDescription(
-						request.getParameter("meta_description1" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				newsBlogDescription.setPageMetaKeyword(
-						request.getParameter("meta_keyword1" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				newsBlogDescription.setDateTransaction(sf.format(date));
-				newsBlogDescription.setExInt1(onHomePage);
-				newsBlogDescriptionList.add(newsBlogDescription);
+                
+                NewsBlogDescription newsBlogDescription = new NewsBlogDescription();
+                newsBlogDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+                newsBlogDescription.setHeading(heading1);
+                newsBlogDescription.setDescriptions(pageDescription);
+                newsBlogDescription.setPageMetaTitle(metaTitle);
+                newsBlogDescription.setPageMetaDescription(metaDescription);
+                newsBlogDescription.setPageMetaKeyword(keyword);
+                newsBlogDescription.setDateTransaction(sf.format(date));
+                newsBlogDescription.setExInt1(onHomePage);
+                newsBlogDescriptionList.add(newsBlogDescription);
 			}
 
 			if (ret == false) {
@@ -957,7 +966,7 @@ public class ContentModuleController {
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
 			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-			String urlName = request.getParameter("url_name");
+			String urlName = XssEscapeUtils.jsoupParse(request.getParameter("url_name").trim().replaceAll("[ ]{2,}", " "));
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
 			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
 			// int pageId = Integer.parseInt(request.getParameter("pageId"));
@@ -965,6 +974,13 @@ public class ContentModuleController {
 			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 
+			  	String heading1 = null;
+	            String pageDescription = null;
+	            String metaTitle = null;
+	            String metaDescription = null;
+	            String keyword = null;
+
+	            
 			// System.out.println("onHomePage :" + onHomePage);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < itemShow.length; i++) {
@@ -975,7 +991,7 @@ public class ContentModuleController {
 
 			Boolean ret = false;
 
-			if (FormValidation.Validaton(request.getParameter("url_name"), "") == true
+			if (FormValidation.Validaton(urlName, "") == true
 					|| FormValidation.Validaton(request.getParameter("status"), "") == true
 					|| FormValidation.Validaton(request.getParameter("page_order"), "") == true || items.length() < 0) {
 
@@ -1000,38 +1016,30 @@ public class ContentModuleController {
 			VpsImageUpload upload = new VpsImageUpload();
 
 			for (int i = 0; i < editNewsBlog.getDetailList().size(); i++) {
+				
+				  heading1 = XssEscapeUtils.jsoupParse(request.getParameter("heading1" + editNewsBlog.getDetailList().get(i).getLanguageId()).trim()
+	                        .replaceAll("[ ]{2,}", " "));
+	                metaTitle = XssEscapeUtils.jsoupParse(request.getParameter("meta_title1" + editNewsBlog.getDetailList().get(i).getLanguageId()).trim()
+	                        .replaceAll("[ ]{2,}", " "));               
+	                pageDescription = request.getParameter("page_description1" + editNewsBlog.getDetailList().get(i).getLanguageId())
+	                        .trim().replaceAll("[ ]{2,}", " ");
+	                metaDescription = request.getParameter("meta_description1" + editNewsBlog.getDetailList().get(i).getLanguageId())
+	                        .trim().replaceAll("[ ]{2,}", " ");
+	                keyword = request
+	                        .getParameter("meta_keyword1" + editNewsBlog.getDetailList().get(i).getLanguageId())
+	                        .trim().replaceAll("[ ]{2,}", " ");
 
-				if (FormValidation.Validaton(
-						request.getParameter("heading1" + editNewsBlog.getDetailList().get(i).getLanguageId()),
-						"") == true
-						|| FormValidation.Validaton(
-								request.getParameter(
-										"meta_title1" + editNewsBlog.getDetailList().get(i).getLanguageId()),
-								"") == true) {
-					ret = true;
-					break;
-				}
+	                if (FormValidation.Validaton(heading1,"") == true || FormValidation.Validaton(metaTitle,"") == true) {
+	                    ret = true;
+	                    break;
+	                }
 
-				editNewsBlog.getDetailList().get(i).setHeading(
-						request.getParameter("heading1" + editNewsBlog.getDetailList().get(i).getLanguageId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				editNewsBlog.getDetailList().get(i)
-						.setDescriptions(request
-								.getParameter("page_description1" + editNewsBlog.getDetailList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				editNewsBlog.getDetailList().get(i)
-						.setPageMetaTitle(request
-								.getParameter("meta_title1" + editNewsBlog.getDetailList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				editNewsBlog.getDetailList().get(i)
-						.setPageMetaDescription(request
-								.getParameter("meta_description1" + editNewsBlog.getDetailList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				editNewsBlog.getDetailList().get(i)
-						.setPageMetaKeyword(request
-								.getParameter("meta_keyword1" + editNewsBlog.getDetailList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				editNewsBlog.getDetailList().get(i).setExInt1(onHomePage);
+	                editNewsBlog.getDetailList().get(i).setHeading(heading1);
+	                editNewsBlog.getDetailList().get(i).setDescriptions(pageDescription);
+	                editNewsBlog.getDetailList().get(i).setPageMetaTitle(metaTitle);
+	                editNewsBlog.getDetailList().get(i).setPageMetaDescription(metaDescription);
+	                editNewsBlog.getDetailList().get(i).setPageMetaKeyword(keyword);
+	                editNewsBlog.getDetailList().get(i).setExInt1(onHomePage);
 			}
 
 			if (ret == false) {
@@ -1119,7 +1127,7 @@ public class ContentModuleController {
 				}
 				editNewsBlog.setExVar2(items);
 				editNewsBlog.setEditByUserId(UserDetail.getUserId());
-				editNewsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
+				editNewsBlog.setNewsSourceUrlName(urlName);
 				editNewsBlog.setExInt1(9);
 				editNewsBlog.setExInt2(onHomePage);
 				editNewsBlog.setExVar1(text.trim().replaceAll("[ ]{2,}", " "));
