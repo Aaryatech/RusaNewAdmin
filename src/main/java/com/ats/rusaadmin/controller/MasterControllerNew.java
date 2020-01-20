@@ -861,7 +861,7 @@ public class MasterControllerNew {
 			String docId = request.getParameter("docId");
 			String catId = request.getParameter("cateId");
 			// System.out.println("category: "+catId);
-			String docName = request.getParameter("docName");
+			String docName = XssEscapeUtils.jsoupParse(request.getParameter("docName").trim().replaceAll("[ ]{2,}", " "));
 			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
@@ -872,7 +872,7 @@ public class MasterControllerNew {
 
 			boolean ret = false;
 			if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
-					|| FormValidation.Validaton(request.getParameter("docName"), "") == true
+					|| FormValidation.Validaton(docName, "") == true
 					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
 
@@ -939,7 +939,7 @@ public class MasterControllerNew {
 					// editbanner.setEditByUserId(UserDetail.getUserId());
 				}
 				// editupload.setDocId(0);
-				editupload.setExVar1(docName.trim().replaceAll("[ ]{2,}", " "));
+				editupload.setExVar1(docName);
 				editupload.setPageId(pageId);
 				editupload.setCateType(catId);
 				editupload.setSortNo(sortNo);

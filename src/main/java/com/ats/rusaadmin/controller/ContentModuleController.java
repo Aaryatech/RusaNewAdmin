@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
@@ -57,7 +58,7 @@ public class ContentModuleController {
 	GallaryDetail editGalleryDetail = new GallaryDetail();
 
 
-	@RequestMapping(value = "/textimonialForm/{pageId}/{moduleId}", method = RequestMethod.GET)
+	@RequestMapping(value = "textimonialForm/{pageId}/{moduleId}", method = RequestMethod.GET)
 	public ModelAndView textimonialForm(@PathVariable int pageId, @PathVariable int moduleId,
 			HttpServletRequest request, HttpServletResponse response) {
 
@@ -116,46 +117,56 @@ public class ContentModuleController {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 			List<TestimonialDetail> newsBlogDescriptionList = new ArrayList<TestimonialDetail>();
-
+			
+			String formName = null;
+			String designation = null;
+			String location = null;
+			String message = null;
 			for (int i = 0; i < languagesList.size(); i++) {
 
 				int lanId=languagesList.get(i).getLanguagesId();
-				String formName = request.getParameter("form_name"+languagesList.get(i).getLanguagesId());
+				formName = XssEscapeUtils.jsoupParse(request.getParameter("form_name"+languagesList.get(i).getLanguagesId()));
+				designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				location = XssEscapeUtils.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				
+				
 				
 				if(lanId==1) {
-					editTestImonial.setDesignation(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
-							.trim().replaceAll("[ ]{2,}", " "));
-					editTestImonial.setLocation(request.getParameter("location" + languagesList.get(i).getLanguagesId())
-							.trim().replaceAll("[ ]{2,}", " "));
+					editTestImonial.setDesignation(designation);
+					editTestImonial.setLocation(location);
 					editTestImonial.setFromName(formName);
 					if (formType== 1) {
-						editTestImonial
-								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
-										.replaceAll("[ ]{2,}", " "));
+						message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+						editTestImonial.setMessage(message);
 					} else {
-						editTestImonial
-								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+						message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+						editTestImonial.setMessage(message);
 					}
 				}
+				
 				TestimonialDetail newsBlogDescription = new TestimonialDetail();
 				
-				newsBlogDescription.setLangId(languagesList.get(i).getLanguagesId());
-				newsBlogDescription
-						.setDesignation(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " "));
-				newsBlogDescription.setFromName(formName);
-				newsBlogDescription.setLocation(request.getParameter("location" + languagesList.get(i).getLanguagesId())
+				designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
 						.trim().replaceAll("[ ]{2,}", " "));
-
+				location = XssEscapeUtils.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				
+				newsBlogDescription.setLangId(languagesList.get(i).getLanguagesId());
+				newsBlogDescription.setDesignation(designation);
+				newsBlogDescription.setFromName(formName);
+				newsBlogDescription.setLocation(location);
 				 
 
 				if (formType== 1) {
-					newsBlogDescription
-							.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
-									.replaceAll("[ ]{2,}", " "));
+					message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
+							.replaceAll("[ ]{2,}", " "));
+					newsBlogDescription.setMessage(message);
 				} else {
-					newsBlogDescription
-							.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+					message = XssEscapeUtils.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+					newsBlogDescription.setMessage(message);
 				}
 				
 				newsBlogDescription.setAddDate(sf.format(date));
@@ -376,6 +387,11 @@ public class ContentModuleController {
 			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
 			int formType = Integer.parseInt(request.getParameter("formType"));
+			
+			String formName = null;
+			String designation = null;
+			String location = null;
+			String message = null;
 
 			//
 			boolean ret = false;
@@ -395,44 +411,46 @@ public class ContentModuleController {
 			for (int i = 0; i < editTestImonial.getDetailList().size(); i++) {
 				
 				int lanId=editTestImonial.getDetailList().get(i).getLangId();
-				String formName = request.getParameter("form_name"+languagesList.get(i).getLanguagesId());
+				formName = XssEscapeUtils.jsoupParse(request.getParameter("form_name"+languagesList.get(i).getLanguagesId()));
 				
 				if(lanId==1) {
-					editTestImonial.setDesignation(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
+					designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
 							.trim().replaceAll("[ ]{2,}", " "));
-					editTestImonial.setLocation(request.getParameter("location" + languagesList.get(i).getLanguagesId())
+					location =  XssEscapeUtils.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId())
 							.trim().replaceAll("[ ]{2,}", " "));
+					editTestImonial.setDesignation(designation);
+					editTestImonial.setLocation(location);
 					editTestImonial.setFromName(formName);
 					
 					if (formType== 1) {
-						editTestImonial
-								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
-										.replaceAll("[ ]{2,}", " "));
+						message = XssEscapeUtils.jsoupParse(request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+						editTestImonial.setMessage(message);
 					} else {
-						editTestImonial
-								.setMessage(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+						message = XssEscapeUtils.jsoupParse(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+						editTestImonial.setMessage(message);
 					}
 				}
 
-				
+				designation = XssEscapeUtils.jsoupParse(request.getParameter("designation" + editTestImonial.getDetailList().get(i).getLangId())
+						.trim().replaceAll("[ ]{2,}", " "));
+				location = XssEscapeUtils.jsoupParse(request.getParameter("location" + editTestImonial.getDetailList().get(i).getLangId())
+						.trim().replaceAll("[ ]{2,}", " "));
 				editTestImonial.getDetailList().get(i).setLangId(editTestImonial.getDetailList().get(i).getLangId());
-				editTestImonial.getDetailList().get(i)
-						.setDesignation(request.getParameter("designation" + editTestImonial.getDetailList().get(i).getLangId())
-								.trim().replaceAll("[ ]{2,}", " "));
+				editTestImonial.getDetailList().get(i).setDesignation(designation);
 				 
 
-				editTestImonial.getDetailList().get(i).setLocation(request.getParameter("location" + editTestImonial.getDetailList().get(i).getLangId())
-						.trim().replaceAll("[ ]{2,}", " "));
+				editTestImonial.getDetailList().get(i).setLocation(location);
 
 				editTestImonial.getDetailList().get(i).setExInt1(formType);
 
 				if (Integer.parseInt(request.getParameter("formType")) == 1) {
-					editTestImonial.getDetailList().get(i)
-							.setMessage(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()).trim()
-									.replaceAll("[ ]{2,}", " "));
+					message = XssEscapeUtils.jsoupParse(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()).trim()
+							.replaceAll("[ ]{2,}", " "));
+					editTestImonial.getDetailList().get(i).setMessage(message);
 				} else {
-					editTestImonial.getDetailList().get(i)
-							.setMessage(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()));
+					message = XssEscapeUtils.jsoupParse(request.getParameter("message" + editTestImonial.getDetailList().get(i).getLangId()));
+					editTestImonial.getDetailList().get(i).setMessage(message);
 				}
 				
 				editTestImonial.getDetailList().get(i).setAddDate(sf.format(date));
@@ -1812,7 +1830,7 @@ public class ContentModuleController {
 
 			String catId = request.getParameter("cateId");
 			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			String titleName = request.getParameter("titleName");
+			String titleName = XssEscapeUtils.jsoupParse(request.getParameter("titleName").trim().replaceAll("[ ]{2,}", " "));
 			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int pageId = Integer.parseInt(request.getParameter("pageId"));
@@ -1821,7 +1839,7 @@ public class ContentModuleController {
 
 			if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
 					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("titleName"), "") == true) {
+					|| FormValidation.Validaton(titleName, "") == true) {
 
 				ret = true;
 			}
@@ -1836,13 +1854,13 @@ public class ContentModuleController {
 				String vedioUrl = request.getParameter("vedioUrl");
 				gallaryDetail.setFileName(vedioUrl.trim().replaceAll("[ ]{2,}", " "));
 			} else {
-				String vedioCode = request.getParameter("vedioCode");
-				gallaryDetail.setFileName(vedioCode.trim().replaceAll("[ ]{2,}", " "));
+				String vedioCode = XssEscapeUtils.jsoupParse(request.getParameter("vedioCode").trim().replaceAll("[ ]{2,}", " "));
+				gallaryDetail.setFileName(vedioCode);
 			}
 			gallaryDetail.setPageId(pageId);
 			gallaryDetail.setTypeVideoImage("4");
 
-			gallaryDetail.setTitle(titleName.trim().replaceAll("[ ]{2,}", " "));
+			gallaryDetail.setTitle(titleName);
 			gallaryDetail.setGalleryCatId(Integer.parseInt(catId));
 			gallaryDetail.setIsActive(isActive);
 			gallaryDetail.setDelStatus(1);

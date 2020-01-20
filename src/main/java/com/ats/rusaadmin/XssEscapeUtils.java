@@ -15,7 +15,7 @@ import org.jsoup.safety.Whitelist;
 <version>1.4</version>
 </dependency>*/
 public class XssEscapeUtils {
-	// a) in all input type text and textarea withoput ckeditor or any html editor
+	// a) in all input type text and textarea without ckeditor or any html editor
 	// in both project
 	public static String jsoupParse(String str) {
 		str = str.replaceAll("\\<.*?\\>", "");
