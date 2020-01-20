@@ -894,10 +894,10 @@ public class AddContentController {
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
-			String externalUrl = request.getParameter("externalUrl");
+			String externalUrl = XssEscapeUtils.jsoupParse(request.getParameter("externalUrl").trim().replaceAll("[ ]{2,}", " "));
 			String newWindow = request.getParameter("newWindow");
 
-			page.setExternalUrl(externalUrl.trim().replaceAll("[ ]{2,}", " "));
+			page.setExternalUrl(externalUrl);
 			page.setExternalUrlTarget(newWindow.trim().replaceAll("[ ]{2,}", " "));
 
 			// System.out.println("page " + page);
@@ -945,13 +945,13 @@ public class AddContentController {
 		try {
 			HttpSession session = request.getSession();
 
-			String metaTitle = request.getParameter("metaTitle");
-			String metaDesc = request.getParameter("metaDesc");
-			String metaKeyword = request.getParameter("metaKeyword");
+			String metaTitle = XssEscapeUtils.jsoupParse(request.getParameter("metaTitle").trim().replaceAll("[ ]{2,}", " "));
+			String metaDesc = XssEscapeUtils.jsoupParse(request.getParameter("metaDesc").trim().replaceAll("[ ]{2,}", " "));
+			String metaKeyword = XssEscapeUtils.jsoupParse(request.getParameter("metaKeyword").trim().replaceAll("[ ]{2,}", " "));
 
-			page.setPageMetaTitle(metaTitle.trim().replaceAll("[ ]{2,}", " "));
-			page.setPageMetaDescription(metaDesc.trim().replaceAll("[ ]{2,}", " "));
-			page.setPageMetaKeyword(metaKeyword.trim().replaceAll("[ ]{2,}", " "));
+			page.setPageMetaTitle(metaTitle);
+			page.setPageMetaDescription(metaDesc);
+			page.setPageMetaKeyword(metaKeyword);
 
 			System.out.println("page " + page);
 			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
