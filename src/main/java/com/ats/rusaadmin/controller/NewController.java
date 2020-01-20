@@ -855,7 +855,7 @@ public class NewController {
 			if (id != null) {
 
 				socialChannel.setId(Integer.parseInt(id));
-				socialChannel.setUrllinks(urlLink);
+				socialChannel.setUrllinks(XssEscapeUtils.jsoupParse(urlLink));
 				socialChannel.setIsActive(Integer.parseInt(isActive));
 				socialChannel.setSortNo(Integer.parseInt(sortNo));
 
