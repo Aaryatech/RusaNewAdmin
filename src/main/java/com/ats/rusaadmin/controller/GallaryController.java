@@ -101,8 +101,9 @@ public class GallaryController {
 				editGallaryCategory.setAddDate(sf.format(date));
 
 				for (int i = 0; i < languagesList.size(); i++) {
-					catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
-							.replaceAll("[ ]{2,}", " ");
+					catName = XssEscapeUtils
+							.jsoupParse(request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 					if (FormValidation.Validaton(catName, "") == true) {
 
 						ret = true;
@@ -111,11 +112,10 @@ public class GallaryController {
 
 					GallaryCategoryDescriptioin gallaryCategoryDescriptioin = new GallaryCategoryDescriptioin();
 					gallaryCategoryDescriptioin.setLanguageId(languagesList.get(i).getLanguagesId());
-					gallaryCategoryDescriptioin.setCateName(XssEscapeUtils.jsoupParse(catName));
+					gallaryCategoryDescriptioin.setCateName(catName);
 
 					if (languagesList.get(i).getLanguagesId() == 1) {
-						catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId())
-								.trim().replaceAll("[ ]{2,}", " ");
+
 						editGallaryCategory.setCateName(catName);
 
 						String text = editGallaryCategory.getCateName();
@@ -135,21 +135,20 @@ public class GallaryController {
 				editGallaryCategory.setAddDate(DateConvertor.convertToYMD(editGallaryCategory.getAddDate()));
 
 				for (int i = 0; i < editGallaryCategory.getGallaryCategoryDescriptioinList().size(); i++) {
-					catName = request.getParameter("catName"
-							+ editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " ");
-					if (FormValidation.Validaton(catName,"") == true) {
+					catName = XssEscapeUtils.jsoupParse(request
+							.getParameter("catName"
+									+ editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " "));
+					if (FormValidation.Validaton(catName, "") == true) {
 						ret = true;
 						break;
 					}
 
-					editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).setCateName(XssEscapeUtils.jsoupParse(catName));
+					editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).setCateName(catName);
 
 					if (editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId() == 1) {
-						catName = request.getParameter("catName" + editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
-								.trim().replaceAll("[ ]{2,}", " ");
-						editGallaryCategory
-								.setCateName(XssEscapeUtils.jsoupParse(catName));
+
+						editGallaryCategory.setCateName(catName);
 						String text = editGallaryCategory.getCateName();
 						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 						// System.out.println(text);
@@ -371,7 +370,8 @@ public class GallaryController {
 				pageId = Integer.parseInt(request.getParameter("pageId"));
 				catId = Integer.parseInt(request.getParameter("catId"));
 
-				//System.out.println("data is *******" + fileName + id + moduleId + pageId + catId + id);
+				// System.out.println("data is *******" + fileName + id + moduleId + pageId +
+				// catId + id);
 
 			} catch (Exception e) {
 				flag = 1;
@@ -381,7 +381,7 @@ public class GallaryController {
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map,
 					Info.class);
 
-		//	System.out.println(" fileName" + fileName);
+			// System.out.println(" fileName" + fileName);
 			File files = new File(Constant.gallryImageURL + fileName);
 			// File files = new
 			// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
@@ -550,7 +550,7 @@ public class GallaryController {
 					contentImages.setThumb(Constant.getOtherDocURL + listOfFiles[i].getName());
 
 					contentImages.setLastmod(String.valueOf(listOfFiles[i].lastModified()));
-					//contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
+					// contentImages.setType(Files.probeContentType(listOfFiles[i].toPath()));
 
 					DiskFileItem fileItem = new DiskFileItem(listOfFiles[i].getName(), contentImages.getType(), false,
 							listOfFiles[i].getName(), (int) listOfFiles[i].length(), listOfFiles[i].getParentFile());
@@ -595,7 +595,6 @@ public class GallaryController {
 
 	}
 
-	
 	@RequestMapping(value = "/multipleUploadMediaDelete", method = RequestMethod.GET)
 	public String multipleUploadMediaDelete(HttpServletRequest request, HttpServletResponse response) {
 
@@ -603,8 +602,8 @@ public class GallaryController {
 		try {
 
 			String[] images = request.getParameterValues("ids");
-			//System.out.println("images list****"+images.toString());
- 
+			// System.out.println("images list****"+images.toString());
+
 			for (int i = 0; i < images.length; i++) {
 				File files = new File(Constant.otherDocURL + images[i]);
 
@@ -613,15 +612,14 @@ public class GallaryController {
 				} else
 					System.out.println("doesn't exists  " + Constant.otherDocURL + images[i]);
 			}
-			 
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return "redirect:/uploadOtherMedia";
 	}
-	
-	
+
 	@RequestMapping(value = "/uploadOtherMediaProccess", method = RequestMethod.POST)
 	public void uploadOtherMediaProccess(@RequestParam("file") List<MultipartFile> file, HttpServletRequest request,
 			HttpServletResponse response) {
