@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,50 +94,63 @@ public class HomeController {
 				mav = "login";
 				model.addAttribute("msg", "Invalid login");
 			} else {
+				String captcha = session.getAttribute("captcha_security").toString();
+				String verifyCaptcha = request.getParameter("captcha");
 
-				MessageDigest md = MessageDigest.getInstance("MD5");
-				byte[] messageDigest = md.digest(password.getBytes());
-				BigInteger number = new BigInteger(1, messageDigest);
-				String hashtext = number.toString(16);
+				if (captcha.equals(verifyCaptcha)) {
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("userName", name);
-				map.add("password", hashtext);
-				LoginResponse loginResponse = Constant.getRestTemplate().postForObject(Constant.url + "/loginResponse",
-						map, LoginResponse.class);
+					MessageDigest md = MessageDigest.getInstance("MD5");
+					byte[] messageDigest = md.digest(password.getBytes());
+					BigInteger number = new BigInteger(1, messageDigest);
+					String hashtext = number.toString(16);
 
-				if (loginResponse.isError() == false) {
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+					map.add("userName", name);
+					map.add("password", hashtext);
+					LoginResponse loginResponse = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/loginResponse", map, LoginResponse.class);
 
-					mav = "redirect:/dashboard";
+					if (loginResponse.isError() == false) {
 
-					session.setAttribute("UserDetail", loginResponse.getUser());
-					session.setAttribute("imageProfileUrl", Constant.getUserProfileURL);
-					session.setAttribute("siteAdminUrl", Constant.siteAdminUrl);
-					InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
-					String hostName = addr.getHostName();
-					String userAgent = request.getHeader("User-Agent");
+						mav = "redirect:/dashboard";
 
-					Date date = new Date();
-					SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-					LoginLogs saveLoginLogs = new LoginLogs();
-					saveLoginLogs.setIpAddress(hostName);
-					saveLoginLogs.setUserAgent(userAgent);
-					saveLoginLogs.setCreatedDate(sf.format(date));
-					saveLoginLogs.setUserId(loginResponse.getUser().getUserId());
+						session.setAttribute("UserDetail", loginResponse.getUser());
+						session.setAttribute("imageProfileUrl", Constant.getUserProfileURL);
+						session.setAttribute("siteAdminUrl", Constant.siteAdminUrl);
+						InetAddress addr = InetAddress.getByName(request.getRemoteAddr());
+						String hostName = addr.getHostName();
+						String userAgent = request.getHeader("User-Agent");
 
-					LoginLogs resp = Constant.getRestTemplate().postForObject(Constant.url + "/saveLoginLogs",
-							saveLoginLogs, LoginLogs.class);
+						Date date = new Date();
+						SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+						LoginLogs saveLoginLogs = new LoginLogs();
+						saveLoginLogs.setIpAddress(hostName);
+						saveLoginLogs.setUserAgent(userAgent);
+						saveLoginLogs.setCreatedDate(sf.format(date));
+						saveLoginLogs.setUserId(loginResponse.getUser().getUserId());
 
-					System.out.println(resp);
+						LoginLogs resp = Constant.getRestTemplate().postForObject(Constant.url + "/saveLoginLogs",
+								saveLoginLogs, LoginLogs.class);
 
+						System.out.println(resp);
+
+					} else {
+
+						mav = "login";
+						// System.out.println("Invalid login credentials");
+						model.addAttribute("msg", "Invalid login");
+					}
 				} else {
-
 					mav = "login";
-					System.out.println("Invalid login credentials");
-					model.addAttribute("msg", "Invalid login");
+					// System.out.println("Invalid login credentials");
+					model.addAttribute("msg", "Invalid Text");
 				}
-
 			}
+
+			Random randChars = new Random();
+			String sImageCode = (Long.toString(Math.abs(randChars.nextLong()), 36)).substring(0, 6);
+			session.setAttribute("captcha_security", sImageCode);
+
 		} catch (Exception e) {
 			System.out.println("HomeController Login API Excep:  " + e.getMessage());
 			e.printStackTrace();
