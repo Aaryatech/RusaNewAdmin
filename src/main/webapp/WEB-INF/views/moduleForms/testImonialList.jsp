@@ -92,7 +92,8 @@
 										<td style="text-align: center;"><input
 																type="checkbox" class="chk" name="ids"
 																id="contact${getPagesModuleList.primaryKeyId}" value="${getPagesModuleList.primaryKeyId}" /></td>
-										<td>${getPagesModuleList.pageName} (${getPagesModuleList.secctionName})</td> 
+										<td>${getPagesModuleList.pageName}
+															(${getPagesModuleList.secctionName})</td> 
 										<td>${getPagesModuleList.content}</td>  
 										<c:choose>
 										 <c:when test="${getPagesModuleList.isActive==1}">

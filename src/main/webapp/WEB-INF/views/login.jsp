@@ -178,9 +178,13 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/js/jquery.easing.min.js"
 		type="text/javascript"></script>
-	<script
+	<%-- <script
 		src="${pageContext.request.contextPath}/resources/assets/plugins/bootstrap/js/bootstrap.min.js"
-		type="text/javascript"></script>
+		type="text/javascript"></script> --%>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/plugins/pace/pace.min.js"
 		type="text/javascript"></script>
