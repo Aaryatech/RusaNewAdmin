@@ -152,7 +152,9 @@ public class HomeController {
 			session.setAttribute("captcha_security", sImageCode);
 
 		} catch (Exception e) {
-			System.out.println("HomeController Login API Excep:  " + e.getMessage());
+			Random randChars = new Random();
+			String sImageCode = (Long.toString(Math.abs(randChars.nextLong()), 36)).substring(0, 6);
+			session.setAttribute("captcha_security", sImageCode);
 			e.printStackTrace();
 			model.addAttribute("msg", "Invalid login");
 		}
