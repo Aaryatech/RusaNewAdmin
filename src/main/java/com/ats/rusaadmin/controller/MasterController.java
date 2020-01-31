@@ -457,95 +457,82 @@ public class MasterController {
 
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String catId = request.getParameter("catId");
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
-			int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+			if (key.trim().equals(token.trim())) {
 
-			String subCatName = null;
-			String subCatDesc = null;
+				String catId = request.getParameter("catId");
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				int sectionId = Integer.parseInt(request.getParameter("sectionId"));
+				int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+				int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
-			Boolean ret = false;
+				String subCatName = null;
+				String subCatDesc = null;
 
-			if (FormValidation.Validaton(request.getParameter("categoryId"), "") == true
-					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("categoryId"), "") == true
-					|| FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
+				Boolean ret = false;
 
-				ret = true;
-			}
+				if (FormValidation.Validaton(request.getParameter("categoryId"), "") == true
+						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+						|| FormValidation.Validaton(request.getParameter("categoryId"), "") == true
+						|| FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
 
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+					ret = true;
+				}
 
-			List<CategoryDescription> categoryDescriptionList = new ArrayList<CategoryDescription>();
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-			if (catId == "" || catId == null) {
-				editcat.setCatId(0);
-				editcat.setCatAddDate(sf.format(date));
+				List<CategoryDescription> categoryDescriptionList = new ArrayList<CategoryDescription>();
 
-				for (int i = 0; i < languagesList.size(); i++) {
-
-					subCatName = request.getParameter("subCatName" + languagesList.get(i).getLanguagesId()).trim()
-							.replaceAll("[ ]{2,}", " ");
-					subCatDesc = request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId()).trim()
-							.replaceAll("[ ]{2,}", " ");
-					if (FormValidation.Validaton(subCatName, "") == true
-							|| FormValidation.Validaton(subCatDesc, "") == true) {
-
-						ret = true;
-						break;
-					}
-
-					CategoryDescription categoryDescription = new CategoryDescription();
-					categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					categoryDescription.setCatName(XssEscapeUtils.jsoupParse(subCatName));
-					categoryDescription.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
-
-					if (languagesList.get(i).getLanguagesId() == 1) {
+				if (catId == "" || catId == null) {
+					editcat.setCatId(0);
+					editcat.setCatAddDate(sf.format(date));
+					editcat.setAddedByUserId(UserDetail.getUserId());
+					for (int i = 0; i < languagesList.size(); i++) {
 
 						subCatName = request.getParameter("subCatName" + languagesList.get(i).getLanguagesId()).trim()
 								.replaceAll("[ ]{2,}", " ");
 						subCatDesc = request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId()).trim()
 								.replaceAll("[ ]{2,}", " ");
+						if (FormValidation.Validaton(subCatName, "") == true
+								|| FormValidation.Validaton(subCatDesc, "") == true) {
 
-						editcat.setCatName(XssEscapeUtils.jsoupParse(subCatName));
-						editcat.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
-						String text = editcat.getCatName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						System.out.println(text);
-						editcat.setSlugName(text);
+							ret = true;
+							break;
+						}
+
+						CategoryDescription categoryDescription = new CategoryDescription();
+						categoryDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+						categoryDescription.setCatName(XssEscapeUtils.jsoupParse(subCatName));
+						categoryDescription.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
+
+						if (languagesList.get(i).getLanguagesId() == 1) {
+
+							subCatName = request.getParameter("subCatName" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " ");
+							subCatDesc = request.getParameter("subCatDesc" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " ");
+
+							editcat.setCatName(XssEscapeUtils.jsoupParse(subCatName));
+							editcat.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
+							String text = editcat.getCatName();
+							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+							System.out.println(text);
+							editcat.setSlugName(text);
+						}
+						categoryDescriptionList.add(categoryDescription);
 					}
-					categoryDescriptionList.add(categoryDescription);
-				}
-				// editcat.setAddedByUserId(UserDetail.getUserId());
-				editcat.setCategoryDescriptionList(categoryDescriptionList);
-			} else {
+					// editcat.setAddedByUserId(UserDetail.getUserId());
+					editcat.setCategoryDescriptionList(categoryDescriptionList);
+				} else {
 
-				editcat.setCatId(Integer.parseInt(catId));
-				editcat.setCatEditDate(sf.format(date));
-				editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
-				for (int i = 0; i < editcat.getCategoryDescriptionList().size(); i++) {
-
-					subCatName = request
-							.getParameter("subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " ");
-					subCatDesc = request
-							.getParameter("subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " ");
-
-					if (FormValidation.Validaton(subCatName, "") == true
-							|| FormValidation.Validaton(subCatDesc, "") == true) {
-
-						ret = true;
-						break;
-					}
-					editcat.getCategoryDescriptionList().get(i).setCatName(XssEscapeUtils.jsoupParse(subCatName));
-					editcat.getCategoryDescriptionList().get(i).setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
-
-					if (editcat.getCategoryDescriptionList().get(i).getLanguageId() == 1) {
+					editcat.setCatId(Integer.parseInt(catId));
+					editcat.setCatEditDate(sf.format(date));
+					editcat.setCatAddDate(DateConvertor.convertToYMD(editcat.getCatAddDate()));
+					editcat.setEditByUserId(UserDetail.getUserId());
+					for (int i = 0; i < editcat.getCategoryDescriptionList().size(); i++) {
 
 						subCatName = request
 								.getParameter(
@@ -555,45 +542,75 @@ public class MasterController {
 								.getParameter(
 										"subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
 								.trim().replaceAll("[ ]{2,}", " ");
-						editcat.setCatName(XssEscapeUtils.jsoupParse(subCatName));
-						editcat.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
-						String text = editcat.getCatName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						// System.out.println(text);
-						editcat.setSlugName(text);
+
+						if (FormValidation.Validaton(subCatName, "") == true
+								|| FormValidation.Validaton(subCatDesc, "") == true) {
+
+							ret = true;
+							break;
+						}
+						editcat.getCategoryDescriptionList().get(i).setCatName(XssEscapeUtils.jsoupParse(subCatName));
+						editcat.getCategoryDescriptionList().get(i).setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
+
+						if (editcat.getCategoryDescriptionList().get(i).getLanguageId() == 1) {
+
+							subCatName = request
+									.getParameter(
+											"subCatName" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+									.trim().replaceAll("[ ]{2,}", " ");
+							subCatDesc = request
+									.getParameter(
+											"subCatDesc" + editcat.getCategoryDescriptionList().get(i).getLanguageId())
+									.trim().replaceAll("[ ]{2,}", " ");
+							editcat.setCatName(XssEscapeUtils.jsoupParse(subCatName));
+							editcat.setCatDesc(XssEscapeUtils.jsoupParse(subCatDesc));
+							String text = editcat.getCatName();
+							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+							// System.out.println(text);
+							editcat.setSlugName(text);
+						}
+
 					}
-
+					// editcat.setEditByUserId(UserDetail.getUserId());
 				}
-				// editcat.setEditByUserId(UserDetail.getUserId());
-			}
-			editcat.setParentId(categoryId);
+				editcat.setParentId(categoryId);
 
-			editcat.setSectionId(sectionId);
-			editcat.setCatSortNo(seqNo);
-			editcat.setIsActive(isActive);
-			editcat.setDelStatus(1);
-			// System.out.println("category" + editcat);
-			if (ret == false) {
-				Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory", editcat,
-						Category.class);
+				editcat.setSectionId(sectionId);
+				editcat.setCatSortNo(seqNo);
+				editcat.setIsActive(isActive);
+				editcat.setDelStatus(1);
+				// System.out.println("category" + editcat);
+				if (ret == false) {
+					Category res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateCategory",
+							editcat, Category.class);
 
-				// System.out.println("res " + res);
+					// System.out.println("res " + res);
 
-				if (res.getCatId() != 0) {
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+					if (res.getCatId() != 0) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
 
+					} else {
+						session.setAttribute("successMsg", "Failed to add Infomation !");
+						session.setAttribute("errorMsg", "true");
+
+					}
 				} else {
-					session.setAttribute("successMsg", "Failed to add Infomation !");
+					session.setAttribute("successMsg", "invalid Infomation !");
 					session.setAttribute("errorMsg", "true");
 
 				}
 			} else {
-				session.setAttribute("successMsg", "invalid Infomation !");
+				session.setAttribute("successMsg", "something wrong");
 				session.setAttribute("errorMsg", "true");
-
 			}
 
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
