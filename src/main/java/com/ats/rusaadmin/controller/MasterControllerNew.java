@@ -289,6 +289,12 @@ public class MasterControllerNew {
 			} else {
 				// System.out.println("Key Not Matched");
 			}
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -438,6 +444,12 @@ public class MasterControllerNew {
 					session.setAttribute("successMsg", "Sorry, Can't deleted!");
 				}
 			}
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -472,54 +484,42 @@ public class MasterControllerNew {
 
 			HttpSession session = request.getSession();
 			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String id = request.getParameter("id");
-			String imageName = request.getParameter("imageName");
-			String urlLink = request.getParameter("urlLink");
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			// int pageId = Integer.parseInt(request.getParameter("pageId"));
-			Boolean ret = false;
+			if (key.trim().equals(token.trim())) {
 
-			/*
-			 * if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
-			 * || FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
-			 * 
-			 * ret = true; }
-			 */
-			VpsImageUpload upload = new VpsImageUpload();
-			String docFile = null;
+				String id = request.getParameter("id");
+				String imageName = request.getParameter("imageName");
+				String urlLink = request.getParameter("urlLink");
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				// int pageId = Integer.parseInt(request.getParameter("pageId"));
+				Boolean ret = false;
 
-			Date date = new Date(); // your date
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				/*
+				 * if (FormValidation.Validaton(request.getParameter("sliderName"), "") == true
+				 * || FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
+				 * 
+				 * ret = true; }
+				 */
+				VpsImageUpload upload = new VpsImageUpload();
+				String docFile = null;
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-			String sliderName = null;
-			String linkName = null;
-			String text1 = null;
-			String text2 = null;
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
 
-			if (ret == false) {
-				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
+				String sliderName = null;
+				String linkName = null;
+				String text1 = null;
+				String text2 = null;
 
-					docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-					editbanner.setSliderImage(docFile);
-					try {
-						Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL, docFile,
-								Constant.values, 0, 0, 0, 0, 0);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-					editbanner.setAddDate(sf.format(date));
-					// editbanner.setAddedByUserId(UserDetail.getUserId());
-				} else {
+				if (ret == false) {
+					if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
-					if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
-						editbanner.setSliderImage(imageName);
-					} else {
 						docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
 						editbanner.setSliderImage(docFile);
 						try {
@@ -529,32 +529,67 @@ public class MasterControllerNew {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
+						editbanner.setAddDate(sf.format(date));
+						// editbanner.setAddedByUserId(UserDetail.getUserId());
+					} else {
+
+						if (docfile.get(0).getOriginalFilename() == null
+								|| docfile.get(0).getOriginalFilename() == "") {
+							editbanner.setSliderImage(imageName);
+						} else {
+							docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
+							editbanner.setSliderImage(docFile);
+							try {
+								Info info = upload.saveUploadedImge(docfile.get(0), Constant.bannerImageURL, docFile,
+										Constant.values, 0, 0, 0, 0, 0);
+							} catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
+						}
+						editbanner.setEditDate(sf.format(date));
+						// editbanner.setEditByUserId(UserDetail.getUserId());
 					}
-					editbanner.setEditDate(sf.format(date));
-					// editbanner.setEditByUserId(UserDetail.getUserId());
-				}
 
-				if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
+					if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
 
-					for (int i = 0; i < languagesList.size(); i++) {
+						for (int i = 0; i < languagesList.size(); i++) {
 
-						sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-						linkName = request.getParameter("linkName" + languagesList.get(i).getLanguagesId());
-						text1 = request.getParameter("text1" + languagesList.get(i).getLanguagesId());
-						text2 = request.getParameter("text2" + languagesList.get(i).getLanguagesId());
+							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+							linkName = request.getParameter("linkName" + languagesList.get(i).getLanguagesId());
+							text1 = request.getParameter("text1" + languagesList.get(i).getLanguagesId());
+							text2 = request.getParameter("text2" + languagesList.get(i).getLanguagesId());
 
-						BannerDetail BannerDetail = new BannerDetail();
-						BannerDetail.setLinkName(XssEscapeUtils.jsoupParse(linkName));
-						BannerDetail.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
-						BannerDetail.setText1(XssEscapeUtils.jsoupParse(text1));
-						BannerDetail.setText2(XssEscapeUtils.jsoupParse(text2));
+							BannerDetail BannerDetail = new BannerDetail();
+							BannerDetail.setLinkName(XssEscapeUtils.jsoupParse(linkName));
+							BannerDetail.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+							BannerDetail.setText1(XssEscapeUtils.jsoupParse(text1));
+							BannerDetail.setText2(XssEscapeUtils.jsoupParse(text2));
 
-						BannerDetail.setSortOrder(languagesList.get(i).getLanguagesId());
-						BannerDetail.setIsActive(1);
-						BannerDetail.setDelStatus(1);
-						editbanner.getDetillist().add(BannerDetail);
+							BannerDetail.setSortOrder(languagesList.get(i).getLanguagesId());
+							BannerDetail.setIsActive(1);
+							BannerDetail.setDelStatus(1);
+							editbanner.getDetillist().add(BannerDetail);
 
-						if (languagesList.get(i).getLanguagesId() == 1) {
+							if (languagesList.get(i).getLanguagesId() == 1) {
+
+								sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+								linkName = request
+										.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+								text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
+								text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+
+								editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
+								editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+								editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
+								editbanner.setText2(XssEscapeUtils.jsoupParse(text2));
+							}
+
+						}
+
+					} else {
+
+						for (int i = 0; i < editbanner.getDetillist().size(); i++) {
 
 							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
 							linkName = request
@@ -562,67 +597,59 @@ public class MasterControllerNew {
 							text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
 							text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
 
-							editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
-							editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
-							editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
-							editbanner.setText2(XssEscapeUtils.jsoupParse(text2));
-						}
+							editbanner.getDetillist().get(i).setLinkName(XssEscapeUtils.jsoupParse(linkName));
+							editbanner.getDetillist().get(i).setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+							editbanner.getDetillist().get(i).setText1(XssEscapeUtils.jsoupParse(text1));
+							editbanner.getDetillist().get(i).setText2(XssEscapeUtils.jsoupParse(text2));
 
+							if (languagesList.get(i).getLanguagesId() == 1) {
+
+								sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
+								linkName = request
+										.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
+								text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
+								text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+
+								editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
+								editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
+								editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
+								editbanner.setText2(XssEscapeUtils.jsoupParse(text2));
+							}
+
+						}
 					}
 
-				} else {
+					editbanner.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
+					editbanner.setIsActive(isActive);
+					editbanner.setDelStatus(1);
 
-					for (int i = 0; i < editbanner.getDetillist().size(); i++) {
+					// System.out.println("editbanner" + editbanner);
 
-						sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-						linkName = request.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
-						text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
-						text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+					BannerImages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveBannerImages",
+							editbanner, BannerImages.class);
 
-						editbanner.getDetillist().get(i).setLinkName(XssEscapeUtils.jsoupParse(linkName));
-						editbanner.getDetillist().get(i).setSliderName(XssEscapeUtils.jsoupParse(sliderName));
-						editbanner.getDetillist().get(i).setText1(XssEscapeUtils.jsoupParse(text1));
-						editbanner.getDetillist().get(i).setText2(XssEscapeUtils.jsoupParse(text2));
-
-						if (languagesList.get(i).getLanguagesId() == 1) {
-
-							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-							linkName = request
-									.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
-							text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
-							text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
-
-							editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
-							editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
-							editbanner.setText1(XssEscapeUtils.jsoupParse(text1));
-							editbanner.setText2(XssEscapeUtils.jsoupParse(text2));
-						}
-
+					if (res.getId() != 0) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Failed To Add Infomation!");
+						session.setAttribute("errorMsg", "true");
 					}
-				}
-
-				editbanner.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
-				editbanner.setIsActive(isActive);
-				editbanner.setDelStatus(1);
-
-				// System.out.println("editbanner" + editbanner);
-
-				BannerImages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveBannerImages",
-						editbanner, BannerImages.class);
-
-				if (res.getId() != 0) {
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
 				} else {
-					session.setAttribute("successMsg", "Failed To Add Infomation!");
+					session.setAttribute("successMsg", "Invalid Infomation!");
 					session.setAttribute("errorMsg", "true");
+
 				}
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
+				session.setAttribute("successMsg", "something wrong");
 				session.setAttribute("errorMsg", "true");
-
 			}
-
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -630,20 +657,32 @@ public class MasterControllerNew {
 		return "redirect:/sliderPicList";
 	}
 
-	@RequestMapping(value = "/deleteSliderPic/{id}", method = RequestMethod.GET)
-	public String deleteSliderPic(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/deleteSliderPic/{id}/{token}", method = RequestMethod.GET)
+	public String deleteSliderPic(@PathVariable int id, @PathVariable String token, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteBanner", map, Info.class);
-			// System.out.println(res);
-
 			HttpSession session = request.getSession();
-			session.setAttribute("successMsg", "Infomation deleted successfully!");
 
+			String key = (String) session.getAttribute("generatedKey");
+
+			if (key.trim().equals(token.trim())) {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteBanner", map, Info.class);
+				// System.out.println(res);
+				session.setAttribute("successMsg", "Infomation deleted successfully!");
+			} else {
+				session.setAttribute("successMsg", "something wrong");
+			}
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -754,57 +793,37 @@ public class MasterControllerNew {
 		try {
 
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
 
-			VpsImageUpload upload = new VpsImageUpload();
+			String key = (String) session.getAttribute("generatedKey");
+			String token = request.getParameter("token");
 
-			Date date = new Date(); // your date
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			if (key.trim().equals(token.trim())) {
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
+				VpsImageUpload upload = new VpsImageUpload();
 
-			// System.out.println(" mainLogo.get(0).getOriginalFilename() " +
-			// mainLogo.get(0).getOriginalFilename());
-			// System.out.println(" Logo2.get(0).getOriginalFilename()) " +
-			// Logo2.get(0).getOriginalFilename());
-			// System.out.println("Logo3.get(0).getOriginalFilename() " +
-			// Logo3.get(0).getOriginalFilename());
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-			Info info = new Info();
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
 
-			if (logo.getId() == 0) {
+				// System.out.println(" mainLogo.get(0).getOriginalFilename() " +
+				// mainLogo.get(0).getOriginalFilename());
+				// System.out.println(" Logo2.get(0).getOriginalFilename()) " +
+				// Logo2.get(0).getOriginalFilename());
+				// System.out.println("Logo3.get(0).getOriginalFilename() " +
+				// Logo3.get(0).getOriginalFilename());
 
-				logo.setAddDate(sf.format(date));
-			} else {
-				logo.setEditDate(sf.format(date));
-			}
+				Info info = new Info();
 
-			if (mainLogo.get(0).getOriginalFilename() == null || mainLogo.get(0).getOriginalFilename() == "") {
+				if (logo.getId() == 0) {
 
-				info = new Info();
-				info.setError(false);
-				info.setMsg("Updated Successfully ");
-
-			} else {
-				String imageName = null;
-				String extension = FilenameUtils.getExtension(mainLogo.get(0).getOriginalFilename());
-				imageName = Constant.logoName + "." + extension;
-				System.err.println("extension " + extension);
-				try {
-					info = upload.saveUploadedImge(mainLogo.get(0), Constant.lgogImageURL, imageName, Constant.values,
-							0, 0, 0, 0, 0);
-
-				} catch (Exception e) {
-					// TODO: handle exception
+					logo.setAddDate(sf.format(date));
+				} else {
+					logo.setEditDate(sf.format(date));
 				}
-				logo.setLogoMain(imageName);
-			}
 
-			if (info.isError() == false) {
-
-				if (Logo2.get(0).getOriginalFilename() == null || Logo2.get(0).getOriginalFilename() == "") {
+				if (mainLogo.get(0).getOriginalFilename() == null || mainLogo.get(0).getOriginalFilename() == "") {
 
 					info = new Info();
 					info.setError(false);
@@ -812,21 +831,22 @@ public class MasterControllerNew {
 
 				} else {
 					String imageName = null;
-					String extension = FilenameUtils.getExtension(Logo2.get(0).getOriginalFilename());
-					imageName = Constant.logoName + "2." + extension;
-
+					String extension = FilenameUtils.getExtension(mainLogo.get(0).getOriginalFilename());
+					imageName = Constant.logoName + "." + extension;
+					System.err.println("extension " + extension);
 					try {
-						info = upload.saveUploadedImge(Logo2.get(0), Constant.lgogImageURL, imageName, Constant.values,
-								0, 0, 0, 0, 0);
+						info = upload.saveUploadedImge(mainLogo.get(0), Constant.lgogImageURL, imageName,
+								Constant.values, 0, 0, 0, 0, 0);
+
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
-					logo.setLogo2(imageName);
+					logo.setLogoMain(imageName);
 				}
 
 				if (info.isError() == false) {
 
-					if (Logo3.get(0).getOriginalFilename() == null || Logo3.get(0).getOriginalFilename() == "") {
+					if (Logo2.get(0).getOriginalFilename() == null || Logo2.get(0).getOriginalFilename() == "") {
 
 						info = new Info();
 						info.setError(false);
@@ -834,28 +854,62 @@ public class MasterControllerNew {
 
 					} else {
 						String imageName = null;
-						String extension = FilenameUtils.getExtension(Logo3.get(0).getOriginalFilename());
-						imageName = Constant.logoName + "3." + extension;
+						String extension = FilenameUtils.getExtension(Logo2.get(0).getOriginalFilename());
+						imageName = Constant.logoName + "2." + extension;
 
 						try {
-
-							info = upload.saveUploadedImge(Logo3.get(0), Constant.lgogImageURL, imageName,
+							info = upload.saveUploadedImge(Logo2.get(0), Constant.lgogImageURL, imageName,
 									Constant.values, 0, 0, 0, 0, 0);
-
 						} catch (Exception e) {
 							// TODO: handle exception
 						}
-						logo.setLogo3(imageName);
+						logo.setLogo2(imageName);
 					}
 
-					// System.out.println("logo" + logo);
+					if (info.isError() == false) {
 
-					Logo res = Constant.getRestTemplate().postForObject(Constant.url + "/saveLogo", logo, Logo.class);
+						if (Logo3.get(0).getOriginalFilename() == null || Logo3.get(0).getOriginalFilename() == "") {
+
+							info = new Info();
+							info.setError(false);
+							info.setMsg("Updated Successfully ");
+
+						} else {
+							String imageName = null;
+							String extension = FilenameUtils.getExtension(Logo3.get(0).getOriginalFilename());
+							imageName = Constant.logoName + "3." + extension;
+
+							try {
+
+								info = upload.saveUploadedImge(Logo3.get(0), Constant.lgogImageURL, imageName,
+										Constant.values, 0, 0, 0, 0, 0);
+
+							} catch (Exception e) {
+								// TODO: handle exception
+							}
+							logo.setLogo3(imageName);
+						}
+
+						// System.out.println("logo" + logo);
+
+						Logo res = Constant.getRestTemplate().postForObject(Constant.url + "/saveLogo", logo,
+								Logo.class);
+					}
 				}
+
+				session.setAttribute("successMsg", info.getMsg());
+				session.setAttribute("errorMsg", info.isError());
+			} else {
+				session.setAttribute("successMsg", "somethin wrong");
+				session.setAttribute("errorMsg", true);
 			}
 
-			session.setAttribute("successMsg", info.getMsg());
-			session.setAttribute("errorMsg", info.isError());
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 
 		} catch (Exception e) {
 			e.printStackTrace();

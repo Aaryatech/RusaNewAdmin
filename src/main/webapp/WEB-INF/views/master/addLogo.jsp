@@ -2,8 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page import="java.io.*,java.util.*, javax.servlet.*" 
-  import = "java.text.SimpleDateFormat"%> 
+<%@ page import="java.io.*,java.util.*, javax.servlet.*"
+	import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
 <!DOCTYPE html>
 <html class=" ">
 <head>
@@ -81,7 +84,17 @@
 								<form class="form-horizontal" id="addSupplier"
 									action="${pageContext.request.contextPath}/updateOrInsertLogo"
 									method="post" enctype="multipart/form-data">
-
+									<%
+										UUID uuid = UUID.randomUUID();
+										MessageDigest md = MessageDigest.getInstance("MD5");
+										byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+										BigInteger number = new BigInteger(1, messageDigest);
+										String hashtext = number.toString(16);
+										session = request.getSession();
+										session.setAttribute("generatedKey", hashtext);
+									%>
+									<input type="hidden" value="<%out.println(hashtext);%>"
+										name="token" id="token">
 									<c:if
 										test="${sessionScope.errorMsg!=null and sessionScope.errorMsg==false}">
 										<div class="col-lg-12">
@@ -114,9 +127,8 @@
 												<%
 													Date date = new Date();
 													SimpleDateFormat sf = new SimpleDateFormat("HHmmss", Locale.ENGLISH);
-													 
 												%>
-												<c:set var="time" value="<%= sf.format(date) %>"></c:set>
+												<c:set var="time" value="<%=sf.format(date)%>"></c:set>
 												<img src="${url}${logo.logoMain}?id=${time}>"
 													style="width: 150px; height: auto">
 											</div>
@@ -152,7 +164,8 @@
 															</div>
 														</span>
 													</div>
-													 <span class="help-block">* Only jpg,gif,png * Best image size is 369px × 64px</span>
+													<span class="help-block">* Only jpg,gif,png * Best
+														image size is 369px × 64px</span>
 												</div>
 											</div>
 										</div>
@@ -194,7 +207,8 @@
 															</div>
 														</span>
 													</div>
-													 <span class="help-block">* Only jpg,gif,png * Best image size is 369px × 64px</span>
+													<span class="help-block">* Only jpg,gif,png * Best
+														image size is 369px × 64px</span>
 												</div>
 											</div>
 										</div>
@@ -236,7 +250,8 @@
 															</div>
 														</span>
 													</div>
-													 <span class="help-block">* Only jpg,gif,png * Best image size is 369px × 64px</span>
+													<span class="help-block">* Only jpg,gif,png * Best
+														image size is 369px × 64px</span>
 												</div>
 											</div>
 										</div>

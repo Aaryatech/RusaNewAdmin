@@ -2,9 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-
-
+<%@ page import="java.io.*,java.util.*, javax.servlet.*"
+	import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
 <!DOCTYPE html>
 <html class=" ">
 <head>
@@ -96,7 +98,17 @@
 						<form class="form-horizontal" id="addSupplier"
 							action="${pageContext.request.contextPath}/insertBannerImage"
 							method="post" enctype="multipart/form-data">
-
+							<%
+								UUID uuid = UUID.randomUUID();
+								MessageDigest md = MessageDigest.getInstance("MD5");
+								byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+								BigInteger number = new BigInteger(1, messageDigest);
+								String hashtext = number.toString(16);
+								session = request.getSession();
+								session.setAttribute("generatedKey", hashtext);
+							%>
+							<input type="hidden" value="<%out.println(hashtext);%>"
+								name="token" id="token">
 							<div class="content-body">
 								<div class="row">
 

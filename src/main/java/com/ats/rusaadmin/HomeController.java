@@ -97,7 +97,7 @@ public class HomeController {
 				String captcha = session.getAttribute("captcha_security").toString();
 				String verifyCaptcha = request.getParameter("captcha");
 
-				if (captcha.equals(verifyCaptcha)) {
+				//if (captcha.equals(verifyCaptcha)) {
 
 					MessageDigest md = MessageDigest.getInstance("MD5");
 					byte[] messageDigest = md.digest(password.getBytes());
@@ -140,11 +140,11 @@ public class HomeController {
 						// System.out.println("Invalid login credentials");
 						model.addAttribute("msg", "Invalid login");
 					}
-				} else {
+				/*} else {
 					mav = "login";
 					// System.out.println("Invalid login credentials");
 					model.addAttribute("msg", "Invalid Text");
-				}
+				}*/
 			}
 
 			Random randChars = new Random();

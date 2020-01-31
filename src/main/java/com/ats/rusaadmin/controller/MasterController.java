@@ -1,6 +1,7 @@
 package com.ats.rusaadmin.controller;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -725,131 +727,152 @@ public class MasterController {
 
 		try {
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
 
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String sectionId = request.getParameter("sectionId");
-			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			int type = Integer.parseInt(request.getParameter("type"));
+			if (key.trim().equals(token.trim())) {
 
-			String secName = null;
-			String secDesc = null;
+				User userDetail = (User) session.getAttribute("UserDetail");
 
-			Boolean ret = false;
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-			if (FormValidation.Validaton(request.getParameter("seqNo"), "") == true
-					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("type"), "") == true) {
+				String sectionId = request.getParameter("sectionId");
+				int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				int type = Integer.parseInt(request.getParameter("type"));
 
-				ret = true;
-			}
+				String secName = null;
+				String secDesc = null;
 
-			List<SectionDescription> sectionDescriptionList = new ArrayList<SectionDescription>();
+				Boolean ret = false;
 
-			if (sectionId == "" || sectionId == null) {
-				editSection.setSectionId(0);
-				editSection.setSectionAddDate(sf.format(date));
-				for (int i = 0; i < languagesList.size(); i++) {
+				if (FormValidation.Validaton(request.getParameter("seqNo"), "") == true
+						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+						|| FormValidation.Validaton(request.getParameter("type"), "") == true) {
 
-					secName = request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim()
-							.replaceAll("[ ]{2,}", " ");
-					secDesc = request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim()
-							.replaceAll("[ ]{2,}", " ");
+					ret = true;
+				}
 
-					if (FormValidation.Validaton(secName, "") == true
-							|| FormValidation.Validaton(secDesc, "") == true) {
+				List<SectionDescription> sectionDescriptionList = new ArrayList<SectionDescription>();
 
-						ret = true;
-						break;
-					}
+				if (sectionId == "" || sectionId == null) {
+					editSection.setSectionId(0);
+					editSection.setSectionAddDate(sf.format(date));
 
-					SectionDescription sectionDescription = new SectionDescription();
-					sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-
-					sectionDescription.setSectionName(XssEscapeUtils.jsoupParse(secName));
-					sectionDescription.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
-
-					if (languagesList.get(i).getLanguagesId() == 1) {
+					for (int i = 0; i < languagesList.size(); i++) {
 
 						secName = request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim()
 								.replaceAll("[ ]{2,}", " ");
 						secDesc = request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim()
 								.replaceAll("[ ]{2,}", " ");
 
-						editSection.setSectionName(XssEscapeUtils.jsoupParse(secName));
-						editSection.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
+						if (FormValidation.Validaton(secName, "") == true
+								|| FormValidation.Validaton(secDesc, "") == true) {
 
-						String text = editSection.getSectionName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						editSection.setSectionSlugname(text);
+							ret = true;
+							break;
+						}
+
+						SectionDescription sectionDescription = new SectionDescription();
+						sectionDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+
+						sectionDescription.setSectionName(XssEscapeUtils.jsoupParse(secName));
+						sectionDescription.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
+						editSection.setAddedByUserId(userDetail.getUserId());
+						if (languagesList.get(i).getLanguagesId() == 1) {
+
+							secName = request.getParameter("sectionName" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " ");
+							secDesc = request.getParameter("sectionDesc" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " ");
+
+							editSection.setSectionName(XssEscapeUtils.jsoupParse(secName));
+							editSection.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
+
+							String text = editSection.getSectionName();
+							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+							editSection.setSectionSlugname(text);
+						}
+						sectionDescriptionList.add(sectionDescription);
+
 					}
-					sectionDescriptionList.add(sectionDescription);
 
-				}
+				} else {
+					editSection.setSectionId(Integer.parseInt(sectionId));
+					editSection.setSectionEditDate(sf.format(date));
+					editSection.setEditByUserId(userDetail.getUserId());
 
-			} else {
-				editSection.setSectionId(Integer.parseInt(sectionId));
-				editSection.setSectionEditDate(sf.format(date));
-				sectionDescriptionList = editSection.getSectionDescriptionList();
+					sectionDescriptionList = editSection.getSectionDescriptionList();
 
-				for (int i = 0; i < sectionDescriptionList.size(); i++) {
-
-					secName = request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim()
-							.replaceAll("[ ]{2,}", " ");
-					secDesc = request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim()
-							.replaceAll("[ ]{2,}", " ");
-
-					if (FormValidation.Validaton(secName, "") == true
-							|| FormValidation.Validaton(secDesc, "") == true) {
-
-						ret = true;
-						break;
-					}
-
-					sectionDescriptionList.get(i).setSectionName(XssEscapeUtils.jsoupParse(secName));
-					sectionDescriptionList.get(i).setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
-
-					if (sectionDescriptionList.get(i).getLanguageId() == 1) {
+					for (int i = 0; i < sectionDescriptionList.size(); i++) {
 
 						secName = request.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId())
 								.trim().replaceAll("[ ]{2,}", " ");
 						secDesc = request.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId())
 								.trim().replaceAll("[ ]{2,}", " ");
 
-						editSection.setSectionName(XssEscapeUtils.jsoupParse(secName));
-						editSection.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
-						String text = editSection.getSectionName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						editSection.setSectionSlugname(text);
+						if (FormValidation.Validaton(secName, "") == true
+								|| FormValidation.Validaton(secDesc, "") == true) {
+
+							ret = true;
+							break;
+						}
+
+						sectionDescriptionList.get(i).setSectionName(XssEscapeUtils.jsoupParse(secName));
+						sectionDescriptionList.get(i).setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
+
+						if (sectionDescriptionList.get(i).getLanguageId() == 1) {
+
+							secName = request
+									.getParameter("sectionName" + sectionDescriptionList.get(i).getLanguageId()).trim()
+									.replaceAll("[ ]{2,}", " ");
+							secDesc = request
+									.getParameter("sectionDesc" + sectionDescriptionList.get(i).getLanguageId()).trim()
+									.replaceAll("[ ]{2,}", " ");
+
+							editSection.setSectionName(XssEscapeUtils.jsoupParse(secName));
+							editSection.setSectionDesc(XssEscapeUtils.jsoupParse(secDesc));
+							String text = editSection.getSectionName();
+							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+							editSection.setSectionSlugname(text);
+						}
 					}
 				}
-			}
 
-			editSection.setSectionSortNo(seqNo);
-			editSection.setSectionDateTime(sf.format(date));
-			editSection.setDelStatus(1);
-			editSection.setIsActive(isActive);
-			editSection.setExInt1(type);
+				editSection.setSectionSortNo(seqNo);
+				editSection.setSectionDateTime(sf.format(date));
+				editSection.setDelStatus(1);
+				editSection.setIsActive(isActive);
+				editSection.setExInt1(type);
 
-			editSection.setSectionDescriptionList(sectionDescriptionList);
-			if (ret == false) {
-				Section res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSection", editSection,
-						Section.class);
-				session = request.getSession();
-				if (res.getSectionId() != 0) {
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+				editSection.setSectionDescriptionList(sectionDescriptionList);
+				if (ret == false) {
+					Section res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSection", editSection,
+							Section.class);
+					session = request.getSession();
+					if (res.getSectionId() != 0) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Failed to add Infomation !");
+						session.setAttribute("errorMsg", "true");
+					}
 				} else {
-					session.setAttribute("successMsg", "Failed to add Infomation !");
+					session.setAttribute("successMsg", "Invalid Infomation !");
 					session.setAttribute("errorMsg", "true");
 				}
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation !");
+				session.setAttribute("successMsg", "Something wrong");
 				session.setAttribute("errorMsg", "true");
 			}
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -879,7 +902,7 @@ public class MasterController {
 
 			HttpSession session = request.getSession();
 			int sectionId = (int) session.getAttribute("sectionId");
-			//session.removeAttribute("sectionId");
+			// session.removeAttribute("sectionId");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("sectionId", sectionId);
 
@@ -940,19 +963,34 @@ public class MasterController {
 		return Info;
 	}
 
-	@RequestMapping(value = "/deleteSection/{sectionId}", method = RequestMethod.GET)
-	public String deleteSection(@PathVariable int sectionId, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/deleteSection/{sectionId}/{token}", method = RequestMethod.GET)
+	public String deleteSection(@PathVariable int sectionId, @PathVariable String token, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("sectionId", sectionId);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteSection", map, Info.class);
-
 			HttpSession session = request.getSession();
-			session.setAttribute("successMsg", "Infomation deleted successfully!");
+			String key = (String) session.getAttribute("generatedKey");
 
+			if (key.trim().equals(token.trim())) {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("sectionId", sectionId);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteSection", map, Info.class);
+				session.setAttribute("successMsg", "Infomation deleted successfully!");
+			} else {
+				session.setAttribute("successMsg", "something wrong");
+			}
+
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

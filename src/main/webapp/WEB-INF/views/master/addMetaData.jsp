@@ -2,6 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.io.*,java.util.*, javax.servlet.*"
+	import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
 
 <!DOCTYPE html>
 <html class=" ">
@@ -57,9 +62,9 @@
 									<c:otherwise>Add Meta Data</c:otherwise>
 								</c:choose>
 							</h2>
-  							 <div class="actions panel_actions pull-right">
-                                    <a class="box_toggle fa fa-chevron-down"></a>
-                                    </div>
+							<div class="actions panel_actions pull-right">
+								<a class="box_toggle fa fa-chevron-down"></a>
+							</div>
 
 
 						</header>
@@ -67,6 +72,19 @@
 						<form class="form-horizontal" id="addSupplier"
 							action="${pageContext.request.contextPath}/insertMetaData"
 							method="post">
+
+							<%
+								UUID uuid = UUID.randomUUID();
+								MessageDigest md = MessageDigest.getInstance("MD5");
+								byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+								BigInteger number = new BigInteger(1, messageDigest);
+								String hashtext = number.toString(16);
+								session = request.getSession();
+								session.setAttribute("generatedKey", hashtext);
+							%>
+							<input type="hidden" value="<%out.println(hashtext);%>"
+								name="token" id="token">
+
 							<c:if test="${sessionScope.successMsg!=null}">
 								<div class="col-lg-12">
 									<div class="alert alert-success alert-dismissible fade in">
@@ -102,8 +120,9 @@
 															</label>
 															<div class="col-sm-10">
 																<input id="siteName${languagesList.languagesId}"
-																	class="form-control" placeholder="Meta Site Name" onchange="trim(this)"
-																	value="${metaList.siteTitle}" style="text-align: left;"
+																	class="form-control" placeholder="Meta Site Name"
+																	onchange="trim(this)" value="${metaList.siteTitle}"
+																	style="text-align: left;"
 																	name="siteName${languagesList.languagesId}" type="text"
 																	required>
 															</div>
@@ -116,8 +135,9 @@
 																class="text-danger">*</span>
 															</label>
 															<div class="col-sm-10">
-																<input id="metaDescription${languagesList.languagesId}" onchange="trim(this)"
-																	class="form-control" placeholder="Meta Description"
+																<input id="metaDescription${languagesList.languagesId}"
+																	onchange="trim(this)" class="form-control"
+																	placeholder="Meta Description"
 																	value="${metaList.metaDescription}"
 																	style="text-align: left;"
 																	name="metaDescription${languagesList.languagesId}"
@@ -132,8 +152,8 @@
 															</label>
 															<div class="col-sm-10">
 																<input id="metaKeywords${languagesList.languagesId}"
-																	class="form-control" placeholder="Meta Keyword" onchange="trim(this)"
-																	value="${metaList.metaKeywords}"
+																	class="form-control" placeholder="Meta Keyword"
+																	onchange="trim(this)" value="${metaList.metaKeywords}"
 																	style="text-align: left;"
 																	name="metaKeywords${languagesList.languagesId}"
 																	type="text" required>
@@ -147,8 +167,8 @@
 															</label>
 															<div class="col-sm-10">
 																<input id="metaAuthor${languagesList.languagesId}"
-																	class="form-control" placeholder="Meta Author" onchange="trim(this)"
-																	value="${metaList.metaAuthor}"
+																	class="form-control" placeholder="Meta Author"
+																	onchange="trim(this)" value="${metaList.metaAuthor}"
 																	style="text-align: left;"
 																	name="metaAuthor${languagesList.languagesId}"
 																	type="text" required>
@@ -234,31 +254,27 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-	
-  <script>
-			function trim(el) {
-				el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
-				replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
-				replace(/\n +/, "\n"); // Removes spaces after newlines
-				return;
-			}
-			</script>
+
 	<script>
-            function clearSessionAttribute() {
-            	 
-            	 
-             
-            	$.getJSON('${clearSessionAttribute}', {
-              
-            		ajax : 'true',
-            
-            	}, function(data) { 
-            		 
-            	
-            	});
-            
-            }
-             
-        </script>
+		function trim(el) {
+			el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+			replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
+			replace(/\n +/, "\n"); // Removes spaces after newlines
+			return;
+		}
+	</script>
+	<script>
+		function clearSessionAttribute() {
+
+			$.getJSON('${clearSessionAttribute}', {
+
+				ajax : 'true',
+
+			}, function(data) {
+
+			});
+
+		}
+	</script>
 </body>
 </html>

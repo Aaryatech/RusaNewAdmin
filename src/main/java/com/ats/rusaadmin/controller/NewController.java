@@ -6,8 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URLConnection;
+import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -115,7 +118,7 @@ public class NewController {
 
 				}
 			}
-		//	System.out.println(editMeta);
+			// System.out.println(editMeta);
 			model.addObject("editMeta", editMeta);
 
 		} catch (Exception e) {
@@ -150,56 +153,79 @@ public class NewController {
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
-			Boolean ret = false;
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
 
-			for (int i = 0; i < editMeta.size(); i++) {
-				
-				String siteTitle = request.getParameter("siteName" + languagesList.get(i).getLanguagesId()); 
-				String metaDesc = request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId());
-				String metaAuthor = request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId());
-				String metaKeyWord = request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId());
-				
-				if (FormValidation.Validaton(siteTitle,"") == true
-						|| FormValidation.Validaton(metaDesc,"") == true
-						|| FormValidation.Validaton(metaAuthor, "") == true
-						|| FormValidation.Validaton(metaKeyWord,"") == true) {
+			String key = (String) session.getAttribute("generatedKey");
+			String token = request.getParameter("token");
 
-					ret = true;
-					break;
+			if (key.trim().equals(token.trim())) {
+
+				User UserDetail = (User) session.getAttribute("UserDetail");
+				Boolean ret = false;
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				List<MetaData> metaDescriptionList = new ArrayList<MetaData>();
+
+				for (int i = 0; i < editMeta.size(); i++) {
+
+					String siteTitle = request.getParameter("siteName" + languagesList.get(i).getLanguagesId());
+					String metaDesc = request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId());
+					String metaAuthor = request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId());
+					String metaKeyWord = request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId());
+
+					if (FormValidation.Validaton(siteTitle, "") == true
+							|| FormValidation.Validaton(metaDesc, "") == true
+							|| FormValidation.Validaton(metaAuthor, "") == true
+							|| FormValidation.Validaton(metaKeyWord, "") == true) {
+
+						ret = true;
+						break;
+					}
+
+					editMeta.get(i)
+							.setSiteTitle(XssEscapeUtils.jsoupParse(siteTitle.trim().replaceAll("[ ]{2,}", " ")));
+					editMeta.get(i)
+							.setMetaDescription(XssEscapeUtils.jsoupParse(metaDesc.trim().replaceAll("[ ]{2,}", " ")));
+					editMeta.get(i)
+							.setMetaAuthor(XssEscapeUtils.jsoupParse(metaAuthor.trim().replaceAll("[ ]{2,}", " ")));
+					editMeta.get(i)
+							.setMetaKeywords(XssEscapeUtils.jsoupParse(metaKeyWord.trim().replaceAll("[ ]{2,}", " ")));
+					editMeta.get(i).setAddDate(sf.format(date));
+					editMeta.get(i).setAddedByUserId(UserDetail.getUserId());
+
 				}
+				// editSection.setAddedByUserId(UserDetail.getUserId());
+				// System.out.println("siteTitle" + editMeta);
 
-				editMeta.get(i).setSiteTitle(XssEscapeUtils.jsoupParse(siteTitle.trim().replaceAll("[ ]{2,}", " ")));
-				editMeta.get(i).setMetaDescription(XssEscapeUtils.jsoupParse(metaDesc.trim().replaceAll("[ ]{2,}", " ")));
-				editMeta.get(i).setMetaAuthor(XssEscapeUtils.jsoupParse(metaAuthor.trim().replaceAll("[ ]{2,}", " ")));
-				editMeta.get(i).setMetaKeywords(XssEscapeUtils.jsoupParse(metaKeyWord.trim().replaceAll("[ ]{2,}", " ")));
+				if (ret == false) {
+					List<MetaData> res = Constant.getRestTemplate().postForObject(Constant.url + "/saveMetaData",
+							editMeta, List.class);
 
-			}
-			// editSection.setAddedByUserId(UserDetail.getUserId());
-			// System.out.println("siteTitle" + editMeta);
+					// System.out.println("res " + res);
+					session = request.getSession();
+					if (res.isEmpty() == false) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
 
-			if (ret == false) {
-				List<MetaData> res = Constant.getRestTemplate().postForObject(Constant.url + "/saveMetaData", editMeta,
-						List.class);
+					} else {
+						session.setAttribute("successMsg", "Failed To Add Infomation!");
+						session.setAttribute("errorMsg", "false");
 
-				// System.out.println("res " + res);
-				session = request.getSession();
-				if (res.isEmpty() == false) {
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
-
+					}
 				} else {
-					session.setAttribute("successMsg", "Failed To Add Infomation!");
-					session.setAttribute("errorMsg", "false");
-
+					session.setAttribute("successMsg", "Invalid Infomation!");
+					session.setAttribute("errorMsg", "true");
 				}
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
+				session.setAttribute("successMsg", "somethin wrong");
 				session.setAttribute("errorMsg", "true");
 			}
+
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -274,97 +300,112 @@ public class NewController {
 		try {
 
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String id = request.getParameter("id");
-			String urlLink = request.getParameter("urlLink");
-			String titleName = request.getParameter("title_name");
+			if (key.trim().equals(token.trim())) {
 
-			int sortOrder = Integer.parseInt(request.getParameter("sortNo"));
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			String imageName = request.getParameter("imageName");
-			VpsImageUpload upload = new VpsImageUpload();
-			String docFile = null;
+				String id = request.getParameter("id");
+				String urlLink = request.getParameter("urlLink");
+				String titleName = request.getParameter("title_name");
 
-			Boolean ret = false;
+				int sortOrder = Integer.parseInt(request.getParameter("sortNo"));
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
 
-			if (FormValidation.Validaton(request.getParameter("title_name"), "") == true
-					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
+				String imageName = request.getParameter("imageName");
+				VpsImageUpload upload = new VpsImageUpload();
+				String docFile = null;
 
-				ret = true;
-			}
+				Boolean ret = false;
 
-			Date date = new Date(); // your date
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				if (FormValidation.Validaton(request.getParameter("title_name"), "") == true
+						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+						|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
-			if(ret==false) {
-			if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
-				
-				
-
-				docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-				// editImageLink.setSliderImage("re"+docFile);
-				editImageLink.setSliderImage(docFile);
-				try {
-					Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL, docFile,
-							Constant.values, 0, 140, 60, 0, 0);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
+					ret = true;
 				}
-				editImageLink.setAddDate(sf.format(date));
-				editImageLink.setIsActive(isActive);
-				// editbanner.setAddedByUserId(UserDetail.getUserId());
-			} else {
 
-				if (docfile.get(0).getOriginalFilename() == null || docfile.get(0).getOriginalFilename() == "") {
-					editImageLink.setSliderImage(imageName.trim().replaceAll("[ ]{2,}", " "));
-				} else {
-					docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-					// editImageLink.setSliderImage("re"+docFile);
-					editImageLink.setSliderImage(docFile.trim().replaceAll("[ ]{2,}", " "));
-					try {
-						Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL, docFile,
-								Constant.values, 0, 140, 60, 0, 0);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				if (ret == false) {
+					if (id.equalsIgnoreCase(null) || id.equalsIgnoreCase("")) {
+
+						docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
+						// editImageLink.setSliderImage("re"+docFile);
+						editImageLink.setSliderImage(docFile);
+						try {
+							Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL,
+									docFile, Constant.values, 0, 140, 60, 0, 0);
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+						editImageLink.setAddDate(sf.format(date));
+						editImageLink.setIsActive(isActive);
+						// editbanner.setAddedByUserId(UserDetail.getUserId());
+					} else {
+
+						if (docfile.get(0).getOriginalFilename() == null
+								|| docfile.get(0).getOriginalFilename() == "") {
+							editImageLink.setSliderImage(imageName.trim().replaceAll("[ ]{2,}", " "));
+						} else {
+							docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
+							// editImageLink.setSliderImage("re"+docFile);
+							editImageLink.setSliderImage(docFile.trim().replaceAll("[ ]{2,}", " "));
+							try {
+								Info info = upload.saveUploadedImgeWithResize(docfile.get(0), Constant.bannerImageURL,
+										docFile, Constant.values, 0, 140, 60, 0, 0);
+							} catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
+						}
+						editImageLink.setEditDate(sf.format(date));
+						editImageLink.setIsActive(isActive);
+						// editbanner.setEditByUserId(UserDetail.getUserId());
 					}
+
+					editImageLink.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
+					editImageLink.setTitleName(titleName.trim().replaceAll("[ ]{2,}", " "));
+					editImageLink.setDelStatus(1);
+					// editImageLink.setIsActive(1);
+					editImageLink.setSortOrder(sortOrder);
+					editImageLink.setEditDate(sf.format(date));
+					editImageLink.setEditByUserId(UserDetail.getUserId());
+					// System.out.println("editImageLink" + editImageLink);
+
+					ImageLink res = Constant.getRestTemplate().postForObject(Constant.url + "/saveImageLink",
+							editImageLink, ImageLink.class);
+
+					if (res.getId() != 0) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Failed to Add Infomation !");
+						session.setAttribute("errorMsg", "true");
+					}
+				} else {
+					session.setAttribute("successMsg", "Invalid Infomation!");
+					session.setAttribute("errorMsg", "true");
 				}
-				editImageLink.setEditDate(sf.format(date));
-				editImageLink.setIsActive(isActive);
-				// editbanner.setEditByUserId(UserDetail.getUserId());
-			}
-
-			editImageLink.setUrlLink(urlLink.trim().replaceAll("[ ]{2,}", " "));
-			editImageLink.setTitleName(titleName.trim().replaceAll("[ ]{2,}", " "));
-			editImageLink.setDelStatus(1);
-			// editImageLink.setIsActive(1);
-			editImageLink.setSortOrder(sortOrder);
-
-			//System.out.println("editImageLink" + editImageLink);
-
-			ImageLink res = Constant.getRestTemplate().postForObject(Constant.url + "/saveImageLink", editImageLink,
-					ImageLink.class);
-
-			if (res.getId() != 0) {
-				session.setAttribute("successMsg", "Infomation added successfully!");
-				session.setAttribute("errorMsg", "false");
 			} else {
-				session.setAttribute("successMsg", "Failed to Add Infomation !");
+				session.setAttribute("successMsg", "something wrong");
 				session.setAttribute("errorMsg", "true");
 			}
-			}
-			else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
-				session.setAttribute("errorMsg", "true");
-			}
-			
+
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -372,20 +413,32 @@ public class NewController {
 		return "redirect:/imageLinkList";
 	}
 
-	@RequestMapping(value = "/deleteImageLink/{id}", method = RequestMethod.GET)
-	public String deleteImageLink(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/deleteImageLink/{id}/{token}", method = RequestMethod.GET)
+	public String deleteImageLink(@PathVariable int id, @PathVariable String token, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
-
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteImagesLink", map, Info.class);
-			//System.out.println(res);
-
 			HttpSession session = request.getSession();
-			session.setAttribute("successMsg", "Infomation deleted successfully!");
+			String key = (String) session.getAttribute("generatedKey");
 
+			if (key.trim().equals(token.trim())) {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteImagesLink", map,
+						Info.class);
+				// System.out.println(res);
+
+				session.setAttribute("successMsg", "Infomation deleted successfully!");
+			} else {
+				session.setAttribute("successMsg", "something wrong");
+			}
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -446,7 +499,7 @@ public class NewController {
 			String remark = request.getParameter("remark");
 
 			String id = request.getParameter("id");
-			//System.out.println("remark: " + remark);
+			// System.out.println("remark: " + remark);
 			if (id != null) {
 
 				contactUs.setId(Integer.parseInt(id));
@@ -633,7 +686,7 @@ public class NewController {
 
 				int totalPages = writer.getPageNumber();
 
-				//System.out.println("Page no " + totalPages);
+				// System.out.println("Page no " + totalPages);
 
 				document.close();
 
@@ -658,7 +711,7 @@ public class NewController {
 					try {
 						FileCopyUtils.copy(inputStream, response.getOutputStream());
 					} catch (IOException e) {
-						//System.out.println("Excep in Opening a Pdf File");
+						// System.out.println("Excep in Opening a Pdf File");
 						e.printStackTrace();
 					}
 				}
@@ -763,8 +816,7 @@ public class NewController {
 
 		return "redirect:/ContactList";
 	}
-	
-	
+
 	@RequestMapping(value = "/multipleUserRegDelete", method = RequestMethod.GET)
 	public String multipleUserRegDelete(HttpServletRequest request, HttpServletResponse response) {
 
@@ -795,7 +847,6 @@ public class NewController {
 
 		return "redirect:/activeUserList";
 	}
-
 
 	@RequestMapping(value = "/deletedContactList", method = RequestMethod.GET)
 	public ModelAndView deletedContactList(HttpServletRequest request, HttpServletResponse response) {
@@ -841,28 +892,44 @@ public class NewController {
 		return "redirect:/deletedContactList";
 	}
 
-	@RequestMapping(value = "/editChannel", method = RequestMethod.POST)
-	public String editChannel(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/submiteditChannel", method = RequestMethod.POST)
+	public String submiteditChannel(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
+			HttpSession session = request.getSession();
+			String key = (String) session.getAttribute("generatedKey");
+			String token = request.getParameter("token");
 
-			// String remark = request.getParameter("remark");
-			String sortNo = request.getParameter("seqNo");
-			String isActive = request.getParameter("isActive");
-			String urlLink = request.getParameter("urlLink");
-			String id = request.getParameter("id");
+			if (key.trim().equals(token.trim())) {
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			if (id != null) {
+				// String remark = request.getParameter("remark");
+				String sortNo = request.getParameter("seqNo");
+				String isActive = request.getParameter("isActive");
+				String urlLink = request.getParameter("urlLink");
+				int id = (int) session.getAttribute("editchannelId");
 
-				socialChannel.setId(Integer.parseInt(id));
-				socialChannel.setUrllinks(XssEscapeUtils.jsoupParse(urlLink));
-				socialChannel.setIsActive(Integer.parseInt(isActive));
-				socialChannel.setSortNo(Integer.parseInt(sortNo));
+				if (id != 0) {
 
+					socialChannel.setId(id);
+					socialChannel.setUrllinks(XssEscapeUtils.jsoupParse(urlLink));
+					socialChannel.setIsActive(Integer.parseInt(isActive));
+					socialChannel.setSortNo(Integer.parseInt(sortNo));
+					socialChannel.setAddDate(sf.format(date));
+					socialChannel.setAddedByUserId(UserDetail.getUserId());
+				}
+				SocialChannels res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSocialChannel",
+						socialChannel, SocialChannels.class);
 			}
-			SocialChannels res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSocialChannel",
-					socialChannel, SocialChannels.class);
 
+			UUID uuid = UUID.randomUUID();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			session.setAttribute("generatedKey", hashtext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -890,11 +957,25 @@ public class NewController {
 	}
 
 	@RequestMapping(value = "/editChannel/{id}", method = RequestMethod.GET)
-	public ModelAndView editChannel(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+	public String editChannel(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			HttpSession session = request.getSession();
+			session.setAttribute("editchannelId", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/editChannelSingle";
+	}
+
+	@RequestMapping(value = "/editChannelSingle", method = RequestMethod.GET)
+	public ModelAndView editChannelSingle(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("master/editSocialChannel");
 		try {
-
+			HttpSession session = request.getSession();
+			int id = (int) session.getAttribute("editchannelId");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 
@@ -909,7 +990,7 @@ public class NewController {
 			model.addObject("editChannel", socialChannel);
 			model.addObject("isEdit", 1);
 
-			System.out.println(contactUs);
+			// System.out.println(contactUs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -964,24 +1045,31 @@ public class NewController {
 
 		try {
 			HttpSession session = request.getSession();
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String status = request.getParameter("status");
-			String message = XssEscapeUtils.jsoupParse(request.getParameter("message"));
-			Date date = new Date(); // your date
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			editSite.setMaintenanceStatus(Integer.parseInt(status));
+			if (key.trim().equals(token.trim())) {
+				String status = request.getParameter("status");
+				String message = XssEscapeUtils.jsoupParse(request.getParameter("message"));
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				editSite.setMaintenanceStatus(Integer.parseInt(status));
 
-			editSite.setEditDate(sf.format(date));
-			editSite.setMessage(message);
+				editSite.setEditDate(sf.format(date));
+				editSite.setMessage(message);
 
-			Maintainance res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSiteMaintenance", editSite,
-					Maintainance.class);
+				Maintainance res = Constant.getRestTemplate().postForObject(Constant.url + "/saveSiteMaintenance",
+						editSite, Maintainance.class);
 
-			if (res.getId() == 0) {
-				session.setAttribute("successMsg", "Error !");
+				if (res.getId() == 0) {
+					session.setAttribute("successMsg", "Error !");
+				} else {
+					session.setAttribute("successMsg", "Infomation Updated successfully!");
+				}
 			} else {
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
+				session.setAttribute("successMsg", "something wrong");
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -42,7 +42,7 @@ public class BasicAuthorizationInterceptor implements ClientHttpRequestIntercept
 		// request.getHeaders().add("Authorization", "Basic " + hashtext);
 		String token = Base64Utils
 				.encodeToString((this.username + ":" + this.password).getBytes(StandardCharsets.UTF_8));
-		System.out.println(token);
+		//System.out.println(token);
 		request.getHeaders().add("Authorization", "Basic " + token);
 
 		return execution.execute(request, body);
