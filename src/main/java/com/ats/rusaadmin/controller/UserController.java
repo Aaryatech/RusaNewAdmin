@@ -38,6 +38,7 @@ import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.EmailUtility;
 import com.ats.rusaadmin.common.RandomString;
+import com.ats.rusaadmin.common.SessionKeyGen;
 import com.ats.rusaadmin.model.EventCountDetails;
 import com.ats.rusaadmin.model.EventDetail;
 import com.ats.rusaadmin.model.EventDetails;
@@ -764,59 +765,61 @@ public class UserController {
 
 	@RequestMapping(value = "/getAllEventList", method = RequestMethod.GET)
 	public ModelAndView getAllEventList(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = null;
 
-		ModelAndView model = new ModelAndView("allEventList");
 		try {
-			
-			
-			Calendar date = Calendar.getInstance();
-			date.set(Calendar.DAY_OF_MONTH, 1);
 
-			Date firstDate = date.getTime();
+			 
+				model = new ModelAndView("allEventList");
+				Calendar date = Calendar.getInstance();
+				date.set(Calendar.DAY_OF_MONTH, 1);
 
-			DateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY");
+				Date firstDate = date.getTime();
 
-			String fromDate = dateFormat.format(firstDate);
+				DateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY");
 
-			String toDate = dateFormat.format(new Date());
+				String fromDate = dateFormat.format(firstDate);
 
-			String fromDate1 = request.getParameter("from_date");
-			String toDate1 = request.getParameter("to_date");
-			// System.out.println("from Date***"+fromDate1);
-			// System.out.println("to Date***"+toDate1);
-			if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+				String toDate = dateFormat.format(new Date());
 
-				fromDate1 = fromDate;
-				toDate1 = toDate;
+				String fromDate1 = request.getParameter("from_date");
+				String toDate1 = request.getParameter("to_date");
+				// System.out.println("from Date***"+fromDate1);
+				// System.out.println("to Date***"+toDate1);
+				if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
 
-			}
+					fromDate1 = fromDate;
+					toDate1 = toDate;
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			map.add("fromDate", DateConvertor.convertToYMD(fromDate1));
-			map.add("toDate", DateConvertor.convertToYMD(toDate1));
-			EventCountDetails[] getUser = Constant.getRestTemplate().postForObject(Constant.url + "/getAllEventList",
-					map, EventCountDetails[].class);
-			userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
-			for (int i = 0; i < userList.size(); i++) {
-				userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
+				}
 
-			}
-			if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate1));
+				map.add("toDate", DateConvertor.convertToYMD(toDate1));
+				EventCountDetails[] getUser = Constant.getRestTemplate()
+						.postForObject(Constant.url + "/getAllEventList", map, EventCountDetails[].class);
+				userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
+				for (int i = 0; i < userList.size(); i++) {
+					userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
 
-				// System.out.println("refresh");
-				model.addObject("fromDate", fromDate);
-				model.addObject("toDate", toDate);
+				}
+				if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
 
-			} else {
-				// System.out.println("submit");
-				model.addObject("fromDate", fromDate1);
-				model.addObject("toDate", toDate1);
-			}
+					// System.out.println("refresh");
+					model.addObject("fromDate", fromDate);
+					model.addObject("toDate", toDate);
 
-			model.addObject("userList", userList);
-			// System.out.println("userList :" + userList);
+				} else {
+					// System.out.println("submit");
+					model.addObject("fromDate", fromDate1);
+					model.addObject("toDate", toDate1);
+				}
 
+				model.addObject("userList", userList);
+				// System.out.println("userList :" + userList);
+			 
 		} catch (Exception e) {
+			 
 			e.printStackTrace();
 		}
 
