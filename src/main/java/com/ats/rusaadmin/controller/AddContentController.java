@@ -648,90 +648,100 @@ public class AddContentController {
 
 	@RequestMapping(value = "/insertFaqForm", method = RequestMethod.POST)
 	public String insertFaqForm(HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = null;
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			int isActive = Integer.parseInt(request.getParameter("status"));
-			int seqNo = Integer.parseInt(request.getParameter("sortNo"));
-			Boolean ret = false;
+			if (token.trim().equals(key.trim())) {
 
-			if (FormValidation.Validaton(request.getParameter("status"), "") == true
-					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-				ret = true;
-			}
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				int isActive = Integer.parseInt(request.getParameter("status"));
+				int seqNo = Integer.parseInt(request.getParameter("sortNo"));
+				Boolean ret = false;
 
-			FreqAskQue freqAskQue = new FreqAskQue();
+				if (FormValidation.Validaton(request.getParameter("status"), "") == true
+						|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
 
-			List<FreqAskQueDescription> freqAskQueDescriptionList = new ArrayList<FreqAskQueDescription>();
-
-			for (int i = 0; i < languagesList.size(); i++) {
-				String resFaq = XssEscapeUtils
-						.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				String resAns = XssEscapeUtils.jsoupParseClean(request
-						.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim().replaceAll("[ ]{2,}", " "));
-
-				if (FormValidation.Validaton(resFaq, "") == true || FormValidation.Validaton(resAns, "") == true) {
 					ret = true;
-					break;
 				}
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-				FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
-				freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-				freqAskQueDescription.setFaqQue(XssEscapeUtils.jsoupParse(resFaq));
-				freqAskQueDescription.setFaqAns(XssEscapeUtils.jsoupParseClean(resAns));
-				freqAskQueDescriptionList.add(freqAskQueDescription);
-			}
-			if (ret == false) {
-				freqAskQue.setAddedByUserId(UserDetail.getUserId());
+				FreqAskQue freqAskQue = new FreqAskQue();
 
-				freqAskQue.setPageId(pageId);
-				freqAskQue.setFaqSortNo(seqNo);
-				freqAskQue.setIsActive(isActive);
-				freqAskQue.setDelStatus(1);
-				freqAskQue.setAddDate(sf.format(date));
+				List<FreqAskQueDescription> freqAskQueDescriptionList = new ArrayList<FreqAskQueDescription>();
 
-				freqAskQue.setDescriptionList(freqAskQueDescriptionList);
+				for (int i = 0; i < languagesList.size(); i++) {
+					String resFaq = XssEscapeUtils
+							.jsoupParse(request.getParameter("question" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+					String resAns = XssEscapeUtils
+							.jsoupParseClean(request.getParameter("ans" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
 
-				// System.out.println("freqAskQue " + freqAskQue);
-				FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
-						freqAskQue, FreqAskQue.class);
+					if (FormValidation.Validaton(resFaq, "") == true || FormValidation.Validaton(resAns, "") == true) {
+						ret = true;
+						break;
+					}
 
-				if (res != null && res.getDescriptionList() != null) {
+					FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
+					freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					freqAskQueDescription.setFaqQue(XssEscapeUtils.jsoupParse(resFaq));
+					freqAskQueDescription.setFaqAns(XssEscapeUtils.jsoupParseClean(resAns));
+					freqAskQueDescriptionList.add(freqAskQueDescription);
+				}
+				if (ret == false) {
+					freqAskQue.setAddedByUserId(UserDetail.getUserId());
 
-					PagesModule pagesModule = new PagesModule();
+					freqAskQue.setPageId(pageId);
+					freqAskQue.setFaqSortNo(seqNo);
+					freqAskQue.setIsActive(isActive);
+					freqAskQue.setDelStatus(1);
+					freqAskQue.setAddDate(sf.format(date));
 
-					pagesModule.setPageId(res.getPageId());
-					pagesModule.setPrimaryKeyId(res.getFaqId());
-					pagesModule.setModuleId(2);
-					PagesModule pagesModuleres = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					// System.out.println("res " + res);
+					freqAskQue.setDescriptionList(freqAskQueDescriptionList);
 
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+					// System.out.println("freqAskQue " + freqAskQue);
+					FreqAskQue res = Constant.getRestTemplate().postForObject(Constant.url + "/saveUpdateFreqAskQue",
+							freqAskQue, FreqAskQue.class);
+
+					if (res != null && res.getDescriptionList() != null) {
+
+						PagesModule pagesModule = new PagesModule();
+
+						pagesModule.setPageId(res.getPageId());
+						pagesModule.setPrimaryKeyId(res.getFaqId());
+						pagesModule.setModuleId(2);
+						PagesModule pagesModuleres = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						// System.out.println("res " + res);
+
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+
+						session.setAttribute("successMsg", "Error While Uploading Content !");
+						session.setAttribute("errorMsg", "true");
+					}
 				} else {
-
-					session.setAttribute("successMsg", "Error While Uploading Content !");
+					session.setAttribute("successMsg", "Invalid Infomation !");
 					session.setAttribute("errorMsg", "true");
+
 				}
+				redirect = "redirect:/sectionTreeList";
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation !");
-				session.setAttribute("errorMsg", "true");
-
+				redirect = "redirect:/accessDenied";
 			}
-
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/sectionTreeList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/faqList", method = RequestMethod.GET)
@@ -754,76 +764,93 @@ public class AddContentController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteFaqContent/{faqId}", method = RequestMethod.GET)
-	public String deleteFaqContent(@PathVariable("faqId") int faqId, HttpServletRequest request,
+	@RequestMapping(value = "/deleteFaqContent/{faqId}/{token}", method = RequestMethod.GET)
+	public String deleteFaqContent(@PathVariable("faqId") int faqId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
+		String redirect = null;
 
 		try {
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("faqIdList", faqId);
-			map.add("delStatus", 0);
-			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteFaq", map, Info.class);
 			HttpSession session = request.getSession();
+			String key = (String) session.getAttribute("generatedKey");
 
-			if (info.isError() == false) {
-				session.setAttribute("successMsg", "Infomation Delete successfully!");
+			if (token.trim().equals(key.trim())) {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("faqIdList", faqId);
+				map.add("delStatus", 0);
+				Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteFaq", map, Info.class);
+
+				if (info.isError() == false) {
+					session.setAttribute("successMsg", "Infomation Delete successfully!");
+				} else {
+					session.setAttribute("successMsg", "Error while Deleting !");
+				}
+				redirect = "redirect:/faqList";
 			} else {
-				session.setAttribute("successMsg", "Error while Deleting !");
+				redirect = "redirect:/accessDenied";
 			}
-
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/faqList";
+		return redirect;
 	}
 
-	@RequestMapping(value = "/editFaqContent/{faqId}", method = RequestMethod.GET)
-	public ModelAndView editFaqContent(@PathVariable("faqId") int faqId, HttpServletRequest request,
+	@RequestMapping(value = "/editFaqContent/{faqId}/{token}", method = RequestMethod.GET)
+	public ModelAndView editFaqContent(@PathVariable("faqId") int faqId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("moduleForms/editFaqContent");
+		ModelAndView model = null;
 		try {
+			HttpSession session = request.getSession();
+			String key = (String) session.getAttribute("generatedKey");
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("faqId", faqId);
+			if (token.trim().equals(key.trim())) {
+				model = new ModelAndView("moduleForms/editFaqContent");
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("faqId", faqId);
 
-			editFreqAskQue = Constant.getRestTemplate().postForObject(Constant.url + "/getFaqById", map,
-					FreqAskQue.class);
+				editFreqAskQue = Constant.getRestTemplate().postForObject(Constant.url + "/getFaqById", map,
+						FreqAskQue.class);
 
-			Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
-					Languages[].class);
-			languagesList = new ArrayList<Languages>(Arrays.asList(languages));
+				Languages[] languages = Constant.getRestTemplate().getForObject(Constant.url + "/getLanguageList",
+						Languages[].class);
+				languagesList = new ArrayList<Languages>(Arrays.asList(languages));
 
-			map = new LinkedMultiValueMap<String, Object>();
-			map.add("pageId", editFreqAskQue.getPageId());
-			Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("pageId", editFreqAskQue.getPageId());
+				Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map,
+						Page.class);
 
-			for (int i = 0; i < languagesList.size(); i++) {
+				for (int i = 0; i < languagesList.size(); i++) {
 
-				int flag = 0;
+					int flag = 0;
 
-				for (int j = 0; j < editFreqAskQue.getDescriptionList().size(); j++) {
+					for (int j = 0; j < editFreqAskQue.getDescriptionList().size(); j++) {
 
-					if (languagesList.get(i).getLanguagesId() == editFreqAskQue.getDescriptionList().get(j)
-							.getLanguageId()) {
-						flag = 1;
-						break;
+						if (languagesList.get(i).getLanguagesId() == editFreqAskQue.getDescriptionList().get(j)
+								.getLanguageId()) {
+							flag = 1;
+							break;
+						}
+					}
+
+					if (flag == 0) {
+						FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
+						freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+						editFreqAskQue.getDescriptionList().add(freqAskQueDescription);
 					}
 				}
 
-				if (flag == 0) {
-					FreqAskQueDescription freqAskQueDescription = new FreqAskQueDescription();
-					freqAskQueDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-					editFreqAskQue.getDescriptionList().add(freqAskQueDescription);
-				}
+				model.addObject("languagesList", languagesList);
+				model.addObject("freqAskQue", editFreqAskQue);
+				model.addObject("page", page);
+
+			} else {
+				model = new ModelAndView("accessDenied");
 			}
-
-			model.addObject("languagesList", languagesList);
-			model.addObject("freqAskQue", editFreqAskQue);
-			model.addObject("page", page);
-
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

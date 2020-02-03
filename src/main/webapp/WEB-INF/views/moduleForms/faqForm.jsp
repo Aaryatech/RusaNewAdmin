@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
   
  
 <!DOCTYPE html>
@@ -88,11 +90,22 @@
                      
                 </header>
                 
-                    
+                         <%
+		UUID uuid = UUID.randomUUID();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+		BigInteger number = new BigInteger(1, messageDigest);
+		String hashtext = number.toString(16);
+		session = request.getSession();
+		session.setAttribute("generatedKey", hashtext);
+	%>
                 <div class="content-body"> 
                     <div class="row">
                     <div class="col-md-12">
                          <form class="form-horizontal" action="${pageContext.request.contextPath}/insertFaqForm" method="post" name="form_sample_2" id="form_sample_2">               
+               
+		<input type="hidden" value="<%out.println(hashtext);%>"
+				name="token" id="token">
                     
                     <ul class="nav nav-tabs">
                         <li class="active">
@@ -215,7 +228,6 @@
             
         <div class="col-xs-12">
 
-
             <table id="example-1" class="table table-striped dt-responsive display">
                 <thead>
                     <tr>
@@ -234,10 +246,10 @@
 										<td>${getPagesModuleList.pageName} (${getPagesModuleList.secctionName})</td> 
 										<td>${getPagesModuleList.content}</td>  
 										<td><a
-											href="${pageContext.request.contextPath}/editFaqContent/${getPagesModuleList.primaryKeyId}"><span
+											href="${pageContext.request.contextPath}/editFaqContent/${getPagesModuleList.primaryKeyId}/<%out.println(hashtext);%>"><span
 												class="glyphicon glyphicon-edit" data-animate=" animated fadeIn "
 												rel="tooltip" ></span></a> | <a
-											href="${pageContext.request.contextPath}/deleteFaqContent/${getPagesModuleList.primaryKeyId}"
+											href="${pageContext.request.contextPath}/deleteFaqContent/${getPagesModuleList.primaryKeyId}/<%out.println(hashtext);%>"
 											onClick="return confirm('Are you sure want to delete this record');" rel="tooltip" data-color-class = "danger" data-animate=" animated fadeIn " data-toggle="tooltip" data-original-title="Delete  record"><span
 												class="glyphicon glyphicon-remove"></span></a></td>
 									</tr>
