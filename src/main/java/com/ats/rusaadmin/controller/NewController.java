@@ -41,6 +41,7 @@ import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
+import com.ats.rusaadmin.common.SessionKeyGen;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerImages;
 import com.ats.rusaadmin.model.ContactUs;
@@ -1114,10 +1115,15 @@ public class NewController {
 
 	@RequestMapping(value = "/multipleCMSDelete", method = RequestMethod.GET)
 	public String multipleCMSDelete(HttpServletRequest request, HttpServletResponse response) {
-
+String redirect = null;
 		try {
-
+			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			//System.err.println("Token Found1-------------"+token);
+			if(token.trim().equals(key.trim())) {
 			String[] ids = request.getParameterValues("ids");
+			
 			String id = "0";
 
 			System.err.println("in mul del ");
@@ -1134,17 +1140,22 @@ public class NewController {
 					Info.class);
 			System.out.println(res);
 
-			HttpSession session = request.getSession();
+			
 			if (res.isError() == true) {
 				session.setAttribute("successMsg", "Sorry, Can't deleted!");
 			} else {
 				session.setAttribute("successMsg", "Infomation deleted successfully!");
 			}
+			redirect = "redirect:/cmsList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/cmsList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/multipleFAQDelete", method = RequestMethod.GET)

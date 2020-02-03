@@ -30,6 +30,7 @@ import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
+import com.ats.rusaadmin.common.SessionKeyGen;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.CMSPageDescription;
 import com.ats.rusaadmin.model.CMSPages;
@@ -177,155 +178,171 @@ public class AddContentController {
 	public String insertCmsForm(@RequestParam("images") List<MultipartFile> images,
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = null;
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String aligment = request.getParameter("header_top_alignment");
-			int isActive = Integer.parseInt(request.getParameter("status"));
-			int seqNo = Integer.parseInt(request.getParameter("page_order"));
+			if (token.trim().equals(key.trim())) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			Boolean ret = false;
+				String aligment = request.getParameter("header_top_alignment");
+				int isActive = Integer.parseInt(request.getParameter("status"));
+				int seqNo = Integer.parseInt(request.getParameter("page_order"));
 
-			if (FormValidation.Validaton(request.getParameter("page_order"), "") == true
-					|| FormValidation.Validaton(request.getParameter("status"), "") == true) {
+				Boolean ret = false;
 
-				ret = true;
-			}
-
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			CMSPages cMSPages = new CMSPages();
-
-			List<CMSPageDescription> cMSPageDescriptionList = new ArrayList<CMSPageDescription>();
-
-			VpsImageUpload upload = new VpsImageUpload();
-
-			for (int i = 0; i < languagesList.size(); i++) {
-
-				String head1 = request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim()
-						.replaceAll("[ ]{2,}", " ");
-
-				String head2 = request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
-						.replaceAll("[ ]{2,}", " ");
-
-				String pageDesc = request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
-						.trim().replaceAll("[ ]{2,}", " ");
-
-				if (FormValidation.Validaton(head1, "") == true || FormValidation.Validaton(head2, "") == true
-						|| FormValidation.Validaton(pageDesc, "") == true) {
+				if (FormValidation.Validaton(request.getParameter("page_order"), "") == true
+						|| FormValidation.Validaton(request.getParameter("status"), "") == true) {
 
 					ret = true;
-					break;
 				}
 
-				CMSPageDescription cMSPageDescription = new CMSPageDescription();
-				cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				CMSPages cMSPages = new CMSPages();
 
-				cMSPageDescription.setHeading(XssEscapeUtils.jsoupParse(head1));
-				cMSPageDescription.setSmallheading(XssEscapeUtils.jsoupParse(head2));
-				cMSPageDescription.setPageDesc(XssEscapeUtils.jsoupParseClean(pageDesc));
+				List<CMSPageDescription> cMSPageDescriptionList = new ArrayList<CMSPageDescription>();
 
-				cMSPageDescription.setDateTransaction(sf.format(date));
-				cMSPageDescriptionList.add(cMSPageDescription);
+				VpsImageUpload upload = new VpsImageUpload();
 
-			}
-			if (ret == false) {
-				cMSPages.setAddedByUserId(UserDetail.getUserId());
-				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+				for (int i = 0; i < languagesList.size(); i++) {
 
-				} else {
+					String head1 = request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim()
+							.replaceAll("[ ]{2,}", " ");
 
-					String imageName = new String();
-					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
+					String head2 = request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
+							.replaceAll("[ ]{2,}", " ");
 
-					try {
+					String pageDesc = request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
+							.trim().replaceAll("[ ]{2,}", " ");
 
-						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
-								Constant.values, 0, 0, 0, 0, 0);
-						if (info.isError() == false) {
-							cMSPages.setFeaturedImage(imageName);
-						}
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+					if (FormValidation.Validaton(head1, "") == true || FormValidation.Validaton(head2, "") == true
+							|| FormValidation.Validaton(pageDesc, "") == true) {
+
+						ret = true;
+						break;
 					}
 
+					CMSPageDescription cMSPageDescription = new CMSPageDescription();
+					cMSPageDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+
+					cMSPageDescription.setHeading(XssEscapeUtils.jsoupParse(head1));
+					cMSPageDescription.setSmallheading(XssEscapeUtils.jsoupParse(head2));
+					cMSPageDescription.setPageDesc(XssEscapeUtils.jsoupParseClean(pageDesc));
+
+					cMSPageDescription.setDateTransaction(sf.format(date));
+					cMSPageDescriptionList.add(cMSPageDescription);
+
 				}
+				if (ret == false) {
+					cMSPages.setAddedByUserId(UserDetail.getUserId());
+					if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
 
-				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
+					} else {
 
-				} else {
+						String imageName = new String();
+						imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
-					String pdfName = new String();
-					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
+						try {
 
-					try {
-						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
-								pdfName);
-
-						if (info.isError() == false) {
-							cMSPages.setDownloadPdf(pdfName);
+							Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+									Constant.values, 0, 0, 0, 0, 0);
+							if (info.isError() == false) {
+								cMSPages.setFeaturedImage(imageName);
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
 						}
 
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
 					}
 
-				}
-				cMSPages.setPageId(pageId);
-				cMSPages.setPageOrder(seqNo);
-				cMSPages.setIsActive(isActive);
-				cMSPages.setDelStatus(1);
-				cMSPages.setDelStatus(1);
-				cMSPages.setAddDate(sf.format(date));
-				cMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
-				cMSPages.setDetailList(cMSPageDescriptionList);
+					if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
-				CMSPages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail",
-						cMSPages, CMSPages.class);
-				if (res != null && res.getDetailList() != null) {
+					} else {
 
-					PagesModule pagesModule = new PagesModule();
+						String pdfName = new String();
+						pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
-					pagesModule.setPageId(res.getPageId());
-					pagesModule.setPrimaryKeyId(res.getCmsPageId());
-					pagesModule.setModuleId(1);
-					PagesModule pagesModuleres = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					// System.out.println("res " + res);
+						try {
+							Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+									pdfName);
 
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+							if (info.isError() == false) {
+								cMSPages.setDownloadPdf(pdfName);
+							}
+
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+
+					}
+					cMSPages.setPageId(pageId);
+					cMSPages.setPageOrder(seqNo);
+					cMSPages.setIsActive(isActive);
+					cMSPages.setDelStatus(1);
+					cMSPages.setDelStatus(1);
+					cMSPages.setAddDate(sf.format(date));
+					cMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
+					cMSPages.setDetailList(cMSPageDescriptionList);
+
+					CMSPages res = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", cMSPages, CMSPages.class);
+					if (res != null && res.getDetailList() != null) {
+
+						PagesModule pagesModule = new PagesModule();
+
+						pagesModule.setPageId(res.getPageId());
+						pagesModule.setPrimaryKeyId(res.getCmsPageId());
+						pagesModule.setModuleId(1);
+						PagesModule pagesModuleres = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						// System.out.println("res " + res);
+
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+
+						session.setAttribute("successMsg", "Error While Uploading Content !");
+						session.setAttribute("errorMsg", "true");
+					}
+
 				} else {
-
-					session.setAttribute("successMsg", "Error While Uploading Content !");
+					session.setAttribute("successMsg", "Invalid Information !");
 					session.setAttribute("errorMsg", "true");
 				}
-
+				redirect = "redirect:/sectionTreeList";
+				
 			} else {
-				session.setAttribute("successMsg", "Invalid Information !");
-				session.setAttribute("errorMsg", "true");
+				redirect = "redirect:/accessDenied";
 			}
+			SessionKeyGen.changeSessionKey(request);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/sectionTreeList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/submtEditCmsForm", method = RequestMethod.POST)
 	public String submtEditCmsForm(@RequestParam("images") List<MultipartFile> images,
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = null;
 		try {
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
+
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			String aligment = request.getParameter("header_top_alignment");
 			int isActive = Integer.parseInt(request.getParameter("status"));
@@ -479,11 +496,17 @@ public class AddContentController {
 				session.setAttribute("successMsg", "Invalid Information!");
 				session.setAttribute("errorMsg", "true");
 			}
+			redirect = "redirect:/cmsList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/cmsList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/cmsList", method = RequestMethod.GET)
@@ -506,29 +529,38 @@ public class AddContentController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteCmsContent/{cmsPageId}", method = RequestMethod.GET)
-	public String deleteCmsContent(@PathVariable("cmsPageId") int cmsPageId, HttpServletRequest request,
+	@RequestMapping(value = "/deleteCmsContent/{cmsPageId}/{token}", method = RequestMethod.GET)
+	public String deleteCmsContent(@PathVariable("cmsPageId") int cmsPageId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		
+		String redirect = null;
 		try {
+			HttpSession session = request.getSession();
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("cmsPageId", cmsPageId);
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteCmsContent", map, Info.class);
 
-			HttpSession session = request.getSession();
+		
 
 			if (info.isError() == false) {
 				session.setAttribute("successMsg", "Infomation Delete successfully!");
 			} else {
 				session.setAttribute("successMsg", "Error while Deleting !");
 			}
-
+			redirect = "redirect:/cmsList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/cmsList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/editCmsContent/{cmsPageId}", method = RequestMethod.GET)
