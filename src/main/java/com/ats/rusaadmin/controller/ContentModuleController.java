@@ -286,8 +286,9 @@ public class ContentModuleController {
 			} else {
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			session.setAttribute("successMsg", "Error while updating!");
 			session.setAttribute("errorMsg", "true");
 			e.printStackTrace();
@@ -588,9 +589,10 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			session.setAttribute("successMsg", "Error while updating!");
 			session.setAttribute("errorMsg", "true");
 			e.printStackTrace();
@@ -753,8 +755,9 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -988,8 +991,9 @@ public class ContentModuleController {
 			} else {
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -1204,8 +1208,9 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -1344,9 +1349,10 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -1574,8 +1580,9 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -1800,9 +1807,10 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -1923,8 +1931,9 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -2042,8 +2051,9 @@ public class ContentModuleController {
 			}else {				
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -2126,8 +2136,9 @@ public class ContentModuleController {
 			} else {
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
@@ -2233,8 +2244,9 @@ public class ContentModuleController {
 			} else {
 				redirect = "redirect:/accessDenied";
 			}
-			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
