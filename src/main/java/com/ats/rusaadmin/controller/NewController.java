@@ -494,29 +494,40 @@ public class NewController {
 
 	@RequestMapping(value = "/editContactUs", method = RequestMethod.POST)
 	public String editContactUs(HttpServletRequest request, HttpServletResponse response) {
-
+		String a = new String();
 		try {
 
-			String remark = request.getParameter("remark");
+			HttpSession session = request.getSession();
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String id = request.getParameter("id");
-			// System.out.println("remark: " + remark);
-			if (id != null) {
+			if (token.trim().equals(key.trim())) {
+				a = "redirect:/ContactList";
+				String remark = request.getParameter("remark");
 
-				contactUs.setId(Integer.parseInt(id));
-				contactUs.setStatusByAdmin(0);
-				contactUs.setRemark(remark);
+				String id = request.getParameter("id");
+				// System.out.println("remark: " + remark);
+				if (id != null) {
 
+					contactUs.setId(Integer.parseInt(id));
+					contactUs.setStatusByAdmin(0);
+					contactUs.setRemark(remark);
+
+				}
+				ContactUs res = Constant.getRestTemplate().postForObject(Constant.url + "/saveContactUs", contactUs,
+						ContactUs.class);
+			} else {
+
+				a = "redirect:/accessDenied";
 			}
-			ContactUs res = Constant.getRestTemplate().postForObject(Constant.url + "/saveContactUs", contactUs,
-					ContactUs.class);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/ContactList";
+		return a;
 	}
+
 
 	List<ContactUs> contactList = new ArrayList<ContactUs>();
 
@@ -762,37 +773,55 @@ public class NewController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteContact/{id}", method = RequestMethod.GET)
-	public String deleteContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
 
+@RequestMapping(value = "/deleteContact/{id}/{hashKey}", method = RequestMethod.GET)
+	public String deleteContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String hashKey) {
+		String a = new String();
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
-
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			// map.add("delStatus", 0);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteContact", map, Info.class);
-			System.out.println(res);
-
 			HttpSession session = request.getSession();
-			if (id == 0) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+			String key = (String) session.getAttribute("generatedKey");
+
+			if (hashKey.trim().equals(key.trim())) {
+				a = "redirect:/ContactList";
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				// map.add("delStatus", 0);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteContact", map, Info.class);
+				System.out.println(res);
+
+				if (id == 0) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
+				a = "redirect:/accessDenied";
 			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
-		return "redirect:/ContactList";
+		return a;
 	}
+@RequestMapping(value = "/multipleContactDelete/{hashKey}", method = RequestMethod.GET)
+public String multipleContactDelete(HttpServletRequest request, HttpServletResponse response,
+		@PathVariable String hashKey) {
 
-	@RequestMapping(value = "/multipleContactDelete", method = RequestMethod.GET)
-	public String multipleContactDelete(HttpServletRequest request, HttpServletResponse response) {
+	// ModelAndView model = new ModelAndView("masters/empDetail");
 
-		// ModelAndView model = new ModelAndView("masters/empDetail");
-		try {
+	String a = new String();
+	try {
 
+		HttpSession session = request.getSession();
+		String key = (String) session.getAttribute("generatedKey");
+
+		if (hashKey.trim().equals(key.trim())) {
+
+			a = "redirect:/ContactList";
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
 
@@ -805,24 +834,37 @@ public class NewController {
 					Info.class);
 			System.out.println(res);
 
-			HttpSession session = request.getSession();
 			if (res.isError() == true) {
 				session.setAttribute("successMsg", "Sorry, Can't deleted!");
 			} else {
 				session.setAttribute("successMsg", "Infomation deleted successfully!");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			a = "redirect:/accessDenied";
 		}
-
-		return "redirect:/ContactList";
+		SessionKeyGen.changeSessionKey(request);
+	} catch (Exception e) {
+		SessionKeyGen.changeSessionKey(request);
+		e.printStackTrace();
 	}
 
-	@RequestMapping(value = "/multipleUserRegDelete", method = RequestMethod.GET)
-	public String multipleUserRegDelete(HttpServletRequest request, HttpServletResponse response) {
+	return a;
+}
 
-		// ModelAndView model = new ModelAndView("masters/empDetail");
-		try {
+@RequestMapping(value = "/multipleUserRegDelete/{hashKey}", method = RequestMethod.GET)
+public String multipleUserRegDelete(HttpServletRequest request, HttpServletResponse response,
+		@PathVariable String hashKey) {
+
+	// ModelAndView model = new ModelAndView("masters/empDetail");
+	HttpSession session = request.getSession();
+	String a = new String();
+
+	try {
+		String key = (String) session.getAttribute("generatedKey");
+
+		if (hashKey.trim().equals(key.trim())) {
+
+			a = "redirect:/activeUserList";
 
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
@@ -836,18 +878,21 @@ public class NewController {
 					Info.class);
 			System.out.println(res);
 
-			HttpSession session = request.getSession();
 			if (res.isError() == true) {
 				session.setAttribute("successMsg", "Sorry, Can't deleted!");
 			} else {
 				session.setAttribute("successMsg", "Infomation deleted successfully!");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			a = "redirect:/accessDenied";
 		}
-
-		return "redirect:/activeUserList";
+	} catch (Exception e) {
+		e.printStackTrace();
 	}
+
+	return a;
+}
+
 
 	@RequestMapping(value = "/deletedContactList", method = RequestMethod.GET)
 	public ModelAndView deletedContactList(HttpServletRequest request, HttpServletResponse response) {
@@ -868,30 +913,44 @@ public class NewController {
 		return model;
 	}
 
-	@RequestMapping(value = "/retriveContact/{id}", method = RequestMethod.GET)
-	public String retriveContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
 
+@RequestMapping(value = "/retriveContact/{id}/{hashKey}", method = RequestMethod.GET)
+	public String retriveContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String hashKey) {
+		HttpSession session = request.getSession();
 		// ModelAndView model = new ModelAndView("masters/empDetail");
+		String a = new String();
 		try {
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			// map.add("delStatus", 0);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/retriveContact", map, Info.class);
-			System.out.println(res);
+			String key = (String) session.getAttribute("generatedKey");
 
-			HttpSession session = request.getSession();
-			if (id == 0) {
-				session.setAttribute("successMsg", "Sorry, Can't Retrieve!");
-			} else {
-				session.setAttribute("successMsg", "Infomation Retrieve successfully!");
+			if (hashKey.trim().equals(key.trim())) {
+				a = "redirect:/deletedContactList";
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				// map.add("delStatus", 0);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/retriveContact", map, Info.class);
+				System.out.println(res);
+
+				if (id == 0) {
+					session.setAttribute("successMsg", "Sorry, Can't Retrieve!");
+				} else {
+					session.setAttribute("successMsg", "Infomation Retrieve successfully!");
+				}
+			}
+
+			else {
+
+				a = "redirect:/accessDenied";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/deletedContactList";
+		return a;
 	}
+
 
 	@RequestMapping(value = "/submiteditChannel", method = RequestMethod.POST)
 	public String submiteditChannel(HttpServletRequest request, HttpServletResponse response) {
@@ -1320,6 +1379,7 @@ String redirect = null;
 			SessionKeyGen.changeSessionKey(request);
 
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 

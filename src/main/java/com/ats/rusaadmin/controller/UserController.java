@@ -417,127 +417,138 @@ public class UserController {
 	public String activateUser(HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
+		String a = new String();
 		try {
-			Info info = null;
-			Info info1 = null;
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			if (token.trim().equals(key.trim())) {
 
-			int regId = Integer.parseInt(request.getParameter("regId"));
-			String alternateEmail = request.getParameter("email");
-			String name = request.getParameter("name");
+				a = "redirect:/activeUserList";
 
-			int type = Integer.parseInt(request.getParameter("type"));
-			// String email = request.getParameter("userEmail");
-			String phone = request.getParameter("phone");
-			String aishe = request.getParameter("aishe");
-			String collegeN = request.getParameter("collegeN");
-			String uniName = request.getParameter("uniName");
-			String designation = request.getParameter("designation");
-			String userPass = request.getParameter("userPass");
+				Info info = null;
+				Info info1 = null;
 
-			String deptN = request.getParameter("deptN");
-			String btnsendmail = request.getParameter("btnsendmail");
-			String authN = request.getParameter("authN");
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			String btnsubmit = request.getParameter("btnsubmit");
-			int status = Integer.parseInt(request.getParameter("status"));
+				int regId = Integer.parseInt(request.getParameter("regId"));
+				String alternateEmail = request.getParameter("email");
+				String name = request.getParameter("name");
 
-			int smsVerified = Integer.parseInt(request.getParameter("smsVerified"));
-			int emailVerified = Integer.parseInt(request.getParameter("emailVerified"));
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				int type = Integer.parseInt(request.getParameter("type"));
+				// String email = request.getParameter("userEmail");
+				String phone = request.getParameter("phone");
+				String aishe = request.getParameter("aishe");
+				String collegeN = request.getParameter("collegeN");
+				String uniName = request.getParameter("uniName");
+				String designation = request.getParameter("designation");
+				String userPass = request.getParameter("userPass");
 
-			if (btnsendmail != null) {
-				if (smsVerified == 1) {
+				String deptN = request.getParameter("deptN");
+				String btnsendmail = request.getParameter("btnsendmail");
+				String authN = request.getParameter("authN");
 
-					/* if (userPass.equals("0")) { */
-					// String password = Commons.getAlphaNumericString(5);
-					// System.out.println("Password: " + password);
+				String btnsubmit = request.getParameter("btnsubmit");
+				int status = Integer.parseInt(request.getParameter("status"));
 
-					RandomString randomString = new RandomString();
-					String password = randomString.nextString();
-					MessageDigest md = MessageDigest.getInstance("MD5");
-					byte[] messageDigest = md.digest(password.getBytes());
-					BigInteger number = new BigInteger(1, messageDigest);
-					String hashtext = number.toString(16);
+				int smsVerified = Integer.parseInt(request.getParameter("smsVerified"));
+				int emailVerified = Integer.parseInt(request.getParameter("emailVerified"));
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-					editUser.setUserPassword(hashtext);
-					editUser.setEmailVerified(1);
-					info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
-							editUser.getEmails(), password);
-					/*
-					 * session.setAttribute("successMsg", "Infomation Updated successfully!");
-					 * session.setAttribute("errorMsg", "false");
-					 */
+				if (btnsendmail != null) {
+					if (smsVerified == 1) {
 
-					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						/* if (userPass.equals("0")) { */
+						// String password = Commons.getAlphaNumericString(5);
+						// System.out.println("Password: " + password);
 
-					map = new LinkedMultiValueMap<String, Object>();
-					map.add("username", "rusamah-wb");
-					map.add("password", "Rus@@123456");
-					map.add("senderid", "MHRUSA");
-					map.add("mobileno", editUser.getMobileNumber());
-					map.add("content", "Your Username " + editUser.getEmails() + "\n Password " + password
-							+ "\n don't share with any one.");
-					map.add("smsservicetype", "singlemsg");
-					String sms = Constant.getRestTemplate()
-							.postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest", map, String.class);
+						RandomString randomString = new RandomString();
+						String password = randomString.nextString();
+						MessageDigest md = MessageDigest.getInstance("MD5");
+						byte[] messageDigest = md.digest(password.getBytes());
+						BigInteger number = new BigInteger(1, messageDigest);
+						String hashtext = number.toString(16);
 
-					/* } else { */
-					/*
-					 * editUser.setEmailVerified(1); info1 = EmailUtility.sendEmail(senderEmail,
-					 * senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
-					 * password);
-					 */
-					/*
-					 * List<Registration> getUser = Constant.getRestTemplate()
-					 * .getForObject(Constant.url + "/getAllRegUserList", List.class);
-					 * session.setAttribute("regList", getUser);
-					 */
-					session.setAttribute("successMsg", "Password Send Successfully");
+						editUser.setUserPassword(hashtext);
+						editUser.setEmailVerified(1);
+						info1 = EmailUtility.sendEmail(senderEmail, senderPassword, editUser.getEmails(), mailsubject,
+								editUser.getEmails(), password);
+						/*
+						 * session.setAttribute("successMsg", "Infomation Updated successfully!");
+						 * session.setAttribute("errorMsg", "false");
+						 */
+
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("username", "rusamah-wb");
+						map.add("password", "Rus@@123456");
+						map.add("senderid", "MHRUSA");
+						map.add("mobileno", editUser.getMobileNumber());
+						map.add("content", "Your Username " + editUser.getEmails() + "\n Password " + password
+								+ "\n don't share with any one.");
+						map.add("smsservicetype", "singlemsg");
+						String sms = Constant.getRestTemplate()
+								.postForObject("https://msdgweb.mgov.gov.in/esms/sendsmsrequest", map, String.class);
+
+						/* } else { */
+						/*
+						 * editUser.setEmailVerified(1); info1 = EmailUtility.sendEmail(senderEmail,
+						 * senderPassword, editUser.getEmails(), mailsubject, editUser.getEmails(),
+						 * password);
+						 */
+						/*
+						 * List<Registration> getUser = Constant.getRestTemplate()
+						 * .getForObject(Constant.url + "/getAllRegUserList", List.class);
+						 * session.setAttribute("regList", getUser);
+						 */
+						session.setAttribute("successMsg", "Password Send Successfully");
+						session.setAttribute("errorMsg", "false");
+						// }
+					} else {
+						editUser.setEmailVerified(0);
+						/*
+						 * List<Registration> getUser = Constant.getRestTemplate()
+						 * .getForObject(Constant.url + "/getAllRegUserList", List.class);
+						 * session.setAttribute("regList", getUser);
+						 */
+
+						session.setAttribute("successMsg", "Please varify your mobile number !");
+						session.setAttribute("errorMsg", "true");
+					}
+
+				}
+				if (btnsubmit != null) {
+
+					if (emailVerified == 0) {
+						editUser.setEmailVerified(0);
+					} else {
+						editUser.setEmailVerified(1);
+					}
+
+					editUser.setIsActive(status);
+					session.setAttribute("successMsg", "Infomation Updated successfully!");
 					session.setAttribute("errorMsg", "false");
-					// }
-				} else {
-					editUser.setEmailVerified(0);
-					/*
-					 * List<Registration> getUser = Constant.getRestTemplate()
-					 * .getForObject(Constant.url + "/getAllRegUserList", List.class);
-					 * session.setAttribute("regList", getUser);
-					 */
-
-					session.setAttribute("successMsg", "Please varify your mobile number !");
-					session.setAttribute("errorMsg", "true");
 				}
 
+				editUser.setEditDate(sf.format(date));
+				Registration regResponse = Constant.getRestTemplate().postForObject(Constant.url + "/saveRegistration",
+						editUser, Registration.class);
+
+				List<Registration> getUser = Constant.getRestTemplate()
+						.getForObject(Constant.url + "/getAllRegUserList", List.class);
+				session.setAttribute("regList", getUser);
+			} else {
+
+				a = "redirect:/accessDenied";
 			}
-			if (btnsubmit != null) {
-
-				if (emailVerified == 0) {
-					editUser.setEmailVerified(0);
-				} else {
-					editUser.setEmailVerified(1);
-				}
-
-				editUser.setIsActive(status);
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
-				session.setAttribute("errorMsg", "false");
-			}
-
-			editUser.setEditDate(sf.format(date));
-			Registration regResponse = Constant.getRestTemplate().postForObject(Constant.url + "/saveRegistration",
-					editUser, Registration.class);
-
-			List<Registration> getUser = Constant.getRestTemplate().getForObject(Constant.url + "/getAllRegUserList",
-					List.class);
-			session.setAttribute("regList", getUser);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/activeUserList";
+		return a;
 	}
 //----------------------------------------Event Registration---------------------------------------------------------------------//
 
@@ -756,6 +767,8 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView("allEventList");
 		try {
+			
+			
 			Calendar date = Calendar.getInstance();
 			date.set(Calendar.DAY_OF_MONTH, 1);
 

@@ -2,6 +2,21 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+ 
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
+ 
+<%
+	UUID uuid = UUID.randomUUID();
+	MessageDigest md = MessageDigest.getInstance("MD5");
+	byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+	BigInteger number = new BigInteger(1, messageDigest);
+	String hashtext = number.toString(16);
+	session = request.getSession();
+	session.setAttribute("generatedKey", hashtext);
+%>
+ 
 
 <!DOCTYPE html>
 <html class=" ">
@@ -68,7 +83,9 @@
 										<input name="isImage" value="1" type="hidden" />
 
 										<div class="fallback">
-											<input name="file" type="file" multiple />
+											<input name="file" type="file" multiple /> <input
+												type="hidden" value="<%out.println(hashtext);%>"
+												name="token" id="token">
 
 
 										</div>
@@ -76,7 +93,7 @@
 
 									</form>
 									<br>
-									 
+
 								</div>
 							</div>
 						</div>
@@ -102,7 +119,7 @@
 							<div class="row">
 
 								<form
-									action="${pageContext.request.contextPath}/multipleUploadMediaDelete"
+									action="${pageContext.request.contextPath}/multipleUploadMediaDelete/<%out.println(hashtext);%>"
 									method="get" id="multipleDelete">
 									<div class="col-xs-12">
 
@@ -143,7 +160,7 @@
 														<td><input value="${list.thumb}" class="col-md-10"
 															type="text" id="${count.index+1}"> <!-- <a href="javascript:void(0);" class="btna" data-clipboard-action="copy" data-clipboard-target="#${count.index+1}">Copy URL</a> --></td>
 														<td><a
-															href="${pageContext.request.contextPath}/deleteOtherMediaFile/${list.image}/${list.size}"
+															href="${pageContext.request.contextPath}/deleteOtherMediaFile/${list.image}/${list.size}/<%out.println(hashtext);%>"
 															onClick="return confirm('Are you sure want to delete this record');"
 															rel="tooltip" data-color-class="danger"
 															data-animate=" animated fadeIn " data-toggle="tooltip"
@@ -180,54 +197,55 @@
 	<!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-<script>
-	$(document).ready(function($) {
+	<script>
+		$(document).ready(function($) {
 
-		$("#multipleDelete").submit(function(e) {
-			var isError = false;
-			var errMsg = "";
+			$("#multipleDelete").submit(function(e) {
+				var isError = false;
+				var errMsg = "";
 
-			var checkedVals = $('.chk:checkbox:checked').map(function() {
-				return this.value;
-			}).get();
-			checkedVals = checkedVals.join(',');
+				var checkedVals = $('.chk:checkbox:checked').map(function() {
+					return this.value;
+				}).get();
+				checkedVals = checkedVals.join(',');
 
-			if (checkedVals == '') {
-				$("#error_table1").show();
-				return false;
-			}
-
-			if (!isError) {
-
-				var x = true;
-				if (x == true) {
-
-					$('#modal_scrollable').modal('show');
+				if (checkedVals == '') {
+					$("#error_table1").show();
+					return false;
 				}
-				//end ajax send this to php page
-			}
-			return false;
+
+				if (!isError) {
+
+					var x = true;
+					if (x == true) {
+
+						$('#modal_scrollable').modal('show');
+					}
+					//end ajax send this to php page
+				}
+				return false;
+			});
 		});
-	});
 		function submitForm() {
-			 $('#modal_scrollable').modal('hide'); 
+			$('#modal_scrollable').modal('hide');
 			document.getElementById("multipleDelete").submit();
-			 
+
 		}
 		function singleDelete(id) {
-			 
+
 			$('#modal_scrollable_single').modal('show');
 			document.getElementById("conid").value = id;
 		}
 		function submitFormSingle() {
-			 $('#modal_scrollable_single').modal('hide'); 
-			 var id = document.getElementById("conid").value;
-			 location.href = "${pageContext.request.contextPath}/deleteContact/"+id;
+			$('#modal_scrollable_single').modal('hide');
+			var id = document.getElementById("conid").value;
+			location.href = "${pageContext.request.contextPath}/deleteContact/"
+					+ id;
 			//document.getElementById("multipleDelete").submit();
-			 
+
 		}
 	</script>
- 
+
 	<div id="modal_scrollable" class="modal fade" data-backdrop="false"
 		tabindex="-1">
 		<div class="modal-dialog modal-dialog-scrollable">

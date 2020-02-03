@@ -268,26 +268,26 @@ public class GallaryController {
 	}
 
 	@RequestMapping(value = "/deleteGalleryCategory/{galleryCatId}/{token}", method = RequestMethod.GET)
-	public String deleteGalleryCategory(@PathVariable("galleryCatId") int galleryCatId, @PathVariable("token") String token, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String deleteGalleryCategory(@PathVariable("galleryCatId") int galleryCatId,
+			@PathVariable("token") String token, HttpServletRequest request, HttpServletResponse response) {
 		String redirect = null;
 
 		// ModelAndView model = new ModelAndView("gallary/galleryCategoryList");
 		try {
 			HttpSession session = request.getSession();
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
+			String key = (String) session.getAttribute("generatedKey");
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("galleryCatId", galleryCatId);
+			if (token.trim().equals(key.trim())) {
 
-			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryCategory", map,
-					Info.class);
-		
-			session.setAttribute("successMsg", "Infomation deleted successfully!");
-			redirect = "redirect:/galleryCategoryList";
-			}else {				
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("galleryCatId", galleryCatId);
+
+				Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryCategory", map,
+						Info.class);
+
+				session.setAttribute("successMsg", "Infomation deleted successfully!");
+				redirect = "redirect:/galleryCategoryList";
+			} else {
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
@@ -594,52 +594,76 @@ public class GallaryController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteOtherMediaFile/{file}/{extension}", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteOtherMediaFile/{file}/{extension}/{hashKey}", method = RequestMethod.GET)
 	public String deleteOtherMediaFile(@PathVariable("file") String file, @PathVariable("extension") String extension,
-			HttpServletRequest request, HttpServletResponse response) {
-
+			HttpServletRequest request, HttpServletResponse response, @PathVariable String hashKey) {
+		String a = new String();
 		try {
+			HttpSession session = request.getSession();
+		
 
-			// File files = new
-			// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
-			// (1).jpeg");
-			File files = new File(Constant.otherDocURL + file);
+			String key = (String) session.getAttribute("generatedKey");
 
-			if (files.delete()) {
-				System.out.println(" File deleted  " + Constant.otherDocURL + file);
-			} else
-				System.out.println("doesn't exists  " + Constant.otherDocURL + file);
+			if (hashKey.trim().equals(key.trim())) {
+
+				a = "redirect:/uploadOtherMedia";
+				// File files = new
+				// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
+				// (1).jpeg");
+				File files = new File(Constant.otherDocURL + file);
+
+				if (files.delete()) {
+					System.out.println(" File deleted  " + Constant.otherDocURL + file);
+				} else
+					System.out.println("doesn't exists  " + Constant.otherDocURL + file);
+			} else {
+
+				a = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
-		return "redirect:/uploadOtherMedia";
+		return a;
 
 	}
 
-	@RequestMapping(value = "/multipleUploadMediaDelete", method = RequestMethod.GET)
-	public String multipleUploadMediaDelete(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/multipleUploadMediaDelete/{hashKey}", method = RequestMethod.GET)
+	public String multipleUploadMediaDelete(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String hashKey) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
+		HttpSession session = request.getSession();
+		String a = new String();
 		try {
+			String key = (String) session.getAttribute("generatedKey");
 
-			String[] images = request.getParameterValues("ids");
-			// System.out.println("images list****"+images.toString());
+			if (hashKey.trim().equals(key.trim())) {
 
-			for (int i = 0; i < images.length; i++) {
-				File files = new File(Constant.otherDocURL + images[i]);
+				a = "redirect:/uploadOtherMedia";
+				String[] images = request.getParameterValues("ids");
+				// System.out.println("images list****"+images.toString());
 
-				if (files.delete()) {
-					System.out.println(" File deleted  " + Constant.otherDocURL + images[i]);
-				} else
-					System.out.println("doesn't exists  " + Constant.otherDocURL + images[i]);
+				for (int i = 0; i < images.length; i++) {
+					File files = new File(Constant.otherDocURL + images[i]);
+
+					if (files.delete()) {
+						System.out.println(" File deleted  " + Constant.otherDocURL + images[i]);
+					} else
+						System.out.println("doesn't exists  " + Constant.otherDocURL + images[i]);
+				}
+			} else {
+				a = "redirect:/accessDenied";
 			}
-
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
 			e.printStackTrace();
 		}
 
-		return "redirect:/uploadOtherMedia";
+		return a;
 	}
 
 	@RequestMapping(value = "/uploadOtherMediaProccess", method = RequestMethod.POST)
@@ -647,6 +671,8 @@ public class GallaryController {
 			HttpServletResponse response) {
 
 		try {
+
+			HttpSession session = request.getSession();
 
 			Date date = new Date();
 			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -663,7 +689,6 @@ public class GallaryController {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
