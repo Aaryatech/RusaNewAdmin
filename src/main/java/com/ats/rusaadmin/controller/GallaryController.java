@@ -34,6 +34,7 @@ import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
+import com.ats.rusaadmin.common.SessionKeyGen;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.ContentImages;
 import com.ats.rusaadmin.model.GallaryCategory;
@@ -74,118 +75,130 @@ public class GallaryController {
 	@RequestMapping(value = "/insertGalleryCategory", method = RequestMethod.POST)
 	public String insertGalleryCategory(HttpServletRequest request, HttpServletResponse response) {
 
+		String redirect = null;
+
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String catId = request.getParameter("catId");
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+			if (token.trim().equals(key.trim())) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			Boolean ret = false;
+				String catId = request.getParameter("catId");
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
-			if (FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
+				Boolean ret = false;
 
-				ret = true;
-			}
+				if (FormValidation.Validaton(request.getParameter("isActive"), "") == true
+						|| FormValidation.Validaton(request.getParameter("seqNo"), "") == true) {
 
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			String catName = null;
-			List<GallaryCategoryDescriptioin> gallaryCategoryDescriptioinList = new ArrayList<GallaryCategoryDescriptioin>();
-
-			if (catId == "" || catId == null) {
-				editGallaryCategory.setGalleryCatId(0);
-				editGallaryCategory.setAddDate(sf.format(date));
-
-				for (int i = 0; i < languagesList.size(); i++) {
-					catName = XssEscapeUtils
-							.jsoupParse(request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
-									.replaceAll("[ ]{2,}", " "));
-					if (FormValidation.Validaton(catName, "") == true) {
-
-						ret = true;
-						break;
-					}
-
-					GallaryCategoryDescriptioin gallaryCategoryDescriptioin = new GallaryCategoryDescriptioin();
-					gallaryCategoryDescriptioin.setLanguageId(languagesList.get(i).getLanguagesId());
-					gallaryCategoryDescriptioin.setCateName(catName);
-
-					if (languagesList.get(i).getLanguagesId() == 1) {
-
-						editGallaryCategory.setCateName(catName);
-
-						String text = editGallaryCategory.getCateName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						// System.out.println(text);
-						editGallaryCategory.setSlugName(text);
-					}
-					gallaryCategoryDescriptioinList.add(gallaryCategoryDescriptioin);
+					ret = true;
 				}
-				editGallaryCategory.setGallaryCategoryDescriptioinList(gallaryCategoryDescriptioinList);
-				editGallaryCategory.setAddedByUserId(UserDetail.getUserId());
 
-			} else {
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				String catName = null;
+				List<GallaryCategoryDescriptioin> gallaryCategoryDescriptioinList = new ArrayList<GallaryCategoryDescriptioin>();
 
-				editGallaryCategory.setGalleryCatId(Integer.parseInt(catId));
-				editGallaryCategory.setEditDate(sf.format(date));
-				editGallaryCategory.setAddDate(DateConvertor.convertToYMD(editGallaryCategory.getAddDate()));
+				if (catId == "" || catId == null) {
+					editGallaryCategory.setGalleryCatId(0);
+					editGallaryCategory.setAddDate(sf.format(date));
 
-				for (int i = 0; i < editGallaryCategory.getGallaryCategoryDescriptioinList().size(); i++) {
-					catName = XssEscapeUtils.jsoupParse(request
-							.getParameter("catName"
-									+ editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
-							.trim().replaceAll("[ ]{2,}", " "));
-					if (FormValidation.Validaton(catName, "") == true) {
-						ret = true;
-						break;
+					for (int i = 0; i < languagesList.size(); i++) {
+						catName = XssEscapeUtils
+								.jsoupParse(request.getParameter("catName" + languagesList.get(i).getLanguagesId())
+										.trim().replaceAll("[ ]{2,}", " "));
+						if (FormValidation.Validaton(catName, "") == true) {
+
+							ret = true;
+							break;
+						}
+
+						GallaryCategoryDescriptioin gallaryCategoryDescriptioin = new GallaryCategoryDescriptioin();
+						gallaryCategoryDescriptioin.setLanguageId(languagesList.get(i).getLanguagesId());
+						gallaryCategoryDescriptioin.setCateName(catName);
+
+						if (languagesList.get(i).getLanguagesId() == 1) {
+
+							editGallaryCategory.setCateName(catName);
+
+							String text = editGallaryCategory.getCateName();
+							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+							// System.out.println(text);
+							editGallaryCategory.setSlugName(text);
+						}
+						gallaryCategoryDescriptioinList.add(gallaryCategoryDescriptioin);
 					}
+					editGallaryCategory.setGallaryCategoryDescriptioinList(gallaryCategoryDescriptioinList);
+					editGallaryCategory.setAddedByUserId(UserDetail.getUserId());
 
-					editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).setCateName(catName);
-
-					if (editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId() == 1) {
-
-						editGallaryCategory.setCateName(catName);
-						String text = editGallaryCategory.getCateName();
-						text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-						// System.out.println(text);
-						editGallaryCategory.setSlugName(text.trim().replaceAll("[ ]{2,}", " "));
-					}
-
-				}
-				editGallaryCategory.setEditByUserId(UserDetail.getUserId());
-			}
-
-			editGallaryCategory.setSortNo(seqNo);
-			editGallaryCategory.setIsActive(isActive);
-			editGallaryCategory.setDelStatus(1);
-			// System.out.println("category" + editGallaryCategory);
-			if (ret == false) {
-				GallaryCategory res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryCategory",
-						editGallaryCategory, GallaryCategory.class);
-
-				// System.out.println("res " + res);
-
-				if (res.getGalleryCatId() != 0) {
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
 				} else {
-					session.setAttribute("successMsg", "Failed To Add Infomation !");
+
+					editGallaryCategory.setGalleryCatId(Integer.parseInt(catId));
+					editGallaryCategory.setEditDate(sf.format(date));
+					editGallaryCategory.setAddDate(DateConvertor.convertToYMD(editGallaryCategory.getAddDate()));
+
+					for (int i = 0; i < editGallaryCategory.getGallaryCategoryDescriptioinList().size(); i++) {
+						catName = XssEscapeUtils
+								.jsoupParse(request
+										.getParameter("catName" + editGallaryCategory
+												.getGallaryCategoryDescriptioinList().get(i).getLanguageId())
+										.trim().replaceAll("[ ]{2,}", " "));
+						if (FormValidation.Validaton(catName, "") == true) {
+							ret = true;
+							break;
+						}
+
+						editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).setCateName(catName);
+
+						if (editGallaryCategory.getGallaryCategoryDescriptioinList().get(i).getLanguageId() == 1) {
+
+							editGallaryCategory.setCateName(catName);
+							String text = editGallaryCategory.getCateName();
+							text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
+							// System.out.println(text);
+							editGallaryCategory.setSlugName(text.trim().replaceAll("[ ]{2,}", " "));
+						}
+
+					}
+					editGallaryCategory.setEditByUserId(UserDetail.getUserId());
+				}
+
+				editGallaryCategory.setSortNo(seqNo);
+				editGallaryCategory.setIsActive(isActive);
+				editGallaryCategory.setDelStatus(1);
+				// System.out.println("category" + editGallaryCategory);
+				if (ret == false) {
+					GallaryCategory res = Constant.getRestTemplate().postForObject(
+							Constant.url + "/saveGalleryCategory", editGallaryCategory, GallaryCategory.class);
+
+					// System.out.println("res " + res);
+
+					if (res.getGalleryCatId() != 0) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Failed To Add Infomation !");
+						session.setAttribute("errorMsg", "true");
+					}
+
+				} else {
+					session.setAttribute("successMsg", "Invalid Information!");
 					session.setAttribute("errorMsg", "true");
 				}
-
+				redirect = "redirect:/galleryCategoryList";
 			} else {
-				session.setAttribute("successMsg", "Invalid Information!");
-				session.setAttribute("errorMsg", "true");
+				redirect = "redirect:/accessDenied";
 			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/galleryCategoryList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/editGalleryCategory/{galleryCatId}", method = RequestMethod.GET)
@@ -254,26 +267,35 @@ public class GallaryController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteGalleryCategory/{galleryCatId}", method = RequestMethod.GET)
-	public String deleteGalleryCategory(@PathVariable("galleryCatId") int galleryCatId, HttpServletRequest request,
+	@RequestMapping(value = "/deleteGalleryCategory/{galleryCatId}/{token}", method = RequestMethod.GET)
+	public String deleteGalleryCategory(@PathVariable("galleryCatId") int galleryCatId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
+		String redirect = null;
 
 		// ModelAndView model = new ModelAndView("gallary/galleryCategoryList");
 		try {
+			HttpSession session = request.getSession();
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("galleryCatId", galleryCatId);
 
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryCategory", map,
 					Info.class);
-			HttpSession session = request.getSession();
+		
 			session.setAttribute("successMsg", "Infomation deleted successfully!");
-
+			redirect = "redirect:/galleryCategoryList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/galleryCategoryList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/gallaryForm/{pageId}/{moduleId}", method = RequestMethod.GET)

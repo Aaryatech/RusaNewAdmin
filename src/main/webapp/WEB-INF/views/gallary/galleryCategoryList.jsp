@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
 
 <!DOCTYPE html>
 <html class=" ">
@@ -62,6 +64,15 @@
 							</div>
 
 						</header>
+							<%
+		UUID uuid = UUID.randomUUID();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+		BigInteger number = new BigInteger(1, messageDigest);
+		String hashtext = number.toString(16);
+		session = request.getSession();
+		session.setAttribute("generatedKey", hashtext);
+	%>
 						<div class="content-body">
 							<div class="row">
 								<%-- <c:if test="${sessionScope.successMsg!=null}">
@@ -203,7 +214,8 @@ function clearSessionAttribute() {
 	function submitFormSingle() {
 		 $('#modal_scrollable_single').modal('hide'); 
 		 var id = document.getElementById("conid").value;
-		 location.href = "${pageContext.request.contextPath}/deleteGalleryCategory/"+id;
+		 var token = document.getElementById("token").value;
+		 location.href = "${pageContext.request.contextPath}/deleteGalleryCategory/"+id+"/"+token;
 		//document.getElementById("multipleDelete").submit();
 		 
 	}
@@ -224,6 +236,8 @@ function clearSessionAttribute() {
 
 				<div class="modal-footer pt-3">
 					<input type="hidden" id="conid" name="conid">
+					<input type="hidden" value="<%out.println(hashtext);%>"
+				name="token" id="token">
 					<button type="button" class="btn bg-primary" data-dismiss="modal">No</button>
 					<button type="button" class="btn bg-primary"
 						onclick="submitFormSingle()">Yes</button>

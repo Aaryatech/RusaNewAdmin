@@ -29,6 +29,7 @@ import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
+import com.ats.rusaadmin.common.SessionKeyGen;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.GallaryCategory;
 import com.ats.rusaadmin.model.GallaryDetail;
@@ -88,201 +89,210 @@ public class ContentModuleController {
 	@RequestMapping(value = "/insertTestimonialForm", method = RequestMethod.POST)
 	public String insertCmsForm(@RequestParam("images") List<MultipartFile> images, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = null;
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		HttpSession session = request.getSession();
 		try {
-//1 time
-			User UserDetail = (User) session.getAttribute("UserDetail");
-			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			// String formName = request.getParameter("form_name");
-			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
-			int id = Integer.parseInt(request.getParameter("id"));
-			int moduleId = Integer.parseInt(request.getParameter("moduleId"));
-			int pageId = Integer.parseInt(request.getParameter("pageId"));
-			int formType = Integer.parseInt(request.getParameter("formType"));
+//1 time			
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			//
-			boolean ret = false;
-			/*
-			 * if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true ||
-			 * FormValidation.Validaton(request.getParameter("status"), "") == true ||
-			 * FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
-			 * 
-			 * ret = true; }
-			 */
-			int isActive = Integer.parseInt(request.getParameter("status"));
-			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			List<TestimonialDetail> newsBlogDescriptionList = new ArrayList<TestimonialDetail>();
+			if (token.trim().equals(key.trim())) {
 
-			String formName = null;
-			String designation = null;
-			String location = null;
-			String message = null;
-			for (int i = 0; i < languagesList.size(); i++) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
+				int remove = Integer.parseInt(request.getParameter("removeImg"));
+				// String formName = request.getParameter("form_name");
+				int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+				int id = Integer.parseInt(request.getParameter("id"));
+				int moduleId = Integer.parseInt(request.getParameter("moduleId"));
+				int pageId = Integer.parseInt(request.getParameter("pageId"));
+				int formType = Integer.parseInt(request.getParameter("formType"));
 
-				int lanId = languagesList.get(i).getLanguagesId();
-				formName = XssEscapeUtils
-						.jsoupParse(request.getParameter("form_name" + languagesList.get(i).getLanguagesId()));
-				designation = XssEscapeUtils
-						.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				location = XssEscapeUtils
-						.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
+				//
+				boolean ret = false;
+				/*
+				 * if (FormValidation.Validaton(request.getParameter("sortNo"), "") == true ||
+				 * FormValidation.Validaton(request.getParameter("status"), "") == true ||
+				 * FormValidation.Validaton(request.getParameter("form_name"), "") == true) {
+				 * 
+				 * ret = true; }
+				 */
+				int isActive = Integer.parseInt(request.getParameter("status"));
+				int sortNo = Integer.parseInt(request.getParameter("sortNo"));
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				List<TestimonialDetail> newsBlogDescriptionList = new ArrayList<TestimonialDetail>();
 
-				if (lanId == 1) {
-					editTestImonial.setDesignation(designation);
-					editTestImonial.setLocation(location);
-					editTestImonial.setFromName(formName);
+				String formName = null;
+				String designation = null;
+				String location = null;
+				String message = null;
+				for (int i = 0; i < languagesList.size(); i++) {
+
+					int lanId = languagesList.get(i).getLanguagesId();
+					formName = XssEscapeUtils
+							.jsoupParse(request.getParameter("form_name" + languagesList.get(i).getLanguagesId()));
+					designation = XssEscapeUtils
+							.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
+					location = XssEscapeUtils
+							.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+
+					if (lanId == 1) {
+						editTestImonial.setDesignation(designation);
+						editTestImonial.setLocation(location);
+						editTestImonial.setFromName(formName);
+						if (formType == 1) {
+							message = XssEscapeUtils.jsoupParseClean(
+									request.getParameter("message" + languagesList.get(i).getLanguagesId()).trim()
+											.replaceAll("[ ]{2,}", " "));
+							editTestImonial.setMessage(message);
+						} else {
+							message = XssEscapeUtils.jsoupParseClean(
+									request.getParameter("message" + languagesList.get(i).getLanguagesId()));
+							editTestImonial.setMessage(message);
+						}
+					}
+
+					TestimonialDetail newsBlogDescription = new TestimonialDetail();
+
+					designation = XssEscapeUtils
+							.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
+					location = XssEscapeUtils
+							.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+
+					newsBlogDescription.setLangId(languagesList.get(i).getLanguagesId());
+					newsBlogDescription.setDesignation(designation);
+					newsBlogDescription.setFromName(formName);
+					newsBlogDescription.setLocation(location);
+
 					if (formType == 1) {
 						message = XssEscapeUtils
 								.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId())
 										.trim().replaceAll("[ ]{2,}", " "));
-						editTestImonial.setMessage(message);
+						newsBlogDescription.setMessage(message);
 					} else {
 						message = XssEscapeUtils.jsoupParseClean(
 								request.getParameter("message" + languagesList.get(i).getLanguagesId()));
-						editTestImonial.setMessage(message);
+						newsBlogDescription.setMessage(message);
 					}
+
+					newsBlogDescription.setAddDate(sf.format(date));
+					newsBlogDescription.setAddedByUserId(UserDetail.getUserId());
+					newsBlogDescription.setDelStatus(1);
+					newsBlogDescription.setExInt2(1);
+					newsBlogDescription.setExInt1(formType);
+					newsBlogDescription.setExVar1("NA");
+					newsBlogDescription.setExVar2("NA");
+					newsBlogDescription.setFromName(formName);
+					newsBlogDescription.setIsActive(1);
+					newsBlogDescription.setTestHeadId(0);
+					newsBlogDescriptionList.add(newsBlogDescription);
 				}
 
-				TestimonialDetail newsBlogDescription = new TestimonialDetail();
+				// System.out.println("detail lis==="+newsBlogDescriptionList.toString());
 
-				designation = XssEscapeUtils
-						.jsoupParse(request.getParameter("designation" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				location = XssEscapeUtils
-						.jsoupParse(request.getParameter("location" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " "));
+				VpsImageUpload upload = new VpsImageUpload();
+				if (ret == false) {
+					if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+						// System.out.println("in image null");
+						try {
 
-				newsBlogDescription.setLangId(languagesList.get(i).getLanguagesId());
-				newsBlogDescription.setDesignation(designation);
-				newsBlogDescription.setFromName(formName);
-				newsBlogDescription.setLocation(location);
+							if (remove == 1) {
+								File files = new File(Constant.gallryImageURL + editTestImonial.getImageName());
+								// File files = new
+								// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
+								// (1).jpeg");
 
-				if (formType == 1) {
-					message = XssEscapeUtils
-							.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId())
-									.trim().replaceAll("[ ]{2,}", " "));
-					newsBlogDescription.setMessage(message);
-				} else {
-					message = XssEscapeUtils
-							.jsoupParseClean(request.getParameter("message" + languagesList.get(i).getLanguagesId()));
-					newsBlogDescription.setMessage(message);
-				}
+								if (files.delete()) {
+									System.out.println(" File deleted  " + Constant.gallryImageURL
+											+ editTestImonial.getImageName());
+								} else
+									System.out.println("doesn't exists  " + Constant.gallryImageURL
+											+ editTestImonial.getImageName());
 
-				newsBlogDescription.setAddDate(sf.format(date));
-				newsBlogDescription.setAddedByUserId(UserDetail.getUserId());
-				newsBlogDescription.setDelStatus(1);
-				newsBlogDescription.setExInt2(1);
-				newsBlogDescription.setExInt1(formType);
-				newsBlogDescription.setExVar1("NA");
-				newsBlogDescription.setExVar2("NA");
-				newsBlogDescription.setFromName(formName);
-				newsBlogDescription.setIsActive(1);
-				newsBlogDescription.setTestHeadId(0);
-				newsBlogDescriptionList.add(newsBlogDescription);
-			}
-
-			// System.out.println("detail lis==="+newsBlogDescriptionList.toString());
-
-			VpsImageUpload upload = new VpsImageUpload();
-			if (ret == false) {
-				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					// System.out.println("in image null");
-					try {
-
-						if (remove == 1) {
-							File files = new File(Constant.gallryImageURL + editTestImonial.getImageName());
-							// File files = new
-							// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
-							// (1).jpeg");
-
-							if (files.delete()) {
-								System.out.println(
-										" File deleted  " + Constant.gallryImageURL + editTestImonial.getImageName());
-							} else
-								System.out.println(
-										"doesn't exists  " + Constant.gallryImageURL + editTestImonial.getImageName());
-
-							// System.out.println("Remove :" + remove);
-							editTestImonial.setImageName("");
+								// System.out.println("Remove :" + remove);
+								editTestImonial.setImageName("");
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
 						}
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+					} else {
+
+						String imageName = new String();
+						imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
+
+						try {
+							upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values,
+									0, 0, 0, 0, 0);
+							editTestImonial.setImageName(imageName);
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					}
+					if (id == 0) {
+						// System.out.println(" add Id :" + id);
+						editTestImonial.setAddedByUserId(UserDetail.getUserId());
+					} else {
+						// System.out.println("edit Id :" + id);
+						editTestImonial.setEditByUserId(UserDetail.getUserId());
+					}
+
+					editTestImonial.setSectionId(moduleId);
+					editTestImonial.setPageId(pageId);
+					editTestImonial.setIsActive(isActive);
+					editTestImonial.setDelStatus(1);
+					editTestImonial.setAddDate(sf.format(date));
+					editTestImonial.setSortNo(sortNo);
+					// editTestImonial.setFromName(formName);
+					editTestImonial.setDetailList(newsBlogDescriptionList);
+					editTestImonial.setExInt1(formType);
+
+					// System.out.println("textImonial" + editTestImonial);
+					TestImonial res = Constant.getRestTemplate().postForObject(
+							Constant.url + "/saveTestinomialsHeaderAndDetail", editTestImonial, TestImonial.class);
+
+					if (res != null && isEdit == 0) {
+
+						PagesModule pagesModule = new PagesModule();
+
+						pagesModule.setPageId(pageId);
+						pagesModule.setPrimaryKeyId(res.getId());
+						pagesModule.setModuleId(moduleId);
+						PagesModule pagesModuleres = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						// System.out.println("res " + res);
+					}
+					if (res != null) {
+
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+
+						session.setAttribute("successMsg", "Failed to add Information!");
+						session.setAttribute("errorMsg", "false");
 					}
 				} else {
-
-					String imageName = new String();
-					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
-
-					try {
-						upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName, Constant.values, 0,
-								0, 0, 0, 0);
-						editTestImonial.setImageName(imageName);
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				}
-				if (id == 0) {
-					// System.out.println(" add Id :" + id);
-					editTestImonial.setAddedByUserId(UserDetail.getUserId());
-				} else {
-					// System.out.println("edit Id :" + id);
-					editTestImonial.setEditByUserId(UserDetail.getUserId());
-				}
-
-				editTestImonial.setSectionId(moduleId);
-				editTestImonial.setPageId(pageId);
-				editTestImonial.setIsActive(isActive);
-				editTestImonial.setDelStatus(1);
-				editTestImonial.setAddDate(sf.format(date));
-				editTestImonial.setSortNo(sortNo);
-				// editTestImonial.setFromName(formName);
-				editTestImonial.setDetailList(newsBlogDescriptionList);
-				editTestImonial.setExInt1(formType);
-
-				// System.out.println("textImonial" + editTestImonial);
-				TestImonial res = Constant.getRestTemplate().postForObject(
-						Constant.url + "/saveTestinomialsHeaderAndDetail", editTestImonial, TestImonial.class);
-
-				if (res != null && isEdit == 0) {
-
-					PagesModule pagesModule = new PagesModule();
-
-					pagesModule.setPageId(pageId);
-					pagesModule.setPrimaryKeyId(res.getId());
-					pagesModule.setModuleId(moduleId);
-					PagesModule pagesModuleres = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					// System.out.println("res " + res);
-				}
-				if (res != null) {
-
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
-				} else {
-
-					session.setAttribute("successMsg", "Failed to add Information!");
+					session.setAttribute("successMsg", "Invalid Infomation!");
 					session.setAttribute("errorMsg", "false");
 				}
+				redirect = "redirect:/sectionTreeList";
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
-				session.setAttribute("errorMsg", "false");
+				redirect = "redirect:/accessDenied";
 			}
-
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			session.setAttribute("successMsg", "Error while updating!");
 			session.setAttribute("errorMsg", "true");
 			e.printStackTrace();
 		}
-		return "redirect:/sectionTreeList";
+		return redirect;
 
 	}
 
@@ -379,11 +389,18 @@ public class ContentModuleController {
 	@RequestMapping(value = "/insertTestimonialEditForm", method = RequestMethod.POST)
 	public String insertTestimonialEditForm(@RequestParam("images") List<MultipartFile> images,
 			HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = null;
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		HttpSession session = request.getSession();
 		try {
 //1 time
+			
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
+
+
 			User UserDetail = (User) session.getAttribute("UserDetail");
 			int remove = Integer.parseInt(request.getParameter("removeImg"));
 			// String formName = request.getParameter("form_name");
@@ -567,13 +584,18 @@ public class ContentModuleController {
 				session.setAttribute("successMsg", "Invalid Infomation!");
 				session.setAttribute("errorMsg", "false");
 			}
+			redirect = "redirect:/sectionTreeList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 
 		} catch (Exception e) {
 			session.setAttribute("successMsg", "Error while updating!");
 			session.setAttribute("errorMsg", "true");
 			e.printStackTrace();
 		}
-		return "redirect:/sectionTreeList";
+		return redirect;
 
 	}
 
@@ -708,28 +730,35 @@ public class ContentModuleController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteTestImonial/{id}", method = RequestMethod.GET)
-	public String deleteTestImonial(@PathVariable("id") int id, HttpServletRequest request,
+	@RequestMapping(value = "/deleteTestImonial/{id}/{token}", method = RequestMethod.GET)
+	public String deleteTestImonial(@PathVariable("id") int id, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = null;
 		try {
+			HttpSession session = request.getSession();
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
+				
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("id", id);
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteTestImonial", map, Info.class);
-
-			HttpSession session = request.getSession();
-
+		
 			if (info.isError() == false) {
 				session.setAttribute("successMsg", "Infomation Delete successfully!");
 			} else {
 				session.setAttribute("successMsg", "Error while Deleting !");
 			}
-
+			redirect = "redirect:/testImonialList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/testImonialList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/NewsBlogForm/{pageId}", method = RequestMethod.GET)
@@ -1873,10 +1902,14 @@ public class ContentModuleController {
 
 	@RequestMapping(value = "/insertVedioForm", method = RequestMethod.POST)
 	public String insertVedioForm(HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = null;
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			String catId = request.getParameter("cateId");
@@ -1947,84 +1980,100 @@ public class ContentModuleController {
 				session.setAttribute("successMsg", "Invalid Information !");
 				session.setAttribute("errorMsg", "true");
 			}
+			redirect = "redirect:/VedioFormList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/VedioFormList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/submitVedioForm", method = RequestMethod.POST)
 	public String submitVedioForm(HttpServletRequest request, HttpServletResponse response) {
+		String redirect = null;
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String catId = request.getParameter("cateId");
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			String titleName = XssEscapeUtils.jsoupParse(request.getParameter("titleName").trim().replaceAll("[ ]{2,}", " "));
-			int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
-			// int
-			// galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
+			if (token.trim().equals(key.trim())) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
-			int pageId = Integer.parseInt(request.getParameter("pageId"));
-			Boolean ret = false;
+				String catId = request.getParameter("cateId");
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				String titleName = XssEscapeUtils
+						.jsoupParse(request.getParameter("titleName").trim().replaceAll("[ ]{2,}", " "));
+				int vedio_url = Integer.parseInt(request.getParameter("vedio_url"));
+				// int
+				// galleryDetailId=Integer.parseInt(request.getParameter("galleryDetailId"));
 
-			if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
-					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
-					|| FormValidation.Validaton(titleName, "") == true) {
+				int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+				int pageId = Integer.parseInt(request.getParameter("pageId"));
+				Boolean ret = false;
 
-				ret = true;
-			}
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			// CMSPages cMSPages = new CMSPages();
-			// GallaryDetail gallaryDetail=new GallaryDetail();
+				if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
+						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+						|| FormValidation.Validaton(titleName, "") == true) {
 
-			if (vedio_url == 0) {
-				String vedioUrl = request.getParameter("vedioUrl");
-				editGalleryDetail.setFileName(vedioUrl.trim().replaceAll("[ ]{2,}", " "));
-			} else {
-				String vedioCode = XssEscapeUtils.jsoupParse(request.getParameter("vedioCode").trim().replaceAll("[ ]{2,}", " "));
-				editGalleryDetail.setFileName(vedioCode);
-			}
-			editGalleryDetail.setPageId(pageId);
-			editGalleryDetail.setTypeVideoImage("4");
+					ret = true;
+				}
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				// CMSPages cMSPages = new CMSPages();
+				// GallaryDetail gallaryDetail=new GallaryDetail();
 
-			editGalleryDetail.setTitle(titleName);
-			editGalleryDetail.setGalleryCatId(Integer.parseInt(catId));
-			editGalleryDetail.setIsActive(isActive);
-			editGalleryDetail.setDelStatus(1);
-			editGalleryDetail.setEditDate(sf.format(date));
-			// gallaryDetail.setFeaturedImageAlignment(aligment);
-
-			// System.out.println("gallaryDetail" + editGalleryDetail);
-			if (ret == false) {
-				GallaryDetail res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetails",
-						editGalleryDetail, GallaryDetail.class);
-				// System.out.println("List : " + res.toString());
-				if (res.getGalleryDetailsId() != 0) {
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+				if (vedio_url == 0) {
+					String vedioUrl = request.getParameter("vedioUrl");
+					editGalleryDetail.setFileName(vedioUrl.trim().replaceAll("[ ]{2,}", " "));
 				} else {
-					session.setAttribute("successMsg", "Failed To Add Infomation!");
+					String vedioCode = XssEscapeUtils
+							.jsoupParse(request.getParameter("vedioCode").trim().replaceAll("[ ]{2,}", " "));
+					editGalleryDetail.setFileName(vedioCode);
+				}
+				editGalleryDetail.setPageId(pageId);
+				editGalleryDetail.setTypeVideoImage("4");
+
+				editGalleryDetail.setTitle(titleName);
+				editGalleryDetail.setGalleryCatId(Integer.parseInt(catId));
+				editGalleryDetail.setIsActive(isActive);
+				editGalleryDetail.setDelStatus(1);
+				editGalleryDetail.setEditDate(sf.format(date));
+				// gallaryDetail.setFeaturedImageAlignment(aligment);
+
+				// System.out.println("gallaryDetail" + editGalleryDetail);
+				if (ret == false) {
+					GallaryDetail res = Constant.getRestTemplate().postForObject(Constant.url + "/saveGalleryDetails",
+							editGalleryDetail, GallaryDetail.class);
+					// System.out.println("List : " + res.toString());
+					if (res.getGalleryDetailsId() != 0) {
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Failed To Add Infomation!");
+						session.setAttribute("errorMsg", "true");
+					}
+
+				} else {
+					session.setAttribute("successMsg", "Invalid Infomation!");
 					session.setAttribute("errorMsg", "true");
 				}
-
+				redirect = "redirect:/VedioFormList";
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
-				session.setAttribute("errorMsg", "true");
+				redirect = "redirect:/accessDenied";
 			}
-
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/VedioFormList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/VedioFormList", method = RequestMethod.GET)
@@ -2105,19 +2154,28 @@ public class ContentModuleController {
 	 * }
 	 */
 
-	@RequestMapping(value = "/deleteVideoGallery/{galleryDetailsId}", method = RequestMethod.GET)
-	public String deleteVideoGallary(@PathVariable int galleryDetailsId, HttpServletRequest request,
+	@RequestMapping(value = "/deleteVideoGallery/{galleryDetailsId}/{token}", method = RequestMethod.GET)
+	public String deleteVideoGallary(@PathVariable int galleryDetailsId, @PathVariable String token, HttpServletRequest request,
 			HttpServletResponse response) {
+		String redirect = null;
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
 		try {
+			HttpSession session = request.getSession();
+			String key = (String) session.getAttribute("generatedKey");
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("galleryDetailsId", galleryDetailsId);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map,
-					Info.class);
-			// System.out.println(res);
+			if (token.trim().equals(key.trim())) {
 
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("galleryDetailsId", galleryDetailsId);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteGalleryDetails", map,
+						Info.class);
+				// System.out.println(res);
+				redirect = "redirect:/VedioFormList";
+			} else {
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
