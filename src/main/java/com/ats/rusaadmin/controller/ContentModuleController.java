@@ -1387,10 +1387,17 @@ public class ContentModuleController {
 	public String insertEventForm(@RequestParam("images") List<MultipartFile> images,
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
+		String redirect = new String();
 
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+			
+			
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			String location = XssEscapeUtils.jsoupParse(request.getParameter("event_loc").trim().replaceAll("[ ]{2,}", " "));
@@ -1563,22 +1570,31 @@ public class ContentModuleController {
 				session.setAttribute("successMsg", "Invalid Information!");
 				session.setAttribute("errorMsg", "true");
 			}
-
+			redirect = "redirect:/sectionTreeList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/sectionTreeList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/submtEditEventForm", method = RequestMethod.POST)
 	public String submtEditEventForm(@RequestParam("images") List<MultipartFile> images,
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = new String();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
+			
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			  String location = XssEscapeUtils.jsoupParse(request.getParameter("event_loc").trim().replaceAll("[ ]{2,}", " "));
@@ -1780,11 +1796,17 @@ public class ContentModuleController {
 				session.setAttribute("errorMsg", "true");
 
 			}
+			redirect = "redirect:/EventFormList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/EventFormList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/EventFormList", method = RequestMethod.GET)
@@ -1876,25 +1898,32 @@ public class ContentModuleController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteEventContent/{newsblogsId}", method = RequestMethod.GET)
-	public String deleteEventContent(@PathVariable("newsblogsId") int newsblogsId, HttpServletRequest request,
+	@RequestMapping(value = "/deleteEventContent/{newsblogsId}/{token}", method = RequestMethod.GET)
+	public String deleteEventContent(@PathVariable("newsblogsId") int newsblogsId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
+		String redirect = new String();
 
 		try {
+			HttpSession session = request.getSession();
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteNewsBlogContent", map,
 					Info.class);
 
-			HttpSession session = request.getSession();
-
 			if (info.isError() == false) {
 				session.setAttribute("successMsg", "Infomation Delete successfully!");
 			} else {
 				session.setAttribute("successMsg", "Error while Deleting !");
 			}
-
+			redirect = "redirect:/EventFormList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1478,9 +1478,13 @@ String redirect = null;
 
 	@RequestMapping(value = "/multipleEventListDelete", method = RequestMethod.GET)
 	public String multipleEventListDelete(HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = new String();
 		try {
-
+			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			String[] ids = request.getParameterValues("ids");
 			String id = "0";
 
@@ -1498,12 +1502,16 @@ String redirect = null;
 					Info.class);
 			System.out.println(res);
 
-			HttpSession session = request.getSession();
 			if (res.isError() == true) {
 				session.setAttribute("successMsg", "Sorry, Can't deleted!");
 			} else {
 				session.setAttribute("successMsg", "Infomation deleted successfully!");
 			}
+			redirect = "redirect:/EventFormList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -947,10 +947,14 @@ public class AddContentController {
 
 	@RequestMapping(value = "/submitExtenalUrl", method = RequestMethod.POST)
 	public String submitExtenalUrl(HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = new String();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			String externalUrl = XssEscapeUtils.jsoupParse(request.getParameter("externalUrl").trim().replaceAll("[ ]{2,}", " "));
@@ -970,12 +974,17 @@ public class AddContentController {
 				session.setAttribute("successMsg", "Failed to Insert Information! ");
 				session.setAttribute("errorMsg", true);
 			}
+			redirect = "redirect:/sectionTreeList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/sectionTreeList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/linkPageMetaData/{pageId}", method = RequestMethod.GET)

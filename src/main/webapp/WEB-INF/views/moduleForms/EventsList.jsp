@@ -3,6 +3,9 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
 
 <!DOCTYPE html>
 <html class=" ">
@@ -76,11 +79,21 @@
 									</div>
 								</c:if>
 								<br>
+								<%
+		UUID uuid = UUID.randomUUID();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+		BigInteger number = new BigInteger(1, messageDigest);
+		String hashtext = number.toString(16);
+		session = request.getSession();
+		session.setAttribute("generatedKey", hashtext);
+	%>
 								<form
 									action="${pageContext.request.contextPath}/multipleEventListDelete"
 									method="get" id="multipleDelete">
 									<div class="col-xs-12">
-
+<input type="hidden" value="<%out.println(hashtext);%>"
+				name="token" id="token">
 
 										<table id="example-1"
 											class="table table-striped dt-responsive display">
@@ -225,7 +238,8 @@ function clearSessionAttribute() {
 	function submitFormSingle() {
 		 $('#modal_scrollable_single').modal('hide'); 
 		 var id = document.getElementById("conid").value;
-		 location.href = "${pageContext.request.contextPath}/deleteEventContent/"+id;
+		 var token = document.getElementById("token").value;
+		 location.href = "${pageContext.request.contextPath}/deleteEventContent/"+id+"/"+token;
 		//document.getElementById("multipleDelete").submit();
 		 
 	}
@@ -269,6 +283,8 @@ function clearSessionAttribute() {
 
 				<div class="modal-footer pt-3">
 					<input type="hidden" id="conid" name="conid">
+					<input type="hidden" value="<%out.println(hashtext);%>"
+				name="token" id="token">
 					<button type="button" class="btn btn btn-primary"
 						data-dismiss="modal">No</button>
 					<button type="button" class="btn btn btn-primary"

@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
 
 
 <!DOCTYPE html>
@@ -105,11 +107,21 @@
 						<div class="content-body">
 							<div class="row">
 								<div class="col-md-12">
+									<%
+		UUID uuid = UUID.randomUUID();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+		BigInteger number = new BigInteger(1, messageDigest);
+		String hashtext = number.toString(16);
+		session = request.getSession();
+		session.setAttribute("generatedKey", hashtext);
+	%>
 									<form class="form-horizontal"
 										action="${pageContext.request.contextPath}/insertEventForm"
 										method="post" enctype="multipart/form-data"
 										name="form_sample_2" id="form_sample_2">
-
+<input type="hidden" value="<%out.println(hashtext);%>"
+				name="token" id="token">
 										<ul class="nav nav-tabs">
 											<li class="active"><a href="#home" data-toggle="tab">
 													<i class="fa fa-home"></i> Home
@@ -514,7 +526,7 @@
 															class="glyphicon glyphicon-edit"
 															data-animate=" animated fadeIn " rel="tooltip"></span></a> |
 														<a
-														href="${pageContext.request.contextPath}/deleteEventContent/${getPagesModuleList.primaryKeyId}"
+														href="${pageContext.request.contextPath}/deleteEventContent/${getPagesModuleList.primaryKeyId}/<%out.println(hashtext);%>"
 														onClick="return confirm('Are you sure want to delete this record');"
 														rel="tooltip" data-color-class="danger"
 														data-animate=" animated fadeIn " data-toggle="tooltip"
