@@ -600,7 +600,6 @@ public class GallaryController {
 		String a = new String();
 		try {
 			HttpSession session = request.getSession();
-		
 
 			String key = (String) session.getAttribute("generatedKey");
 
@@ -673,22 +672,29 @@ public class GallaryController {
 		try {
 
 			HttpSession session = request.getSession();
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
+ 
+			if (token.trim().equals(key.trim())) {
 
-			Date date = new Date();
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-			String imageName = new String();
-			imageName = dateTimeInGMT.format(date) + "_" + file.get(0).getOriginalFilename();
-			VpsImageUpload upload = new VpsImageUpload();
+				Date date = new Date();
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				String imageName = new String();
+				imageName = dateTimeInGMT.format(date) + "_" + file.get(0).getOriginalFilename();
+				VpsImageUpload upload = new VpsImageUpload();
 
-			try {
-				upload.saveUploadedImge(file.get(0), Constant.otherDocURL, imageName, Constant.values, 0, 0, 0, 0, 0);
-				upload.saveUploadedImge(file.get(0), Constant.uploadDocURL, imageName, Constant.DocValues, 0, 0, 0, 0,
-						0);
+				try {
+					upload.saveUploadedImge(file.get(0), Constant.otherDocURL, imageName, Constant.values, 0, 0, 0, 0,
+							0);
+					upload.saveUploadedImge(file.get(0), Constant.uploadDocURL, imageName, Constant.DocValues, 0, 0, 0,
+							0, 0);
 
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

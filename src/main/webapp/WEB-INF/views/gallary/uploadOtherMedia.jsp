@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
- 
+
 <%@ page import="java.util.UUID"%>
 <%@ page import="java.security.MessageDigest"%>
 <%@ page import="java.math.BigInteger"%>
- 
+
 <%
 	UUID uuid = UUID.randomUUID();
 	MessageDigest md = MessageDigest.getInstance("MD5");
@@ -16,7 +16,7 @@
 	session = request.getSession();
 	session.setAttribute("generatedKey", hashtext);
 %>
- 
+
 
 <!DOCTYPE html>
 <html class=" ">
@@ -80,12 +80,14 @@
 									<form class="dropzone"
 										action="${pageContext.request.contextPath}/uploadOtherMediaProccess"
 										method="post" enctype="multipart/form-data">
-										<input name="isImage" value="1" type="hidden" />
-
+										<input name="isImage" value="1" type="hidden" /> <input
+											type="hidden" value="<%out.println(hashtext);%>" name="token"
+											id="token">
 										<div class="fallback">
-											<input name="file" type="file" multiple /> <input
-												type="hidden" value="<%out.println(hashtext);%>"
-												name="token" id="token">
+
+
+
+											<input name="file" type="file" multiple />
 
 
 										</div>
