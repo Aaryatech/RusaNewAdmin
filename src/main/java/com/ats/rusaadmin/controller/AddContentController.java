@@ -1008,10 +1008,14 @@ public class AddContentController {
 
 	@RequestMapping(value = "/submitPageMetaData", method = RequestMethod.POST)
 	public String submitPageMetaData(HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = new String();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 
 			String metaTitle = XssEscapeUtils.jsoupParse(request.getParameter("metaTitle").trim().replaceAll("[ ]{2,}", " "));
 			String metaDesc = XssEscapeUtils.jsoupParse(request.getParameter("metaDesc").trim().replaceAll("[ ]{2,}", " "));
@@ -1032,12 +1036,16 @@ public class AddContentController {
 				session.setAttribute("successMsg", "Failrd to Insert Information!");
 				session.setAttribute("errorMsg", true);
 			}
-
+			redirect = "redirect:/sectionTreeList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/sectionTreeList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/sitebrowse", method = RequestMethod.GET)
