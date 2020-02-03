@@ -32,6 +32,7 @@ import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
 import com.ats.rusaadmin.common.FormValidation;
+import com.ats.rusaadmin.common.SessionKeyGen;
 import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.BannerDetail;
 import com.ats.rusaadmin.model.BannerImages;
@@ -949,10 +950,14 @@ public class MasterControllerNew {
 	@RequestMapping(value = "/insertUploadDoc", method = RequestMethod.POST)
 	public String insertDocument(@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-
+String redirect = new String();
 		try {
-
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
+			
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			String docId = request.getParameter("docId");
@@ -993,7 +998,7 @@ public class MasterControllerNew {
 
 			if (ret == false) {
 				if (docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
-					// System.out.println("id null");
+				//	System.out.println("id null");
 
 					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 					editupload.setFileName(pdfName);
@@ -1078,12 +1083,16 @@ public class MasterControllerNew {
 				session.setAttribute("successMsg", "Invalid Infomation!");
 				session.setAttribute("errorMsg", "false");
 			}
-
+			redirect = "redirect:/documentUploadList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/documentUploadList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/documentUploadList", method = RequestMethod.GET)

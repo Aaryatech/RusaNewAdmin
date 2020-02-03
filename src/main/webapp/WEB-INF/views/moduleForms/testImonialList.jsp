@@ -80,7 +80,7 @@
 									<form
 										action="${pageContext.request.contextPath}/multipleTestimonialDelete"
 										method="get" id="multipleDelete"> 
-										<input type="hidden" value="<%out.println(hashtext);%>"
+									<input type="hidden" value="<%out.println(hashtext);%>"
 				name="token" id="token">
         <div class="col-xs-12">
 
