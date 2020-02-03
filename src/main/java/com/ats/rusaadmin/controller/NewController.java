@@ -1398,37 +1398,47 @@ String redirect = null;
 
 	@RequestMapping(value = "/multipleDocumentListDelete", method = RequestMethod.GET)
 	public String multipleDocumentListDelete(HttpServletRequest request, HttpServletResponse response) {
-
+		String redirect = new String();
 		try {
 
-			String[] ids = request.getParameterValues("ids");
-			String id = "0";
-
-			System.err.println("in mul del ");
-
-			for (int i = 0; i < ids.length; i++) {
-				id = id + "," + ids[i];
-
-			}
-			System.err.println("in mul del " + id);
-
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleDocumentList", map,
-					Info.class);
-			System.out.println(res);
-
 			HttpSession session = request.getSession();
-			if (res.isError() == true) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
+
+			if (token.trim().equals(key.trim())) {
+				String[] ids = request.getParameterValues("ids");
+				String id = "0";
+
+				System.err.println("in mul del ");
+
+				for (int i = 0; i < ids.length; i++) {
+					id = id + "," + ids[i];
+
+				}
+				System.err.println("in mul del " + id);
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleDocumentList", map,
+						Info.class);
+				System.out.println(res);
+				
+				if (res.isError() == true) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
+				redirect = "redirect:/documentUploadList";
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
+				redirect = "redirect:/accessDenied";
 			}
+			SessionKeyGen.changeSessionKey(request);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/documentUploadList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/multipleNewsListDelete", method = RequestMethod.GET)

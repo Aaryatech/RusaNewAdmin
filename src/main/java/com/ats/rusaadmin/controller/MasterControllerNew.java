@@ -1148,29 +1148,39 @@ String redirect = new String();
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteDocument/{docId}", method = RequestMethod.GET)
-	public String deleteDocument(@PathVariable int docId, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/deleteDocument/{docId}/{token}", method = RequestMethod.GET)
+	public String deleteDocument(@PathVariable int docId, @PathVariable String token, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		// ModelAndView model = new ModelAndView("masters/empDetail");
+		String redirect = new String();
 		try {
-
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("docId", docId);
-			// map.add("delStatus", 0);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteDocument", map, Info.class);
-			// System.out.println(res);
-
 			HttpSession session = request.getSession();
-			if (res == null) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+			String key = (String) session.getAttribute("generatedKey");
+
+			if (token.trim().equals(key.trim())) {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("docId", docId);
+				// map.add("delStatus", 0);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteDocument", map, Info.class);
+				// System.out.println(res);
+
+				if (res == null) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
+				redirect = "redirect:/documentUploadList";
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
+				redirect = "redirect:/accessDenied";
 			}
+			SessionKeyGen.changeSessionKey(request);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/documentUploadList";
+		return redirect;
 	}
 
 }

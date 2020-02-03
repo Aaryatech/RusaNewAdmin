@@ -800,196 +800,213 @@ public class ContentModuleController {
 	public String insertCmsForm(@RequestParam("images") List<MultipartFile> images,
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = new String();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String aligment = request.getParameter("header_top_alignment");
-			int isActive = Integer.parseInt(request.getParameter("status"));
-			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-			 String urlName = XssEscapeUtils.jsoupParse(request.getParameter("url_name").trim().replaceAll("[ ]{2,}", " "));
-			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
-			int pageId = Integer.parseInt(request.getParameter("pageId"));
-			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
-			String[] itemShow = request.getParameterValues("sectionId");
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < itemShow.length; i++) {
-				sb = sb.append(itemShow[i] + ",");
-			}
-			String items = sb.toString();
-			items = items.substring(0, items.length() - 1);
-			// System.out.println("items :" + items);
-			Boolean ret = false;
+			if (token.trim().equals(key.trim())) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			if (FormValidation.Validaton(urlName, "") == true
-					|| FormValidation.Validaton(request.getParameter("status"), "") == true
-					|| FormValidation.Validaton(request.getParameter("page_order"), "") == true || items.length() < 0) {
+				String aligment = request.getParameter("header_top_alignment");
+				int isActive = Integer.parseInt(request.getParameter("status"));
+				int seqNo = Integer.parseInt(request.getParameter("page_order"));
+				String urlName = XssEscapeUtils
+						.jsoupParse(request.getParameter("url_name").trim().replaceAll("[ ]{2,}", " "));
+				int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+				int pageId = Integer.parseInt(request.getParameter("pageId"));
+				int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+				String[] itemShow = request.getParameterValues("sectionId");
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < itemShow.length; i++) {
+					sb = sb.append(itemShow[i] + ",");
+				}
+				String items = sb.toString();
+				items = items.substring(0, items.length() - 1);
+				// System.out.println("items :" + items);
+				Boolean ret = false;
 
-				ret = true;
-			}
-
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("pageId", pageId);
-			Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map, Page.class);
-
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-
-			String text = page.getPageName();
-			text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
-			
-			String heading1 = null;
-            String pageDescription = null;
-            String metaTitle = null;
-            String metaDescription = null;
-            String keyword = null;
-            
-			// System.out.println(text);
-
-			// CMSPages cMSPages = new CMSPages();
-			NewsBlog newsBlog = new NewsBlog();
-			List<NewsBlogDescription> newsBlogDescriptionList = new ArrayList<NewsBlogDescription>();
-
-			VpsImageUpload upload = new VpsImageUpload();
-
-			for (int i = 0; i < languagesList.size(); i++) {
-				heading1 = XssEscapeUtils.jsoupParse(request.getParameter("heading1" + languagesList.get(i).getLanguagesId())
-                        .trim().replaceAll("[ ]{2,}", " "));
-				 pageDescription = XssEscapeUtils.jsoupParseClean(
-	                        request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()).trim()
-	                                .replaceAll("[ ]{2,}", " "));
-	                metaTitle = XssEscapeUtils.jsoupParse(request.getParameter("meta_title1" + languagesList.get(i).getLanguagesId())
-	                        .trim().replaceAll("[ ]{2,}", " "));
-	                metaDescription = XssEscapeUtils.jsoupParse(
-	                        request.getParameter("meta_description1" + languagesList.get(i).getLanguagesId()).trim()
-	                        .replaceAll("[ ]{2,}", " "));
-	                keyword = XssEscapeUtils.jsoupParse(
-	                        request.getParameter("meta_keyword1" + languagesList.get(i).getLanguagesId()).trim()
-	                        .replaceAll("[ ]{2,}", " "));
-				
-				if (FormValidation.Validaton(heading1,"") == true || FormValidation.Validaton(metaTitle,
-								"") == true) {
+				if (FormValidation.Validaton(urlName, "") == true
+						|| FormValidation.Validaton(request.getParameter("status"), "") == true
+						|| FormValidation.Validaton(request.getParameter("page_order"), "") == true
+						|| items.length() < 0) {
 
 					ret = true;
-					break;
 				}
 
-                
-                NewsBlogDescription newsBlogDescription = new NewsBlogDescription();
-                newsBlogDescription.setLanguageId(languagesList.get(i).getLanguagesId());
-                newsBlogDescription.setHeading(heading1);
-                newsBlogDescription.setDescriptions(pageDescription);
-                newsBlogDescription.setPageMetaTitle(metaTitle);
-                newsBlogDescription.setPageMetaDescription(metaDescription);
-                newsBlogDescription.setPageMetaKeyword(keyword);
-                newsBlogDescription.setDateTransaction(sf.format(date));
-                newsBlogDescription.setExInt1(onHomePage);
-                newsBlogDescriptionList.add(newsBlogDescription);
-			}
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("pageId", pageId);
+				Page page = Constant.getRestTemplate().postForObject(Constant.url + "/getPageByPageId", map,
+						Page.class);
 
-			if (ret == false) {
-				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-				} else {
+				String text = page.getPageName();
+				text = text.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase();
 
-					String imageName = new String();
-					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
+				String heading1 = null;
+				String pageDescription = null;
+				String metaTitle = null;
+				String metaDescription = null;
+				String keyword = null;
 
-					try {
-						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
-								Constant.values, 0, 0, 0, 0, 0);
-						if (info.isError() == false) {
-							newsBlog.setFeaturedImage(imageName);
-						}
+				// System.out.println(text);
 
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+				// CMSPages cMSPages = new CMSPages();
+				NewsBlog newsBlog = new NewsBlog();
+				List<NewsBlogDescription> newsBlogDescriptionList = new ArrayList<NewsBlogDescription>();
+
+				VpsImageUpload upload = new VpsImageUpload();
+
+				for (int i = 0; i < languagesList.size(); i++) {
+					heading1 = XssEscapeUtils
+							.jsoupParse(request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+					pageDescription = XssEscapeUtils.jsoupParseClean(
+							request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+					metaTitle = XssEscapeUtils
+							.jsoupParse(request.getParameter("meta_title1" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
+					metaDescription = XssEscapeUtils.jsoupParse(
+							request.getParameter("meta_description1" + languagesList.get(i).getLanguagesId()).trim()
+									.replaceAll("[ ]{2,}", " "));
+					keyword = XssEscapeUtils
+							.jsoupParse(request.getParameter("meta_keyword1" + languagesList.get(i).getLanguagesId())
+									.trim().replaceAll("[ ]{2,}", " "));
+
+					if (FormValidation.Validaton(heading1, "") == true
+							|| FormValidation.Validaton(metaTitle, "") == true) {
+
+						ret = true;
+						break;
 					}
 
+					NewsBlogDescription newsBlogDescription = new NewsBlogDescription();
+					newsBlogDescription.setLanguageId(languagesList.get(i).getLanguagesId());
+					newsBlogDescription.setHeading(heading1);
+					newsBlogDescription.setDescriptions(pageDescription);
+					newsBlogDescription.setPageMetaTitle(metaTitle);
+					newsBlogDescription.setPageMetaDescription(metaDescription);
+					newsBlogDescription.setPageMetaKeyword(keyword);
+					newsBlogDescription.setDateTransaction(sf.format(date));
+					newsBlogDescription.setExInt1(onHomePage);
+					newsBlogDescriptionList.add(newsBlogDescription);
 				}
 
-				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
+				if (ret == false) {
+					if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
 
-				} else {
+					} else {
 
-					String pdfName = new String();
-					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
+						String imageName = new String();
+						imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
 
-					try {
-						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
-								pdfName);
-						if (info.isError() == false) {
-							newsBlog.setDownloadPdf(pdfName);
+						try {
+							Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+									Constant.values, 0, 0, 0, 0, 0);
+							if (info.isError() == false) {
+								newsBlog.setFeaturedImage(imageName);
+							}
+
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
 						}
 
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
 					}
 
-				}
+					if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
 
-				newsBlog.setAddedByUserId(UserDetail.getUserId());
-				newsBlog.setPageId(pageId);
-				newsBlog.setExVar1(text.trim().replaceAll("[ ]{2,}", " "));
-				newsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
-				newsBlog.setExInt1(9);
+					} else {
 
-				newsBlog.setExVar2(items);
-				newsBlog.setPageOrder(seqNo);
-				newsBlog.setIsActive(isActive);
-				newsBlog.setDelStatus(1);
-				newsBlog.setAddDate(sf.format(date));
-				newsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
-				newsBlog.setDetailList(newsBlogDescriptionList);
+						String pdfName = new String();
+						pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 
-				// System.out.println("newsBlog" + newsBlog);
-				NewsBlog res = Constant.getRestTemplate().postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail",
-						newsBlog, NewsBlog.class);
+						try {
+							Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+									pdfName);
+							if (info.isError() == false) {
+								newsBlog.setDownloadPdf(pdfName);
+							}
 
-				if (res != null && res.getDetailList() != null && isEdit == 0) {
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
 
-					PagesModule pagesModule = new PagesModule();
+					}
 
-					pagesModule.setPageId(res.getPageId());
-					pagesModule.setPrimaryKeyId(res.getNewsblogsId());
-					pagesModule.setModuleId(9);
-					PagesModule pagesModuleres = Constant.getRestTemplate()
-							.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-					// System.out.println("pagesModuleres " + pagesModuleres);
-				}
-				if (res != null) {
+					newsBlog.setAddedByUserId(UserDetail.getUserId());
+					newsBlog.setPageId(pageId);
+					newsBlog.setExVar1(text.trim().replaceAll("[ ]{2,}", " "));
+					newsBlog.setNewsSourceUrlName(urlName.trim().replaceAll("[ ]{2,}", " "));
+					newsBlog.setExInt1(9);
 
-					session.setAttribute("successMsg", "Infomation added successfully!");
-					session.setAttribute("errorMsg", "false");
+					newsBlog.setExVar2(items);
+					newsBlog.setPageOrder(seqNo);
+					newsBlog.setIsActive(isActive);
+					newsBlog.setDelStatus(1);
+					newsBlog.setAddDate(sf.format(date));
+					newsBlog.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
+					newsBlog.setDetailList(newsBlogDescriptionList);
 
+					// System.out.println("newsBlog" + newsBlog);
+					NewsBlog res = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/saveNewsBlogHeaderAndDetail", newsBlog, NewsBlog.class);
+
+					if (res != null && res.getDetailList() != null && isEdit == 0) {
+
+						PagesModule pagesModule = new PagesModule();
+
+						pagesModule.setPageId(res.getPageId());
+						pagesModule.setPrimaryKeyId(res.getNewsblogsId());
+						pagesModule.setModuleId(9);
+						PagesModule pagesModuleres = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+						// System.out.println("pagesModuleres " + pagesModuleres);
+					}
+					if (res != null) {
+
+						session.setAttribute("successMsg", "Infomation added successfully!");
+						session.setAttribute("errorMsg", "false");
+
+					} else {
+						session.setAttribute("successMsg", "Error While Uploading Content !");
+						session.setAttribute("errorMsg", "true");
+					}
 				} else {
-					session.setAttribute("successMsg", "Error While Uploading Content !");
+					session.setAttribute("successMsg", "Invalid Information !");
 					session.setAttribute("errorMsg", "true");
 				}
+				redirect = "redirect:/NewsBlogList";
+
 			} else {
-				session.setAttribute("successMsg", "Invalid Information !");
-				session.setAttribute("errorMsg", "true");
+				redirect = "redirect:/accessDenied";
 			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/NewsBlogList";
+		return redirect;
 	}
-
 	@RequestMapping(value = "/submtEditNewsBlogForm", method = RequestMethod.POST)
 	public String submtEditNewsBlogForm(@RequestParam("images") List<MultipartFile> images,
 			@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-
+		String redirect = new String();
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
+			String token=request.getParameter("token");
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			User UserDetail = (User) session.getAttribute("UserDetail");
 
 			String aligment = request.getParameter("header_top_alignment");
@@ -1183,11 +1200,16 @@ public class ContentModuleController {
 				session.setAttribute("successMsg", "Invalid Information !");
 				session.setAttribute("errorMsg", "true");
 			}
+			redirect = "redirect:/NewsBlogList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/NewsBlogList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/NewsBlogList", method = RequestMethod.GET)
@@ -1298,30 +1320,37 @@ public class ContentModuleController {
 		return model;
 	}
 
-	@RequestMapping(value = "/deleteNewsBlogContent/{newsblogsId}", method = RequestMethod.GET)
-	public String deleteNewsBlogContent(@PathVariable("newsblogsId") int newsblogsId, HttpServletRequest request,
+	@RequestMapping(value = "/deleteNewsBlogContent/{newsblogsId}/{token}", method = RequestMethod.GET)
+	public String deleteNewsBlogContent(@PathVariable("newsblogsId") int newsblogsId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
+		String redirect = new String();
 
 		try {
-
+			HttpSession session = request.getSession();
+			String key=(String) session.getAttribute("generatedKey");
+			
+			if(token.trim().equals(key.trim())) {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("newsblogsId", newsblogsId);
 			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteNewsBlogContent", map,
 					Info.class);
-
-			HttpSession session = request.getSession();
 
 			if (info.isError() == false) {
 				session.setAttribute("successMsg", "Infomation Delete successfully!");
 			} else {
 				session.setAttribute("successMsg", "Error while Deleting !");
 			}
+			redirect = "redirect:/NewsBlogList";
+			}else {				
+				redirect = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/NewsBlogList";
+		return redirect;
 	}
 
 	@RequestMapping(value = "/EventForm/{pageId}", method = RequestMethod.GET)

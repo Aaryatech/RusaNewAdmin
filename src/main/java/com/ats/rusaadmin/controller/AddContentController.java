@@ -533,11 +533,12 @@ public class AddContentController {
 	public String deleteCmsContent(@PathVariable("cmsPageId") int cmsPageId, @PathVariable("token") String token, HttpServletRequest request,
 			HttpServletResponse response) {
 		
-		String redirect = null;
+		String redirect = new String();
+		System.out.println("token-----------------"+token);
 		try {
 			HttpSession session = request.getSession();
 			String key=(String) session.getAttribute("generatedKey");
-			
+			System.out.println("Key-------------"+key);
 			if(token.trim().equals(key.trim())) {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
