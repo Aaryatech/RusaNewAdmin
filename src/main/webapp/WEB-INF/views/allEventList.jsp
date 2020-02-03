@@ -3,6 +3,25 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+ 
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
+
+
+
+<%
+												UUID uuid = UUID.randomUUID();
+													MessageDigest md = MessageDigest.getInstance("MD5");
+													byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+													BigInteger number = new BigInteger(1, messageDigest);
+													String hashtext = number.toString(16);
+													session = request.getSession();
+													session.setAttribute("generatedKey", hashtext);
+											%>
+
+ 
+										
 
 <!DOCTYPE html>
 <html class=" ">
@@ -106,6 +125,11 @@
 								<form
 									action="${pageContext.request.contextPath}/getAllEventList"
 									id="submitInsertLeave" method="GET">
+									
+									
+										<input type="hidden" value="<%out.println(hashtext);%>"
+												name="token" id="token">
+									
 									<div class="col-xs-12">
 										<label class="control-label col-sm-2" for="page_name">From
 											Date :<span class="text-danger">*</span>

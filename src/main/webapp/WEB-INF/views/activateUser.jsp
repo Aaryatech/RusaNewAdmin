@@ -4,6 +4,23 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
+ 
+<%@ page import="java.util.UUID"%>
+<%@ page import="java.security.MessageDigest"%>
+<%@ page import="java.math.BigInteger"%>
+ 
+<%
+												UUID uuid = UUID.randomUUID();
+													MessageDigest md = MessageDigest.getInstance("MD5");
+													byte[] messageDigest = md.digest(String.valueOf(uuid).getBytes());
+													BigInteger number = new BigInteger(1, messageDigest);
+													String hashtext = number.toString(16);
+													session = request.getSession();
+													session.setAttribute("generatedKey", hashtext);
+											%>
+
+
+										 
 <!DOCTYPE html>
 <html class=" ">
 <head>
@@ -115,7 +132,7 @@
 									</div> 
 									<br>
 									<form
-										action="${pageContext.request.contextPath}/multipleUserRegDelete"
+										action="${pageContext.request.contextPath}/multipleUserRegDelete/<%out.println(hashtext);%>"
 										method="get" id="multipleDelete">
 									<div class="table-responsive">
 										<table id="example-1"
