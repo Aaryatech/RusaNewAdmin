@@ -199,10 +199,12 @@ public class MasterController {
 
 					for (int i = 0; i < languagesList.size(); i++) {
 
-						catName = request.getParameter("catName" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " ");
-						catDesc = request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()).trim()
-								.replaceAll("[ ]{2,}", " ");
+						catName = XssEscapeUtils
+								.jsoupParse(request.getParameter("catName" + languagesList.get(i).getLanguagesId()))
+								.trim().replaceAll("[ ]{2,}", " ");
+						catDesc = XssEscapeUtils
+								.jsoupParse(request.getParameter("catDesc" + languagesList.get(i).getLanguagesId()))
+								.trim().replaceAll("[ ]{2,}", " ");
 
 						if (FormValidation.Validaton(catName, "") == true
 								|| FormValidation.Validaton(catName, "") == true) {
@@ -1159,7 +1161,7 @@ public class MasterController {
 		try {
 
 			String galleryHeaderId = request.getParameter("galleryHeaderId");
-			String titleName = request.getParameter("titleName");
+			String titleName = XssEscapeUtils.jsoupParse(request.getParameter("titleName"));
 			int catId = Integer.parseInt(request.getParameter("catId"));
 			int subCatId = Integer.parseInt(request.getParameter("subCatId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));

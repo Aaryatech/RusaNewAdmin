@@ -189,7 +189,7 @@ public class AddContentController {
 			if (token.trim().equals(key.trim())) {
 				User UserDetail = (User) session.getAttribute("UserDetail");
 
-				String aligment = request.getParameter("header_top_alignment");
+				String aligment = XssEscapeUtils.jsoupParse(request.getParameter("header_top_alignment"));
 				int isActive = Integer.parseInt(request.getParameter("status"));
 				int seqNo = Integer.parseInt(request.getParameter("page_order"));
 
@@ -212,13 +212,18 @@ public class AddContentController {
 
 				for (int i = 0; i < languagesList.size(); i++) {
 
-					String head1 = request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim()
+					String head1 = XssEscapeUtils
+							.jsoupParse(request.getParameter("heading1" + languagesList.get(i).getLanguagesId()).trim())
 							.replaceAll("[ ]{2,}", " ");
 
-					String head2 = request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim()
+					String head2 = XssEscapeUtils
+							.jsoupParse(
+									request.getParameter("smallheading" + languagesList.get(i).getLanguagesId()).trim())
 							.replaceAll("[ ]{2,}", " ");
 
-					String pageDesc = request.getParameter("page_description1" + languagesList.get(i).getLanguagesId())
+					String pageDesc = XssEscapeUtils
+							.jsoupParse(
+									request.getParameter("page_description1" + languagesList.get(i).getLanguagesId()))
 							.trim().replaceAll("[ ]{2,}", " ");
 
 					if (FormValidation.Validaton(head1, "") == true || FormValidation.Validaton(head2, "") == true
@@ -318,7 +323,7 @@ public class AddContentController {
 					session.setAttribute("errorMsg", "true");
 				}
 				redirect = "redirect:/sectionTreeList";
-				
+
 			} else {
 				redirect = "redirect:/accessDenied";
 			}
@@ -338,166 +343,170 @@ public class AddContentController {
 		String redirect = null;
 		try {
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			User UserDetail = (User) session.getAttribute("UserDetail");
-			String aligment = request.getParameter("header_top_alignment");
-			int isActive = Integer.parseInt(request.getParameter("status"));
-			int seqNo = Integer.parseInt(request.getParameter("page_order"));
-			int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
-			int remove = Integer.parseInt(request.getParameter("removeImg"));
-			int removePdf = Integer.parseInt(request.getParameter("removePdf"));
-			Boolean ret = false;
+			if (token.trim().equals(key.trim())) {
 
-			if (FormValidation.Validaton(request.getParameter("page_order"), "") == true
-					|| FormValidation.Validaton(request.getParameter("status"), "") == true) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
+				String aligment = XssEscapeUtils.jsoupParse(request.getParameter("header_top_alignment"));
+				int isActive = Integer.parseInt(request.getParameter("status"));
+				int seqNo = Integer.parseInt(request.getParameter("page_order"));
+				int onHomePage = Integer.parseInt(request.getParameter("onHomePage"));
+				int remove = Integer.parseInt(request.getParameter("removeImg"));
+				int removePdf = Integer.parseInt(request.getParameter("removePdf"));
+				Boolean ret = false;
 
-				ret = true;
-			}
-
-			Date date = new Date();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-
-			VpsImageUpload upload = new VpsImageUpload();
-			
-			String heading = null;
-			String smallHeading = null;
-			String content = null;
-
-			for (int i = 0; i < editCMSPages.getDetailList().size(); i++) {
-				heading = XssEscapeUtils.jsoupParse(request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId()).trim()
-								.replaceAll("[ ]{2,}", " "));
-				
-				smallHeading = XssEscapeUtils.jsoupParse(request.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				
-				content = XssEscapeUtils.jsoupParseClean(request.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				if (FormValidation.Validaton(heading,"") == true) {
+				if (FormValidation.Validaton(request.getParameter("page_order"), "") == true
+						|| FormValidation.Validaton(request.getParameter("status"), "") == true) {
 
 					ret = true;
-					break;
 				}
 
-				editCMSPages.getDetailList().get(i).setHeading(heading);
-				editCMSPages.getDetailList().get(i).setSmallheading(smallHeading);
-				editCMSPages.getDetailList().get(i).setPageDesc(content);
-				editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
-			}
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-			if (ret == false) {
-				editCMSPages.setEditByUserId(UserDetail.getUserId());
+				VpsImageUpload upload = new VpsImageUpload();
 
-				if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
-					// System.out.println("in image null");
-					try {
+				String heading = null;
+				String smallHeading = null;
+				String content = null;
 
-						if (remove == 1) {
-							File files = new File(Constant.gallryImageURL + editCMSPages.getFeaturedImage());
-							// File files = new
-							// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
-							// (1).jpeg");
+				for (int i = 0; i < editCMSPages.getDetailList().size(); i++) {
+					heading = XssEscapeUtils.jsoupParse(
+							request.getParameter("heading1" + editCMSPages.getDetailList().get(i).getLanguageId())
+									.trim().replaceAll("[ ]{2,}", " "));
 
-							if (files.delete()) {
-								System.out.println(
-										" File deleted  " + Constant.gallryImageURL + editCMSPages.getFeaturedImage());
-							} else
-								System.out.println(
-										"doesn't exists  " + Constant.gallryImageURL + editCMSPages.getFeaturedImage());
+					smallHeading = XssEscapeUtils.jsoupParse(
+							request.getParameter("smallheading" + editCMSPages.getDetailList().get(i).getLanguageId())
+									.trim().replaceAll("[ ]{2,}", " "));
 
-							System.out.println("Remove :" + remove);
-							editCMSPages.setFeaturedImage("");
+					content = XssEscapeUtils.jsoupParseClean(request
+							.getParameter("page_description1" + editCMSPages.getDetailList().get(i).getLanguageId())
+							.trim().replaceAll("[ ]{2,}", " "));
+					if (FormValidation.Validaton(heading, "") == true) {
+
+						ret = true;
+						break;
+					}
+
+					editCMSPages.getDetailList().get(i).setHeading(heading);
+					editCMSPages.getDetailList().get(i).setSmallheading(smallHeading);
+					editCMSPages.getDetailList().get(i).setPageDesc(content);
+					editCMSPages.getDetailList().get(i).setExInt1(onHomePage);
+				}
+
+				if (ret == false) {
+					editCMSPages.setEditByUserId(UserDetail.getUserId());
+
+					if (images.get(0).getOriginalFilename() == null || images.get(0).getOriginalFilename() == "") {
+						// System.out.println("in image null");
+						try {
+
+							if (remove == 1) {
+								File files = new File(Constant.gallryImageURL + editCMSPages.getFeaturedImage());
+								// File files = new
+								// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
+								// (1).jpeg");
+
+								if (files.delete()) {
+									System.out.println(" File deleted  " + Constant.gallryImageURL
+											+ editCMSPages.getFeaturedImage());
+								} else
+									System.out.println("doesn't exists  " + Constant.gallryImageURL
+											+ editCMSPages.getFeaturedImage());
+
+								System.out.println("Remove :" + remove);
+								editCMSPages.setFeaturedImage("");
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
 						}
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+
+					} else {
+						// System.out.println("in image not null");
+
+						String imageName = new String();
+						imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
+
+						try {
+							Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
+									Constant.values, 0, 0, 0, 0, 0);
+							if (info.isError() == false) {
+								editCMSPages.setFeaturedImage(imageName);
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+
+					}
+
+					// System.out.println("in pdf not null");
+					if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
+
+						try {
+							if (removePdf == 1) {
+								File files = new File(Constant.cmsPdf + editCMSPages.getDownloadPdf());
+								// File files = new
+								// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
+								// (1).jpeg");
+
+								if (files.delete()) {
+									System.out.println(
+											" File deleted  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
+								} else
+									System.out.println(
+											"doesn't exists  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
+
+								// System.out.println("Remove :" + removePdf);
+								editCMSPages.setDownloadPdf("");
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					} else {
+
+						String pdfName = new String();
+						pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
+
+						try {
+							Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+									pdfName);
+							if (info.isError() == false) {
+								editCMSPages.setDownloadPdf(pdfName);
+							}
+
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					}
+					editCMSPages.setPageOrder(seqNo);
+					editCMSPages.setIsActive(isActive);
+					editCMSPages.setEditDate(sf.format(date));
+					editCMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
+
+					CMSPages res = Constant.getRestTemplate()
+							.postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail", editCMSPages, CMSPages.class);
+
+					if (res.getCmsPageId() != 0) {
+						session.setAttribute("successMsg", "Infomation Updated successfully!");
+						session.setAttribute("errorMsg", "false");
+					} else {
+						session.setAttribute("successMsg", "Error while updating Content!");
+						session.setAttribute("errorMsg", "true");
 					}
 
 				} else {
-					// System.out.println("in image not null");
-
-					String imageName = new String();
-					imageName = dateTimeInGMT.format(date) + "_" + images.get(0).getOriginalFilename();
-
-					try {
-						Info info = upload.saveUploadedImge(images.get(0), Constant.gallryImageURL, imageName,
-								Constant.values, 0, 0, 0, 0, 0);
-						if (info.isError() == false) {
-							editCMSPages.setFeaturedImage(imageName);
-						}
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-
-				}
-
-				// System.out.println("in pdf not null");
-				if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
-
-					try {
-						if (removePdf == 1) {
-							File files = new File(Constant.cmsPdf + editCMSPages.getDownloadPdf());
-							// File files = new
-							// File("/home/lenovo/Downloads/apache-tomcat-8.5.37/webapps/media/other/2019-02-16_17:08:37_download
-							// (1).jpeg");
-
-							if (files.delete()) {
-								System.out.println(" File deleted  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
-							} else
-								System.out
-										.println("doesn't exists  " + Constant.cmsPdf + editCMSPages.getDownloadPdf());
-
-							// System.out.println("Remove :" + removePdf);
-							editCMSPages.setDownloadPdf("");
-						}
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				} else {
-
-					String pdfName = new String();
-					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
-
-					try {
-						Info info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
-								pdfName);
-						if (info.isError() == false) {
-							editCMSPages.setDownloadPdf(pdfName);
-						}
-
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				}
-				editCMSPages.setPageOrder(seqNo);
-				editCMSPages.setIsActive(isActive);
-				editCMSPages.setEditDate(sf.format(date));
-				editCMSPages.setFeaturedImageAlignment(aligment.trim().replaceAll("[ ]{2,}", " "));
-
-				CMSPages res = Constant.getRestTemplate().postForObject(Constant.url + "/saveCMSPagesHeaderAndDetail",
-						editCMSPages, CMSPages.class);
-
-				if (res.getCmsPageId() != 0) {
-					session.setAttribute("successMsg", "Infomation Updated successfully!");
-					session.setAttribute("errorMsg", "false");
-				} else {
-					session.setAttribute("successMsg", "Error while updating Content!");
+					session.setAttribute("successMsg", "Invalid Information!");
 					session.setAttribute("errorMsg", "true");
 				}
-
+				redirect = "redirect:/cmsList";
 			} else {
-				session.setAttribute("successMsg", "Invalid Information!");
-				session.setAttribute("errorMsg", "true");
-			}
-			redirect = "redirect:/cmsList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
@@ -530,30 +539,29 @@ public class AddContentController {
 	}
 
 	@RequestMapping(value = "/deleteCmsContent/{cmsPageId}/{token}", method = RequestMethod.GET)
-	public String deleteCmsContent(@PathVariable("cmsPageId") int cmsPageId, @PathVariable("token") String token, HttpServletRequest request,
-			HttpServletResponse response) {
-		
+	public String deleteCmsContent(@PathVariable("cmsPageId") int cmsPageId, @PathVariable("token") String token,
+			HttpServletRequest request, HttpServletResponse response) {
+
 		String redirect = new String();
-		System.out.println("token-----------------"+token);
+		System.out.println("token-----------------" + token);
 		try {
 			HttpSession session = request.getSession();
-			String key=(String) session.getAttribute("generatedKey");
-			System.out.println("Key-------------"+key);
-			if(token.trim().equals(key.trim())) {
+			String key = (String) session.getAttribute("generatedKey");
+			System.out.println("Key-------------" + key);
+			if (token.trim().equals(key.trim())) {
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("cmsPageId", cmsPageId);
-			Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteCmsContent", map, Info.class);
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("cmsPageId", cmsPageId);
+				Info info = Constant.getRestTemplate().postForObject(Constant.url + "/deleteCmsContent", map,
+						Info.class);
 
-		
-
-			if (info.isError() == false) {
-				session.setAttribute("successMsg", "Infomation Delete successfully!");
+				if (info.isError() == false) {
+					session.setAttribute("successMsg", "Infomation Delete successfully!");
+				} else {
+					session.setAttribute("successMsg", "Error while Deleting !");
+				}
+				redirect = "redirect:/cmsList";
 			} else {
-				session.setAttribute("successMsg", "Error while Deleting !");
-			}
-			redirect = "redirect:/cmsList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
@@ -766,8 +774,8 @@ public class AddContentController {
 	}
 
 	@RequestMapping(value = "/deleteFaqContent/{faqId}/{token}", method = RequestMethod.GET)
-	public String deleteFaqContent(@PathVariable("faqId") int faqId, @PathVariable("token") String token, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String deleteFaqContent(@PathVariable("faqId") int faqId, @PathVariable("token") String token,
+			HttpServletRequest request, HttpServletResponse response) {
 		String redirect = null;
 
 		try {
@@ -799,8 +807,8 @@ public class AddContentController {
 	}
 
 	@RequestMapping(value = "/editFaqContent/{faqId}/{token}", method = RequestMethod.GET)
-	public ModelAndView editFaqContent(@PathVariable("faqId") int faqId, @PathVariable("token") String token, HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView editFaqContent(@PathVariable("faqId") int faqId, @PathVariable("token") String token,
+			HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = null;
 		try {
@@ -880,14 +888,15 @@ public class AddContentController {
 				ret = true;
 			}
 
-			
 			for (int i = 0; i < editFreqAskQue.getDescriptionList().size(); i++) {
 
-				String question = XssEscapeUtils.jsoupParse(request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId())
-						.trim().replaceAll("[ ]{2,}", " "));
-				String answer = XssEscapeUtils.jsoupParseClean(request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim()
-						.replaceAll("[ ]{2,}", " "));
-				if (FormValidation.Validaton(question,	"") == true) {
+				String question = XssEscapeUtils.jsoupParse(
+						request.getParameter("question" + editFreqAskQue.getDescriptionList().get(i).getLanguageId())
+								.trim().replaceAll("[ ]{2,}", " "));
+				String answer = XssEscapeUtils.jsoupParseClean(
+						request.getParameter("ans" + editFreqAskQue.getDescriptionList().get(i).getLanguageId()).trim()
+								.replaceAll("[ ]{2,}", " "));
+				if (FormValidation.Validaton(question, "") == true) {
 					ret = true;
 					break;
 				}
@@ -951,31 +960,32 @@ public class AddContentController {
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String externalUrl = XssEscapeUtils.jsoupParse(request.getParameter("externalUrl").trim().replaceAll("[ ]{2,}", " "));
-			String newWindow = request.getParameter("newWindow");
+			if (token.trim().equals(key.trim())) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-			page.setExternalUrl(externalUrl);
-			page.setExternalUrlTarget(newWindow.trim().replaceAll("[ ]{2,}", " "));
+				String externalUrl = XssEscapeUtils
+						.jsoupParse(request.getParameter("externalUrl").trim().replaceAll("[ ]{2,}", " "));
+				String newWindow = request.getParameter("newWindow");
 
-			// System.out.println("page " + page);
-			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+				page.setExternalUrl(externalUrl);
+				page.setExternalUrlTarget(newWindow.trim().replaceAll("[ ]{2,}", " "));
 
-			if (res != null) {
+				// System.out.println("page " + page);
+				Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
-				session.setAttribute("successMsg", "Infomation Updated successfully!");
-				session.setAttribute("errorMsg", false);
+				if (res != null) {
+
+					session.setAttribute("successMsg", "Infomation Updated successfully!");
+					session.setAttribute("errorMsg", false);
+				} else {
+					session.setAttribute("successMsg", "Failed to Insert Information! ");
+					session.setAttribute("errorMsg", true);
+				}
+				redirect = "redirect:/sectionTreeList";
 			} else {
-				session.setAttribute("successMsg", "Failed to Insert Information! ");
-				session.setAttribute("errorMsg", true);
-			}
-			redirect = "redirect:/sectionTreeList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
@@ -1012,32 +1022,35 @@ public class AddContentController {
 		// ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String metaTitle = XssEscapeUtils.jsoupParse(request.getParameter("metaTitle").trim().replaceAll("[ ]{2,}", " "));
-			String metaDesc = XssEscapeUtils.jsoupParse(request.getParameter("metaDesc").trim().replaceAll("[ ]{2,}", " "));
-			String metaKeyword = XssEscapeUtils.jsoupParse(request.getParameter("metaKeyword").trim().replaceAll("[ ]{2,}", " "));
+			if (token.trim().equals(key.trim())) {
 
-			page.setPageMetaTitle(metaTitle);
-			page.setPageMetaDescription(metaDesc);
-			page.setPageMetaKeyword(metaKeyword);
+				String metaTitle = XssEscapeUtils
+						.jsoupParse(request.getParameter("metaTitle").trim().replaceAll("[ ]{2,}", " "));
+				String metaDesc = XssEscapeUtils
+						.jsoupParse(request.getParameter("metaDesc").trim().replaceAll("[ ]{2,}", " "));
+				String metaKeyword = XssEscapeUtils
+						.jsoupParse(request.getParameter("metaKeyword").trim().replaceAll("[ ]{2,}", " "));
 
-			System.out.println("page " + page);
-			Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
+				page.setPageMetaTitle(metaTitle);
+				page.setPageMetaDescription(metaDesc);
+				page.setPageMetaKeyword(metaKeyword);
 
-			if (res != null) {
+				System.out.println("page " + page);
+				Page res = Constant.getRestTemplate().postForObject(Constant.url + "/savePage", page, Page.class);
 
-				session.setAttribute("successMsg", "Infomation updated successfully!");
-				session.setAttribute("errorMsg", false);
+				if (res != null) {
+
+					session.setAttribute("successMsg", "Infomation updated successfully!");
+					session.setAttribute("errorMsg", false);
+				} else {
+					session.setAttribute("successMsg", "Failrd to Insert Information!");
+					session.setAttribute("errorMsg", true);
+				}
+				redirect = "redirect:/sectionTreeList";
 			} else {
-				session.setAttribute("successMsg", "Failrd to Insert Information!");
-				session.setAttribute("errorMsg", true);
-			}
-			redirect = "redirect:/sectionTreeList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);

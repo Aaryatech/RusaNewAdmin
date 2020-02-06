@@ -168,10 +168,14 @@ public class NewController {
 
 				for (int i = 0; i < editMeta.size(); i++) {
 
-					String siteTitle = request.getParameter("siteName" + languagesList.get(i).getLanguagesId());
-					String metaDesc = request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId());
-					String metaAuthor = request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId());
-					String metaKeyWord = request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId());
+					String siteTitle = XssEscapeUtils
+							.jsoupParse(request.getParameter("siteName" + languagesList.get(i).getLanguagesId()));
+					String metaDesc = XssEscapeUtils.jsoupParse(
+							request.getParameter("metaDescription" + languagesList.get(i).getLanguagesId()));
+					String metaAuthor = XssEscapeUtils
+							.jsoupParse(request.getParameter("metaAuthor" + languagesList.get(i).getLanguagesId()));
+					String metaKeyWord = XssEscapeUtils
+							.jsoupParse(request.getParameter("metaKeywords" + languagesList.get(i).getLanguagesId()));
 
 					if (FormValidation.Validaton(siteTitle, "") == true
 							|| FormValidation.Validaton(metaDesc, "") == true
@@ -321,8 +325,9 @@ public class NewController {
 
 				Boolean ret = false;
 
-				if (FormValidation.Validaton(request.getParameter("title_name"), "") == true
-						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true
+				if (FormValidation.Validaton(XssEscapeUtils.jsoupParse(request.getParameter("title_name")), "") == true
+						|| FormValidation.Validaton(XssEscapeUtils.jsoupParse(request.getParameter("isActive")),
+								"") == true
 						|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true) {
 
 					ret = true;
@@ -527,7 +532,6 @@ public class NewController {
 
 		return a;
 	}
-
 
 	List<ContactUs> contactList = new ArrayList<ContactUs>();
 
@@ -773,8 +777,7 @@ public class NewController {
 		return model;
 	}
 
-
-@RequestMapping(value = "/deleteContact/{id}/{hashKey}", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteContact/{id}/{hashKey}", method = RequestMethod.GET)
 	public String deleteContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String hashKey) {
 		String a = new String();
@@ -807,92 +810,92 @@ public class NewController {
 
 		return a;
 	}
-@RequestMapping(value = "/multipleContactDelete/{hashKey}", method = RequestMethod.GET)
-public String multipleContactDelete(HttpServletRequest request, HttpServletResponse response,
-		@PathVariable String hashKey) {
 
-	// ModelAndView model = new ModelAndView("masters/empDetail");
+	@RequestMapping(value = "/multipleContactDelete/{hashKey}", method = RequestMethod.GET)
+	public String multipleContactDelete(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String hashKey) {
 
-	String a = new String();
-	try {
+		// ModelAndView model = new ModelAndView("masters/empDetail");
 
+		String a = new String();
+		try {
+
+			HttpSession session = request.getSession();
+			String key = (String) session.getAttribute("generatedKey");
+
+			if (hashKey.trim().equals(key.trim())) {
+
+				a = "redirect:/ContactList";
+				String[] ids = request.getParameterValues("ids");
+				String id = "0";
+
+				for (int i = 0; i < ids.length; i++) {
+					id = id + "," + ids[i];
+				}
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleContact", map,
+						Info.class);
+				System.out.println(res);
+
+				if (res.isError() == true) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
+			} else {
+				a = "redirect:/accessDenied";
+			}
+			SessionKeyGen.changeSessionKey(request);
+		} catch (Exception e) {
+			SessionKeyGen.changeSessionKey(request);
+			e.printStackTrace();
+		}
+
+		return a;
+	}
+
+	@RequestMapping(value = "/multipleUserRegDelete/{hashKey}", method = RequestMethod.GET)
+	public String multipleUserRegDelete(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String hashKey) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
 		HttpSession session = request.getSession();
-		String key = (String) session.getAttribute("generatedKey");
+		String a = new String();
 
-		if (hashKey.trim().equals(key.trim())) {
+		try {
+			String key = (String) session.getAttribute("generatedKey");
 
-			a = "redirect:/ContactList";
-			String[] ids = request.getParameterValues("ids");
-			String id = "0";
+			if (hashKey.trim().equals(key.trim())) {
 
-			for (int i = 0; i < ids.length; i++) {
-				id = id + "," + ids[i];
-			}
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleContact", map,
-					Info.class);
-			System.out.println(res);
+				a = "redirect:/activeUserList";
 
-			if (res.isError() == true) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				String[] ids = request.getParameterValues("ids");
+				String id = "0";
+
+				for (int i = 0; i < ids.length; i++) {
+					id = id + "," + ids[i];
+				}
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleUserReg", map,
+						Info.class);
+				System.out.println(res);
+
+				if (res.isError() == true) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
+				a = "redirect:/accessDenied";
 			}
-		} else {
-			a = "redirect:/accessDenied";
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		SessionKeyGen.changeSessionKey(request);
-	} catch (Exception e) {
-		SessionKeyGen.changeSessionKey(request);
-		e.printStackTrace();
+
+		return a;
 	}
-
-	return a;
-}
-
-@RequestMapping(value = "/multipleUserRegDelete/{hashKey}", method = RequestMethod.GET)
-public String multipleUserRegDelete(HttpServletRequest request, HttpServletResponse response,
-		@PathVariable String hashKey) {
-
-	// ModelAndView model = new ModelAndView("masters/empDetail");
-	HttpSession session = request.getSession();
-	String a = new String();
-
-	try {
-		String key = (String) session.getAttribute("generatedKey");
-
-		if (hashKey.trim().equals(key.trim())) {
-
-			a = "redirect:/activeUserList";
-
-			String[] ids = request.getParameterValues("ids");
-			String id = "0";
-
-			for (int i = 0; i < ids.length; i++) {
-				id = id + "," + ids[i];
-			}
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleUserReg", map,
-					Info.class);
-			System.out.println(res);
-
-			if (res.isError() == true) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
-			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
-			}
-		} else {
-			a = "redirect:/accessDenied";
-		}
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-
-	return a;
-}
-
 
 	@RequestMapping(value = "/deletedContactList", method = RequestMethod.GET)
 	public ModelAndView deletedContactList(HttpServletRequest request, HttpServletResponse response) {
@@ -913,8 +916,7 @@ public String multipleUserRegDelete(HttpServletRequest request, HttpServletRespo
 		return model;
 	}
 
-
-@RequestMapping(value = "/retriveContact/{id}/{hashKey}", method = RequestMethod.GET)
+	@RequestMapping(value = "/retriveContact/{id}/{hashKey}", method = RequestMethod.GET)
 	public String retriveContact(@PathVariable int id, HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String hashKey) {
 		HttpSession session = request.getSession();
@@ -950,7 +952,6 @@ public String multipleUserRegDelete(HttpServletRequest request, HttpServletRespo
 
 		return a;
 	}
-
 
 	@RequestMapping(value = "/submiteditChannel", method = RequestMethod.POST)
 	public String submiteditChannel(HttpServletRequest request, HttpServletResponse response) {
@@ -1174,39 +1175,38 @@ public String multipleUserRegDelete(HttpServletRequest request, HttpServletRespo
 
 	@RequestMapping(value = "/multipleCMSDelete", method = RequestMethod.GET)
 	public String multipleCMSDelete(HttpServletRequest request, HttpServletResponse response) {
-String redirect = null;
+		String redirect = null;
 		try {
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			//System.err.println("Token Found1-------------"+token);
-			if(token.trim().equals(key.trim())) {
-			String[] ids = request.getParameterValues("ids");
-			
-			String id = "0";
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
+			// System.err.println("Token Found1-------------"+token);
+			if (token.trim().equals(key.trim())) {
+				String[] ids = request.getParameterValues("ids");
 
-			System.err.println("in mul del ");
+				String id = "0";
 
-			for (int i = 0; i < ids.length; i++) {
-				id = id + "," + ids[i];
+				System.err.println("in mul del ");
 
-			}
-			System.err.println("in mul del " + id);
+				for (int i = 0; i < ids.length; i++) {
+					id = id + "," + ids[i];
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleCMSContentList", map,
-					Info.class);
-			System.out.println(res);
+				}
+				System.err.println("in mul del " + id);
 
-			
-			if (res.isError() == true) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleCMSContentList", map,
+						Info.class);
+				System.out.println(res);
+
+				if (res.isError() == true) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
+				redirect = "redirect:/cmsList";
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
-			}
-			redirect = "redirect:/cmsList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
@@ -1342,38 +1342,37 @@ String redirect = null;
 	public String multipleTestimonialDelete(HttpServletRequest request, HttpServletResponse response) {
 		String redirect = null;
 		try {
-			
+
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
+			if (token.trim().equals(key.trim())) {
 
-			String[] ids = request.getParameterValues("ids");
-			String id = "0";
+				String[] ids = request.getParameterValues("ids");
+				String id = "0";
 
-			System.err.println("in mul del ");
+				System.err.println("in mul del ");
 
-			for (int i = 0; i < ids.length; i++) {
-				id = id + "," + ids[i];
+				for (int i = 0; i < ids.length; i++) {
+					id = id + "," + ids[i];
 
-			}
-			System.err.println("in mul del " + id);
+				}
+				System.err.println("in mul del " + id);
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate()
-					.postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
-			System.out.println(res);
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate()
+						.postForObject(Constant.url + "/deleteMultipleTestimonialSuccessTeamList", map, Info.class);
+				System.out.println(res);
 
-			if (res.isError() == true) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				if (res.isError() == true) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
+				redirect = "redirect:/testImonialList";
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
-			}
-			redirect = "redirect:/testImonialList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
@@ -1482,7 +1481,7 @@ String redirect = null;
 				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleDocumentList", map,
 						Info.class);
 				System.out.println(res);
-				
+
 				if (res.isError() == true) {
 					session.setAttribute("successMsg", "Sorry, Can't deleted!");
 				} else {
@@ -1541,34 +1540,34 @@ String redirect = null;
 		String redirect = new String();
 		try {
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
-			String[] ids = request.getParameterValues("ids");
-			String id = "0";
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			System.err.println("in mul del ");
+			if (token.trim().equals(key.trim())) {
+				String[] ids = request.getParameterValues("ids");
+				String id = "0";
 
-			for (int i = 0; i < ids.length; i++) {
-				id = id + "," + ids[i];
+				System.err.println("in mul del ");
 
-			}
-			System.err.println("in mul del " + id);
+				for (int i = 0; i < ids.length; i++) {
+					id = id + "," + ids[i];
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("id", id);
-			Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleNewsBlogEventsList", map,
-					Info.class);
-			System.out.println(res);
+				}
+				System.err.println("in mul del " + id);
 
-			if (res.isError() == true) {
-				session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				Info res = Constant.getRestTemplate().postForObject(Constant.url + "/deleteMultipleNewsBlogEventsList",
+						map, Info.class);
+				System.out.println(res);
+
+				if (res.isError() == true) {
+					session.setAttribute("successMsg", "Sorry, Can't deleted!");
+				} else {
+					session.setAttribute("successMsg", "Infomation deleted successfully!");
+				}
+				redirect = "redirect:/EventFormList";
 			} else {
-				session.setAttribute("successMsg", "Infomation deleted successfully!");
-			}
-			redirect = "redirect:/EventFormList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);

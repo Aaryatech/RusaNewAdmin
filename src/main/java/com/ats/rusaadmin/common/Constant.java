@@ -14,9 +14,9 @@ import com.itextpdf.text.Font.FontFamily;
 
 public class Constant {
 
-	// public static final String url = "http://115.124.111.54:8080/RusaWebapi/";
-	public static final String url = "http://localhost:8094/";
-	// public static final String url="http://10.9.63.2:8080/RusaWebapi/";
+	public static final String url = "http://115.124.111.54:8080/RusaSiteWebService/";
+	//public static final String url = "http://localhost:8094/";
+	// public static final String url="http://10.9.63.2:8080/RusaSiteWebService/";
 	// Local path------------------------
 
 	/*
@@ -144,7 +144,7 @@ public class Constant {
 		User UserDetail = (User) session.getAttribute("UserDetail");*/
 
 		String userName = "aaryatech";
-		String pass = "Aaryatech@1cr";
+		String pass = "Aaryatech@123";
 		/*try {
 			userName = UserDetail.getUserName();
 			pass = UserDetail.getUserPass();

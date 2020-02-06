@@ -139,7 +139,7 @@
 					<p>
 						<label for="user_pass">Enter Text : <br /> <input
 							type="text" class="form-control capcha-input" name="captcha"
-							id="captcha" placeholder="Enter Text" autocomplete="off"></label>
+							id="captcha" placeholder="Enter Text" autocomplete="off" required></label>
 					</p>
 					<!--  <p class="forgetmenot">
                     <label class="icheck-label form-label" for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" class="icheck-minimal-aero" checked> Remember me</label>

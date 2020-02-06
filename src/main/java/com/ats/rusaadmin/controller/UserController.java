@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.rusaadmin.XssEscapeUtils;
 import com.ats.rusaadmin.common.Commons;
 import com.ats.rusaadmin.common.Constant;
 import com.ats.rusaadmin.common.DateConvertor;
@@ -420,7 +421,7 @@ public class UserController {
 		HttpSession session = request.getSession();
 		String a = new String();
 		try {
-			String token = request.getParameter("token");
+			String token = XssEscapeUtils.jsoupParse(request.getParameter("token"));
 			String key = (String) session.getAttribute("generatedKey");
 
 			if (token.trim().equals(key.trim())) {
@@ -619,7 +620,7 @@ public class UserController {
 			int regId = Integer.parseInt(request.getParameter("regId"));
 
 			// System.out.println("newsblogsId : " + newsblogsId);
-			String email = request.getParameter("userEmail");
+			String email = XssEscapeUtils.jsoupParse(request.getParameter("userEmail"));
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -782,8 +783,8 @@ public class UserController {
 
 				String toDate = dateFormat.format(new Date());
 
-				String fromDate1 = request.getParameter("from_date");
-				String toDate1 = request.getParameter("to_date");
+				String fromDate1 = XssEscapeUtils.jsoupParse(request.getParameter("from_date"));
+				String toDate1 = XssEscapeUtils.jsoupParse(request.getParameter("to_date"));
 				// System.out.println("from Date***"+fromDate1);
 				// System.out.println("to Date***"+toDate1);
 				if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {

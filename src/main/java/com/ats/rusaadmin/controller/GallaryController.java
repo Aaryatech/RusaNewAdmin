@@ -386,7 +386,7 @@ public class GallaryController {
 		try {
 			try {
 
-				fileName = request.getParameter("file");
+				fileName = XssEscapeUtils.jsoupParse(request.getParameter("file"));
 				id = Integer.parseInt(request.getParameter("id"));
 				moduleId = Integer.parseInt(request.getParameter("moduleId"));
 				pageId = Integer.parseInt(request.getParameter("pageId"));

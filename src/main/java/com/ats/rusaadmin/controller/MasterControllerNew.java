@@ -111,7 +111,7 @@ public class MasterControllerNew {
 		Info Info = new Info();
 		try {
 
-			String userName = request.getParameter("userName");
+			String userName = XssEscapeUtils.jsoupParse(request.getParameter("userName"));
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("userName", userName);
 			Info = Constant.getRestTemplate().postForObject(Constant.url + "/checkUserName", map, Info.class);
@@ -312,7 +312,7 @@ public class MasterControllerNew {
 			HttpSession session1 = request.getSession();
 			User UserDetail = (User) session1.getAttribute("UserDetail");
 			String userId = request.getParameter("userId");
-			String pass = request.getParameter("userPass");
+			String pass = XssEscapeUtils.jsoupParse(request.getParameter("userPass"));
 			Boolean ret = false;
 			if (FormValidation.Validaton(request.getParameter("userId"), "") == true
 					|| FormValidation.Validaton(request.getParameter("userPass"), "") == true) {
@@ -491,8 +491,8 @@ public class MasterControllerNew {
 			if (key.trim().equals(token.trim())) {
 
 				String id = request.getParameter("id");
-				String imageName = request.getParameter("imageName");
-				String urlLink = request.getParameter("urlLink");
+				String imageName = XssEscapeUtils.jsoupParse(request.getParameter("imageName"));
+				String urlLink = XssEscapeUtils.jsoupParse(request.getParameter("urlLink"));
 				int isActive = Integer.parseInt(request.getParameter("isActive"));
 				// int pageId = Integer.parseInt(request.getParameter("pageId"));
 				Boolean ret = false;
@@ -556,10 +556,14 @@ public class MasterControllerNew {
 
 						for (int i = 0; i < languagesList.size(); i++) {
 
-							sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-							linkName = request.getParameter("linkName" + languagesList.get(i).getLanguagesId());
-							text1 = request.getParameter("text1" + languagesList.get(i).getLanguagesId());
-							text2 = request.getParameter("text2" + languagesList.get(i).getLanguagesId());
+							sliderName = XssEscapeUtils.jsoupParse(
+									request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+							linkName = XssEscapeUtils.jsoupParse(
+									request.getParameter("linkName" + languagesList.get(i).getLanguagesId()));
+							text1 = XssEscapeUtils
+									.jsoupParse(request.getParameter("text1" + languagesList.get(i).getLanguagesId()));
+							text2 = XssEscapeUtils
+									.jsoupParse(request.getParameter("text2" + languagesList.get(i).getLanguagesId()));
 
 							BannerDetail BannerDetail = new BannerDetail();
 							BannerDetail.setLinkName(XssEscapeUtils.jsoupParse(linkName));
@@ -574,11 +578,14 @@ public class MasterControllerNew {
 
 							if (languagesList.get(i).getLanguagesId() == 1) {
 
-								sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-								linkName = request
-										.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
-								text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
-								text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+								sliderName = XssEscapeUtils.jsoupParse(
+										request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+								linkName = XssEscapeUtils.jsoupParse(request
+										.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
+								text1 = XssEscapeUtils.jsoupParse(request
+										.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
+								text2 = XssEscapeUtils.jsoupParse(request
+										.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
 
 								editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
 								editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
@@ -605,11 +612,11 @@ public class MasterControllerNew {
 
 							if (languagesList.get(i).getLanguagesId() == 1) {
 
-								sliderName = request.getParameter("sliderName" + languagesList.get(i).getLanguagesId());
-								linkName = request
-										.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder());
-								text1 = request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder());
-								text2 = request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder());
+								sliderName = XssEscapeUtils.jsoupParse(request.getParameter("sliderName" + languagesList.get(i).getLanguagesId()));
+								linkName = XssEscapeUtils.jsoupParse(request
+										.getParameter("linkName" + editbanner.getDetillist().get(i).getSortOrder()));
+								text1 = XssEscapeUtils.jsoupParse(request.getParameter("text1" + editbanner.getDetillist().get(i).getSortOrder()));
+								text2 = XssEscapeUtils.jsoupParse(request.getParameter("text2" + editbanner.getDetillist().get(i).getSortOrder()));
 
 								editbanner.setLinkName(XssEscapeUtils.jsoupParse(linkName));
 								editbanner.setSliderName(XssEscapeUtils.jsoupParse(sliderName));
@@ -950,80 +957,55 @@ public class MasterControllerNew {
 	@RequestMapping(value = "/insertUploadDoc", method = RequestMethod.POST)
 	public String insertDocument(@RequestParam("pagePdf") List<MultipartFile> pagePdf, HttpServletRequest request,
 			HttpServletResponse response) {
-String redirect = new String();
+		String redirect = new String();
 		try {
 			HttpSession session = request.getSession();
-			String token=request.getParameter("token");
-			String key=(String) session.getAttribute("generatedKey");
-			
-			if(token.trim().equals(key.trim())) {
-			
-			User UserDetail = (User) session.getAttribute("UserDetail");
+			String token = request.getParameter("token");
+			String key = (String) session.getAttribute("generatedKey");
 
-			String docId = request.getParameter("docId");
-			String catId = request.getParameter("cateId");
-			// System.out.println("category: "+catId);
-			String docName = XssEscapeUtils
-					.jsoupParse(request.getParameter("docName").trim().replaceAll("[ ]{2,}", " "));
-			int sortNo = Integer.parseInt(request.getParameter("sortNo"));
-			int isActive = Integer.parseInt(request.getParameter("isActive"));
-			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
-			int pageId = Integer.parseInt(request.getParameter("pageId"));
-			// System.out.println("Id: "+isEdit);
-			VpsImageUpload upload = new VpsImageUpload();
-			String pdfName = null;
+			if (token.trim().equals(key.trim())) {
 
-			boolean ret = false;
-			if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
-					|| FormValidation.Validaton(docName, "") == true
-					|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true
-					|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
+				User UserDetail = (User) session.getAttribute("UserDetail");
 
-				ret = true;
-			}
+				String docId = request.getParameter("docId");
+				String catId = request.getParameter("cateId");
+				// System.out.println("category: "+catId);
+				String docName = XssEscapeUtils
+						.jsoupParse(request.getParameter("docName").trim().replaceAll("[ ]{2,}", " "));
+				int sortNo = Integer.parseInt(request.getParameter("sortNo"));
+				int isActive = Integer.parseInt(request.getParameter("isActive"));
+				int isEdit = Integer.parseInt(request.getParameter("isEdit"));
+				int pageId = Integer.parseInt(request.getParameter("pageId"));
+				// System.out.println("Id: "+isEdit);
+				VpsImageUpload upload = new VpsImageUpload();
+				String pdfName = null;
 
-			Date date = new Date(); // your date
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+				boolean ret = false;
+				if (FormValidation.Validaton(request.getParameter("cateId"), "") == true
+						|| FormValidation.Validaton(docName, "") == true
+						|| FormValidation.Validaton(request.getParameter("sortNo"), "") == true
+						|| FormValidation.Validaton(request.getParameter("isActive"), "") == true) {
 
-			String extension = null;
-			long fileSize = 0;
+					ret = true;
+				}
 
-			String fileType = null;
-			// System.out.println("docfile extension:"+fileType);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
+				Date date = new Date(); // your date
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
-			Info info = new Info();
+				String extension = null;
+				long fileSize = 0;
 
-			if (ret == false) {
-				if (docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
-				//	System.out.println("id null");
+				String fileType = null;
+				// System.out.println("docfile extension:"+fileType);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
 
-					pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
-					editupload.setFileName(pdfName);
-					try {
+				Info info = new Info();
 
-						extension = FilenameUtils.getExtension(pagePdf.get(0).getOriginalFilename());
-						fileSize = pagePdf.get(0).getSize();
-						fileType = pagePdf.get(0).getContentType();
-						editupload.setFileSize(fileSize);
-						editupload.setFileType(fileType);
-						info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues, pdfName);
-
-					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-					editupload.setAddDate(sf.format(date));
-
-					// editbanner.setAddedByUserId(UserDetail.getUserId());
-				} else {
-
-					if (pagePdf.get(0).getOriginalFilename() == null || pagePdf.get(0).getOriginalFilename() == "") {
-						editupload.setEditDate(sf.format(date));
-
-					} else {
+				if (ret == false) {
+					if (docId.equalsIgnoreCase(null) || docId.equalsIgnoreCase("")) {
+						// System.out.println("id null");
 
 						pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
 						editupload.setFileName(pdfName);
@@ -1036,55 +1018,82 @@ String redirect = new String();
 							editupload.setFileType(fileType);
 							info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
 									pdfName);
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							e.printStackTrace();
 						}
+						editupload.setAddDate(sf.format(date));
+
+						// editbanner.setAddedByUserId(UserDetail.getUserId());
+					} else {
+
+						if (pagePdf.get(0).getOriginalFilename() == null
+								|| pagePdf.get(0).getOriginalFilename() == "") {
+							editupload.setEditDate(sf.format(date));
+
+						} else {
+
+							pdfName = dateTimeInGMT.format(date) + "_" + pagePdf.get(0).getOriginalFilename();
+							editupload.setFileName(pdfName);
+							try {
+
+								extension = FilenameUtils.getExtension(pagePdf.get(0).getOriginalFilename());
+								fileSize = pagePdf.get(0).getSize();
+								fileType = pagePdf.get(0).getContentType();
+								editupload.setFileSize(fileSize);
+								editupload.setFileType(fileType);
+								info = upload.saveUploadedFiles(pagePdf.get(0), Constant.cmsPdf, Constant.DocValues,
+										pdfName);
+							} catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
+						}
+						editupload.setEditDate(sf.format(date));
+						// editbanner.setEditByUserId(UserDetail.getUserId());
 					}
-					editupload.setEditDate(sf.format(date));
-					// editbanner.setEditByUserId(UserDetail.getUserId());
-				}
-				// editupload.setDocId(0);
-				editupload.setExVar1(docName);
-				editupload.setPageId(pageId);
-				editupload.setCateType(catId);
-				editupload.setSortNo(sortNo);
-				editupload.setIsActive(isActive);
-				editupload.setDelStatus(1);
+					// editupload.setDocId(0);
+					editupload.setExVar1(docName);
+					editupload.setPageId(pageId);
+					editupload.setCateType(catId);
+					editupload.setSortNo(sortNo);
+					editupload.setIsActive(isActive);
+					editupload.setDelStatus(1);
 
-				if (info.isError() == false) {
+					if (info.isError() == false) {
 
-					DocumentUpload res = Constant.getRestTemplate().postForObject(Constant.url + "/saveDocumentFiles",
-							editupload, DocumentUpload.class);
-					if (res != null && isEdit == 0) {
+						DocumentUpload res = Constant.getRestTemplate()
+								.postForObject(Constant.url + "/saveDocumentFiles", editupload, DocumentUpload.class);
+						if (res != null && isEdit == 0) {
 
-						PagesModule pagesModule = new PagesModule();
+							PagesModule pagesModule = new PagesModule();
 
-						pagesModule.setPageId(pageId);
-						pagesModule.setPrimaryKeyId(res.getDocId());
-						pagesModule.setModuleId(7);
-						PagesModule pagesModuleres = Constant.getRestTemplate()
-								.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
-						// System.out.println("res " + res);
-					}
-					if (res.getDocId() != 0) {
+							pagesModule.setPageId(pageId);
+							pagesModule.setPrimaryKeyId(res.getDocId());
+							pagesModule.setModuleId(7);
+							PagesModule pagesModuleres = Constant.getRestTemplate()
+									.postForObject(Constant.url + "/savePagesModules", pagesModule, PagesModule.class);
+							// System.out.println("res " + res);
+						}
+						if (res.getDocId() != 0) {
 
-						session.setAttribute("successMsg", "Infomation added successfully!");
-						session.setAttribute("errorMsg", "false");
+							session.setAttribute("successMsg", "Infomation added successfully!");
+							session.setAttribute("errorMsg", "false");
+						} else {
+							session.setAttribute("successMsg", "Failed To  Add Infomation!");
+							session.setAttribute("errorMsg", "false");
+						}
 					} else {
 						session.setAttribute("successMsg", "Failed To  Add Infomation!");
 						session.setAttribute("errorMsg", "false");
 					}
 				} else {
-					session.setAttribute("successMsg", "Failed To  Add Infomation!");
+					session.setAttribute("successMsg", "Invalid Infomation!");
 					session.setAttribute("errorMsg", "false");
 				}
+				redirect = "redirect:/documentUploadList";
 			} else {
-				session.setAttribute("successMsg", "Invalid Infomation!");
-				session.setAttribute("errorMsg", "false");
-			}
-			redirect = "redirect:/documentUploadList";
-			}else {				
 				redirect = "redirect:/accessDenied";
 			}
 			SessionKeyGen.changeSessionKey(request);
