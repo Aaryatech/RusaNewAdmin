@@ -243,11 +243,14 @@ public class MasterControllerNew {
 						} else {
 
 							docFile = dateTimeInGMT.format(date) + "_" + docfile.get(0).getOriginalFilename();
-							user.setFileName(docFile);
+							//user.setFileName(docFile);
 
 							try {
 								Info info = upload.saveUploadedImge(docfile.get(0), Constant.userProfileURL, docFile,
 										Constant.values, 0, 0, 0, 0, 0);
+								if (info.isError() == false) {
+									user.setFileName(docFile);
+								}
 							} catch (Exception e) {
 								// TODO: handle exception
 								e.printStackTrace();

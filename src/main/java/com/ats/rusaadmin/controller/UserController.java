@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +20,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -139,6 +144,57 @@ public class UserController {
 		}
 
 		return model;
+	}
+
+	@RequestMapping(value = "/downloadDocument", method = RequestMethod.GET)
+	public void downloadDocument(HttpServletRequest request, HttpServletResponse response) {
+
+		HttpSession session = request.getSession();
+
+		try {
+
+			Date date = new Date();
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy_MM_dd_HH:mm:ss");
+
+			int docId = Integer.parseInt(request.getParameter("docId"));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("docId", docId);
+			Info imgRes = Constant.getRestTemplate().postForObject(Constant.url + "/getDocByDocId", map, Info.class);
+			String dataDirectory = Constant.userDocURL;
+			/* request.getServletContext().getRealPath("/WEB-INF/downloads/pdf/"); */
+
+			if (imgRes.isError() == false) {
+
+				String fileName = imgRes.getMsg();
+				Path file = Paths.get(dataDirectory, fileName);
+				if (Files.exists(file)) {
+					response.setContentType("application/pdf");
+					response.addHeader("Content-Disposition",
+							"attachment; filename=" + dateTimeInGMT.format(date) + "_" + fileName);
+					try {
+						Files.copy(file, response.getOutputStream());
+						response.getOutputStream().flush();
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			RequestDispatcher rd = request.getRequestDispatcher("accessDenied");
+			if (rd != null)
+				try {
+					rd.forward(request, response);
+				} catch (ServletException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		}
+
 	}
 
 	@RequestMapping(value = "/activeUserListPdf", method = RequestMethod.GET)
@@ -770,57 +826,56 @@ public class UserController {
 
 		try {
 
-			 
-				model = new ModelAndView("allEventList");
-				Calendar date = Calendar.getInstance();
-				date.set(Calendar.DAY_OF_MONTH, 1);
+			model = new ModelAndView("allEventList");
+			Calendar date = Calendar.getInstance();
+			date.set(Calendar.DAY_OF_MONTH, 1);
 
-				Date firstDate = date.getTime();
+			Date firstDate = date.getTime();
 
-				DateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY");
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY");
 
-				String fromDate = dateFormat.format(firstDate);
+			String fromDate = dateFormat.format(firstDate);
 
-				String toDate = dateFormat.format(new Date());
+			String toDate = dateFormat.format(new Date());
 
-				String fromDate1 = XssEscapeUtils.jsoupParse(request.getParameter("from_date"));
-				String toDate1 = XssEscapeUtils.jsoupParse(request.getParameter("to_date"));
-				// System.out.println("from Date***"+fromDate1);
-				// System.out.println("to Date***"+toDate1);
-				if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+			String fromDate1 = XssEscapeUtils.jsoupParse(request.getParameter("from_date"));
+			String toDate1 = XssEscapeUtils.jsoupParse(request.getParameter("to_date"));
+			// System.out.println("from Date***"+fromDate1);
+			// System.out.println("to Date***"+toDate1);
+			if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
 
-					fromDate1 = fromDate;
-					toDate1 = toDate;
+				fromDate1 = fromDate;
+				toDate1 = toDate;
 
-				}
+			}
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-				map.add("fromDate", DateConvertor.convertToYMD(fromDate1));
-				map.add("toDate", DateConvertor.convertToYMD(toDate1));
-				EventCountDetails[] getUser = Constant.getRestTemplate()
-						.postForObject(Constant.url + "/getAllEventList", map, EventCountDetails[].class);
-				userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
-				for (int i = 0; i < userList.size(); i++) {
-					userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate1));
+			map.add("toDate", DateConvertor.convertToYMD(toDate1));
+			EventCountDetails[] getUser = Constant.getRestTemplate().postForObject(Constant.url + "/getAllEventList",
+					map, EventCountDetails[].class);
+			userList = new ArrayList<EventCountDetails>(Arrays.asList(getUser));
+			for (int i = 0; i < userList.size(); i++) {
+				userList.get(i).setEventDateFrom(DateConvertor.convertToDMY(userList.get(i).getEventDateFrom()));
 
-				}
-				if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
+			}
+			if (fromDate1 == null || fromDate1 == "" || toDate1 == null || toDate1 == "") {
 
-					// System.out.println("refresh");
-					model.addObject("fromDate", fromDate);
-					model.addObject("toDate", toDate);
+				// System.out.println("refresh");
+				model.addObject("fromDate", fromDate);
+				model.addObject("toDate", toDate);
 
-				} else {
-					// System.out.println("submit");
-					model.addObject("fromDate", fromDate1);
-					model.addObject("toDate", toDate1);
-				}
+			} else {
+				// System.out.println("submit");
+				model.addObject("fromDate", fromDate1);
+				model.addObject("toDate", toDate1);
+			}
 
-				model.addObject("userList", userList);
-				// System.out.println("userList :" + userList);
-			 
+			model.addObject("userList", userList);
+			// System.out.println("userList :" + userList);
+
 		} catch (Exception e) {
-			 
+
 			e.printStackTrace();
 		}
 

@@ -157,6 +157,7 @@ public class HomeController {
 			session.setAttribute("captcha_security", sImageCode);
 			e.printStackTrace();
 			model.addAttribute("msg", "Invalid login");
+			mav = "login";
 		}
 
 		return mav;

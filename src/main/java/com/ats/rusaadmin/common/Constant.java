@@ -14,9 +14,9 @@ import com.itextpdf.text.Font.FontFamily;
 
 public class Constant {
 
-	public static final String url = "http://115.124.111.54:8080/RusaSiteWebService/";
+	//public static final String url = "http://115.124.111.54:8080/RusaSiteWebService/";
 	//public static final String url = "http://localhost:8094/";
-	// public static final String url="http://10.9.63.2:8080/RusaSiteWebService/";
+	public static final String url="http://10.9.63.2:8080/RusaSiteWebService/";
 	// Local path------------------------
 
 	/*
@@ -89,7 +89,8 @@ public class Constant {
 	 * public static final String siteAdminUrl =
 	 * "http://ats.aaryatechindia.in:15063/ats/";
 	 */
-
+	/*public static final String otherDocURL = "/home/lenovo/Downloads/old/apache-tomcat-8.5.37/webapps/media/other/";
+	public static final String getOtherDocURL = "http://192.168.2.22:8080/media/other/";*/
 	public static final int gallryImage = 1;
 	public static final String lgogImageURL = "/opt/tomcat/webapps/mediarusa/logo/";
 	public static final String bannerImageURL = "/opt/tomcat/webapps/mediarusa/banenr/";
@@ -112,12 +113,13 @@ public class Constant {
 	public static final String getOtherDocURL = "http://115.124.111.54:8080/mediarusa/other/";
 	public static final String getUserProfileURL = "http://115.124.111.54:8080/mediarusa/userprofile/";
 	public static final String siteAdminUrl = "http://115.124.111.54:8080/RusaAdmin/";
-
+	public static final String userDocURL = "/opt/tomcat/webapps/mediarusa/userUploadeddocument/";
+	
 	// public static final String getUserDocURL =
 	// "http://192.168.2.17:8080/media/userdocument/";
 	// public static final String getUserDocURL =
 	// "http://ats.aaryatechindia.in:15063/media/userdocument/";
-	public static final String getUserDocURL = "http://115.124.111.54:8080/mediarusa/userdocument/";
+	public static final String getUserDocURL = "http://115.124.111.54:8080/mediarusa/userUploadeddocument/";
 	public static Font headFontData = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
 	public static Font tableHeaderFont = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 	public static final BaseColor tableHeaderFontBaseColor = BaseColor.WHITE;
@@ -144,7 +146,7 @@ public class Constant {
 		User UserDetail = (User) session.getAttribute("UserDetail");*/
 
 		String userName = "aaryatech";
-		String pass = "Aaryatech@123";
+		String pass = "Aaryatech@1234567";
 		/*try {
 			userName = UserDetail.getUserName();
 			pass = UserDetail.getUserPass();
