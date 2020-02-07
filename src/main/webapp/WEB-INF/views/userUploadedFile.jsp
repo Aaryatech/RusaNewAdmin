@@ -56,17 +56,17 @@
 		<section id="main-content" class=" ">
 			<section class="wrapper main-wrapper row" style=''>
 
-				  <div class='col-xs-12'>
+				<div class='col-xs-12'>
 					<div class="page-title">
 
-						<div class="pull-left"> 
+						<div class="pull-left">
 							<h1 class="title">Uploaded Document List</h1>
-							 
+
 						</div>
 
 
 					</div>
-				</div>  
+				</div>
 				<div class="clearfix"></div>
 				<!-- MAIN CONTENT AREA STARTS -->
 
@@ -102,7 +102,7 @@
 								</c:if>
 
 								<div class="col-xs-12">
- 
+
 									<div class="table-responsive">
 										<table id="example-1"
 											class="table table-striped dt-responsive display">
@@ -125,7 +125,7 @@
 														<td>${uploadDocumentList.typeName}</td>
 														<td style="text-align: right;">${uploadDocumentList.extraVarchar1}</td>
 														<td style="text-align: center;"><a
-															href="${frontDocUrl}${uploadDocumentList.fileName}"
+															href="${pageContext.request.contextPath}/downloadDocument?docId=${uploadDocumentList.docId}"
 															target="_blank"><i class="fa fa-download"
 																aria-hidden="true"></i></a></td>
 
